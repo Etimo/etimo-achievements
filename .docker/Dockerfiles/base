@@ -1,0 +1,35 @@
+FROM node:14-alpine
+WORKDIR /app
+
+# Install dependencies
+RUN npm install -g \
+  knex \
+  rimraf \
+  ts-node \
+  typescript
+
+# Set yarn version
+RUN yarn set version berry
+
+# Copy root files
+COPY package.json lerna.json tsconfig.json yarn.lock .yarnrc.yml ./
+
+# Copy yarn files
+COPY .yarn/cache .yarn/cache
+COPY .yarn/releases .yarn/releases
+COPY .yarn/plugins .yarn/plugins
+
+# Copy package.jsons from packages
+COPY packages/api/package.json packages/api/package.json
+COPY packages/common/package.json packages/common/package.json
+COPY packages/data/package.json packages/data/package.json
+COPY packages/security/package.json packages/security/package.json
+
+# Install node_modules
+RUN yarn install
+
+# Copy package sources
+COPY packages packages
+
+# Build packages
+RUN yarn compile

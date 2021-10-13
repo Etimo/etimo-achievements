@@ -1,0 +1,45 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "auth-server": "lerna run --scope @etimo-achievements/api start",
+    "build": "lerna run --parallel build",
+    "clear": "rimraf node_modules && lerna run clear",
+    "compile": "lerna run --parallel compile",
+    "db-create": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",
+    "db-drop": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"DROP DATABASE achievements\"",
+    "db-recreate": "npm run db-drop && npm run db-create",
+    "db-reset": "npm run db-recreate && npm run migrate && npm run seed",
+    "db-reset-force": "docker-compose down && docker-compose up -d postgres && sleep 10 && npm run db-reset && docker-compose up -d",
+    "docker-build": "./.docker/scripts/build.sh --no-base",
+    "docker-rebuild": "./.docker/scripts/build.sh",
+    "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
+    "migrate": "lerna run --scope @etimo-achievements/data migrate",
+    "migration": "lerna run --scope @etimo-achievements/data migration",
+    "prepare": "husky install && ./scripts/update-references.sh",
+    "prettier": "prettier --write .",
+    "seed": "lerna run --scope @etimo-achievements/data seed",
+    "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
+    "support": "docker-compose up -d postgres pgadmin",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "@tsconfig/node14": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^4.32.0",
+    "@typescript-eslint/parser": "^4.32.0",
+    "eslint": "^7.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-react": "^7.26.0",
+    "husky": "^7.0.2",
+    "lerna": "^4.0.0",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.4.1"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

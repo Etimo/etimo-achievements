@@ -1,0 +1,27 @@
+{
+  "name": "@etimo-achievements/security",
+  "version": "1.0.0",
+  "description": "Security-related functions",
+  "author": "Niclas Lindstedt <niclas.lindstedt@etimo.se>",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "yarn clean && yarn compile",
+    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "clear": "rimraf node_modules",
+    "compile": "tsc --build && cp package.json dist",
+    "test": "exit 0"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "secure-random-password": "^0.2.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/node": "^16.10.2",
+    "@types/secure-random-password": "^0.2.1",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}

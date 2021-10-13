@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug api",
+      "program": "${workspaceFolder}/packages/api/src/index.ts",
+      "preLaunchTask": "tsc: build - packages/api/tsconfig.json",
+      "outFiles": ["${workspaceFolder}/packages/**/dist/**/*.js"]
+    }
+  ]
+}

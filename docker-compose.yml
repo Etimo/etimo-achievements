@@ -1,0 +1,38 @@
+version: '3.7'
+
+volumes:
+  db-data:
+    name: achievements-db
+    driver: local
+
+services:
+  api:
+    build:
+      dockerfile: .docker/Dockerfiles/api
+      context: .
+    ports:
+      - 3000:3000
+
+  postgres:
+    image: postgres:latest
+    container_name: achievements-pg
+    environment:
+      DATABASE_HOST: 127.0.0.1
+      POSTGRES_DB: root
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: achievements-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@etimo.se
+      PGADMIN_DEFAULT_PASSWORD: test123!
+    ports:
+      - '8011:80'
+    depends_on:
+      - postgres
