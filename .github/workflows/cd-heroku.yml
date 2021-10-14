@@ -30,5 +30,8 @@ jobs:
             -t registry.heroku.com/${{ env.APP_NAME }}/web \
             .
 
+      - name: Docker Login
+        run: docker login --username=_ --password=${{ env.HEROKU_API_KEY }} registry.heroku.com
+
       - name: Push Image
         run: docker push registry.heroku.com/${{ env.APP_NAME }}/web
