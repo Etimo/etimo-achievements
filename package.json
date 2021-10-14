@@ -14,7 +14,7 @@
     "db-drop": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"DROP DATABASE achievements\"",
     "db-recreate": "npm run db-drop && npm run db-create",
     "db-reset": "npm run db-recreate && npm run migrate && npm run seed",
-    "db-reset-force": "docker-compose down && docker-compose up -d postgres && sleep 10 && npm run db-reset && docker-compose up -d",
+    "db-reset-force": "docker-compose down --remove-orphans && docker-compose up -d postgres && sleep 10 && npm run db-reset && docker-compose up -d",
     "docker-build": "./.docker/scripts/build.sh --no-base",
     "docker-rebuild": "./.docker/scripts/build.sh --nodemon",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",

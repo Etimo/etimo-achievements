@@ -19,6 +19,7 @@
     "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/data": "^1.0.0",
     "@etimo-achievements/security": "^1.0.0",
+    "@etimo-achievements/service": "^1.0.0",
     "express": "^4.17.1",
     "express-winston": "^4.2.0",
     "winston": "^3.3.3"
