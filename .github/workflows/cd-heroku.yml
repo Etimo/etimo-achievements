@@ -1,0 +1,23 @@
+name: Deploy to Heroku
+
+on:
+  push:
+    branches: [heroku]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Build & Release
+        uses: niclaslindstedt/heroku-docker-deploy@v1.4.0
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: etimo-achievements-staging
+          dockerfile_directory: .docker/Dockerfiles
+          dockerfile_name: Dockerfile
+          process_type: web
+          context: .
