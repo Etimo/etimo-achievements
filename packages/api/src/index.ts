@@ -1,4 +1,5 @@
 import { isDevelopment } from '@etimo-achievements/common';
+import { Database } from '@etimo-achievements/data';
 import Server from './server';
 
 function getPort(): number {
@@ -12,6 +13,9 @@ function getPort(): number {
 }
 
 console.log(`Development: ${isDevelopment()}`);
+
+// This initializes a database connection
+Database.getKnexInstance();
 
 const server = new Server(getPort());
 

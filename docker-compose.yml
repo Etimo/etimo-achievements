@@ -11,14 +11,16 @@ services:
       dockerfile: .docker/Dockerfiles/api
       context: .
       target: develop
-    env_file: .env
+    env_file: packages/api/.env
+    environment:
+      - DB_HOSTNAME=postgres
     ports:
       - 3000:3000
     user: 1000:1000
     labels:
       - 'com.achievements-etimo.monitored'
     volumes:
-      - ./packages/api/dist:/app/packages/api/dist
+      - ./packages:/app/packages
 
   nodemon:
     build:
