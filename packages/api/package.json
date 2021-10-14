@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Authenticates a user with OAuth2",
   "author": "Niclas Lindstedt <niclas.lindstedt@etimo.se>",
-  "license": "ISC",
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

@@ -129,16 +129,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@etimo-achievements/obama@workspace:packages/obama":
-  version: 0.0.0-use.local
-  resolution: "@etimo-achievements/obama@workspace:packages/obama"
-  dependencies:
-    "@types/node": ^16.10.2
-    ts-node: ^10.2.1
-    typescript: ^4.4.3
-  languageName: unknown
-  linkType: soft
-
 "@etimo-achievements/security@^1.0.0, @etimo-achievements/security@workspace:packages/security":
   version: 0.0.0-use.local
   resolution: "@etimo-achievements/security@workspace:packages/security"
@@ -1381,9 +1371,9 @@ __metadata:
   linkType: hard
 
 "@types/node@npm:*, @types/node@npm:^16.10.2":
-  version: 16.10.8
-  resolution: "@types/node@npm:16.10.8"
-  checksum: e4d35774ff5a195aca2079131acc189ace1be568423c88ee332944206f2c5a632999e8eca461f65c204baa482b3ae9a0e92727185c94d009d82a6af0fa5edd80
+  version: 16.10.9
+  resolution: "@types/node@npm:16.10.9"
+  checksum: b47c3e3896ce243d3bc9e356578d4d607357d9ea0c1445a15cb564341580ac4db4f95677bf15fd354e46343edbd171ac19701740a53637234411da5b66c883a4
   languageName: node
   linkType: hard
 
