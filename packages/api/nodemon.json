@@ -2,5 +2,5 @@
   "watch": ["dist/**"],
   "ext": "ts,map,js,json",
   "delay": 1000,
-  "exec": "ts-node dist/index.js"
+  "exec": "node dist/index.js"
 }

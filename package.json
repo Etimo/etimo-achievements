@@ -7,6 +7,7 @@
   "scripts": {
     "auth-server": "lerna run --scope @etimo-achievements/api start",
     "build": "lerna run --parallel build",
+    "clean": "rimraf node_modules && lerna run clean",
     "clear": "rimraf node_modules && lerna run clear",
     "compile": "lerna run --parallel compile",
     "db-create": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",
@@ -21,6 +22,7 @@
     "migration": "lerna run --scope @etimo-achievements/data migration",
     "prepare": "husky install && ./scripts/update-references.sh",
     "prettier": "prettier --write .",
+    "restart": "docker stop $(docker ps -aq --filter 'label=com.achievements-etimo.monitored') && npm run build && npm run start",
     "seed": "lerna run --scope @etimo-achievements/data seed",
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
     "support": "docker-compose up -d postgres pgadmin",
