@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: 'Deploy to Heroku'
     runs-on: ubuntu-latest
     env:
       APP_NAME: etimo-achievements-staging
@@ -14,6 +15,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Build Base Image
+        run: |
+          docker build \
+            -f .docker/Dockerfiles/base \
+            -t etimo-achievements/base \
+            .
 
       - name: Build Image
         run: |
