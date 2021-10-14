@@ -1,20 +1,19 @@
-FROM etimo-achievements/base AS base
+FROM etimo-achievements/base AS develop
+ENV PORT=3000
 WORKDIR /app/packages/api
-COPY packages/api .
-EXPOSE 3000
-
-FROM base AS develop
-RUN chown -R 1000:1000 /app/packages
+COPY --chown=1000:1000 packages/api .
+EXPOSE $PORT
 CMD ["npm", "run", "dev"]
 
-FROM base AS build
+FROM develop AS build
 RUN npm run compile
 RUN yarn workspaces focus --all --production
 
 FROM node:14-alpine AS production
+ENV PORT=3000
 WORKDIR /app
-COPY --from=build /app/node_modules ./node_modules
-COPY --from=build /app/packages /app/packages
-COPY --from=build /app/packages/api/dist .
-EXPOSE 3000
+COPY --chown=1000:1000 --from=build /app/node_modules ./node_modules
+COPY --chown=1000:1000 --from=build /app/packages /app/packages
+COPY --chown=1000:1000 --from=build /app/packages/api/dist .
+EXPOSE $PORT
 CMD ["node", "index.js"]

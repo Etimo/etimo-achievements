@@ -9,28 +9,32 @@ RUN npm install -g \
   ts-node \
   typescript
 
+RUN chown 1000:1000 /app
+USER 1000:1000
+
 # Set yarn version
 RUN yarn set version berry
 
 # Copy root files
-COPY package.json lerna.json tsconfig.json yarn.lock .yarnrc.yml ./
+COPY --chown=1000:1000 package.json lerna.json tsconfig.json yarn.lock .yarnrc.yml ./
 
 # Copy yarn files
-COPY .yarn/cache .yarn/cache
-COPY .yarn/releases .yarn/releases
-COPY .yarn/plugins .yarn/plugins
+COPY --chown=1000:1000 .yarn/cache .yarn/cache
+COPY --chown=1000:1000 .yarn/releases .yarn/releases
+COPY --chown=1000:1000 .yarn/plugins .yarn/plugins
 
 # Copy package.jsons from packages
-COPY packages/api/package.json packages/api/package.json
-COPY packages/common/package.json packages/common/package.json
-COPY packages/data/package.json packages/data/package.json
-COPY packages/security/package.json packages/security/package.json
+COPY --chown=1000:1000 packages/api/package.json packages/api/package.json
+COPY --chown=1000:1000 packages/common/package.json packages/common/package.json
+COPY --chown=1000:1000 packages/data/package.json packages/data/package.json
+COPY --chown=1000:1000 packages/security/package.json packages/security/package.json
+COPY --chown=1000:1000 packages/service/package.json packages/service/package.json
 
 # Install node_modules
 RUN yarn install
 
 # Copy package sources
-COPY packages packages
+COPY --chown=1000:1000 packages packages
 
 # Build packages
 RUN yarn compile
