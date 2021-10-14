@@ -2,7 +2,7 @@ name: Deploy to Heroku
 
 on:
   push:
-    branches: [heroku]
+    branches: [master]
     paths:
       - '.github/**'
       - 'packages/**'
@@ -12,7 +12,7 @@ on:
       branch:
         description: 'Branch to deploy'
         required: true
-        default: 'heroku'
+        default: 'master'
 
 defaults:
   run:
