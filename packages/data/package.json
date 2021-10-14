@@ -11,10 +11,12 @@
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "rimraf node_modules",
     "compile": "tsc --build && cp package.json dist",
-    "migrate": "knex --knexfile src/config/knexfile.ts migrate:latest",
-    "new-migration": "knex --knexfile src/config/knexfile.ts migrate:make",
-    "new-seed": "knex --knexfile src/config/knexfile.ts seed:make",
-    "seed": "knex --knexfile src/config/knexfile.ts seed:run",
+    "knex:dev": "knex --knexfile src/config/knexfile.ts --env development",
+    "knex:local": "knex --knexfile src/config/knexfile.ts --env local",
+    "migrate": "yarn knex:local migrate:latest",
+    "new-migration": "yarn knex:local migrate:make",
+    "new-seed": "yarn knex:local seed:make",
+    "seed": "yarn knex:local seed:run",
     "test": "exit 0"
   },
   "dependencies": {
