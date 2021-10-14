@@ -17,21 +17,16 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Base Image
-        run: |
-          docker build \
-            -f .docker/Dockerfiles/base \
-            -t etimo-achievements/base \
-            .
+        run: docker build -f .docker/Dockerfiles/base -t etimo-achievements/base .
 
       - name: Build Image
-        run: |
-          docker build \
-            -f .docker/Dockerfiles/api \
-            -t registry.heroku.com/${{ env.APP_NAME }}/web \
-            .
+        run: docker build -f .docker/Dockerfiles/api -t registry.heroku.com/${{ env.APP_NAME }}/web .
 
       - name: Docker Login
         run: docker login --username=_ --password=${{ env.HEROKU_API_KEY }} registry.heroku.com
 
       - name: Push Image
         run: docker push registry.heroku.com/${{ env.APP_NAME }}/web
+
+      - name: Deploy on Heroku
+        run: heroku container:release web --app ${{ env.APP_NAME }}
