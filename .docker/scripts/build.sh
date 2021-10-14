@@ -22,6 +22,9 @@ build_packages() {
       echo "* Building $app"
       docker_build "$app_path"
     fi
+    if (( BUILD_NODEMON )) && [ "$app" = "nodemon" ]; then
+      docker_build "$app_path"
+    fi
   done
 }
 
@@ -48,6 +51,7 @@ error() {
 # Default arguments
 NO_BASE=0 # --no-base
 NO_CACHE=0 # --no-cache
+BUILD_NODEMON=0 # --build-nodemon
 
 # Parse arguments
 positional=()
@@ -64,6 +68,11 @@ while [[ $# -gt 0 ]]; do
       --no-base)
       echo "* Skipping base image"
       NO_BASE=1
+      shift
+      ;;
+      --nodemon)
+      echo "* Building nodemon image"
+      BUILD_NODEMON=1
       shift
       ;;
       --no-cache)

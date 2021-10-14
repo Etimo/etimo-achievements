@@ -1,10 +1,13 @@
-FROM etimo-achievements/base AS develop
+FROM etimo-achievements/base AS base
 WORKDIR /app/packages/api
 COPY packages/api .
 EXPOSE 3000
-CMD ["npm", "run", "start"]
 
-FROM develop AS build
+FROM base AS develop
+RUN chown -R 1000:1000 /app/packages
+CMD ["npm", "run", "dev"]
+
+FROM base AS build
 RUN npm run compile
 RUN yarn workspaces focus --all --production
 

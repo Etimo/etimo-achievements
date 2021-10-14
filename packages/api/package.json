@@ -11,7 +11,7 @@
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "rimraf node_modules",
     "compile": "tsc --build && cp package.json dist",
-    "dev": "nodemon src/index.ts",
+    "dev": "nodemon",
     "start": "ts-node src/index.ts",
     "test": "exit 0"
   },

@@ -15,7 +15,7 @@
     "db-reset": "npm run db-recreate && npm run migrate && npm run seed",
     "db-reset-force": "docker-compose down && docker-compose up -d postgres && sleep 10 && npm run db-reset && docker-compose up -d",
     "docker-build": "./.docker/scripts/build.sh --no-base",
-    "docker-rebuild": "./.docker/scripts/build.sh",
+    "docker-rebuild": "./.docker/scripts/build.sh --nodemon",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
     "migrate": "lerna run --scope @etimo-achievements/data migrate",
     "migration": "lerna run --scope @etimo-achievements/data migration",

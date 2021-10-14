@@ -10,8 +10,20 @@ services:
     build:
       dockerfile: .docker/Dockerfiles/api
       context: .
+      target: develop
     ports:
       - 3000:3000
+    user: 1000:1000
+    volumes:
+      - ./packages/api/dist:/app/packages/api/dist
+
+  nodemon:
+    build:
+      dockerfile: .docker/Dockerfiles/nodemon
+      context: .
+    user: 1000:1000
+    volumes:
+      - ./packages:/app/packages
 
   postgres:
     image: postgres:latest
