@@ -129,6 +129,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@etimo-achievements/obama@workspace:packages/obama":
+  version: 0.0.0-use.local
+  resolution: "@etimo-achievements/obama@workspace:packages/obama"
+  dependencies:
+    "@types/node": ^16.10.2
+    ts-node: ^10.2.1
+    typescript: ^4.4.3
+  languageName: unknown
+  linkType: soft
+
 "@etimo-achievements/security@^1.0.0, @etimo-achievements/security@workspace:packages/security":
   version: 0.0.0-use.local
   resolution: "@etimo-achievements/security@workspace:packages/security"
