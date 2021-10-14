@@ -6,6 +6,7 @@ export interface IUser {
   username: string;
   password: string;
   email: string;
+  slackHandle: string;
 }
 
 export type INewUser = Omit<IUser, 'id'>;
@@ -26,6 +27,7 @@ export class UserModel extends Model implements IUser {
         username: { type: 'string', minLength: 2, maxLength: 32 },
         password: { type: 'string', minLength: 10, maxLength: 255 },
         email: { type: 'string', format: 'email', maxLength: 128 },
+        slackHandle: { type: 'string', minLength: 2, maxLength: 64 },
         createdAt: { type: 'string', format: 'date-time' },
         updatedAt: { type: 'string', format: 'date-time' },
       },
@@ -46,6 +48,7 @@ export class UserModel extends Model implements IUser {
   username!: string;
   password!: string;
   email!: string;
+  slackHandle!: string;
   createdAt!: Date;
   updatedAt!: Date;
 }

@@ -8,10 +8,10 @@
   "exclude": ["node_modules", "**/*.spec.ts"],
   "baseUrl": ".",
   "paths": {
+    "@etimo-achievements/service/*": ["service/src/*"],
     "@etimo-achievements/api/*": ["api/src/*"],
-    "@etimo-achievements/common/*": ["common/src/*"],
     "@etimo-achievements/security/*": ["security/src/*"],
-    "@etimo-achievements/data/*": ["data/src/*"],
-    "@etimo-achievements/service/*": ["service/src/*"]
+    "@etimo-achievements/common/*": ["common/src/*"],
+    "@etimo-achievements/data/*": ["data/src/*"]
   }
 }

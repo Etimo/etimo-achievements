@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('username', 32).notNullable().unique();
     table.string('password', 255).notNullable();
     table.string('email', 128).notNullable().unique();
+    table.string('slackHandle', 64).notNullable().unique();
 
     // Timestamps
     table.timestamp('createdAt').notNullable().defaultTo(knex.fn.now());
