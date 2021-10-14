@@ -20,4 +20,8 @@ export class AchievementRepository {
   delete(id: string): Promise<number> {
     return AchievementModel.query().deleteById(id);
   }
+
+  getAll(): Promise<Array<IAchievement>> {
+    return AchievementModel.query();
+  }
 }

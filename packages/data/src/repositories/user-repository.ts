@@ -24,4 +24,8 @@ export class UserRepository {
   delete(id: string): Promise<number> {
     return UserModel.query().deleteById(id);
   }
+
+  getAll(): Promise<Array<IUser>> {
+    return UserModel.query();
+  }
 }
