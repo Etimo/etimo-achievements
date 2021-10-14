@@ -11,6 +11,7 @@
     "@etimo-achievements/api/*": ["api/src/*"],
     "@etimo-achievements/common/*": ["common/src/*"],
     "@etimo-achievements/security/*": ["security/src/*"],
-    "@etimo-achievements/data/*": ["data/src/*"]
+    "@etimo-achievements/data/*": ["data/src/*"],
+    "@etimo-achievements/service/*": ["service/src/*"]
   }
 }
