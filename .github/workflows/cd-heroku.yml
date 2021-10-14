@@ -7,16 +7,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      - APP_NAME=etimo-achievements-staging
+      - HEROKU_EMAIL=${{ secrets.HEROKU_EMAIL }}
+      - HEROKU_API_KEY=${{ secrets.HEROKU_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Build & Release
-        uses: gonuit/heroku-docker-deploy@v1.3.3
-        with:
-          email: ${{ secrets.HEROKU_EMAIL }}
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: etimo-achievements-staging
-          dockerfile_directory: .docker/Dockerfiles
-          dockerfile_name: api
-          process_type: web
+      - name: Build Image
+        run: |
+          docker build \
+            -f .docker/Dockerfiles/api \
+            -t registry.heroku.com/${{ env.APP_NAME }}/web \
+            .
+
+      - name: Push Image
+        run: docker push registry.heroku.com/${{ env.APP_NAME }}/web
