@@ -1,5 +1,4 @@
-import { IUser } from '../models';
-import { INewUser, IPartialUser, UserModel } from '../models/user-model';
+import { IUser, INewUser, IPartialUser, UserModel } from '../models/user-model';
 
 export class UserRepository {
   findById(id: string): Promise<IUser> {
