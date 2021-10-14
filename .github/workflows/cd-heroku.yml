@@ -3,29 +3,55 @@ name: Deploy to Heroku
 on:
   push:
     branches: [heroku]
+    paths:
+      - '.github/**'
+      - 'packages/**'
+      - '!packages/**/*.md'
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to deploy'
+        required: true
+        default: 'heroku'
+
+defaults:
+  run:
+    shell: bash
 
 jobs:
   build:
     name: 'Deploy to Heroku'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
     env:
       APP_NAME: etimo-achievements-staging
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
     steps:
+      - name: Determine branch
+        id: branch
+        run: |
+          echo "::set-output name=checkout-branch::$DEFAULT_BRANCH"
+          manual="${{ github.event.inputs.branch }}"
+          [[ ! -z "$manual" ]] && echo "::set-output name=checkout-branch::$manual"
+          exit 0
+
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: 'refs/heads/${{ steps.branch.outputs.checkout-branch }}'
 
-      - name: Build Base Image
+      - name: Build base image
         run: docker build -f .docker/Dockerfiles/base -t etimo-achievements/base .
 
-      - name: Build Image
+      - name: Build app image
         run: docker build -f .docker/Dockerfiles/api -t registry.heroku.com/${{ env.APP_NAME }}/web .
 
-      - name: Docker Login
+      - name: Login to Heroku registry
         run: docker login --username=_ --password=${{ env.HEROKU_API_KEY }} registry.heroku.com
 
-      - name: Push Image
+      - name: Push image to Heroku
         run: docker push registry.heroku.com/${{ env.APP_NAME }}/web
 
       - name: Deploy on Heroku
