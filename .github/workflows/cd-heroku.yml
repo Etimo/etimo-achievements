@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build & Release
-        uses: niclaslindstedt/heroku-docker-deploy@v1.4.0
+        uses: gonuit/heroku-docker-deploy@v1.3.3
         with:
           email: ${{ secrets.HEROKU_EMAIL }}
           heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
@@ -20,4 +20,3 @@ jobs:
           dockerfile_directory: .docker/Dockerfiles
           dockerfile_name: Dockerfile
           process_type: web
-          context: .
