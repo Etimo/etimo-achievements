@@ -3,7 +3,8 @@
   "compilerOptions": {
     "composite": true,
     "outDir": "dist",
-    "rootDir": "src"
+    "rootDir": "src",
+    "resolveJsonModule": true
   },
   "references": [
     {
@@ -19,5 +20,5 @@
       "path": "../service"
     }
   ],
-  "include": ["./src"]
+  "include": ["./src", "**/version.json"]
 }

@@ -61,6 +61,14 @@ jobs:
       - name: Setup cache
         uses: ./.github/actions/setup-cache
 
+      - uses: danielr1996/envsubst-action@1.0.0
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+          BUILD_DATE: ${{ needs.init.outputs.date }}
+        with:
+          input: packages/api/src/version.json
+          output: packages/api/src/version.json
+
       - name: Build & push base image
         uses: ./.github/actions/docker-build-push
         with:

@@ -45,7 +45,12 @@ export default class Server {
 
     this.express.use('/users', new UserController().routes);
     this.express.use('/slack', new SlackController().routes);
+    this.express.use('/version', this.versionEndpoint);
   }
+
+  private versionEndpoint = (req: any, res: any) => {
+    res.send(require('./version.json'));
+  };
 
   private setupErrorHandler() {
     console.log('Setting up error handling');

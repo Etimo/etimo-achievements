@@ -1,0 +1,4 @@
+{
+  "version": "${COMMIT_SHA}",
+  "date": "${DEPLOY_DATE}"
+}
