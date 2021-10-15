@@ -9,6 +9,6 @@ export class DeleteUserService {
   }
 
   public async delete(user: IUser) {
-    await this.userRepo.create(user);
+    await this.userRepo.delete(user.id);
   }
 }
