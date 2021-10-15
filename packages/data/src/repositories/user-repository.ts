@@ -1,5 +1,4 @@
-import { IUser } from '../models';
-import { INewUser, IPartialUser, UserModel } from '../models/user-model';
+import { IUser, INewUser, IPartialUser, UserModel } from '../models/user-model';
 
 export class UserRepository {
   findById(id: string): Promise<IUser> {
@@ -24,5 +23,9 @@ export class UserRepository {
 
   delete(id: string): Promise<number> {
     return UserModel.query().deleteById(id);
+  }
+
+  getAll(): Promise<Array<IUser>> {
+    return UserModel.query();
   }
 }
