@@ -1,7 +1,6 @@
-import { GetAchievementService } from '../..';
-import { getAcheivementsListBody, showModal } from './utils';
-import { Request, Response } from 'express';
 import { AchievementRepository } from '@etimo-achievements/data';
+import { Request, Response } from 'express';
+import { getAchievementsListBody, showModal } from './utils';
 
 export class SlackService {
   public async getAllAchievements(req: Request, _res: Response) {
@@ -12,7 +11,7 @@ export class SlackService {
     const achievements = await achievementRepo.getAll();
 
     console.log('Creating view');
-    const view = getAcheivementsListBody(req.body, achievements);
+    const view = getAchievementsListBody(req.body, achievements);
 
     console.log('Showing modal');
     await showModal(view);

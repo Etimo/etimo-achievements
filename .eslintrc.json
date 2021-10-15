@@ -5,6 +5,7 @@
     "node": true
   },
   "extends": ["plugin:react/recommended", "google", "prettier"],
+  "ignorePatterns": ["**/dist/**/*"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
@@ -15,9 +16,10 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
-    "quotes": ["error", "single"],
-    "require-jsdoc": "off",
     "new-cap": ["error", { "capIsNew": false }],
-    "no-invalid-this": "off"
+    "no-invalid-this": "off",
+    "no-unused-vars": "off",
+    "quotes": ["error", "single"],
+    "require-jsdoc": "off"
   }
 }
