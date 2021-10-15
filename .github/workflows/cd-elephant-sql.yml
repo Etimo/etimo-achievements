@@ -37,4 +37,4 @@ jobs:
 
       - name: Migrate database
         working-directory: packages/data
-        run: yarn knex:dev migrate:latest
+        run: yarn knex:prod migrate:latest
