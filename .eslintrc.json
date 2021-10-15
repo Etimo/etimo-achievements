@@ -16,6 +16,8 @@
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
     "quotes": ["error", "single"],
-    "require-jsdoc": "off"
+    "require-jsdoc": "off",
+    "new-cap": ["error", { "capIsNew": false }],
+    "no-invalid-this": "off"
   }
 }
