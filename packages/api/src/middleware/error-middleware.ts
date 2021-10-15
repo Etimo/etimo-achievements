@@ -12,16 +12,13 @@ import { NextFunction, Request, Response } from 'express';
 import { ValidationError as ApiValidationError } from '../errors/validation-error';
 
 export const errorMiddleware = () => {
-  return (_req: Request, res: Response, next: NextFunction) => {
-    try {
-      next();
-    } catch (error: any) {
-      return handleError(error, res);
-    }
+  return (err: Error, _req: Request, res: Response, next: NextFunction) => {
+    console.log('hell');
+    handleError(err, res);
   };
 };
 
-function handleError(error: any, res: Response) {
+export function handleError(error: any, res: Response) {
   if (error instanceof ApiValidationError) {
     return res.status(400).send(error.message);
   }
@@ -134,6 +131,7 @@ function handleError(error: any, res: Response) {
     });
   }
 
+  console.error(error.stack);
   return res.status(500).send({
     message: error.message,
     type: 'UnknownError',

@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run compile",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "rimraf node_modules",
-    "compile": "tsc --build && cp -f package.json dist",
+    "compile": "tsc --build; cp -f package.json dist; exit 0",
     "start": "ts-node src/index.ts",
     "test": "exit 0"
   },

@@ -10,10 +10,11 @@
     "build": "yarn clean && yarn compile",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "rimraf node_modules",
-    "compile": "tsc --build && cp -f package.json dist",
+    "compile": "tsc --build; cp -f package.json dist; exit 0",
     "test": "exit 0"
   },
   "dependencies": {
+    "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/data": "^1.0.0"
   },
   "devDependencies": {
