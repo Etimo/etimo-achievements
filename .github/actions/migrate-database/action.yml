@@ -1,0 +1,43 @@
+name: Migrate database
+description: Migrates the database
+
+inputs:
+  database:
+    description: The name of the database
+    required: true
+  hostname:
+    description: The hostname of the database
+    required: true
+  port:
+    description: The port of the database
+    default: 5432
+  username:
+    description: The username with access to the database
+    required: true
+  password:
+    description: The user's password
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: |
+        npm install -g rimraf
+        yarn install
+
+    - name: Build packages
+      shell: bash
+      run: yarn build
+
+    - name: Migrate database
+      working-directory: packages/data
+      shell: bash
+      env:
+        DB_NAME: ${{ inputs.database }}
+        DB_HOSTNAME: ${{ inputs.hostname }}
+        DB_PORT: ${{ inputs.port }}
+        DB_USERNAME: ${{ inputs.username }}
+        DB_PASSWORD: ${{ inputs.password }}
+      run: yarn knex:prod migrate:latest

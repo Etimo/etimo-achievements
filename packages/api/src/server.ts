@@ -36,8 +36,8 @@ export default class Server {
 
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: true }));
-    //this.express.use(errorMiddleware());
-    //this.express.use(apiKeyMiddleware());
+    // this.express.use(errorMiddleware());
+    // this.express.use(apiKeyMiddleware());
   }
 
   private setupRoutes() {

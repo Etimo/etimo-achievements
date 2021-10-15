@@ -10,7 +10,7 @@
     "build": "yarn clean && yarn compile",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "rimraf node_modules",
-    "compile": "tsc --build; cp -f package.json dist; exit 0",
+    "compile": "tsc --build; cp -f package.json dist",
     "knex:dev": "knex --knexfile src/config/knexfile.ts --env development",
     "knex:local": "knex --knexfile src/config/knexfile.ts --env local",
     "knex:prod": "knex --knexfile src/config/knexfile.ts --env production",

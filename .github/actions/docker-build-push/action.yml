@@ -1,0 +1,51 @@
+name: Docker Build
+description: Build and push an app
+
+inputs:
+  branch:
+    description: The branch to checkout
+    default: master
+  dockerfile:
+    description: The Dockerfile path
+    required: true
+  image-name:
+    description: The name of the image
+    required: true
+  context:
+    description: The Docker context to use
+    default: .
+  image-suffix:
+    description: What suffix to use for the image (optional!)
+  tag:
+    description: What tag to use for the image
+    required: true
+  target:
+    description: The Dockerfile target to use
+    default: production
+  registry:
+    description: The container registry to push image to
+    default: ghcr.io/etimo
+
+runs:
+  using: composite
+  steps:
+    - name: Set short-sha
+      id: short-sha
+      shell: bash
+      run: echo "::set-output name=sha::$(echo ${{ github.sha }} | cut -c1-7)"
+
+    - name: Build image
+      uses: docker/build-push-action@v2
+      env:
+        GIT_COMMIT_HASH: ${{ github.sha }}
+        GIT_BRANCH: ${{ inputs.branch }}
+      with:
+        context: ${{ inputs.context }}
+        file: .docker/Dockerfiles/${{ inputs.dockerfile }}
+        target: ${{ inputs.target }}
+        push: true
+        tags: |
+          ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ steps.short-sha.outputs.sha }}
+          ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ inputs.tag }}
+        cache-from: type=gha,scope=${{ inputs.image-name }}
+        cache-to: type=gha,scope=${{ inputs.image-name }},mode=max
