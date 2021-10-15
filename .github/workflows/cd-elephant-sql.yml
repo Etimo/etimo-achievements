@@ -10,14 +10,13 @@ defaults:
   run:
     shell: bash
 
-environment: staging
-
 jobs:
   build:
     name: 'Migrate Elephant SQL'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
+    environment: staging
     env:
       DB_NAME: achievements
       DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
