@@ -1,3 +1,3 @@
 export * from './env-helper';
-export * from './pagination-helper';
+export * from './paginate';
 export * from './uuid';
