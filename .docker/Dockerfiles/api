@@ -1,4 +1,4 @@
-FROM ghcr.io/etimo/etimo-achievements/base AS develop
+FROM ghcr.io/etimo/etimo-achievements/base:latest AS develop
 ENV PORT=3000
 WORKDIR /app/packages/api
 COPY --chown=1000:1000 packages/api .
