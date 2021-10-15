@@ -24,6 +24,20 @@ The `docker-rebuild` command will build everything, including dependencies.
 
 It should be used when you add new dependencies to the project.
 
+Before you are done, you will need to create and seed the database:
+
+```
+yarn db-create
+yarn migrate
+yarn seed
+```
+
+After the initial creation, you can recreate, migrate and seed the database using the following script:
+
+```
+yarn db-reset
+```
+
 ## Developing
 
 When developing, simply run:
