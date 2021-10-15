@@ -3,3 +3,7 @@ export * from './user/create-user-service';
 export * from './user/delete-user-service';
 export * from './user/get-user-service';
 export * from './user/update-user-service';
+export * from './achievement/create-achievement-service';
+export * from './achievement/delete-achievement-service';
+export * from './achievement/get-achievement-service';
+export * from './achievement/update-achievement-service';
