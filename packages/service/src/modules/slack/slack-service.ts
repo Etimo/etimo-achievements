@@ -1,10 +1,10 @@
-import { GetAchievementService } from '..';
+import { GetAchievementService } from '../..';
 import { getAcheivementsListBody, showModal } from './utils';
 import { Request, Response } from 'express';
 import { AchievementRepository } from '@etimo-achievements/data';
 
 export class SlackService {
-  public async getAllAchivements(req: Request, _res: Response) {
+  public async getAllAchievements(req: Request, _res: Response) {
     const achievementRepo = new AchievementRepository();
     console.log(req.body);
 
@@ -19,6 +19,6 @@ export class SlackService {
   }
 
   public async createAchievement(req: Request, res: Response) {
-    res.status(200).send('create-achievement not implemented.');
+    res.status(501).send('create-achievement not implemented.');
   }
 }

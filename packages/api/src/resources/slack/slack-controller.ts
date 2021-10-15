@@ -14,7 +14,7 @@ export class SlackController {
 
   public get routes(): Router {
     const router = Router();
-    router.post('/achievements', this.slackService.getAllAchivements);
+    router.post('/achievements', this.slackService.getAllAchievements);
     router.post('/create-achievement', this.slackService.createAchievement);
     return router;
   }

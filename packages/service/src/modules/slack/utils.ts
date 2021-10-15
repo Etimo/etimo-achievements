@@ -19,12 +19,12 @@ export const getSlackHeaders = () => {
   };
 };
 
-export const getAcheivementsListBody = (body: any, achievements: Array<IAchievement>) => {
+export const getAchievementsListBody = (body: any, achievements: Array<IAchievement>) => {
   return {
     trigger_id: 'trigger_id',
     view: {
       type: 'modal',
-      callback_id: 'show-acheivements',
+      callback_id: 'show-achievements',
       title: {
         type: 'plain_text',
         text: 'Obama',
