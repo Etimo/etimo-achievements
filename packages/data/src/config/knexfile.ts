@@ -41,10 +41,12 @@ module.exports = {
   },
   production: {
     client: 'postgresql',
-    connection,
+    connection: {
+      ...connection,
+      ssl: true,
+    },
     migrations: {
       directory: '../../migrations',
     },
-    ssl: true,
   },
 };
