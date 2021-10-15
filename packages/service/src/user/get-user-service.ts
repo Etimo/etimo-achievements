@@ -9,6 +9,6 @@ export class GetUserService {
   }
 
   public async get(user: IUser) {
-    await this.userRepo.create(user);
+    await this.userRepo.findById(user.id);
   }
 }

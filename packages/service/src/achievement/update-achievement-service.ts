@@ -1,4 +1,4 @@
-import { AchievementRepository, IUser } from '@etimo-achievements/data';
+import { AchievementRepository, IAchievement } from '@etimo-achievements/data';
 import { ServiceOptions } from '../service-options';
 
 export class UpdateAchievementService {
@@ -8,7 +8,7 @@ export class UpdateAchievementService {
     this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
   }
 
-  public async update(user: IUser) {
-    await this.achievementRepo.update(user);
+  public async update(achievement: IAchievement) {
+    await this.achievementRepo.update(achievement);
   }
 }
