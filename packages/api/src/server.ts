@@ -1,6 +1,7 @@
 import { isDevelopment } from '@etimo-achievements/common';
 import express, { Application, Router } from 'express';
 import { loggingMiddleware, winstonMiddleware } from './middleware';
+import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 
 export default class Server {
@@ -43,6 +44,7 @@ export default class Server {
     console.log('Setting up routes');
 
     this.express.use('/users', new UserController().routes);
+    this.express.use('/slack', new SlackController().routes);
   }
 
   private setupErrorHandler() {

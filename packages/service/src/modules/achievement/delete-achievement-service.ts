@@ -8,7 +8,7 @@ export class DeleteAchievementService {
     this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
   }
 
-  public async delete(achievement: IAchievement) {
-    await this.achievementRepo.delete(achievement.id);
+  public async delete(achievementId: string) {
+    await this.achievementRepo.delete(achievementId);
   }
 }
