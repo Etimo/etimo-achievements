@@ -1,4 +1,4 @@
-FROM etimo-achievements/base AS develop
+FROM ghcr.io/etimo/etimo-achievements/base:latest AS develop
 WORKDIR /app
 COPY --chown=1000:1000 nodemon.json .
 CMD ["nodemon"]

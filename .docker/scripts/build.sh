@@ -39,6 +39,7 @@ docker_build() {
     $( (( NO_CACHE )) && echo "--no-cache" ) \
     -f "$1" \
     -t "etimo-achievements/$image_name" \
+    -t "ghcr.io/etimo/etimo-achievements/$image_name" \
     "$_root_path" \
   || error "Could not build $image_name image"
 }
