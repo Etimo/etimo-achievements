@@ -30,6 +30,9 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Build packages
+        run: yarn build
+
       - name: Migrate database
         working-directory: packages/data
         run: yarn knex:dev migrate:latest
