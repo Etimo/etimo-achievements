@@ -8,7 +8,7 @@ export class GetUserService {
     this.userRepo = options?.userRepository ?? new UserRepository();
   }
 
-  public async get(user: IUser) {
-    await this.userRepo.findById(user.id);
+  public async get(userId: string): Promise<IUser> {
+    return await this.userRepo.findById(userId);
   }
 }

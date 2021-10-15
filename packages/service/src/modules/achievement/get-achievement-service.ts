@@ -8,7 +8,7 @@ export class GetAchievementService {
     this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
   }
 
-  public async get(achievement: IAchievement) {
-    await this.achievementRepo.findById(achievement.id);
+  public async get(achievementId: string): Promise<IAchievement> {
+    return await this.achievementRepo.findById(achievementId);
   }
 }

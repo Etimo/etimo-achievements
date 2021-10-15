@@ -8,7 +8,7 @@ export class DeleteUserService {
     this.userRepo = options?.userRepository ?? new UserRepository();
   }
 
-  public async delete(user: IUser) {
-    await this.userRepo.delete(user.id);
+  public async delete(userId: string) {
+    await this.userRepo.delete(userId);
   }
 }
