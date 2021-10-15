@@ -1,4 +1,4 @@
-name: Migrate Elephant SQL
+name: Migrate SQL Database
 
 on:
   push:
@@ -12,13 +12,13 @@ defaults:
 
 jobs:
   build:
-    name: 'Migrate Elephant SQL'
+    name: 'Migrate SQL Database'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
     environment: staging
     env:
-      DB_NAME: achievements
+      DB_NAME: ${{ secrets.DB_NAME }}
       DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
       DB_PORT: 5432
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
