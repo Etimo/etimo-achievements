@@ -1,0 +1,36 @@
+name: Migrate Elephant SQL
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'packages/data/migrations/**'
+
+defaults:
+  run:
+    shell: bash
+
+environment: staging
+
+jobs:
+  build:
+    name: 'Migrate Elephant SQL'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    env:
+      DB_NAME: achievements
+      DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
+      DB_PORT: 5432
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Migrate database
+        working-directory: packages/data
+        run: yarn knex:dev migrate:latest
