@@ -57,3 +57,13 @@ jobs:
 
       - name: Deploy on Heroku
         run: heroku container:release web --app ${{ env.APP_NAME }}
+
+      - name: Migrate database
+        working-directory: packages/data
+        run: yarn knex:prod migrate:latest
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
+          DB_PORT: 5432
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}

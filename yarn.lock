@@ -503,7 +503,7 @@ __metadata:
   dependencies:
     "@etimo-achievements/common": ^1.0.0
     "@etimo-achievements/security": ^1.0.0
-    "@types/node": ^16.10.2
+    "@types/node": ^16.11.0
     knex: ~0.21.21
     objection: ^2.2.16
     pg: ^8.7.1
@@ -2146,6 +2146,13 @@ __metadata:
   version: 16.10.9
   resolution: "@types/node@npm:16.10.9"
   checksum: b47c3e3896ce243d3bc9e356578d4d607357d9ea0c1445a15cb564341580ac4db4f95677bf15fd354e46343edbd171ac19701740a53637234411da5b66c883a4
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.11.0":
+  version: 16.11.0
+  resolution: "@types/node@npm:16.11.0"
+  checksum: 194ae80ec72f664e15e03c33f116be96aa1e85b167a19e31003c53ddfc36dabd65744e9a76c1d46b7ce2e5981d2ccb8e84a85c3ec9ac89f1471daaa885bdcfd0
   languageName: node
   linkType: hard
 

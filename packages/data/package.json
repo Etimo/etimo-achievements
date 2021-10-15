@@ -13,6 +13,7 @@
     "compile": "tsc --build; cp -f package.json dist; exit 0",
     "knex:dev": "knex --knexfile src/config/knexfile.ts --env development",
     "knex:local": "knex --knexfile src/config/knexfile.ts --env local",
+    "knex:prod": "knex --knexfile src/config/knexfile.ts --env production",
     "migrate": "yarn knex:local migrate:latest",
     "new-migration": "yarn knex:local migrate:make",
     "new-seed": "yarn knex:local seed:make",
@@ -28,7 +29,7 @@
     "spacetime": "^6.16.3"
   },
   "devDependencies": {
-    "@types/node": "^16.10.2",
+    "@types/node": "^16.11.0",
     "ts-node": "^10.2.1",
     "typescript": "^4.4.3"
   }
