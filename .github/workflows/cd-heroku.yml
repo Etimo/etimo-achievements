@@ -25,6 +25,7 @@ jobs:
     strategy:
       fail-fast: true
     env:
+      DEFAULT_BRANCH: master
       APP_NAME: etimo-achievements-staging
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
