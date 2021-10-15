@@ -43,7 +43,7 @@ module.exports = {
     client: 'postgresql',
     connection: {
       ...connection,
-      ssl: true,
+      ssl: { rejectUnauthorized: false },
     },
     migrations: {
       directory: '../../migrations',
