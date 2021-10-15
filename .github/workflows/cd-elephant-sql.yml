@@ -2,9 +2,9 @@ name: Migrate Elephant SQL
 
 on:
   push:
-    branches: [master]
-    paths:
-      - 'packages/data/migrations/**'
+    branches: [elephant]
+#    paths:
+#      - 'packages/data/migrations/**'
 
 defaults:
   run:
