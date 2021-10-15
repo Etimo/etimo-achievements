@@ -1,6 +1,6 @@
 import { AchievementRepository, IAchievement } from '@etimo-achievements/data';
 import { ConflictError } from '../../errors';
-import { ServiceOptions } from '../service-options';
+import { ServiceOptions } from '../common/service-options';
 
 export class CreateAchievementService {
   private achievementRepo: AchievementRepository;

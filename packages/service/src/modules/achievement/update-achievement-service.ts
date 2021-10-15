@@ -1,5 +1,5 @@
 import { AchievementRepository, IAchievement } from '@etimo-achievements/data';
-import { ServiceOptions } from '../service-options';
+import { ServiceOptions } from '../common/service-options';
 
 export class UpdateAchievementService {
   private achievementRepo: AchievementRepository;
