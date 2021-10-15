@@ -1,12 +1,11 @@
 import { isDevelopment } from '@etimo-achievements/common';
-import express, { Express, Router } from 'express';
-import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
-import { errorMiddleware } from './middleware/error-middleware';
+import express, { Application, Router } from 'express';
+import { loggingMiddleware, winstonMiddleware } from './middleware';
 import { UserController } from './resources/users/user-controller';
 
 export default class Server {
   private port: number;
-  private express: Express;
+  private express: Application;
   private router: Router;
 
   constructor(port: number) {
@@ -16,15 +15,16 @@ export default class Server {
   }
 
   public start() {
-    this.applyMiddleware();
+    this.setupMiddleware();
     this.setupRoutes();
+    this.setupErrorHandler();
 
     this.express.listen(this.port);
 
     console.log(`Server running at port ${this.port}`);
   }
 
-  private applyMiddleware() {
+  private setupMiddleware() {
     console.log('Applying middleware');
 
     if (isDevelopment()) {
@@ -35,13 +35,21 @@ export default class Server {
 
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: true }));
-    this.express.use(apiKeyMiddleware());
-    this.express.use(errorMiddleware());
+    //this.express.use(errorMiddleware());
+    //this.express.use(apiKeyMiddleware());
   }
 
   private setupRoutes() {
     console.log('Setting up routes');
 
-    this.express.use('/users', new UserController().routes());
+    this.express.use('/users', new UserController().routes);
+  }
+
+  private setupErrorHandler() {
+    console.log('Setting up error handling');
+
+    this.express.use((err: any, _req: any, _res: any, _next: any) => {
+      console.log(err);
+    });
   }
 }
