@@ -35,11 +35,14 @@ docker_build() {
 
   [ ! -f "$1" ] && error "Could not find $image_name Dockerfile"
 
+  COMMIT_SHA="$(git rev-parse HEAD)"
+
   docker build \
     $( (( NO_CACHE )) && echo "--no-cache" ) \
     -f "$1" \
     -t "etimo-achievements/$image_name" \
     -t "ghcr.io/etimo/etimo-achievements/$image_name" \
+    --build-arg "COMMIT_SHA=$COMMIT_SHA" \
     "$_root_path" \
   || error "Could not build $image_name image"
 }

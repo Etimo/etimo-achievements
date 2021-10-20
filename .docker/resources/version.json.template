@@ -1,0 +1,4 @@
+{
+  "commit": "$COMMIT_SHA",
+  "date": "$COMPILE_DATE"
+}
