@@ -61,10 +61,14 @@ jobs:
       - name: Setup cache
         uses: ./.github/actions/setup-cache
 
+      - name: set current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d %H:%M:%S')"
+
       - uses: danielr1996/envsubst-action@1.0.0
         env:
           COMMIT_SHA: ${{ github.sha }}
-          BUILD_DATE: ${{ needs.init.outputs.date }}
+          COMPILE_DATE: ${{ steps.date.outputs.date }}
         with:
           input: packages/api/src/version.json
           output: packages/api/src/version.json

@@ -2,12 +2,14 @@ FROM node:14-alpine AS base
 WORKDIR /app
 
 # Install dependencies
-RUN npm install -g \
-  knex \
-  nodemon \
-  rimraf \
-  ts-node \
-  typescript
+RUN apk add --update \
+    gettext \
+  && npm install -g \
+    knex \
+    nodemon \
+    rimraf \
+    ts-node \
+    typescript
 
 RUN chown 1000:1000 /app
 USER 1000:1000
