@@ -36,16 +36,14 @@ runs:
 
     - name: Build image
       uses: docker/build-push-action@v2
-      env:
-        GIT_COMMIT_HASH: ${{ github.sha }}
-        GIT_BRANCH: ${{ inputs.branch }}
       with:
         context: ${{ inputs.context }}
         file: .docker/Dockerfiles/${{ inputs.dockerfile }}
         target: ${{ inputs.target }}
         push: true
+        build-args: COMMIT_SHA=${{ github.sha }}
         tags: |
-          ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ steps.short-sha.outputs.sha }}
+          ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ github.sha }}
           ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ inputs.tag }}
         cache-from: type=gha,scope=${{ inputs.image-name }}
         cache-to: type=gha,scope=${{ inputs.image-name }},mode=max

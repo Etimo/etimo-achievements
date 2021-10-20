@@ -23,13 +23,13 @@ runs:
   steps:
     - name: Install dependencies
       shell: bash
-      run: |
-        npm install -g rimraf
-        yarn install
+      working-directory: packages/data
+      run: yarn workspaces focus
 
     - name: Build packages
       shell: bash
-      run: yarn build
+      working-directory: packages/data
+      run: yarn compile
 
     - name: Migrate database
       working-directory: packages/data
@@ -40,4 +40,4 @@ runs:
         DB_PORT: ${{ inputs.port }}
         DB_USERNAME: ${{ inputs.username }}
         DB_PASSWORD: ${{ inputs.password }}
-      run: yarn knex:prod migrate:latest
+      run: yarn dlx knex --knexfile src/config/knexfile.ts --env production migrate:latest
