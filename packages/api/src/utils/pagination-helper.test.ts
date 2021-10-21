@@ -26,7 +26,13 @@ describe('getPaginationOptions', () => {
   });
 
   test('should not allow take lower than 1', () => {
-    const req = { query: { skip: 10, take: 0 } };
+    const req = { query: { skip: 0, take: 0 } };
+    const [skip, take] = getPaginationOptions(req);
+    expect(take).toBe(10); // will set to 10 because 0 is interpreted as not set => use default
+  });
+
+  test('should not allow take lower than 0', () => {
+    const req = { query: { skip: 0, take: -5 } };
     const [skip, take] = getPaginationOptions(req);
     expect(take).toBe(1);
   });
@@ -53,5 +59,17 @@ describe('getPaginationOptions', () => {
     const req = { query: { skip: 0, take: 1 } };
     const [skip, take] = getPaginationOptions(req);
     expect(take).toBe(1);
+  });
+
+  test('should set default skip', () => {
+    const req = { query: { skip: undefined, take: 5 } };
+    const [skip, take] = getPaginationOptions(req);
+    expect(skip).toBe(0);
+  });
+
+  test('should set default take', () => {
+    const req = { query: { skip: 0, take: undefined } };
+    const [skip, take] = getPaginationOptions(req);
+    expect(take).toBe(10);
   });
 });
