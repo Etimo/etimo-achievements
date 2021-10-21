@@ -25,7 +25,7 @@
     "restart": "docker stop $(docker ps -aq --filter 'label=com.achievements-etimo.monitored') && yarn build && yarn start",
     "seed": "lerna run --scope @etimo-achievements/data seed",
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
-    "support": "docker-compose up -d postgres pgadmin",
+    "support": "docker-compose up -d postgres pgadmin nodemon",
     "test": "lerna run test"
   },
   "devDependencies": {
