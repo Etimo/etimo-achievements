@@ -1,5 +1,6 @@
 import { SlackService } from '@etimo-achievements/service';
 import { Router } from 'express';
+import { endpoint } from '../../utils';
 
 export type SlackControllerOptions = {
   slackService?: SlackService;
@@ -14,8 +15,8 @@ export class SlackController {
 
   public get routes(): Router {
     const router = Router();
-    router.post('/achievements', this.slackService.getAllAchievements);
-    router.post('/create-achievement', this.slackService.createAchievement);
+    router.post('/achievements', endpoint(this.slackService.getAllAchievements));
+    router.post('/create-achievement', endpoint(this.slackService.createAchievement));
     return router;
   }
 }

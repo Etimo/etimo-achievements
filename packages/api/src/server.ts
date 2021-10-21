@@ -1,6 +1,7 @@
 import { isDevelopment } from '@etimo-achievements/common';
 import express, { Application, Router } from 'express';
 import { loggingMiddleware, winstonMiddleware } from './middleware';
+import { errorMiddleware } from './middleware/error-middleware';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 
@@ -36,7 +37,6 @@ export default class Server {
 
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: true }));
-    // this.express.use(errorMiddleware());
     // this.express.use(apiKeyMiddleware());
   }
 
@@ -55,8 +55,6 @@ export default class Server {
   private setupErrorHandler() {
     console.log('Setting up error handling');
 
-    this.express.use((err: any, _req: any, _res: any, _next: any) => {
-      console.log(err);
-    });
+    this.express.use(errorMiddleware());
   }
 }

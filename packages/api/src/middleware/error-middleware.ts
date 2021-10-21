@@ -12,9 +12,8 @@ import { NextFunction, Request, Response } from 'express';
 import { ValidationError as ApiValidationError } from '../errors/validation-error';
 
 export const errorMiddleware = () => {
-  return (err: Error, _req: Request, res: Response, next: NextFunction) => {
-    console.log('hell');
-    handleError(err, res);
+  return (error: Error, _req: Request, res: Response, next: NextFunction) => {
+    return handleError(error, res);
   };
 };
 
