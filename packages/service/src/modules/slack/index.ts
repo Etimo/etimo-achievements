@@ -1,1 +1,1 @@
-export * from './slack-service';
+export * from './show-achievements-service';

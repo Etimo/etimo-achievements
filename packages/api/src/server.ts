@@ -2,6 +2,7 @@ import { isDevelopment } from '@etimo-achievements/common';
 import express, { Application, Router } from 'express';
 import { loggingMiddleware, winstonMiddleware } from './middleware';
 import { errorMiddleware } from './middleware/error-middleware';
+import { VersionController } from './resources';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 
@@ -43,14 +44,10 @@ export default class Server {
   private setupRoutes() {
     console.log('Setting up routes');
 
-    this.express.use('/users', new UserController().routes);
-    this.express.use('/slack', new SlackController().routes);
-    this.express.use('/version', this.versionEndpoint);
+    this.express.use('/', new UserController().routes);
+    this.express.use('/', new SlackController().routes);
+    this.express.use('/version', new VersionController().routes);
   }
-
-  private versionEndpoint = (req: any, res: any) => {
-    res.send(require('./version.json'));
-  };
 
   private setupErrorHandler() {
     console.log('Setting up error handling');

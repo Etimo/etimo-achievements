@@ -1,22 +1,27 @@
-import { SlackService } from '@etimo-achievements/service';
-import { Router } from 'express';
+import { ShowSlackAchievementsService } from '@etimo-achievements/service';
+import { Request, Response, Router } from 'express';
 import { endpoint } from '../../utils';
 
 export type SlackControllerOptions = {
-  slackService?: SlackService;
+  showSlackAchievementsService?: ShowSlackAchievementsService;
 };
 
 export class SlackController {
-  private slackService: SlackService;
+  private showSlackAchievementsService: ShowSlackAchievementsService;
 
   constructor(options?: SlackControllerOptions) {
-    this.slackService = options?.slackService ?? new SlackService();
+    this.showSlackAchievementsService = options?.showSlackAchievementsService ?? new ShowSlackAchievementsService();
   }
 
   public get routes(): Router {
     const router = Router();
-    router.post('/achievements', endpoint(this.slackService.getAllAchievements));
-    router.post('/create-achievement', endpoint(this.slackService.createAchievement));
+    router.get('/slack/achievements', endpoint(this.getAchievements));
     return router;
   }
+
+  private getAchievements = async (req: Request, res: Response) => {
+    await this.showSlackAchievementsService.show();
+
+    return res.status(200).send();
+  };
 }

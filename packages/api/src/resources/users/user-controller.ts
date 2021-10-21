@@ -22,8 +22,8 @@ export class UserController {
 
   public get routes(): Router {
     const router = Router();
-    router.get('/', endpoint(this.getUsers));
-    router.post('/', endpoint(this.createUser));
+    router.get('/users', endpoint(this.getUsers));
+    router.post('/users', endpoint(this.createUser));
     return router;
   }
 
