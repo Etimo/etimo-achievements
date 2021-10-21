@@ -1,4 +1,4 @@
-import { isDevelopment } from '@etimo-achievements/common';
+import { nodeEnv } from '@etimo-achievements/common';
 import Knex, { Config } from 'knex';
 import { Model } from 'objection';
 const knexfile = require('./config/knexfile');
@@ -41,9 +41,7 @@ export class Database {
   }
 
   private init(): void {
-    const env = isDevelopment() ? 'development' : 'production';
-
-    this.knex = Knex(knexfile[env]);
+    this.knex = Knex(knexfile[nodeEnv()]);
 
     Model.knex(this.knex);
   }
