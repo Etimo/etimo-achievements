@@ -5,7 +5,7 @@ COPY .docker/resources/version.json.template /tmp
 COPY --chown=1000:1000 packages/api .
 RUN export COMPILE_DATE="$(date +'%Y-%m-%d %H:%M:%S')" \
   && export COMMIT_SHA=$COMMIT_SHA \
-  && envsubst '$COMMIT_SHA $COMPILE_DATE' < /tmp/version.json.template > ./src/version.json
+  && envsubst '$COMMIT_SHA $COMPILE_DATE' < /tmp/version.json.template > ./src/resources/version/version.json
 
 FROM base AS develop
 ENV PORT=3000
