@@ -46,7 +46,7 @@ export default class Server {
 
     this.express.use('/', new UserController().routes);
     this.express.use('/', new SlackController().routes);
-    this.express.use('/version', new VersionController().routes);
+    this.express.use('/', new VersionController().routes);
   }
 
   private setupErrorHandler() {

@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { endpoint } from '../utils';
+import { endpoint } from '../../utils';
 
 export class VersionController {
   public get routes(): Router {
