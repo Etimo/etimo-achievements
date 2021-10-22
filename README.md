@@ -14,28 +14,22 @@ Then you need to install the local dependencies:
 yarn install
 ```
 
-Now, you need to build the entire project:
+Initialize the .env files:
 
 ```
-yarn docker-rebuild
+yarn env
 ```
 
-The `docker-rebuild` command will build everything, including dependencies.
-
-It should be used when you add new dependencies to the project.
-
-Before you are done, you will need to create and seed the database:
+Now start the database and nodemon containers:
 
 ```
-yarn db-create
-yarn migrate
-yarn seed
+yarn support
 ```
 
-After the initial creation, you can recreate, migrate and seed the database using the following script:
+Create and seed the database:
 
 ```
-yarn db-reset
+yarn db-init
 ```
 
 ## Developing
@@ -47,3 +41,9 @@ yarn start
 ```
 
 This will start the project in development mode, and `nodemon` will monitor the project and rebuild everything when source files change.
+
+If you need to recreate, migrate and seed the database, use the following script:
+
+```
+yarn db-reset
+```
