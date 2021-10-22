@@ -25,6 +25,9 @@ jobs:
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_REGISTRY: registry.heroku.com
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Login to Heroku registry
         uses: docker/login-action@v1
         with:
