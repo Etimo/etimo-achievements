@@ -12,7 +12,6 @@
     "compile": "lerna run --parallel compile",
     "db-create": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",
     "db-drop": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"DROP DATABASE achievements\"",
-    "db-init": "npm run db-create && npm run migrate && npm run seed",
     "db-recreate": "nmp run db-drop && nmp run db-create",
     "db-reset": "nmp run db-recreate && nmp run migrate && nmp run seed",
     "db-reset-force": "docker-compose down --remove-orphans && docker-compose up -d postgres && sleep 10 && nmp run db-reset && docker-compose up -d",
@@ -20,6 +19,7 @@
     "docker-rebuild": "./.docker/scripts/build.sh --nodemon",
     "env": "cp -n packages/api/.env.example packages/api/.env",
     "env-force": "cp packages/api/.env.example packages/api/.env",
+    "first-run": "npm run env && npm run docker-rebuild && npm run support && sleep 10 && npm run db-create && npm run migrate && npm run seed && npm run start",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
     "migrate": "lerna run --scope @etimo-achievements/data migrate",
     "migration": "lerna run --scope @etimo-achievements/data migration",
@@ -28,7 +28,7 @@
     "restart": "docker stop $(docker ps -aq --filter 'label=com.achievements-etimo.monitored') && nmp run build && nmp run start",
     "seed": "lerna run --scope @etimo-achievements/data seed",
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
-    "support": "docker-compose up -d postgres pgadmin nodemon",
+    "support": "docker-compose up -d --build postgres pgadmin nodemon",
     "test": "lerna run test"
   },
   "devDependencies": {

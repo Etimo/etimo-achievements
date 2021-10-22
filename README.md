@@ -14,22 +14,10 @@ Then you need to install the local dependencies:
 yarn install
 ```
 
-Initialize the .env files:
+If this is your first time running this project, bootstrap it by running:
 
 ```
-yarn env
-```
-
-Now start the database and nodemon containers:
-
-```
-yarn support
-```
-
-Create and seed the database:
-
-```
-yarn db-init
+yarn first-run
 ```
 
 ## Developing
