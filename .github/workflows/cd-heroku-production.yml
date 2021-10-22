@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       verify:
-        description: 'Are you sure? Type \'YES\''
+        description: 'Are you sure? Type "YES"'
         required: true
 
 defaults:
