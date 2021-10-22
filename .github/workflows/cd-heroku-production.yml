@@ -35,19 +35,12 @@ jobs:
           username: _
           password: ${{ secrets.HEROKU_API_KEY }}
 
-      - name: Login to GitHub registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io/etimo
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GH_PACKAGES_TOKEN }}
-
       - name: Promote Docker image
         uses: ./.github/actions/docker-promote
         with:
           registry: ${{ env.HEROKU_REGISTRY }}
-          from-image-name: etimo-achievements-staging
-          to-image-name: etimo-achievements
+          from-image-name: etimo-achievements-staging/web
+          to-image-name: etimo-achievements/web
 
       - name: Deploy to Heroku
         shell: bash
