@@ -1,0 +1,38 @@
+name: Docker Build
+description: Build and push an app
+
+inputs:
+  registry:
+    description: The container registry to push image to
+    default: ghcr.io/etimo
+  from-image-name:
+    description: Source image name
+    required: true
+  to-image-name:
+    description: Target image name
+    required: true
+  from-tag:
+    description: Source image tag
+    default: latest
+  to-tag:
+    description: Target image tag
+    default: latest
+
+runs:
+  using: composite
+  steps:
+    - name: Pull image
+      shell: bash
+      run: |
+        docker pull ${{ inputs.registry }}/${{ inputs.from-image-name }}:${{ inputs.from-tag }}
+
+    - name: Tag image
+      shell: bash
+      run: |
+        docker tag ${{ inputs.registry }}/${{ inputs.from-image-name }}:${{ inputs.from-tag }} \
+          ${{ inputs.registry }}/${{ inputs.to-image-name }}:${{ inputs.to-tag }}
+
+    - name: Push image
+      shell: bash
+      run: |
+        docker push ${{ inputs.registry }}/${{ inputs.to-image-name }}:${{ inputs.to-tag }}

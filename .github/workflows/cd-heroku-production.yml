@@ -1,0 +1,59 @@
+name: Promote to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      verify:
+        description: 'Are you sure? Type \'YES\''
+        required: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  promote:
+    if: github.event.inputs.verify == 'YES'
+    name: 'Promote to Production'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+    environment: production
+    env:
+      DEFAULT_BRANCH: master
+      HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      HEROKU_REGISTRY: registry.heroku.com
+    steps:
+      - name: Login to Heroku registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.HEROKU_REGISTRY }}
+          username: _
+          password: ${{ secrets.HEROKU_API_KEY }}
+
+      - name: Login to GitHub registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io/etimo
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_PACKAGES_TOKEN }}
+
+      - name: Promote Docker image
+        uses: ./.github/actions/docker-promote
+        with:
+          registry: ${{ env.HEROKU_REGISTRY }}
+          from-image-name: etimo-achievements-staging
+          to-image-name: etimo-achievements
+
+      - name: Deploy to Heroku
+        shell: bash
+        run: heroku container:release web --app etimo-achievements
+
+      - name: Migrate database
+        uses: ./.github/actions/migrate-database
+        with:
+          database: ${{ secrets.DB_NAME }}
+          hostname: ${{ secrets.DB_HOSTNAME }}
+          username: ${{ secrets.DB_USERNAME }}
+          password: ${{ secrets.DB_PASSWORD }}

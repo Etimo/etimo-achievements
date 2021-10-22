@@ -1,4 +1,4 @@
-name: Deploy to Heroku
+name: Deploy to Staging
 
 on:
   push:
@@ -20,8 +20,8 @@ defaults:
     shell: bash
 
 jobs:
-  build:
-    name: 'Deploy to Heroku'
+  deploy:
+    name: 'Deploy to Staging'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
