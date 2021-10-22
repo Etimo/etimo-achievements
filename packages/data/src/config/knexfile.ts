@@ -12,41 +12,48 @@ if (isDevelopment()) {
   console.log('Database connection:', connection);
 }
 
+const fixedLocalhost = {
+  client: 'postgresql',
+  connection: {
+    host: '127.0.0.1',
+    port: 5432,
+    user: 'root',
+    password: 'root',
+    database: 'achievements',
+  },
+  migrations: {
+    directory: '../../migrations',
+  },
+  seeds: {
+    directory: '../../seeds',
+  },
+};
+
+const useEnv = {
+  client: 'postgresql',
+  connection,
+  migrations: {
+    directory: '../../migrations',
+  },
+  seeds: {
+    directory: '../../seeds',
+  },
+};
+
+const heroku = {
+  client: 'postgresql',
+  connection: {
+    ...connection,
+    ssl: { rejectUnauthorized: false },
+  },
+  migrations: {
+    directory: '../../migrations',
+  },
+};
+
 module.exports = {
-  local: {
-    client: 'postgresql',
-    connection: {
-      host: '127.0.0.1',
-      port: 5432,
-      user: 'root',
-      password: 'root',
-      database: 'achievements',
-    },
-    migrations: {
-      directory: '../../migrations',
-    },
-    seeds: {
-      directory: '../../seeds',
-    },
-  },
-  development: {
-    client: 'postgresql',
-    connection,
-    migrations: {
-      directory: '../../migrations',
-    },
-    seeds: {
-      directory: '../../seeds',
-    },
-  },
-  production: {
-    client: 'postgresql',
-    connection: {
-      ...connection,
-      ssl: { rejectUnauthorized: false },
-    },
-    migrations: {
-      directory: '../../migrations',
-    },
-  },
+  local: fixedLocalhost,
+  development: useEnv,
+  staging: heroku,
+  production: heroku,
 };
