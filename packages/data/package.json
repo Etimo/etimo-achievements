@@ -14,10 +14,11 @@
     "knex:dev": "knex --knexfile src/config/knexfile.ts --env development",
     "knex:local": "knex --knexfile src/config/knexfile.ts --env local",
     "knex:prod": "knex --knexfile src/config/knexfile.ts --env production",
-    "migrate": "yarn knex:local migrate:latest",
-    "new-migration": "yarn knex:local migrate:make",
-    "new-seed": "yarn knex:local seed:make",
-    "seed": "yarn knex:local seed:run",
+    "migration-apply": "yarn knex:local migrate:latest",
+    "migration-new": "yarn knex:local migrate:make",
+    "migration-revert": "yarn knex:local migrate:down",
+    "seed-new": "yarn knex:local seed:make",
+    "seed-run": "yarn knex:local seed:run",
     "test": "exit 0"
   },
   "dependencies": {
