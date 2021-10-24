@@ -1,4 +1,4 @@
-import { isDevelopment } from '@etimo-achievements/common';
+import { isDevelopment, isLocal, isProduction } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
 import Server from './server';
 
@@ -12,7 +12,17 @@ function getPort(): number {
   return 3000;
 }
 
-console.log(`Development: ${isDevelopment()}`);
+console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+
+if (isLocal()) {
+  console.log('Local environment detected');
+}
+if (isDevelopment()) {
+  console.log('Development environment detected');
+}
+if (isProduction()) {
+  console.log('Production environment detected');
+}
 
 // This initializes a database connection
 Database.getKnexInstance();
