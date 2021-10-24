@@ -9,6 +9,6 @@ export class GetUserService {
   }
 
   public async get(userId: string): Promise<IUser> {
-    return await this.userRepo.findById(userId);
+    return this.userRepo.findById(userId);
   }
 }

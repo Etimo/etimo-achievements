@@ -10,3 +10,7 @@ export const newUserValidator = Joi.object({
     .pattern(/^@[a-zA-Z0-9]{3,32}$/)
     .required(),
 });
+
+export const guidValidator = Joi.object({
+  userId: Joi.string().guid(),
+});
