@@ -36,7 +36,7 @@ const useEnv = {
   },
 };
 
-const heroku = {
+const production = {
   client: 'postgresql',
   connection: {
     ...connection,
@@ -50,6 +50,5 @@ const heroku = {
 module.exports = {
   local: fixedLocalhost,
   development: useEnv,
-  staging: heroku,
-  production: heroku,
+  production,
 };

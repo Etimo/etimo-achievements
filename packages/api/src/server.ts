@@ -1,6 +1,6 @@
 import { isDevelopment } from '@etimo-achievements/common';
 import express, { Application, Router } from 'express';
-import { loggingMiddleware, winstonMiddleware } from './middleware';
+import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
 import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
 import { SlackController } from './resources/slack';
@@ -38,7 +38,7 @@ export default class Server {
 
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: true }));
-    // this.express.use(apiKeyMiddleware());
+    this.express.use(apiKeyMiddleware());
   }
 
   private setupRoutes() {
