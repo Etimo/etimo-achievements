@@ -1,20 +1,19 @@
 import { isDevelopment } from '@etimo-achievements/common';
-import express, { Application, Router } from 'express';
+import express, { Application } from 'express';
 import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
 import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
+import { OpenApiController } from './resources/openapi/openapi-controller';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 
 export default class Server {
   private port: number;
   private express: Application;
-  private router: Router;
 
   constructor(port: number) {
     this.port = port;
     this.express = express();
-    this.router = Router();
   }
 
   public start() {
@@ -44,8 +43,9 @@ export default class Server {
   private setupRoutes() {
     console.log('Setting up routes');
 
-    this.express.use('/', new UserController().routes);
+    this.express.use('/', new OpenApiController().routes);
     this.express.use('/', new SlackController().routes);
+    this.express.use('/', new UserController().routes);
     this.express.use('/', new VersionController().routes);
   }
 
