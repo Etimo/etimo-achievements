@@ -49,6 +49,7 @@ export class UserController {
      *       200:
      *         description: User was created.
      */
+    router.get('/users/:userId', endpoint(this.getUser));
     router.post('/users', endpoint(this.createUser));
     return router;
   }
