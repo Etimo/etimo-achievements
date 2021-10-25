@@ -97,3 +97,6 @@ jobs:
           hostname: ${{ secrets.DB_HOSTNAME }}
           username: ${{ secrets.DB_USERNAME }}
           password: ${{ secrets.DB_PASSWORD }}
+
+      - name: Verify release
+        run: ./scripts/verify-release.sh production ${{ steps.commit.outputs.sha }}
