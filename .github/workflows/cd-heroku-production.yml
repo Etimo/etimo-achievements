@@ -21,6 +21,8 @@ jobs:
     environment: production
     env:
       DEFAULT_BRANCH: master
+      STAGING_URL: https://etimo-achievements-staging.herokuapp.com
+      PROD_URL: https://etimo-achievements.herokuapp.com
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_REGISTRY: registry.heroku.com
@@ -35,7 +37,47 @@ jobs:
           username: _
           password: ${{ secrets.HEROKU_API_KEY }}
 
+      - name: Check if staging is newer than production
+        id: commit
+        shell: bash
+        run: |
+          set -x
+          echo "::set-output name=differs::true"
+          staging_contents="$(curl --fail -s "${{ env.STAGING_URL }}/version")"
+          prod_contents="$(curl --fail -s "${{ env.PROD_URL }}/version")"
+          if [[ "$staging_contents" =~ ^\{.*\}$ ]]; then
+            staging_commit="$(echo "$staging_contents" | jq -r '.commit')"
+            if [[ "$staging_commit" =~ ^[0-9a-f]{40}$ ]]; then
+              echo "::set-output name=sha::$staging_commit"
+              prod_commit="$(echo "$prod_contents" | jq -r '.commit')"
+              if [ "$staging_commit" == "$prod_commit" ]; then
+                echo "::set-output name=differs::false"
+              fi
+            fi
+          fi
+          exit 0
+
+      - name: Tag release
+        id: tag
+        if: steps.commit.outputs.differs == 'true'
+        shell: bash
+        run: |
+          # This script will not work unless there's a 'v1' tag already present
+          set -x
+          git fetch --all --tags
+          latest_version=$(git tag | grep -E ^v[[:digit:]]+$ | sort -V | tail -n 1 | cut -c 2-)
+          this_commit=${{ steps.commit.outputs.sha }}
+          tag_commit=$(git rev-list -n 1 v$latest_version)
+          next_version=v$((++ latest_version))
+          if [ "$this_commit" != "$tag_commit" ]; then
+            git tag $next_version $this_commit \
+            && git push origin $next_version
+            echo "::set-output name=tagged::true"
+          fi
+          exit 0
+
       - name: Promote Docker image
+        if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/docker-promote
         with:
           registry: ${{ env.HEROKU_REGISTRY }}
@@ -43,10 +85,12 @@ jobs:
           to-image-name: etimo-achievements/web
 
       - name: Deploy to Heroku
+        if: steps.tag.outputs.tagged == 'true'
         shell: bash
         run: heroku container:release web --app etimo-achievements
 
       - name: Migrate database
+        if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/migrate-database
         with:
           database: ${{ secrets.DB_NAME }}
