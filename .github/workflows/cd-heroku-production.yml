@@ -1,5 +1,7 @@
 name: Promote to Production
 
+concurrency: production_environment
+
 on:
   workflow_dispatch:
     inputs:

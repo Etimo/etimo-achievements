@@ -1,5 +1,7 @@
 name: Deploy to Staging
 
+concurrency: staging_environment
+
 on:
   push:
     branches: [master]
