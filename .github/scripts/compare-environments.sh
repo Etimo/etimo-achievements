@@ -26,6 +26,12 @@ echo "Fetching production version information from $production_url"
 production_contents="$(curl --fail -s "$production_url")"
 production_commit="$(echo "$production_contents" | jq -r '.commit')"
 
+# If the "commit" property is not a valid commit, we can't
+# know for certain that the environments do not differ.
+[[ "$production_commit" =~ ^[0-9a-f]{40}$ ]] || exit 0
+
+echo "Production environment has commit: $production_commit"
+
 [ "$staging_commit" == "$production_commit" ] && {
   echo "Production environment is the same as staging."
   echo "::set-output name=differs::false"
