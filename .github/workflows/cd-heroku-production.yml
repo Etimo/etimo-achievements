@@ -22,7 +22,7 @@ jobs:
     env:
       DEFAULT_BRANCH: master
       STAGING_URL: https://etimo-achievements-staging.herokuapp.com
-      PROD_URL: https://etimo-achievements.herokuapp.com
+      PRODUCTION_URL: https://etimo-achievements.herokuapp.com
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_REGISTRY: registry.heroku.com
@@ -40,27 +40,14 @@ jobs:
       - name: Check if staging is newer than production
         id: commit
         shell: bash
-        run: |
-          set -x
-          echo "::set-output name=differs::true"
-          staging_contents="$(curl --fail -s "${{ env.STAGING_URL }}/version")"
-          prod_contents="$(curl --fail -s "${{ env.PROD_URL }}/version")"
-          if [[ "$staging_contents" =~ ^\{.*\}$ ]]; then
-            staging_commit="$(echo "$staging_contents" | jq -r '.commit')"
-            if [[ "$staging_commit" =~ ^[0-9a-f]{40}$ ]]; then
-              echo "::set-output name=sha::$staging_commit"
-              prod_commit="$(echo "$prod_contents" | jq -r '.commit')"
-              if [ "$staging_commit" == "$prod_commit" ]; then
-                echo "::set-output name=differs::false"
-              fi
-            fi
-          fi
-          exit 0
+        # outputs "differs" == "true" if there are differences
+        run: ./.github/scripts/compare-environments.sh ${{ env.STAGING_URL }} ${{ env.PRODUCTION_URL }}
 
       - name: Tag release
         id: tag
         if: steps.commit.outputs.differs == 'true'
         shell: bash
+        # outputs "tagged" == "true" if the tag was created
         run: ./.github/scripts/tag-release.sh ${{ steps.commit.outputs.sha }}
 
       - name: Promote Docker image
