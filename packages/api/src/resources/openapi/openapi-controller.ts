@@ -12,9 +12,10 @@ export class OpenApiController {
   private get swaggerSpec() {
     const options = {
       definition: {
+        openapi: "3.0.0",
         info: {
           title: 'Etimo Achievements',
-          version: '1.0.1',
+          version: '1.0.0',
           license: {
             name: 'Licensed Under MIT',
             url: 'https://spdx.org/licenses/MIT.html',
