@@ -10,7 +10,9 @@ export class ShowSlackAchievementsService {
   }
 
   public async show() {
-    const achievements = await this.achievementRepo.getAll();
+    const skip: number = 0;
+    const take: number = 50;
+    const achievements = await this.achievementRepo.getAll(skip, take);
     const view = this.generateView(achievements);
     await showModal(view);
   }
