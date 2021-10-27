@@ -1,28 +1,39 @@
-import { Request, Response, Router } from 'express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import { endpoint } from '../../utils';
+import { Router } from 'express';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUi from 'swagger-ui-express';
 
 export class OpenApiController {
   public get routes(): Router {
     const router = Router();
-    router.get('/api-docs.json', endpoint(this.getSwaggerSpec));
+    router.use('/swagger', swaggerUi.serve, swaggerUi.setup(this.swaggerSpec));
     return router;
   }
 
-  private getSwaggerSpec = async (_req: Request, res: Response) => {
+  private get swaggerSpec() {
     const options = {
       definition: {
         info: {
           title: 'Etimo Achievements',
-          version: '1.0.0',
+          version: '1.0.1',
+          license: {
+            name: 'Licensed Under MIT',
+            url: 'https://spdx.org/licenses/MIT.html',
+          },
+          contact: {
+            name: 'Etimo AB',
+            url: 'https://etimo.se',
+          },
         },
       },
       apis: ['**/resources/*/*-controller.ts'],
+      servers: [
+        {
+          url: 'http://localhost:3000',
+          description: 'Development server',
+        },
+      ],
     };
 
-    const swaggerSpec = swaggerJsdoc(options);
-
-    res.setHeader('Content-Type', 'application/json');
-    res.send(swaggerSpec);
-  };
+    return swaggerJSDoc(options);
+  }
 }
