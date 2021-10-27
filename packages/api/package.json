@@ -9,8 +9,8 @@
   "scripts": {
     "build": "npm run clean && npm run compile",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
-    "clear": "rimraf node_modules",
-    "compile": "tsc --build; cp -f package.json dist",
+    "clear": "npm run clean && rimraf node_modules",
+    "compile": "tsc --build; cp -f package.json dist/",
     "dev": "nodemon",
     "start": "ts-node src/index.ts",
     "test": "jest"

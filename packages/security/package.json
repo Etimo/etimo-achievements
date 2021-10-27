@@ -9,8 +9,8 @@
   "scripts": {
     "build": "yarn clean && yarn compile",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
-    "clear": "rimraf node_modules",
-    "compile": "tsc --build; cp -f package.json dist",
+    "clear": "npm run clean && rimraf node_modules",
+    "compile": "tsc --build; cp -f package.json dist/",
     "test": "exit 0"
   },
   "dependencies": {
