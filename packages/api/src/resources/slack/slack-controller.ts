@@ -15,7 +15,18 @@ export class SlackController {
 
   public get routes(): Router {
     const router = Router();
+
+    /**
+     * @openapi
+     * /slack/achievements:
+     *   get:
+     *     description: Show Slack achievements modal.
+     *     responses:
+     *       200:
+     *         description: Achievements modal was created.
+     */
     router.get('/slack/achievements', endpoint(this.getAchievements));
+
     return router;
   }
 
