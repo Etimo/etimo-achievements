@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { UnauthorizedError } from '../errors/unauthorized-error';
 
-const excludedPaths = ['/version'];
+const excludedPaths = ['/version', '/swagger'];
 
 export const apiKeyMiddleware = () => {
   return (req: Request, res: Response, next: NextFunction) => {
