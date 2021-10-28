@@ -23,7 +23,6 @@ jobs:
       image: node:14
     strategy:
       fail-fast: true
-    environment: staging
     env:
       NODE_ENV: development
       DB_HOSTNAME: postgres
