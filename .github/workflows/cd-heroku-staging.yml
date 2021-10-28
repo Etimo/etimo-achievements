@@ -3,13 +3,10 @@ name: Deploy to Staging
 concurrency: staging_environment
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - '.docker/**'
-      - '.github/**'
-      - 'packages/**'
-      - '!packages/**/*.md'
+  workflow_run:
+    workflows: ['Run tests']
+    types:
+      - completed
   workflow_dispatch:
     inputs:
       branch:
