@@ -1,6 +1,6 @@
 name: Run tests
 
-concurrency: staging_environment
+concurrency: test
 
 on:
   push:
@@ -68,3 +68,6 @@ jobs:
 
       - name: Run unit tests
         run: npm run test
+
+      - name: Run integration tests
+        run: npm run test-integration

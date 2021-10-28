@@ -50,5 +50,6 @@ const production = {
 module.exports = {
   local: fixedLocalhost,
   development: useEnv,
+  test: useEnv,
   production,
 };

@@ -23,6 +23,7 @@ function assertValidEnv(env: string): string {
   switch (env) {
     case 'local': // Local development
     case 'development': // Development on e.g. Docker or a local server
+    case 'test': // Testing environment, e.g. GitHub Actions
     case 'production': // Production environment (staging/production)
       return env;
 
