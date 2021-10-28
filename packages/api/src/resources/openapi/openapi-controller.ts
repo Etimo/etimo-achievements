@@ -12,7 +12,7 @@ export class OpenApiController {
   private get swaggerSpec() {
     const options = {
       definition: {
-        openapi: "3.0.0",
+        openapi: '3.0.0',
         info: {
           title: 'Etimo Achievements',
           version: '1.0.0',
