@@ -51,5 +51,8 @@ runs:
         DB_PASSWORD: ${{ inputs.password }}
         DB_SSL: ${{ inputs.ssl }}
       run: |
-        yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} migrate:latest
-        [ "${{ inputs.seed }}" = "true" ] && yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} seed:run
+        yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} migrate:latest || exit 1
+        [ "${{ inputs.seed }}" = "true" ] && {
+          yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} seed:run || exit 1
+        }
+        exit 0
