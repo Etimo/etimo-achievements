@@ -1,6 +1,8 @@
 name: Run tests
 
-concurrency: test
+concurrency:
+  group: test
+  cancel-in-progress: true
 
 on:
   push:
