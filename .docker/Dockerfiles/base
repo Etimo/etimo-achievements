@@ -5,6 +5,7 @@ WORKDIR /app
 RUN apk add --update \
     gettext \
   && npm install -g \
+    jest \
     knex \
     nodemon \
     rimraf \

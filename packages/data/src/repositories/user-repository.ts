@@ -3,7 +3,7 @@ import { INewUser, IPartialUser, IUser, UserModel } from '../models/user-model';
 
 export class UserRepository {
   async count(): Promise<number> {
-    const result = await Database.getKnexInstance().raw('select count(*) from users');
+    const result = await Database.knex.raw('select count(*) from users');
     return parseInt(result.rows[0]['count'], 10);
   }
 

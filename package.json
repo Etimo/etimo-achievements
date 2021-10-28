@@ -31,6 +31,7 @@
     "seed-run": "lerna run --scope @etimo-achievements/data seed-apply",
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
     "support": "docker-compose up -d --build postgres pgadmin nodemon",
+    "test-integration": "lerna run test-integration",
     "test": "lerna run test"
   },
   "devDependencies": {

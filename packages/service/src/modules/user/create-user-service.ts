@@ -1,4 +1,4 @@
-import { IUser, UserRepository } from '@etimo-achievements/data';
+import { INewUser, IUser, UserRepository } from '@etimo-achievements/data';
 import { ConflictError } from '../../errors';
 import { ServiceOptions } from '../common/service-options';
 
@@ -9,7 +9,7 @@ export class CreateUserService {
     this.userRepo = options?.userRepository ?? new UserRepository();
   }
 
-  public async create(user: IUser): Promise<IUser> {
+  public async create(user: INewUser): Promise<IUser> {
     try {
       return await this.userRepo.create(user);
     } catch (error: any) {
