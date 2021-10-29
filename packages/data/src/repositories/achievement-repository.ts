@@ -1,6 +1,12 @@
+import { Database } from '..';
 import { IAchievement, INewAchievement, IPartialAchievement, AchievementModel } from '../models/achievement-model';
 
 export class AchievementRepository {
+  async count(): Promise<number> {
+    const result = await Database.getKnexInstance().raw('select count(*) from achievements');
+    return parseInt(result.rows[0]['count'], 10);
+  }
+
   findById(id: string): Promise<IAchievement> {
     return AchievementModel.query().findById(id);
   }
@@ -21,7 +27,7 @@ export class AchievementRepository {
     return AchievementModel.query().deleteById(id);
   }
 
-  getAll(): Promise<Array<IAchievement>> {
-    return AchievementModel.query();
+  getAll(skip: number, take: number): Promise<IAchievement[]> {
+    return AchievementModel.query().limit(take).offset(skip);
   }
 }

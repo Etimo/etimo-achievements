@@ -3,7 +3,7 @@ import { Model, ModelOptions, QueryContext } from 'objection';
 
 export interface IAchievement {
   id: string;
-  name: string;
+  achievement: string;
   description: string;
 }
 
@@ -18,11 +18,11 @@ export class AchievementModel extends Model implements IAchievement {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['id', 'name', 'description'],
+      required: ['achievement', 'description'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
-        name: { type: 'string', minLength: 2, maxLength: 255 },
+        achievement: { type: 'string', minLength: 2, maxLength: 255 },
         description: { type: 'string', minLength: 0, maxLength: 255 },
         createdAt: { type: 'string', format: 'date-time' },
         updatedAt: { type: 'string', format: 'date-time' },
@@ -41,7 +41,7 @@ export class AchievementModel extends Model implements IAchievement {
   }
 
   id!: string;
-  name!: string;
+  achievement!: string;
   description!: string;
   createdAt!: Date;
   updatedAt!: Date;
