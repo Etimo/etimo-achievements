@@ -3,7 +3,7 @@ import { IAchievement, INewAchievement, IPartialAchievement, AchievementModel } 
 
 export class AchievementRepository {
   async count(): Promise<number> {
-    const result = await Database.getKnexInstance().raw('select count(*) from achievements');
+    const result = await Database.knex.raw('select count(*) from achievements');
     return parseInt(result.rows[0]['count'], 10);
   }
 
