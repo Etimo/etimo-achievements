@@ -37,7 +37,25 @@ export class UserController {
      */
     router.get('/users', endpoint(this.getUsers));
 
-    // TODO: Write openapi docs
+    /**
+     * @openapi
+     * /users/{userId}:
+     *   get:
+     *     description: Get user.
+     *     parameters:
+     *       - name: userId
+     *         in: path
+     *         required: true
+     *         type: string
+     *         format: uuid
+     *     responses:
+     *       200:
+     *         description: A user.
+     *       400:
+     *         description: Bad request, missing or invalid parameter.
+     *       404:
+     *         description: Not found, the user was not found.
+     */
     router.get('/users/:userId', endpoint(this.getUser));
 
     /**
@@ -45,11 +63,32 @@ export class UserController {
      * /users:
      *   post:
      *     description: Creates a user.
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: username
+     *         in: formData
+     *         required: true
+     *         type: string
+     *       - name: password
+     *         in: formData
+     *         required: true
+     *         type: string
+     *       - name: email
+     *         in: formData
+     *         required: true
+     *         type: string
+     *         format: email
+     *       - name: slackHandle
+     *         in: formData
+     *         required: true
+     *         type: string
      *     responses:
      *       200:
      *         description: User was created.
+     *       400:
+     *         description: Bad request, missing or invalid parameter.
      */
-    router.get('/users/:userId', endpoint(this.getUser));
     router.post('/users', endpoint(this.createUser));
     return router;
   }
