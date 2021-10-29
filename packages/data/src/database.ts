@@ -11,7 +11,11 @@ export class Database {
     return this.getInstance().getOptions();
   }
 
-  public static getKnexInstance(): Knex {
+  public static connect(): void {
+    this.getInstance();
+  }
+
+  public static get knex(): Knex {
     return this.getInstance().knex;
   }
 

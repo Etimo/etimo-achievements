@@ -25,8 +25,30 @@ export class UserController {
 
   public get routes(): Router {
     const router = Router();
+
+    /**
+     * @openapi
+     * /users:
+     *   get:
+     *     description: Get users.
+     *     responses:
+     *       200:
+     *         description: A list of users.
+     */
     router.get('/users', endpoint(this.getUsers));
+
+    // TODO: Write openapi docs
     router.get('/users/:userId', endpoint(this.getUser));
+
+    /**
+     * @openapi
+     * /users:
+     *   post:
+     *     description: Creates a user.
+     *     responses:
+     *       200:
+     *         description: User was created.
+     */
     router.post('/users', endpoint(this.createUser));
     return router;
   }

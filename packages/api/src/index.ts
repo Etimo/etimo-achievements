@@ -24,8 +24,7 @@ if (isProduction()) {
   console.log('Production environment detected');
 }
 
-// This initializes a database connection
-Database.getKnexInstance();
+Database.connect();
 
 const server = new Server(getPort());
 

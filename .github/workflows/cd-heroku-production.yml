@@ -1,5 +1,7 @@
 name: Promote to Production
 
+concurrency: production_environment
+
 on:
   workflow_dispatch:
     inputs:
@@ -21,6 +23,8 @@ jobs:
     environment: production
     env:
       DEFAULT_BRANCH: master
+      STAGING_URL: https://etimo-achievements-staging.herokuapp.com
+      PRODUCTION_URL: https://etimo-achievements.herokuapp.com
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_REGISTRY: registry.heroku.com
@@ -35,7 +39,21 @@ jobs:
           username: _
           password: ${{ secrets.HEROKU_API_KEY }}
 
+      - name: Check if staging is newer than production
+        id: commit
+        shell: bash
+        # outputs "differs" == "true" if there are differences
+        run: ./.github/scripts/compare-environments.sh ${{ env.STAGING_URL }} ${{ env.PRODUCTION_URL }}
+
+      - name: Tag release
+        id: tag
+        if: steps.commit.outputs.differs == 'true'
+        shell: bash
+        # outputs "tagged" == "true" if the tag was created
+        run: ./.github/scripts/tag-release.sh ${{ steps.commit.outputs.sha }}
+
       - name: Promote Docker image
+        if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/docker-promote
         with:
           registry: ${{ env.HEROKU_REGISTRY }}
@@ -43,13 +61,18 @@ jobs:
           to-image-name: etimo-achievements/web
 
       - name: Deploy to Heroku
+        if: steps.tag.outputs.tagged == 'true'
         shell: bash
         run: heroku container:release web --app etimo-achievements
 
       - name: Migrate database
+        if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/migrate-database
         with:
           database: ${{ secrets.DB_NAME }}
           hostname: ${{ secrets.DB_HOSTNAME }}
           username: ${{ secrets.DB_USERNAME }}
           password: ${{ secrets.DB_PASSWORD }}
+
+      - name: Verify release
+        run: ./scripts/verify-release.sh production ${{ steps.commit.outputs.sha }}

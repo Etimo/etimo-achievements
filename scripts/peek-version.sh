@@ -7,7 +7,7 @@ get_info() {
   if [[ "$contents" =~ ^\{.*\}$ ]]; then
     commit_sha="$(echo "$contents" | jq -r '.commit' | cut -c1-7)"
     compile_date="$(echo "$contents" | jq -r '.date')"
-    echo "${commit_sha} deployed at $compile_date"
+    echo "${commit_sha} compiled at $compile_date"
     return 0
   else
     echo "offline"
