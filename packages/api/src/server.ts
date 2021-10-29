@@ -7,6 +7,7 @@ import { OpenApiController } from './resources/openapi/openapi-controller';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 import { AchievementController } from './resources/achievements/achievement-controller';
+import { AwardsController } from './resources/awards/awards-controller';
 
 export default class Server {
   private port: number;
@@ -48,6 +49,7 @@ export default class Server {
     this.express.use('/', new AchievementController().routes);
     this.express.use('/', new SlackController().routes);
     this.express.use('/', new UserController().routes);
+    this.express.use('/', new AwardsController().routes);
     this.express.use('/', new VersionController().routes);
   }
 
