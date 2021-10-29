@@ -22,8 +22,42 @@ export class AchievementController {
 
   public get routes(): Router {
     const router = Router();
-    router.post('/achievements', endpoint(this.createAchievements));
+
+    /**
+     * @openapi
+     * /achievements:
+     *   get:
+     *     description: Get achievements.
+     *     responses:
+     *       200:
+     *         description: A list of achievements.
+     */
     router.get('/achievements', endpoint(this.getAchievements));
+
+    /**
+     * @openapi
+     * /achievements:
+     *   post:
+     *     description: Creates an achievement.
+     *     produces:
+     *       - application/json
+     *     parameters:
+     *       - name: achievement
+     *         in: formData
+     *         required: true
+     *         type: string
+     *       - name: description
+     *         in: formData
+     *         required: true
+     *         type: string
+     *     responses:
+     *       200:
+     *         description: User was created.
+     *       400:
+     *         description: Bad request, missing or invalid parameter.
+     */
+    router.post('/achievements', endpoint(this.createAchievements));
+
     return router;
   }
 
