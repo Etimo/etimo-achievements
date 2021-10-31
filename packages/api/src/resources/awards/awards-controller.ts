@@ -12,8 +12,30 @@ export class AwardsController {
     /**
      * @openapi
      * /awards:
+     *   get:
+     *     description: Get awards.
+     *     security:
+     *       - ApiKey: []
+     *     parameters:
+     *       - $ref: '#/parameters/skipParam'
+     *       - $ref: '#/parameters/takeParam'
+     *     produces:
+     *       - application/json
+     *     responses:
+     *       200:
+     *         description: A list of awards.
+     *     tags:
+     *       - Awards
+     */
+    router.get('/awards', endpoint(this.getAwards));
+
+    /**
+     * @openapi
+     * /awards:
      *   post:
      *     description: Give a user an award.
+     *     security:
+     *       - ApiKey: []
      *     produces:
      *       - application/json
      *     parameters:
@@ -28,19 +50,11 @@ export class AwardsController {
      *     responses:
      *       200:
      *         description: User given award.
+     *     tags:
+     *       - Awards
      */
     router.post('/awards', endpoint(this.createAwards));
 
-    /**
-     * @openapi
-     * /awards:
-     *   get:
-     *     description: Get awards.
-     *     responses:
-     *       200:
-     *         description: A list of awards.
-     */
-    router.get('/awards', endpoint(this.getAwards));
     return router;
   }
 

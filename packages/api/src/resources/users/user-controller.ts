@@ -1,10 +1,10 @@
-import { CreateUserService, GetUsersService, GetUserService } from '@etimo-achievements/service';
+import { CreateUserService, GetUserService, GetUsersService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { UserMapper } from '.';
 import { endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { validate } from '../../utils/validation-helper';
-import { newUserValidator, guidValidator } from './user-validator';
+import { guidValidator, newUserValidator } from './user-validator';
 
 export type UserControllerOptions = {
   createUserService?: CreateUserService;
@@ -31,9 +31,18 @@ export class UserController {
      * /users:
      *   get:
      *     description: Get users.
+     *     security:
+     *       - ApiKey: []
+     *     parameters:
+     *       - $ref: '#/parameters/skipParam'
+     *       - $ref: '#/parameters/takeParam'
+     *     produces:
+     *       - application/json
      *     responses:
      *       200:
      *         description: A list of users.
+     *     tags:
+     *       - Users
      */
     router.get('/users', endpoint(this.getUsers));
 
@@ -41,7 +50,11 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   get:
-     *     description: Get user.
+     *     description: Get a specific user.
+     *     security:
+     *       - ApiKey: []
+     *     produces:
+     *       - application/json
      *     parameters:
      *       - name: userId
      *         in: path
@@ -55,6 +68,8 @@ export class UserController {
      *         description: Bad request, missing or invalid parameter.
      *       404:
      *         description: Not found, the user was not found.
+     *     tags:
+     *       - Users
      */
     router.get('/users/:userId', endpoint(this.getUser));
 
@@ -63,6 +78,8 @@ export class UserController {
      * /users:
      *   post:
      *     description: Creates a user.
+     *     security:
+     *       - ApiKey: []
      *     produces:
      *       - application/json
      *     parameters:
@@ -88,8 +105,11 @@ export class UserController {
      *         description: User was created.
      *       400:
      *         description: Bad request, missing or invalid parameter.
+     *     tags:
+     *       - Users
      */
     router.post('/users', endpoint(this.createUser));
+
     return router;
   }
 

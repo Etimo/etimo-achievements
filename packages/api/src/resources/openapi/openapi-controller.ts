@@ -26,11 +26,19 @@ export class OpenApiController {
           },
         },
       },
-      apis: ['**/resources/*/*-controller.ts'],
+      apis: ['**/resources/**/*.ts'],
       servers: [
         {
           url: 'http://localhost:3000',
           description: 'Development server',
+        },
+        {
+          url: 'https://etimo-achievements-staging.herokuapp.com',
+          description: 'Staging server',
+        },
+        {
+          url: 'https://etimo-achievements.herokuapp.com',
+          description: 'Production server',
         },
       ],
     };

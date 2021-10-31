@@ -3,11 +3,11 @@ import express, { Application } from 'express';
 import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
 import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
+import { AchievementController } from './resources/achievements/achievement-controller';
+import { AwardsController } from './resources/awards/awards-controller';
 import { OpenApiController } from './resources/openapi/openapi-controller';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
-import { AchievementController } from './resources/achievements/achievement-controller';
-import { AwardsController } from './resources/awards/awards-controller';
 
 export default class Server {
   private port: number;
@@ -39,6 +39,7 @@ export default class Server {
 
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: true }));
+
     this.express.use(apiKeyMiddleware());
   }
 

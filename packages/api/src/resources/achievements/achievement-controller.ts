@@ -28,9 +28,18 @@ export class AchievementController {
      * /achievements:
      *   get:
      *     description: Get achievements.
+     *     security:
+     *       - ApiKey: []
+     *     parameters:
+     *       - $ref: '#/parameters/skipParam'
+     *       - $ref: '#/parameters/takeParam'
+     *     produces:
+     *       - application/json
      *     responses:
      *       200:
      *         description: A list of achievements.
+     *     tags:
+     *       - Achievements
      */
     router.get('/achievements', endpoint(this.getAchievements));
 
@@ -39,6 +48,8 @@ export class AchievementController {
      * /achievements:
      *   post:
      *     description: Creates an achievement.
+     *     security:
+     *       - ApiKey: []
      *     produces:
      *       - application/json
      *     parameters:
@@ -55,6 +66,8 @@ export class AchievementController {
      *         description: User was created.
      *       400:
      *         description: Bad request, missing or invalid parameter.
+     *     tags:
+     *       - Achievements
      */
     router.post('/achievements', endpoint(this.createAchievements));
 
