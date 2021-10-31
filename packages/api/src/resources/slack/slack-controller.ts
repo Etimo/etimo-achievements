@@ -21,9 +21,18 @@ export class SlackController {
      * /slack/achievements:
      *   get:
      *     description: Show Slack achievements modal.
+     *     security:
+     *       - ApiKey: []
+     *     parameters:
+     *       - $ref: '#/parameters/skipParam'
+     *       - $ref: '#/parameters/takeParam'
+     *     produces:
+     *       - application/json
      *     responses:
      *       200:
      *         description: Achievements modal was created.
+     *     tags:
+     *       - Slack
      */
     router.get('/slack/achievements', endpoint(this.getAchievements));
 

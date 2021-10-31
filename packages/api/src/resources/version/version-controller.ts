@@ -10,9 +10,14 @@ export class VersionController {
      * /version:
      *   get:
      *     description: Returns version information about the deployed application.
+     *     security: []
+     *     produces:
+     *       - application/json
      *     responses:
      *       200:
      *         description: Object containing version information.
+     *     tags:
+     *       - Version
      */
     router.get('/version', endpoint(this.getVersion));
 

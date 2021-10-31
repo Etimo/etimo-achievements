@@ -1,10 +1,10 @@
-import { CreateUserService, GetUsersService, GetUserService } from '@etimo-achievements/service';
+import { CreateUserService, GetUserService, GetUsersService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { UserMapper } from '.';
 import { endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { validate } from '../../utils/validation-helper';
-import { newUserValidator, guidValidator } from './user-validator';
+import { guidValidator, newUserValidator } from './user-validator';
 
 export type UserControllerOptions = {
   createUserService?: CreateUserService;
@@ -30,10 +30,19 @@ export class UserController {
      * @openapi
      * /users:
      *   get:
-     *     description: Get users.
+     *     description: Get a list of users
+     *     security:
+     *       - ApiKey: []
+     *     parameters:
+     *       - $ref: '#/parameters/skipParam'
+     *       - $ref: '#/parameters/takeParam'
+     *     produces:
+     *       - application/json
      *     responses:
      *       200:
      *         description: A list of users.
+     *     tags:
+     *       - Users
      */
     router.get('/users', endpoint(this.getUsers));
 
@@ -41,20 +50,22 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   get:
-     *     description: Get user.
+     *     description: Find a user
+     *     security:
+     *       - ApiKey: []
      *     parameters:
-     *       - name: userId
-     *         in: path
-     *         required: true
-     *         type: string
-     *         format: uuid
+     *       - $ref: '#/parameters/userIdParam'
+     *     produces:
+     *       - application/json
      *     responses:
      *       200:
-     *         description: A user.
+     *         description: The requested user.
      *       400:
      *         description: Bad request, missing or invalid parameter.
      *       404:
      *         description: Not found, the user was not found.
+     *     tags:
+     *       - Users
      */
     router.get('/users/:userId', endpoint(this.getUser));
 
@@ -62,34 +73,26 @@ export class UserController {
      * @openapi
      * /users:
      *   post:
-     *     description: Creates a user.
+     *     description: Create a user
+     *     security:
+     *       - ApiKey: []
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/NewUser'
      *     produces:
      *       - application/json
-     *     parameters:
-     *       - name: username
-     *         in: formData
-     *         required: true
-     *         type: string
-     *       - name: password
-     *         in: formData
-     *         required: true
-     *         type: string
-     *       - name: email
-     *         in: formData
-     *         required: true
-     *         type: string
-     *         format: email
-     *       - name: slackHandle
-     *         in: formData
-     *         required: true
-     *         type: string
      *     responses:
      *       200:
      *         description: User was created.
      *       400:
      *         description: Bad request, missing or invalid parameter.
+     *     tags:
+     *       - Users
      */
     router.post('/users', endpoint(this.createUser));
+
     return router;
   }
 

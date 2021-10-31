@@ -12,35 +12,49 @@ export class AwardsController {
     /**
      * @openapi
      * /awards:
-     *   post:
-     *     description: Give a user an award.
+     *   get:
+     *     description: Get awards.
+     *     security:
+     *       - ApiKey: []
+     *     parameters:
+     *       - $ref: '#/parameters/skipParam'
+     *       - $ref: '#/parameters/takeParam'
      *     produces:
      *       - application/json
-     *     parameters:
-     *       - name: userId
-     *         in: formData
-     *         required: true
-     *         type: string
-     *       - name: achievementId
-     *         in: formData
-     *         required: true
-     *         type: string
      *     responses:
      *       200:
-     *         description: User given award.
+     *         description: A list of awards.
+     *     tags:
+     *       - Awards
      */
-    router.post('/awards', endpoint(this.createAwards));
+    router.get('/awards', endpoint(this.getAwards));
 
     /**
      * @openapi
      * /awards:
-     *   get:
-     *     description: Get awards.
+     *   post:
+     *     description: Give a user an award.
+     *     security:
+     *       - ApiKey: []
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/Award'
+     *     produces:
+     *       - application/json
      *     responses:
      *       200:
-     *         description: A list of awards.
+     *         description: The award was given to the user.
+     *       400:
+     *         description: Bad request. The request was badly formed.
+     *       404:
+     *         description: The achievement or user was not found.
+     *     tags:
+     *       - Awards
      */
-    router.get('/awards', endpoint(this.getAwards));
+    router.post('/awards', endpoint(this.createAwards));
+
     return router;
   }
 

@@ -93,13 +93,14 @@ These are the technologies used in this project:
 | [GNU Bash](https://www.gnu.org/software/bash/)        | Deployment/utility scripts.                                 |
 | [GitHub Actions](https://github.com/features/actions) | Continuous integration/deployment.                          |
 | [Heroku](https://www.heroku.com/)                     | Cloud platform for deployment.                              |
-| [Husky](https://typicode.github.io/husky/)            | Git Hooks.                                                  |
+| [Husky](https://typicode.github.io/husky/)            | Git hooks.                                                  |
 | [Jest](https://jestjs.io/)                            | Unit testing.                                               |
 | [Knex](https://knexjs.org)                            | DB access, migrations and seed files.                       |
-| [Lerna](https://lerna.js.org/)                        | Manages multiple packages in a monorepo.                    |
-| [Nodemon](https://nodemon.io/)                        | Monitoring changes during development.                      |
+| [Lerna](https://lerna.js.org/)                        | Monorepo administration.                                    |
+| [Nodemon](https://nodemon.io/)                        | Change monitoring during development.                       |
 | [Objection.js](https://vincit.github.io/objection.js) | ORM for Knex.                                               |
 | [Postgres](https://www.postgresql.org/)               | SQL database.                                               |
 | [Prettier](https://prettier.io)                       | Code formatting.                                            |
-| [TypeScript](https://www.typescriptlang.org)          | All source code is written with TypeScript.                 |
-| [Yarn](https://yarnpkg.com/)                          | Package manager. Workspaces.                                |
+| [Swagger](https://swagger.io/)                        | API documentation.                                          |
+| [TypeScript](https://www.typescriptlang.org)          | Strong typing.                                              |
+| [Yarn](https://yarnpkg.com/)                          | Package manager & workspaces.                               |
