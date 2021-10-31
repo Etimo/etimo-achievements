@@ -25,22 +25,22 @@ export class OpenApiController {
             url: 'https://etimo.se',
           },
         },
+        servers: [
+          {
+            url: 'http://localhost:3000',
+            description: 'Development server',
+          },
+          {
+            url: 'https://etimo-achievements-staging.herokuapp.com',
+            description: 'Staging server',
+          },
+          {
+            url: 'https://etimo-achievements.herokuapp.com',
+            description: 'Production server',
+          },
+        ],
       },
       apis: ['**/resources/**/*.ts'],
-      servers: [
-        {
-          url: 'http://localhost:3000',
-          description: 'Development server',
-        },
-        {
-          url: 'https://etimo-achievements-staging.herokuapp.com',
-          description: 'Staging server',
-        },
-        {
-          url: 'https://etimo-achievements.herokuapp.com',
-          description: 'Production server',
-        },
-      ],
     };
 
     return swaggerJSDoc(options);
