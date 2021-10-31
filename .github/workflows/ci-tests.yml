@@ -1,8 +1,6 @@
 name: Run tests
 
-concurrency:
-  group: test
-  cancel-in-progress: true
+concurrency: staging_environment
 
 on:
   push:
