@@ -14,7 +14,7 @@ const fixedLocalhost = {
     port: 5432,
     user: 'root',
     password: 'root',
-    database: 'achievements',
+    database: process.env.DB_NAME ?? 'achievements',
     ssl: false,
   },
   migrations: {

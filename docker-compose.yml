@@ -18,7 +18,7 @@ services:
       - 3000:3000
     user: 1000:1000
     labels:
-      - 'com.achievements-etimo.monitored'
+      - 'com.etimo-achievements.monitored'
     volumes:
       - ./packages:/app/packages
 
@@ -28,7 +28,7 @@ services:
       context: .
     user: 1000:1000
     labels:
-      - 'com.achievements-etimo.monitored'
+      - 'com.etimo-achievements.monitored'
     volumes:
       - ./packages:/app/packages
 
@@ -44,6 +44,8 @@ services:
       - db-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    labels:
+      - 'com.etimo-achievements.postgres'
 
   pgadmin:
     image: dpage/pgadmin4:latest

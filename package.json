@@ -26,7 +26,7 @@
     "migration-revert": "lerna run --scope @etimo-achievements/data migration-revert",
     "prepare": "husky install && ./scripts/update-references.sh",
     "prettier": "prettier --write .",
-    "restart": "docker stop $(docker ps -aq --filter 'label=com.achievements-etimo.monitored') && npm run build && npm run start",
+    "restart": "docker stop $(docker ps -aq --filter 'label=com.etimo-achievements.monitored') && npm run build && npm run start",
     "seed-new": "lerna run --scope @etimo-achievements/data seed-new",
     "seed-run": "lerna run --scope @etimo-achievements/data seed-apply",
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
