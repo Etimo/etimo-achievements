@@ -36,20 +36,20 @@ export class AwardsController {
      *     description: Give a user an award.
      *     security:
      *       - ApiKey: []
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/Award'
      *     produces:
      *       - application/json
-     *     parameters:
-     *       - name: userId
-     *         in: formData
-     *         required: true
-     *         type: string
-     *       - name: achievementId
-     *         in: formData
-     *         required: true
-     *         type: string
      *     responses:
      *       200:
-     *         description: User given award.
+     *         description: The award was given to the user.
+     *       400:
+     *         description: Bad request. The request was badly formed.
+     *       404:
+     *         description: The achievement or user was not found.
      *     tags:
      *       - Awards
      */

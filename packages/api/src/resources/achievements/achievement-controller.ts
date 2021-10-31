@@ -50,20 +50,16 @@ export class AchievementController {
      *     description: Creates an achievement.
      *     security:
      *       - ApiKey: []
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/Achievement'
      *     produces:
      *       - application/json
-     *     parameters:
-     *       - name: achievement
-     *         in: formData
-     *         required: true
-     *         type: string
-     *       - name: description
-     *         in: formData
-     *         required: true
-     *         type: string
      *     responses:
      *       200:
-     *         description: User was created.
+     *         description: Achievement was created.
      *       400:
      *         description: Bad request, missing or invalid parameter.
      *     tags:

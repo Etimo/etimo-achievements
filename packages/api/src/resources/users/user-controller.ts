@@ -30,7 +30,7 @@ export class UserController {
      * @openapi
      * /users:
      *   get:
-     *     description: Get users.
+     *     description: Get a list of users
      *     security:
      *       - ApiKey: []
      *     parameters:
@@ -50,20 +50,16 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   get:
-     *     description: Get a specific user.
+     *     description: Find a user
      *     security:
      *       - ApiKey: []
+     *     parameters:
+     *       - $ref: '#/parameters/userIdParam'
      *     produces:
      *       - application/json
-     *     parameters:
-     *       - name: userId
-     *         in: path
-     *         required: true
-     *         type: string
-     *         format: uuid
      *     responses:
      *       200:
-     *         description: A user.
+     *         description: The requested user.
      *       400:
      *         description: Bad request, missing or invalid parameter.
      *       404:
@@ -77,29 +73,16 @@ export class UserController {
      * @openapi
      * /users:
      *   post:
-     *     description: Creates a user.
+     *     description: Create a user
      *     security:
      *       - ApiKey: []
+     *     requestBody:
+     *       content:
+     *         application/json:
+     *           schema:
+     *             $ref: '#/components/schemas/NewUser'
      *     produces:
      *       - application/json
-     *     parameters:
-     *       - name: username
-     *         in: formData
-     *         required: true
-     *         type: string
-     *       - name: password
-     *         in: formData
-     *         required: true
-     *         type: string
-     *       - name: email
-     *         in: formData
-     *         required: true
-     *         type: string
-     *         format: email
-     *       - name: slackHandle
-     *         in: formData
-     *         required: true
-     *         type: string
      *     responses:
      *       200:
      *         description: User was created.
