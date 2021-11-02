@@ -10,7 +10,7 @@
     "build": "yarn clean && yarn compile",
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "npm run clean && rimraf node_modules",
-    "compile": "tsc --build; cp -f package.json dist/",
+    "compile": "tsc --build",
     "test-integration": "exit 0; jest --preset ts-jest --env node --testMatch \"**/src/**/*.spec.ts\" --modulePathIgnorePatterns dist",
     "test": "exit 0; jest --preset ts-jest --env node --testMatch \"**/src/**/*.test.ts\" --modulePathIgnorePatterns dist"
   },

@@ -1,6 +1,7 @@
 {
-  "watch": ["packages/**/src/**"],
-  "ext": "ts,json",
-  "ignore": ["src/**/*.spec.ts"],
-  "exec": "npm run compile; exit 0"
+  "watch": ["packages/**"],
+  "ext": "ts,json,yml",
+  "ignore": ["**/dist/**", "**/*.spec.ts", "**/openapi.json"],
+  "exec": "npm run openapi; npm run compile; exit 0",
+  "verbose": true
 }

@@ -1,10 +1,8 @@
 import { CreateUserService, GetUserService, GetUsersService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { UserMapper } from '.';
 import { endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
-import { validate } from '../../utils/validation-helper';
-import { guidValidator, newUserValidator } from './user-validator';
+import { UserMapper } from './user-mapper';
 
 export type UserControllerOptions = {
   createUserService?: CreateUserService;
@@ -34,10 +32,8 @@ export class UserController {
      *     security:
      *       - ApiKey: []
      *     parameters:
-     *       - $ref: '#/parameters/skipParam'
-     *       - $ref: '#/parameters/takeParam'
-     *     produces:
-     *       - application/json
+     *       - *skipParam
+     *       - *takeParam
      *     responses:
      *       200:
      *         description: A list of users.
@@ -54,9 +50,7 @@ export class UserController {
      *     security:
      *       - ApiKey: []
      *     parameters:
-     *       - $ref: '#/parameters/userIdParam'
-     *     produces:
-     *       - application/json
+     *       - *userIdParam
      *     responses:
      *       200:
      *         description: The requested user.
@@ -74,15 +68,12 @@ export class UserController {
      * /users:
      *   post:
      *     description: Create a user
-     *     security:
-     *       - ApiKey: []
      *     requestBody:
+     *       required: true
      *       content:
      *         application/json:
      *           schema:
      *             $ref: '#/components/schemas/NewUser'
-     *     produces:
-     *       - application/json
      *     responses:
      *       200:
      *         description: User was created.
@@ -105,8 +96,6 @@ export class UserController {
   };
 
   private getUser = async (req: Request, res: Response) => {
-    validate(guidValidator, req.params, res);
-
     const userId = req.params.userId;
     const user = await this.getUserService.get(userId);
 
@@ -118,8 +107,6 @@ export class UserController {
 
   private createUser = async (req: Request, res: Response) => {
     const payload = req.body;
-
-    validate(newUserValidator, payload, res);
 
     const input = UserMapper.toNewUser(payload);
     const user = await this.createUserService.create(input);

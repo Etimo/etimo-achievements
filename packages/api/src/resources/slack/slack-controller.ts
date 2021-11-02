@@ -24,10 +24,8 @@ export class SlackController {
      *     security:
      *       - ApiKey: []
      *     parameters:
-     *       - $ref: '#/parameters/skipParam'
-     *       - $ref: '#/parameters/takeParam'
-     *     produces:
-     *       - application/json
+     *       - *skipParam
+     *       - *takeParam
      *     responses:
      *       200:
      *         description: Achievements modal was created.

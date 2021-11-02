@@ -26,10 +26,8 @@ export class AwardsController {
      *     security:
      *       - ApiKey: []
      *     parameters:
-     *       - $ref: '#/parameters/skipParam'
-     *       - $ref: '#/parameters/takeParam'
-     *     produces:
-     *       - application/json
+     *       - *skipParam
+     *       - *takeParam
      *     responses:
      *       200:
      *         description: A list of awards.
@@ -50,8 +48,6 @@ export class AwardsController {
      *         application/json:
      *           schema:
      *             $ref: '#/components/schemas/Award'
-     *     produces:
-     *       - application/json
      *     responses:
      *       200:
      *         description: The award was given to the user.

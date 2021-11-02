@@ -11,8 +11,6 @@ export class VersionController {
      *   get:
      *     description: Returns version information about the deployed application.
      *     security: []
-     *     produces:
-     *       - application/json
      *     responses:
      *       200:
      *         description: Object containing version information.

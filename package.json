@@ -7,7 +7,7 @@
   "scripts": {
     "api": "lerna run --scope @etimo-achievements/api start",
     "build": "lerna run --parallel build",
-    "clean": "lerna run clean && rimraf node_modules",
+    "clean": "lerna run clean",
     "clear": "lerna run clear && rimraf node_modules",
     "compile": "lerna run --parallel compile",
     "db-create": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",
@@ -30,7 +30,9 @@
     "seed-new": "lerna run --scope @etimo-achievements/data seed-new",
     "seed-run": "lerna run --scope @etimo-achievements/data seed-run",
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
+    "start-fresh": "yarn install && npm run build && npm run openapi && npm run docker-rebuild && npm run start",
     "support": "docker-compose up -d --build postgres pgadmin nodemon",
+    "openapi": "lerna run --scope @etimo-achievements/api openapi",
     "test-integration": "lerna run test-integration",
     "test": "lerna run test"
   },

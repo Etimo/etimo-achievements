@@ -8,6 +8,7 @@
  *       properties:
  *         username:
  *           type: string
+ *           minLength: 3
  *         email:
  *           type: string
  *           format: email
@@ -37,6 +38,7 @@ export interface UserDto {
  *         - properties:
  *             password:
  *               type: string
+ *               minLength: 8
  *         - required:
  *           - password
  */

@@ -65,6 +65,16 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Check for OpenAPI changes
+        working-directory: packages/api
+        run: |
+          npm run openapi
+          files_changed=$(git diff --name-only)
+          (( files_changed )) && {
+            echo "Files changed: $files_changed"
+            exit 1
+          }
+
       - name: Run unit tests
         run: npm run test
 
