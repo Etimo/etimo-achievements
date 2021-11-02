@@ -1,3 +1,4 @@
+import { Database } from '..';
 import {
   IUserAchievement,
   INewUserAchievement,
@@ -6,12 +7,17 @@ import {
 } from '../models/user-achievement-model';
 
 export class UserAchievementRepository {
+  async count(): Promise<number> {
+    const result = await Database.knex.raw('select count(*) from "userAchievements"');
+    return parseInt(result.rows[0]['count'], 10);
+  }
+
   findByUserId(id: string): Promise<Array<IUserAchievement>> {
-    return UserAchievementModel.query().where('user_id', id);
+    return UserAchievementModel.query().where('userId', id);
   }
 
   findByAchievementId(id: string): Promise<Array<IUserAchievement>> {
-    return UserAchievementModel.query().where('achievement_id', id);
+    return UserAchievementModel.query().where('achievementId', id);
   }
 
   create(userAchievement: INewUserAchievement): Promise<IUserAchievement> {
@@ -26,7 +32,7 @@ export class UserAchievementRepository {
     return UserAchievementModel.query().deleteById(id);
   }
 
-  getAll(): Promise<Array<IUserAchievement>> {
-    return UserAchievementModel.query();
+  getAll(skip: number, take: number): Promise<IUserAchievement[]> {
+    return UserAchievementModel.query().limit(take).offset(skip);
   }
 }
