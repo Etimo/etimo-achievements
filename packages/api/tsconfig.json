@@ -20,5 +20,5 @@
       "path": "../service"
     }
   ],
-  "include": ["./src", "./src/**/version.json"]
+  "include": ["./src", "./src/**/version.json", "./src/openapi.json"]
 }

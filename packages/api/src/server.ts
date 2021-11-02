@@ -1,11 +1,13 @@
+const openApiDocument = require('./openapi.json');
 import { isDevelopment } from '@etimo-achievements/common';
-import express, { Application } from 'express';
+import express, { Application, static as serveStatic } from 'express';
+import * as OpenApiValidator from 'express-openapi-validator';
+import swaggerUi from 'swagger-ui-express';
 import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
 import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
 import { AchievementController } from './resources/achievements/achievement-controller';
 import { AwardsController } from './resources/awards/awards-controller';
-import { OpenApiController } from './resources/openapi/openapi-controller';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 
@@ -20,12 +22,22 @@ export default class Server {
 
   public start() {
     this.setupMiddleware();
+    this.setupOpenApi();
     this.setupRoutes();
     this.setupErrorHandler();
 
     this.express.listen(this.port);
 
     console.log(`Server running at port ${this.port}`);
+  }
+
+  private setupOpenApi() {
+    console.log('Setting up OpenApi');
+
+    const options = { customSiteTitle: 'EA Swagger' };
+    this.express.use('/apidoc.json', serveStatic(`${__dirname}/openapi.json`));
+    this.express.use('/swagger', swaggerUi.serve, swaggerUi.setup(openApiDocument, options));
+    this.express.use(OpenApiValidator.middleware({ apiSpec: openApiDocument, validateRequests: true }));
   }
 
   private setupMiddleware() {
@@ -45,7 +57,6 @@ export default class Server {
   private setupRoutes() {
     console.log('Setting up routes');
 
-    this.express.use('/', new OpenApiController().routes);
     this.express.use('/', new AchievementController().routes);
     this.express.use('/', new SlackController().routes);
     this.express.use('/', new UserController().routes);

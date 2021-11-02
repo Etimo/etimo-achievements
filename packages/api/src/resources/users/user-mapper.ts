@@ -1,5 +1,5 @@
 import { IUser } from '@etimo-achievements/data';
-import { NewUserDto, UserDto } from '.';
+import { NewUserDto, UserDto } from './user-dto';
 
 export class UserMapper {
   public static toUserDto(user: IUser): UserDto {

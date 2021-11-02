@@ -1,0 +1,7 @@
+x-template: &achievementIdParam
+  name: achievementId
+  in: path
+  required: true
+  schema:
+    type: string
+    format: uuid

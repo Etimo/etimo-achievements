@@ -1,0 +1,390 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Etimo Achievements",
+    "version": "1.0.0",
+    "license": {
+      "name": "Licensed Under MIT",
+      "url": "https://spdx.org/licenses/MIT.html"
+    },
+    "contact": {
+      "name": "Etimo AB",
+      "url": "https://etimo.se"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    },
+    {
+      "url": "https://etimo-achievements-staging.herokuapp.com",
+      "description": "Staging server"
+    },
+    {
+      "url": "https://etimo-achievements.herokuapp.com",
+      "description": "Production server"
+    }
+  ],
+  "security": [
+    {
+      "ApiKey": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "ApiKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    },
+    "schemas": {
+      "Achievement": {
+        "title": "Achievement",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "achievement": {
+            "type": "string",
+            "description": "The name of the achievement"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of when the achievement should be awarded"
+          }
+        },
+        "required": ["achievement", "description"]
+      },
+      "Award": {
+        "title": "Award",
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "achievementId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": ["userId", "achievementId"]
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "minLength": 3
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "slackHandle": {
+            "type": "string",
+            "description": "The @slack handle of the user"
+          }
+        },
+        "required": ["username", "email", "slackHandle"]
+      },
+      "NewUser": {
+        "title": "User (for creation)",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/User"
+          },
+          {
+            "properties": {
+              "password": {
+                "type": "string",
+                "minLength": 8
+              }
+            }
+          },
+          {
+            "required": ["password"]
+          }
+        ]
+      }
+    }
+  },
+  "paths": {
+    "/achievements": {
+      "post": {
+        "description": "Creates an achievement.",
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Achievement"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Achievement was created."
+          },
+          "400": {
+            "description": "Bad request, missing or invalid parameter."
+          }
+        },
+        "tags": ["Achievements"]
+      },
+      "get": {
+        "description": "Get achievements.",
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of achievements."
+          }
+        },
+        "tags": ["Achievements"]
+      }
+    },
+    "/awards": {
+      "post": {
+        "description": "Give a user an award.",
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Award"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The award was given to the user."
+          },
+          "400": {
+            "description": "Bad request. The request was badly formed."
+          },
+          "404": {
+            "description": "The achievement or user was not found."
+          }
+        },
+        "tags": ["Awards"]
+      },
+      "get": {
+        "description": "Get awards.",
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of awards."
+          }
+        },
+        "tags": ["Awards"]
+      }
+    },
+    "/users": {
+      "post": {
+        "description": "Create a user",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User was created."
+          },
+          "400": {
+            "description": "Bad request, missing or invalid parameter."
+          }
+        },
+        "tags": ["Users"]
+      },
+      "get": {
+        "description": "Get a list of users",
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of users."
+          }
+        },
+        "tags": ["Users"]
+      }
+    },
+    "/version": {
+      "get": {
+        "description": "Returns version information about the deployed application.",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Object containing version information."
+          }
+        },
+        "tags": ["Version"]
+      }
+    },
+    "/slack/achievements": {
+      "get": {
+        "description": "Show Slack achievements modal.",
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Achievements modal was created."
+          }
+        },
+        "tags": ["Slack"]
+      }
+    },
+    "/users/{userId}": {
+      "get": {
+        "description": "Find a user",
+        "security": [
+          {
+            "ApiKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested user."
+          },
+          "400": {
+            "description": "Bad request, missing or invalid parameter."
+          },
+          "404": {
+            "description": "Not found, the user was not found."
+          }
+        },
+        "tags": ["Users"]
+      }
+    }
+  },
+  "tags": []
+}

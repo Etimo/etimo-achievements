@@ -15,6 +15,7 @@ function getPort(): number {
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 
 if (isLocal()) {
+  console.log(`API_KEY: ${process.env.API_KEY}`);
   console.log('Local environment detected');
 }
 if (isDevelopment()) {

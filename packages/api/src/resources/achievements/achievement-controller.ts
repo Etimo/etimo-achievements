@@ -1,10 +1,8 @@
 import { CreateAchievementService, GetAchievementsService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { AchievementMapper } from '.';
 import { endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
-import { validate } from '../../utils/validation-helper';
-import { newAchievementValidator } from './achievement-validator';
+import { AchievementMapper } from './achievement-mapper';
 
 export type AchievementControllerOptions = {
   createAchievementsService?: CreateAchievementService;
@@ -31,10 +29,8 @@ export class AchievementController {
      *     security:
      *       - ApiKey: []
      *     parameters:
-     *       - $ref: '#/parameters/skipParam'
-     *       - $ref: '#/parameters/takeParam'
-     *     produces:
-     *       - application/json
+     *       - *skipParam
+     *       - *takeParam
      *     responses:
      *       200:
      *         description: A list of achievements.
@@ -55,8 +51,6 @@ export class AchievementController {
      *         application/json:
      *           schema:
      *             $ref: '#/components/schemas/Achievement'
-     *     produces:
-     *       - application/json
      *     responses:
      *       200:
      *         description: Achievement was created.
@@ -72,8 +66,6 @@ export class AchievementController {
 
   private createAchievements = async (req: Request, res: Response) => {
     const payload = req.body;
-
-    validate(newAchievementValidator, payload, res);
 
     const input = AchievementMapper.toAchievementDto(payload);
     const achievement = await this.createAchievementsService.create(input);
