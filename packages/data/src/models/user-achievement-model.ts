@@ -18,7 +18,7 @@ export class UserAchievementModel extends Model implements IUserAchievement {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['id', 'achievementId', 'userId'],
+      required: ['achievementId', 'userId'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
