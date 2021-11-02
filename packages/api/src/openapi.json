@@ -57,7 +57,10 @@
             "description": "A description of when the achievement should be awarded"
           }
         },
-        "required": ["achievement", "description"]
+        "required": [
+          "achievement",
+          "description"
+        ]
       },
       "Award": {
         "title": "Award",
@@ -72,7 +75,10 @@
             "format": "uuid"
           }
         },
-        "required": ["userId", "achievementId"]
+        "required": [
+          "userId",
+          "achievementId"
+        ]
       },
       "User": {
         "title": "User",
@@ -91,7 +97,11 @@
             "description": "The @slack handle of the user"
           }
         },
-        "required": ["username", "email", "slackHandle"]
+        "required": [
+          "username",
+          "email",
+          "slackHandle"
+        ]
       },
       "NewUser": {
         "title": "User (for creation)",
@@ -108,7 +118,9 @@
             }
           },
           {
-            "required": ["password"]
+            "required": [
+              "password"
+            ]
           }
         ]
       }
@@ -140,7 +152,9 @@
             "description": "Bad request, missing or invalid parameter."
           }
         },
-        "tags": ["Achievements"]
+        "tags": [
+          "Achievements"
+        ]
       },
       "get": {
         "description": "Get achievements.",
@@ -175,7 +189,9 @@
             "description": "A list of achievements."
           }
         },
-        "tags": ["Achievements"]
+        "tags": [
+          "Achievements"
+        ]
       }
     },
     "/awards": {
@@ -206,7 +222,9 @@
             "description": "The achievement or user was not found."
           }
         },
-        "tags": ["Awards"]
+        "tags": [
+          "Awards"
+        ]
       },
       "get": {
         "description": "Get awards.",
@@ -241,7 +259,9 @@
             "description": "A list of awards."
           }
         },
-        "tags": ["Awards"]
+        "tags": [
+          "Awards"
+        ]
       }
     },
     "/users": {
@@ -265,7 +285,9 @@
             "description": "Bad request, missing or invalid parameter."
           }
         },
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       },
       "get": {
         "description": "Get a list of users",
@@ -300,7 +322,9 @@
             "description": "A list of users."
           }
         },
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/version": {
@@ -312,7 +336,9 @@
             "description": "Object containing version information."
           }
         },
-        "tags": ["Version"]
+        "tags": [
+          "Version"
+        ]
       }
     },
     "/slack/achievements": {
@@ -349,7 +375,9 @@
             "description": "Achievements modal was created."
           }
         },
-        "tags": ["Slack"]
+        "tags": [
+          "Slack"
+        ]
       }
     },
     "/users/{userId}": {
@@ -382,7 +410,9 @@
             "description": "Not found, the user was not found."
           }
         },
-        "tags": ["Users"]
+        "tags": [
+          "Users"
+        ]
       }
     }
   },
