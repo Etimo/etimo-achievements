@@ -7,7 +7,7 @@ import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middle
 import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
 import { AchievementController } from './resources/achievements/achievement-controller';
-import { AwardsController } from './resources/awards/awards-controller';
+import { AwardsController } from './resources/awards/award-controller';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 

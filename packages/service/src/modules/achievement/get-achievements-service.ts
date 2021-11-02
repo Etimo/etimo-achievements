@@ -1,6 +1,6 @@
+import { paginate, PaginationType } from '@etimo-achievements/common';
 import { AchievementRepository, IAchievement } from '@etimo-achievements/data';
 import { ServiceOptions } from '../common/service-options';
-import { paginate, PaginationType } from '@etimo-achievements/common';
 
 export class GetAchievementsService {
   private achievementRepo: AchievementRepository;

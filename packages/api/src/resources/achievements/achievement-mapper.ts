@@ -1,8 +1,8 @@
 import { IAchievement } from '@etimo-achievements/data';
-import { AchievementsDto } from './achievement-dto';
+import { AchievementDto } from './achievement-dto';
 
 export class AchievementMapper {
-  public static toAchievementDto(achievement: IAchievement): AchievementsDto {
+  public static toAchievementDto(achievement: IAchievement): AchievementDto {
     return {
       id: achievement.id,
       achievement: achievement.achievement,
@@ -10,7 +10,7 @@ export class AchievementMapper {
     };
   }
 
-  public static toAchievement(achievementDto: AchievementsDto): IAchievement {
+  public static toAchievement(achievementDto: AchievementDto): IAchievement {
     return {
       id: achievementDto.id,
       achievement: achievementDto.achievement,

@@ -17,6 +17,7 @@
  *         - achievementId
  */
 export interface AwardDto {
+  id: string;
   userId: string;
   achievementId: string;
 }
