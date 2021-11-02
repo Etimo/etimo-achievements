@@ -1,4 +1,4 @@
-import { AchievementRepository, IAchievement } from '@etimo-achievements/data';
+import { AchievementRepository } from '@etimo-achievements/data';
 import { ServiceOptions } from '../common/service-options';
 
 export class DeleteAchievementService {

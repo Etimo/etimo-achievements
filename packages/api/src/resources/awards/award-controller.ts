@@ -1,8 +1,8 @@
-import { GetAwardsService, CreateAwardsService } from '@etimo-achievements/service';
+import { CreateAwardsService, GetAwardsService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { AwardsMapper, newAwardValidator } from '.';
-import { endpoint, validate } from '../../utils';
+import { endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
+import { AwardMapper } from './award-mapper';
 
 export type AwardsControllerOptions = {
   getAwardsService?: GetAwardsService;
@@ -69,11 +69,9 @@ export class AwardsController {
   private createAwards = async (req: Request, res: Response) => {
     const payload = req.body;
 
-    validate(newAwardValidator, payload, res);
-
-    const input = AwardsMapper.toUserAchievement(payload);
+    const input = AwardMapper.toUserAchievement(payload);
     const award = await this.createAwardsService.create(input);
-    const output = AwardsMapper.toAwardsDto(award);
+    const output = AwardMapper.toAwardsDto(award);
 
     return res.status(201).send(output);
   };
@@ -81,7 +79,7 @@ export class AwardsController {
   private getAwards = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
     const awards = await this.getAwardsService.getAll(skip, take);
-    const output = { ...awards, data: awards.data.map(AwardsMapper.toAwardsDto) };
+    const output = { ...awards, data: awards.data.map(AwardMapper.toAwardsDto) };
 
     return res.status(200).send(output);
   };

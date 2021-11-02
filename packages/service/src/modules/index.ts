@@ -1,5 +1,5 @@
 export * from './achievement';
+export * from './award';
 export * from './common';
-export * from './user';
-export * from './awards';
 export * from './slack';
+export * from './user';

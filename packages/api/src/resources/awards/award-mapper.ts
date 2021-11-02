@@ -1,8 +1,8 @@
 import { IUserAchievement } from '@etimo-achievements/data';
-import { AwardsDto } from '.';
+import { AwardDto } from './award-dto';
 
-export class AwardsMapper {
-  public static toAwardsDto(userAchevement: IUserAchievement): AwardsDto {
+export class AwardMapper {
+  public static toAwardsDto(userAchevement: IUserAchievement): AwardDto {
     return {
       id: userAchevement.id,
       achievementId: userAchevement.achievementId,
@@ -10,7 +10,7 @@ export class AwardsMapper {
     };
   }
 
-  public static toUserAchievement(awardsDto: AwardsDto): IUserAchievement {
+  public static toUserAchievement(awardsDto: AwardDto): IUserAchievement {
     return {
       id: awardsDto.id,
       achievementId: awardsDto.achievementId,

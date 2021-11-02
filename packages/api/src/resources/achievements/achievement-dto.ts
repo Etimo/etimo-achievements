@@ -19,7 +19,7 @@
  *         - achievement
  *         - description
  */
-export interface AchievementsDto {
+export interface AchievementDto {
   id: string;
   achievement: string;
   description: string;

@@ -1,4 +1,4 @@
-import { IUser, UserRepository } from '@etimo-achievements/data';
+import { UserRepository } from '@etimo-achievements/data';
 import { ServiceOptions } from '../common/service-options';
 
 export class DeleteUserService {
