@@ -20,6 +20,7 @@ defaults:
 
 jobs:
   deploy:
+    if: github.event.workflow_run.conclusion == 'success'
     name: 'Deploy to Staging'
     runs-on: ubuntu-latest
     strategy:
