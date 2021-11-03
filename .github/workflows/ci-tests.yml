@@ -74,6 +74,8 @@ jobs:
   checks:
     name: 'Check for errors'
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
 
     steps:
       - name: Checkout code
@@ -82,5 +84,18 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Check for OpenAPI changes
-        run: npm run openapi && git diff-index --quiet HEAD
+      - name: Generate OpenAPI spec
+        run: npm run openapi
+
+      - name: Check for changed files
+        uses: tj-actions/verify-changed-files@v8.3
+        id: changed-files
+        with:
+          files: |
+            openapi.json
+
+      - name: Files changed
+        if: steps.changed-files.outputs.files_changed == 'true'
+        run: |
+          echo "Changed files: ${{ steps.changed-files.outputs.changed_files }}"
+          exit 1
