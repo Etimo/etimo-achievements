@@ -10,6 +10,8 @@ on:
       - '.github/**'
       - 'packages/**'
       - '!packages/**/*.md'
+  pull_request:
+    branches: [master]
 
 defaults:
   run:
@@ -21,8 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: node:14
-    strategy:
-      fail-fast: true
     env:
       NODE_ENV: development
       DB_HOSTNAME: postgres
@@ -65,11 +65,22 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Check for OpenAPI changes
-        run: npm run openapi && git diff-index --quiet HEAD
-
       - name: Run unit tests
         run: npm run test
 
       - name: Run integration tests
         run: npm run test-integration
+
+  checks:
+    name: 'Check for errors'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Check for OpenAPI changes
+        run: npm run openapi && git diff-index --quiet HEAD

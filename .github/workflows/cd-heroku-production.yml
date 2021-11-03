@@ -18,8 +18,6 @@ jobs:
     if: github.event.inputs.verify == 'YES'
     name: 'Promote to Production'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
     environment: production
     env:
       DEFAULT_BRANCH: master
@@ -28,6 +26,7 @@ jobs:
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_REGISTRY: registry.heroku.com
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2

@@ -23,14 +23,13 @@ jobs:
     if: github.event.workflow_run.conclusion == 'success'
     name: 'Deploy to Staging'
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
     environment: staging
     env:
       DEFAULT_BRANCH: master
       HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
       HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
       HEROKU_REGISTRY: registry.heroku.com
+
     steps:
       - name: Determine branch
         id: branch
