@@ -1,4 +1,3 @@
-export * from './conflict-error';
 export const {
   ValidationError,
   NotFoundError,
