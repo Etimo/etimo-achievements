@@ -11,7 +11,7 @@ services:
       dockerfile: .docker/Dockerfiles/api
       context: .
       target: develop
-    env_file: packages/api/.env
+    env_file: ${API_ENV:-packages/api/.env}
     environment:
       - DB_HOSTNAME=postgres
     ports:
