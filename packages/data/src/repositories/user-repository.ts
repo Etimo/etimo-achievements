@@ -1,37 +1,54 @@
 import { Database } from '..';
 import { INewUser, IPartialUser, IUser, UserModel } from '../models/user-model';
+import { catchErrors } from '../utils';
 
 export class UserRepository {
   async count(): Promise<number> {
-    const result = await Database.knex.raw('select count(*) from users');
-    return parseInt(result.rows[0]['count'], 10);
+    return catchErrors(async () => {
+      const result = await Database.knex.raw('select count(*) from users');
+      return parseInt(result.rows[0]['count'], 10);
+    });
   }
 
   getAll(skip: number, take: number): Promise<IUser[]> {
-    return UserModel.query().limit(take).offset(skip);
+    return catchErrors(async () => {
+      return UserModel.query().limit(take).offset(skip);
+    });
   }
 
   findById(id: string): Promise<IUser> {
-    return UserModel.query().findById(id);
+    return catchErrors(async () => {
+      return UserModel.query().findById(id);
+    });
   }
 
   findByUsername(username: string): Promise<IUser> {
-    return UserModel.query().findOne({ username });
+    return catchErrors(async () => {
+      return UserModel.query().findOne({ username });
+    });
   }
 
   findByEmail(email: string): Promise<IUser> {
-    return UserModel.query().findOne({ email });
+    return catchErrors(async () => {
+      return UserModel.query().findOne({ email });
+    });
   }
 
   create(user: INewUser): Promise<IUser> {
-    return UserModel.query().insert(user);
+    return catchErrors(async () => {
+      return UserModel.query().insert(user);
+    });
   }
 
   update(user: IPartialUser): Promise<IUser> {
-    return UserModel.query().patchAndFetchById(user.id, user);
+    return catchErrors(async () => {
+      return UserModel.query().patchAndFetchById(user.id, user);
+    });
   }
 
   delete(id: string): Promise<number> {
-    return UserModel.query().deleteById(id);
+    return catchErrors(async () => {
+      return UserModel.query().deleteById(id);
+    });
   }
 }

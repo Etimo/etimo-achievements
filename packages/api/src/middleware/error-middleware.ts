@@ -1,4 +1,4 @@
-import { ConflictError } from '@etimo-achievements/common';
+import { ConflictError, NotFoundError, UnauthorizedError } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
 
 export const errorMiddleware = () => {
@@ -9,10 +9,16 @@ export const errorMiddleware = () => {
 
 export function handleError(error: any, res: Response) {
   switch (error.constructor) {
+    case UnauthorizedError:
+      return res.status(401);
+
+    case NotFoundError:
+      return res.status(404);
+
     case ConflictError:
-      return res.status(409).send(error.message);
+      return res.status(409);
 
     default:
-      return res.status(500).send(error.message);
+      return res.status(500);
   }
 }

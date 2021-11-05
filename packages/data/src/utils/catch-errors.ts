@@ -9,22 +9,31 @@ import {
   UniqueViolationError,
 } from 'objection';
 
-function handleRemainingErrors(error: any, res: Response) {
+export async function catchErrors<T>(fn: () => Promise<T>) {
+  try {
+    return await fn();
+  } catch (e: any) {
+    console.log(e);
+    throw handleError(e);
+  }
+}
+
+function handleError(error: any): Error {
   switch (error.constructor) {
     case CheckViolationError:
     case DataError:
-      throw new BadRequestError(error.message);
+      return new BadRequestError(error.message);
 
     case ObjectionNotFoundError:
-      throw new NotFoundError(error.message);
+      return new NotFoundError(error.message);
 
     case UniqueViolationError:
     case ForeignKeyViolationError:
     case ConstraintViolationError:
-      throw new ConflictError(error.message);
+      return new ConflictError(error.message);
 
     case DBError:
     default:
-      throw new InternalServerError(error.message);
+      return new InternalServerError(error.message);
   }
 }

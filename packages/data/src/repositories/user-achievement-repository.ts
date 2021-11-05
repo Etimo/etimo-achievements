@@ -1,38 +1,53 @@
 import { Database } from '..';
 import {
-  IUserAchievement,
   INewUserAchievement,
   IPartialUserAchievement,
+  IUserAchievement,
   UserAchievementModel,
 } from '../models/user-achievement-model';
+import { catchErrors } from '../utils';
 
 export class UserAchievementRepository {
   async count(): Promise<number> {
-    const result = await Database.knex.raw('select count(*) from "userAchievements"');
-    return parseInt(result.rows[0]['count'], 10);
+    return catchErrors(async () => {
+      const result = await Database.knex.raw('select count(*) from "userAchievements"');
+      return parseInt(result.rows[0]['count'], 10);
+    });
   }
 
   findByUserId(id: string): Promise<Array<IUserAchievement>> {
-    return UserAchievementModel.query().where('userId', id);
+    return catchErrors(async () => {
+      return UserAchievementModel.query().where('userId', id);
+    });
   }
 
   findByAchievementId(id: string): Promise<Array<IUserAchievement>> {
-    return UserAchievementModel.query().where('achievementId', id);
+    return catchErrors(async () => {
+      return UserAchievementModel.query().where('achievementId', id);
+    });
   }
 
   create(userAchievement: INewUserAchievement): Promise<IUserAchievement> {
-    return UserAchievementModel.query().insert(userAchievement);
+    return catchErrors(async () => {
+      return UserAchievementModel.query().insert(userAchievement);
+    });
   }
 
   update(userAchievement: IPartialUserAchievement): Promise<IUserAchievement> {
-    return UserAchievementModel.query().patchAndFetchById(userAchievement.id, userAchievement);
+    return catchErrors(async () => {
+      return UserAchievementModel.query().patchAndFetchById(userAchievement.id, userAchievement);
+    });
   }
 
   delete(id: string): Promise<number> {
-    return UserAchievementModel.query().deleteById(id);
+    return catchErrors(async () => {
+      return UserAchievementModel.query().deleteById(id);
+    });
   }
 
   getAll(skip: number, take: number): Promise<IUserAchievement[]> {
-    return UserAchievementModel.query().limit(take).offset(skip);
+    return catchErrors(async () => {
+      return UserAchievementModel.query().limit(take).offset(skip);
+    });
   }
 }
