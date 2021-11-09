@@ -15,20 +15,28 @@ export default class Server {
   private port: number;
   private express: Application;
 
-  constructor(port: number) {
-    this.port = port;
+  constructor(port?: number) {
+    this.port = port ?? 3000;
     this.express = express();
   }
 
   public start() {
-    this.setupMiddleware();
-    this.setupOpenApi();
-    this.setupRoutes();
-    this.setupErrorHandler();
+    this.setup();
 
     this.express.listen(this.port);
 
     console.log(`Server running at port ${this.port}`);
+  }
+
+  public setup() {
+    this.setupMiddleware();
+    this.setupOpenApi();
+    this.setupRoutes();
+    this.setupErrorHandler();
+  }
+
+  public get instance() {
+    return this.express;
   }
 
   private setupOpenApi() {
