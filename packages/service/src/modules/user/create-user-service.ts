@@ -1,5 +1,4 @@
 import { INewUser, IUser, UserRepository } from '@etimo-achievements/data';
-import { ConflictError } from '../../errors';
 import { ServiceOptions } from '../common/service-options';
 
 export class CreateUserService {
@@ -10,14 +9,6 @@ export class CreateUserService {
   }
 
   public async create(user: INewUser): Promise<IUser> {
-    try {
-      return await this.userRepo.create(user);
-    } catch (error: any) {
-      console.log(error);
-      if (error.code == '23505') {
-        throw new ConflictError('User already exists');
-      }
-      throw error;
-    }
+    return await this.userRepo.create(user);
   }
 }

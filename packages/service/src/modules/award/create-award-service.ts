@@ -9,11 +9,6 @@ export class CreateAwardsService {
   }
 
   public async create(award: INewUserAchievement): Promise<IUserAchievement> {
-    try {
-      return await this.userAchievementRepo.create(award);
-    } catch (error: any) {
-      console.log(error);
-      throw error;
-    }
+    return await this.userAchievementRepo.create(award);
   }
 }

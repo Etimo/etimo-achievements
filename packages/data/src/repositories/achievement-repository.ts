@@ -1,33 +1,48 @@
 import { Database } from '..';
-import { IAchievement, INewAchievement, IPartialAchievement, AchievementModel } from '../models/achievement-model';
+import { AchievementModel, IAchievement, INewAchievement, IPartialAchievement } from '../models/achievement-model';
+import { catchErrors } from '../utils';
 
 export class AchievementRepository {
   async count(): Promise<number> {
-    const result = await Database.knex.raw('select count(*) from achievements');
-    return parseInt(result.rows[0]['count'], 10);
+    return catchErrors(async () => {
+      const result = await Database.knex.raw('select count(*) from achievements');
+      return parseInt(result.rows[0]['count'], 10);
+    });
   }
 
   findById(id: string): Promise<IAchievement> {
-    return AchievementModel.query().findById(id);
+    return catchErrors(async () => {
+      return AchievementModel.query().findById(id);
+    });
   }
 
   findByAchievementName(achievement: string): Promise<IAchievement> {
-    return AchievementModel.query().findOne({ achievement });
+    return catchErrors(async () => {
+      return AchievementModel.query().findOne({ achievement });
+    });
   }
 
   create(achievement: INewAchievement): Promise<IAchievement> {
-    return AchievementModel.query().insert(achievement);
+    return catchErrors(async () => {
+      return AchievementModel.query().insert(achievement);
+    });
   }
 
   update(achievement: IPartialAchievement): Promise<IAchievement> {
-    return AchievementModel.query().patchAndFetchById(achievement.id, achievement);
+    return catchErrors(async () => {
+      return AchievementModel.query().patchAndFetchById(achievement.id, achievement);
+    });
   }
 
   delete(id: string): Promise<number> {
-    return AchievementModel.query().deleteById(id);
+    return catchErrors(async () => {
+      return AchievementModel.query().deleteById(id);
+    });
   }
 
   getAll(skip: number, take: number): Promise<IAchievement[]> {
-    return AchievementModel.query().limit(take).offset(skip);
+    return catchErrors(async () => {
+      return AchievementModel.query().limit(take).offset(skip);
+    });
   }
 }

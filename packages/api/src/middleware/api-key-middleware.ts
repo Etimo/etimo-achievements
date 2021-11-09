@@ -1,5 +1,5 @@
+import { UnauthorizedError } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
-import { UnauthorizedError } from '../errors/unauthorized-error';
 
 const excludedPaths = ['/version', '/swagger', '/apidoc.json'];
 
