@@ -63,7 +63,7 @@ jobs:
           seed: true
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Run unit tests
         run: npm run test
@@ -82,7 +82,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Generate OpenAPI spec
         run: npm run openapi
