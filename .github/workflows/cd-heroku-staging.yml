@@ -64,7 +64,6 @@ jobs:
       - name: Build & push base image
         uses: ./.github/actions/docker-build-push
         with:
-          branch: ${{ env.DEFAULT_BRANCH }}
           dockerfile: base
           image-name: etimo-achievements/base
           target: base
@@ -73,7 +72,6 @@ jobs:
       - name: Build & push api image
         uses: ./.github/actions/docker-build-push
         with:
-          branch: ${{ env.DEFAULT_BRANCH }}
           registry: ${{ env.HEROKU_REGISTRY }}
           dockerfile: api
           image-name: etimo-achievements-staging

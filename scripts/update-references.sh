@@ -15,7 +15,7 @@ main() {
 update_package_tsconfigs() {
   local dependencies expression newtsconfig tsconfig
 
-  for file in $(find ./packages -name package.json -not -path "*/dist/*"); do
+  for file in $(find ./packages -mindepth 2 -maxdepth 2 -name package.json); do
     echo "Updating package references for $(basename "$(dirname "$file")")"
 
     tsconfig="$(dirname "$file")/tsconfig.json"

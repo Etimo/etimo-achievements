@@ -2,12 +2,12 @@ name: Docker Build
 description: Build and push an app
 
 inputs:
-  branch:
-    description: The branch to checkout
-    default: master
   dockerfile:
     description: The Dockerfile path
     required: true
+  push:
+    description: Whether to push or not
+    default: true
   image-name:
     description: The name of the image
     required: true
@@ -18,7 +18,7 @@ inputs:
     description: What suffix to use for the image (optional!)
   tag:
     description: What tag to use for the image
-    required: true
+    default: latest
   target:
     description: The Dockerfile target to use
     default: production
@@ -40,7 +40,7 @@ runs:
         context: ${{ inputs.context }}
         file: .docker/Dockerfiles/${{ inputs.dockerfile }}
         target: ${{ inputs.target }}
-        push: true
+        push: ${{ inputs.push }}
         build-args: COMMIT_SHA=${{ github.sha }}
         tags: |
           ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ github.sha }}
