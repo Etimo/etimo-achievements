@@ -14,8 +14,8 @@
     "dev": "nodemon",
     "start": "ts-node src/index.ts",
     "openapi": "ts-node generate-openapi.ts",
-    "test-integration": "exit 0; jest --preset ts-jest --env node --testMatch \"**/src/**/*.spec.ts\" --modulePathIgnorePatterns dist",
-    "test": "jest --preset ts-jest --env node --testMatch \"**/src/**/*.test.ts\" --modulePathIgnorePatterns dist"
+    "test-integration": "exit 0; jest --testMatch \"**/src/**/*.spec.ts\"",
+    "test": "jest --testMatch \"**/src/**/*.test.ts\""
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",

@@ -4079,6 +4079,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-node@npm:^0.0.1-security":
+  version: 0.0.1-security
+  resolution: "babel-node@npm:0.0.1-security"
+  checksum: 2089aad21c18b0bbe5e8413c9fb90d2191274131b06d4abb79ee785601f7adf5bcfd4f02383e29d67132acaa7b67a9b41e00e974a4525ab254d9f5bacbfd2814
+  languageName: node
+  linkType: hard
+
 "babel-plugin-dynamic-import-node@npm:^2.3.3":
   version: 2.3.3
   resolution: "babel-plugin-dynamic-import-node@npm:2.3.3"
@@ -11611,6 +11618,7 @@ resolve@^2.0.0-next.3:
     "@tsconfig/node14": ^1.0.1
     "@typescript-eslint/eslint-plugin": ^4.32.0
     "@typescript-eslint/parser": ^4.32.0
+    babel-node: ^0.0.1-security
     eslint: ^7.32.0
     eslint-config-google: ^0.14.0
     eslint-config-prettier: ^8.3.0

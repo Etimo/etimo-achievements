@@ -13,7 +13,7 @@ Clone the repository and follow the instructions in this file to get started.
 First off, you need a few global dependencies:
 
 ```
-sudo npm install -g typescript ts-node rimraf knex lerna
+sudo npm install -g jest knex lerna rimraf ts-node typescript
 ```
 
 Then you need to install the local dependencies:
