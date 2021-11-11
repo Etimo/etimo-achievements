@@ -14,8 +14,8 @@
     "dev": "nodemon",
     "start": "ts-node src/index.ts",
     "openapi": "ts-node generate-openapi.ts",
-    "test-integration": "jest --testMatch \"**/src/**/*.spec.ts\" --config ../../jest.config.js",
-    "test": "jest --testMatch \"**/src/**/*.test.ts\""
+    "test-integration": "jest --testMatch '**/src/**/*.spec.ts'",
+    "test": "jest"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",

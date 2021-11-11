@@ -3,13 +3,20 @@
 DB_NAME="achievements_ci"
 
 main() {
-  (start_postgres \
+  (build_packages \
+  && start_postgres \
   && create_database \
   && migrate_database \
   && seed_database \
   && run_unit_tests \
   && run_integration_tests \
   && echo "Tests passed") || { echo "Tests failed"; exit 1; }
+}
+
+build_packages() {
+  echo "Building packages"
+  cd "$_script_path" || exit 1
+  yarn build
 }
 
 start_postgres() {

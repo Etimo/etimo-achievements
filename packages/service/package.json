@@ -11,8 +11,8 @@
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "npm run clean && rimraf node_modules",
     "compile": "tsc --build",
-    "test-integration": "jest --preset ts-jest --env node --testMatch \"**/src/**/*.spec.ts\" --modulePathIgnorePatterns dist",
-    "test": "exit 0; jest --preset ts-jest --env node --testMatch \"**/src/**/*.test.ts\" --modulePathIgnorePatterns dist"
+    "test-integration": "jest --testMatch '**/src/**/*.spec.ts'",
+    "test": "exit 0; jest"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
