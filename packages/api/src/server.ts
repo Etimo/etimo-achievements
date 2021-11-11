@@ -57,10 +57,6 @@ export default class Server {
       this.express.use(winstonMiddleware());
     }
 
-    this.express.use((_req, res, next) => {
-      next();
-      res.end();
-    });
     this.express.use(express.json());
     this.express.use(express.urlencoded({ extended: true }));
     this.express.use(apiKeyMiddleware());
