@@ -18,10 +18,10 @@ start_postgres() {
 
 create_database() {
   echo "Dropping database '$DB_NAME'"
-  pg_command "DROP DATABASE $DB_NAME" &>/dev/null
+  pg_command "DROP DATABASE $DB_NAME"
 
   echo "Creating database '$DB_NAME'"
-  pg_command "CREATE DATABASE $DB_NAME" &>/dev/null
+  pg_command "CREATE DATABASE $DB_NAME"
 }
 
 pg_command() {
@@ -29,11 +29,13 @@ pg_command() {
 }
 
 migrate_database() {
+  echo "Migrating database"
   (cd "$_root_path/packages/data" || return 1
   DB_NAME="$DB_NAME" npm run knex:local migrate:latest)
 }
 
 seed_database() {
+  echo "Seeding database"
   (cd "$_root_path/packages/data" || return 1
   DB_NAME="$DB_NAME" npm run knex:local seed:run)
 }

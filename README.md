@@ -10,16 +10,10 @@ Clone the repository and follow the instructions in this file to get started.
 
 ### Dependencies
 
-First off, you need a few global dependencies:
+Install dependencies (including global dependencies) by running:
 
 ```
-sudo npm install -g jest knex lerna rimraf ts-node typescript
-```
-
-Then you need to install the local dependencies:
-
-```
-yarn install
+yarn install-deps
 ```
 
 ### First Run

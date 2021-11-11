@@ -1,33 +1,40 @@
+export enum Environment {
+  Local = 'local',
+  Development = 'development',
+  Test = 'test',
+  Staging = 'staging',
+  Production = 'production',
+}
+
+export function getEnvironment(): Environment {
+  const env = process?.env?.NODE_ENV?.toLowerCase();
+  switch (env) {
+    default:
+      return Environment.Local;
+    case Environment.Development:
+    case Environment.Test:
+    case Environment.Staging:
+    case Environment.Production:
+      return env;
+  }
+}
+
 export function isLocal(): boolean {
-  return !isProduction() && !isDevelopment();
+  return getEnvironment() === Environment.Local;
 }
 
 export function isDevelopment(): boolean {
-  return nodeEnv() === 'development';
+  return getEnvironment() === Environment.Development;
+}
+
+export function isTest(): boolean {
+  return getEnvironment() === Environment.Test;
+}
+
+export function isStaging(): boolean {
+  return getEnvironment() === Environment.Staging;
 }
 
 export function isProduction(): boolean {
-  return nodeEnv() === 'production';
-}
-
-export function nodeEnv(): string {
-  if (process !== undefined && process.env !== undefined && process.env.NODE_ENV !== undefined) {
-    const env = process.env.NODE_ENV.toLowerCase();
-    return assertValidEnv(env);
-  }
-
-  return 'local';
-}
-
-function assertValidEnv(env: string): string {
-  switch (env) {
-    case 'local': // Local development
-    case 'development': // Development on e.g. Docker or a local server
-    case 'test': // Testing environment, e.g. GitHub Actions
-    case 'production': // Production environment (staging/production)
-      return env;
-
-    default:
-      throw new Error(`Invalid environment: ${env}`);
-  }
+  return getEnvironment() === Environment.Production;
 }

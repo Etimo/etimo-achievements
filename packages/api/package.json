@@ -14,13 +14,14 @@
     "dev": "nodemon",
     "start": "ts-node src/index.ts",
     "openapi": "ts-node generate-openapi.ts",
-    "test-integration": "exit 0; jest --testMatch \"**/src/**/*.spec.ts\"",
+    "test-integration": "jest --testMatch \"**/src/**/*.spec.ts\" --config ../../jest.config.js",
     "test": "jest --testMatch \"**/src/**/*.test.ts\""
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/security": "^1.0.0",
     "@etimo-achievements/service": "^1.0.0",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-openapi-validator": "^4.13.2",
     "express-winston": "^4.2.0",
@@ -32,6 +33,7 @@
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.0",
     "@babel/preset-typescript": "^7.16.0",
+    "@types/dotenv": "^8.2.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.2",

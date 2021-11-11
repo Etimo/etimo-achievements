@@ -20,6 +20,7 @@
     "env": "cp -n packages/api/.env.example packages/api/.env",
     "env-force": "cp packages/api/.env.example packages/api/.env",
     "first-run": "npm run env && npm run docker-rebuild && npm run support && sleep 10 && npm run db-create && npm run migration-apply && npm run seed-run && npm run start",
+    "install-deps": "sudo npm install -g jest knex lerna rimraf ts-node typescript && yarn install",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
     "migration-apply": "lerna run --scope @etimo-achievements/data migration-apply",
     "migration-new": "lerna run --scope @etimo-achievements/data migration-new",
