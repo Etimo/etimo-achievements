@@ -8,17 +8,15 @@ const packages = readdirSync(basePath).filter((name) => {
 
 module.exports = {
   detectOpenHandles: true,
-  modulePathIgnorePatterns: ['dist'],
   preset: 'ts-jest',
-  rootDir: '.',
   testEnvironment: 'node',
-  testMatch: ['**/src/**/*.test.ts'],
+  testMatch: ['**/src/**/*.test.ts', '**/src/**/*.spec.ts'],
 
   moduleNameMapper: {
     ...packages.reduce(
       (acc, name) => ({
         ...acc,
-        [`@etimo-achievements/${name}(.*)$`]: `<rootDir>/../${name}/src/$1`,
+        [`@etimo-achievements/${name}(.*)$`]: `<rootDir>/packages/${name}/src/$1`,
       }),
       {}
     ),
