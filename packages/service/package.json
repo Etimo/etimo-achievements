@@ -11,8 +11,8 @@
     "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
     "clear": "npm run clean && rimraf node_modules",
     "compile": "tsc --build",
-    "test-integration": "jest --testMatch '**/src/**/*.spec.ts'",
-    "test": "exit 0; jest"
+    "test-integration": "jest --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",
+    "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",

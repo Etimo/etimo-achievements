@@ -13,7 +13,7 @@
     "compile": "tsc --build",
     "start": "ts-node src/index.ts",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
-    "test": "exit 0; jest"
+    "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "uuid": "^8.3.2"

@@ -15,6 +15,10 @@ export class Database {
     this.getInstance();
   }
 
+  public static disconnect(): void {
+    this.getInstance().close();
+  }
+
   public static get knex(): Knex {
     return this.getInstance().knex;
   }

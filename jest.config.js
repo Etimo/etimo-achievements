@@ -16,7 +16,7 @@ module.exports = {
     ...packages.reduce(
       (acc, name) => ({
         ...acc,
-        [`@etimo-achievements/${name}(.*)$`]: `<rootDir>/packages/${name}/src/$1`,
+        [`@etimo-achievements/${name}(.*)$`]: `<rootDir>/../${name}/src/$1`,
       }),
       {}
     ),

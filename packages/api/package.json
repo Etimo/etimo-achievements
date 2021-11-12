@@ -15,7 +15,7 @@
     "start": "ts-node src/index.ts",
     "openapi": "ts-node generate-openapi.ts",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
-    "test": "jest"
+    "test": "jest --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",

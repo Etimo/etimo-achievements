@@ -20,7 +20,7 @@
     "seed-new": "yarn knex:local seed:make",
     "seed-run": "yarn knex:local seed:run",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
-    "test": "exit 0; jest"
+    "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
