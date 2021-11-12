@@ -1,4 +1,4 @@
-import { isLocal, nodeEnv } from '@etimo-achievements/common';
+import { getEnvironment, isDevelopment, isLocal, isTest } from '@etimo-achievements/common';
 import Knex, { Config } from 'knex';
 import { Model } from 'objection';
 const knexfile = require('./config/knexfile');
@@ -13,6 +13,10 @@ export class Database {
 
   public static connect(): void {
     this.getInstance();
+  }
+
+  public static disconnect(): void {
+    this.getInstance().close();
   }
 
   public static get knex(): Knex {
@@ -45,11 +49,14 @@ export class Database {
   }
 
   private init(): void {
-    const settings = knexfile[nodeEnv()];
+    console.log('Initializing database');
+
+    const env = getEnvironment();
+    const settings = knexfile[env];
     this.knex = Knex(settings);
 
-    if (isLocal()) {
-      console.log(`Database connection: ${JSON.stringify(settings.connection, null, 2)}`);
+    if (isLocal() || isDevelopment() || isTest()) {
+      console.log(`Database connection (${env}): ${JSON.stringify(settings.connection, null, 2)}`);
     }
 
     Model.knex(this.knex);

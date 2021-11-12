@@ -20,6 +20,7 @@
     "env": "cp -n packages/api/.env.example packages/api/.env",
     "env-force": "cp packages/api/.env.example packages/api/.env",
     "first-run": "npm run env && npm run docker-rebuild && npm run support && sleep 10 && npm run db-create && npm run migration-apply && npm run seed-run && npm run start",
+    "install-deps": "sudo npm install -g jest knex lerna rimraf ts-node typescript && yarn install",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
     "migration-apply": "lerna run --scope @etimo-achievements/data migration-apply",
     "migration-new": "lerna run --scope @etimo-achievements/data migration-new",
@@ -33,8 +34,8 @@
     "start-fresh": "yarn install && npm run build && npm run openapi && npm run docker-rebuild && npm run start",
     "support": "docker-compose up -d --build postgres pgadmin nodemon",
     "openapi": "lerna run --scope @etimo-achievements/api openapi",
-    "test-integration": "lerna run test-integration",
-    "test": "lerna run test"
+    "test-integration": "for p in packages/*; do (cd $p && npm run test-integration) || exit 1; done",
+    "test": "for p in packages/*; do (cd $p && npm run test) || exit 1; done"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
