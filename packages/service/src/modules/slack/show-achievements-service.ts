@@ -1,6 +1,6 @@
 import { AchievementRepository, IAchievement } from '@etimo-achievements/data';
 import { ServiceOptions } from '..';
-import { showModal } from './utils';
+import { openSlackView } from './utils';
 
 export class ShowSlackAchievementsService {
   private achievementRepo: AchievementRepository;
@@ -14,7 +14,7 @@ export class ShowSlackAchievementsService {
     const take: number = 50;
     const achievements = await this.achievementRepo.getAll(skip, take);
     const view = this.generateView(achievements);
-    await showModal(view);
+    await openSlackView(view);
   }
 
   private generateView = (achievements: Array<IAchievement>) => {
