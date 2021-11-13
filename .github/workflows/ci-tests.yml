@@ -3,13 +3,6 @@ name: Run tests
 concurrency: staging_environment
 
 on:
-  push:
-    branches: [master]
-    paths:
-      - '.docker/**'
-      - '.github/**'
-      - 'packages/**'
-      - '!packages/**/*.md'
   pull_request:
     branches: [master]
 
