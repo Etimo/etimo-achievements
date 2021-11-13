@@ -32,13 +32,11 @@ runs:
   steps:
     - name: Install dependencies
       shell: bash
-      working-directory: packages/data
-      run: yarn workspaces focus
+      run: yarn install --immutable
 
     - name: Build packages
       shell: bash
-      working-directory: packages/data
-      run: yarn compile
+      run: yarn dlx lerna run compile
 
     - name: Migrate & seed database
       working-directory: packages/data
