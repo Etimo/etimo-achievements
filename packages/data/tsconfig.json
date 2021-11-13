@@ -13,5 +13,5 @@
       "path": "../security"
     }
   ],
-  "include": ["./src", "./seeds", "./migrations"]
+  "include": ["./src"]
 }
