@@ -11,6 +11,7 @@
     "clean": "rimraf dist && rimraf *.tsbuildinfo",
     "clear": "npm run clean && rimraf node_modules",
     "compile": "tsc --project tsconfig.build.json",
+    "compile-test": "yarn dlx tsc --build",
     "dev": "nodemon",
     "start": "ts-node src/index.ts",
     "openapi": "ts-node generate-openapi.ts",

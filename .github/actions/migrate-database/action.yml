@@ -36,7 +36,7 @@ runs:
 
     - name: Build packages
       shell: bash
-      run: yarn dlx lerna run compile
+      run: yarn dlx lerna run compile-test
 
     - name: Migrate & seed database
       working-directory: packages/data
