@@ -38,7 +38,7 @@ runs:
 
     - name: Build packages
       shell: bash
-      run: lerna run compile-test
+      run: npm run compile-test
 
     - name: Migrate & seed database
       working-directory: packages/data
