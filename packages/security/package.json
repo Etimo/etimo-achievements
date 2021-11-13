@@ -11,7 +11,7 @@
     "clean": "rimraf dist && rimraf *.tsbuildinfo",
     "clear": "npm run clean && rimraf node_modules",
     "compile": "tsc --project tsconfig.build.json",
-    "compile-test": "yarn dlx tsc --build",
+    "compile-test": "tsc --build",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },

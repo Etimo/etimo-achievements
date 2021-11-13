@@ -32,11 +32,13 @@ runs:
   steps:
     - name: Install dependencies
       shell: bash
-      run: yarn install --immutable
+      run: |
+        npm install typescript lerna
+        yarn install --immutable
 
     - name: Build packages
       shell: bash
-      run: yarn dlx lerna run compile-test
+      run: lerna run compile-test
 
     - name: Migrate & seed database
       working-directory: packages/data
