@@ -282,6 +282,30 @@
         ]
       }
     },
+    "/slack/create-achievement": {
+      "post": {
+        "description": "Slack command create achievement modal.",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Good request."
+          },
+          "400": {
+            "description": "Bad request, missing or invalid parameter."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
     "/users": {
       "post": {
         "description": "Create a user",

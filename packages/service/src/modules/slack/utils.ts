@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
 
-export const showModal = async (view: any) => {
+export const openSlackView = async (view: any) => {
   const response = await fetch('https://slack.com/api/views.open', {
     method: 'POST',
     headers: getSlackHeaders(),
