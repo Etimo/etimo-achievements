@@ -32,9 +32,7 @@ runs:
   steps:
     - name: Install dependencies
       shell: bash
-      run: |
-        yarn install --immutable
-        npm install typescript lerna
+      run: yarn install --immutable
 
     - name: Build packages
       shell: bash
