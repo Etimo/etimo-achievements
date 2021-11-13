@@ -6,7 +6,6 @@
     "sourceMap": true
   },
   "extends": "@tsconfig/node14/tsconfig.json",
-  "exclude": ["node_modules", "**/*.spec.ts"],
   "baseUrl": ".",
   "paths": {
     "@etimo-achievements/service/*": ["service/src/*"],

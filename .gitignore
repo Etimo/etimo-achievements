@@ -8,5 +8,5 @@ node_modules/
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
-tsconfig.tsbuildinfo
+*.tsbuildinfo
 .env

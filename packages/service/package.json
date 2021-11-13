@@ -8,9 +8,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "yarn clean && yarn compile",
-    "clean": "rimraf dist && rimraf tsconfig.tsbuildinfo",
+    "clean": "rimraf dist && rimraf *.tsbuildinfo",
     "clear": "npm run clean && rimraf node_modules",
-    "compile": "tsc --build",
+    "compile": "tsc --project tsconfig.build.json",
     "test-integration": "jest --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },

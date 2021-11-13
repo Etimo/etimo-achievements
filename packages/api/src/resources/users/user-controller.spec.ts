@@ -1,4 +1,4 @@
-import { request, setupTestServer } from '../../utils';
+import { request, setupTestServer } from '../../test';
 
 const app = setupTestServer();
 

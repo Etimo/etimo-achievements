@@ -1,5 +1,5 @@
-import { setupEnvironment } from '..';
-import Server from '../../server';
+import { setupEnvironment } from '../utils';
+import Server from '../server';
 
 export function setupTestServer() {
   setupEnvironment('test');
