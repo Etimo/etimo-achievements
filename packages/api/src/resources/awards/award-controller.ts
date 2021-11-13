@@ -27,7 +27,8 @@ export class AwardsController {
      *   get:
      *     description: Get awards.
      *     security:
-     *       - ApiKey: []
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -45,7 +46,8 @@ export class AwardsController {
      *   post:
      *     description: Give a user an award.
      *     security:
-     *       - ApiKey: []
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
      *     requestBody:
      *       content:
      *         application/json:

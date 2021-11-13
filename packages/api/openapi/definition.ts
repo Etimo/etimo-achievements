@@ -28,15 +28,21 @@ export const definition = {
   ],
   security: [
     {
-      ApiKey: [],
+      ApiKeyHeader: [],
+      ApiKeyParameter: [],
     },
   ],
   components: {
     securitySchemes: {
-      ApiKey: {
+      ApiKeyHeader: {
         type: 'apiKey',
         in: 'header',
         name: 'X-API-Key',
+      },
+      ApiKeyParameter: {
+        type: 'apiKey',
+        in: 'query',
+        name: 'apiKey',
       },
     },
   },

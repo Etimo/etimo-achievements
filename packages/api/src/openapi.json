@@ -28,15 +28,21 @@
   ],
   "security": [
     {
-      "ApiKey": []
+      "ApiKeyHeader": [],
+      "ApiKeyParameter": []
     }
   ],
   "components": {
     "securitySchemes": {
-      "ApiKey": {
+      "ApiKeyHeader": {
         "type": "apiKey",
         "in": "header",
         "name": "X-API-Key"
+      },
+      "ApiKeyParameter": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "apiKey"
       }
     },
     "schemas": {
@@ -132,7 +138,10 @@
         "description": "Creates an achievement.",
         "security": [
           {
-            "ApiKey": []
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
           }
         ],
         "requestBody": {
@@ -160,7 +169,10 @@
         "description": "Get achievements.",
         "security": [
           {
-            "ApiKey": []
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
           }
         ],
         "parameters": [
@@ -199,7 +211,10 @@
         "description": "Give a user an award.",
         "security": [
           {
-            "ApiKey": []
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
           }
         ],
         "requestBody": {
@@ -230,7 +245,10 @@
         "description": "Get awards.",
         "security": [
           {
-            "ApiKey": []
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
           }
         ],
         "parameters": [
@@ -293,7 +311,10 @@
         "description": "Get a list of users",
         "security": [
           {
-            "ApiKey": []
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
           }
         ],
         "parameters": [
@@ -346,7 +367,10 @@
         "description": "Show Slack achievements modal.",
         "security": [
           {
-            "ApiKey": []
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
           }
         ],
         "parameters": [
@@ -385,7 +409,10 @@
         "description": "Find a user",
         "security": [
           {
-            "ApiKey": []
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
           }
         ],
         "parameters": [

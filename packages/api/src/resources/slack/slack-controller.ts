@@ -22,7 +22,8 @@ export class SlackController {
      *   get:
      *     description: Show Slack achievements modal.
      *     security:
-     *       - ApiKey: []
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam

@@ -27,7 +27,8 @@ export class AchievementController {
      *   get:
      *     description: Get achievements.
      *     security:
-     *       - ApiKey: []
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -45,7 +46,8 @@ export class AchievementController {
      *   post:
      *     description: Creates an achievement.
      *     security:
-     *       - ApiKey: []
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
      *     requestBody:
      *       content:
      *         application/json:

@@ -9,9 +9,17 @@ export const apiKeyMiddleware = () => {
       console.log(`Path ${req.path} is excluded from authentication`);
       return next();
     }
-    if (req.headers['x-api-key'] !== process.env.API_KEY) {
-      throw new UnauthorizedError('Invalid API key');
+
+    const apiKey = process.env.API_KEY;
+
+    if (req.headers['x-api-key'] === apiKey) {
+      return next();
     }
-    next();
+
+    if (req.query['apiKey'] === apiKey) {
+      return next();
+    }
+
+    throw new UnauthorizedError('Invalid API key');
   };
 };

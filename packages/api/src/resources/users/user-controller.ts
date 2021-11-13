@@ -30,7 +30,8 @@ export class UserController {
      *   get:
      *     description: Get a list of users
      *     security:
-     *       - ApiKey: []
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -48,7 +49,8 @@ export class UserController {
      *   get:
      *     description: Find a user
      *     security:
-     *       - ApiKey: []
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
      *     parameters:
      *       - *userIdParam
      *     responses:
