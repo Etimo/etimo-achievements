@@ -7,6 +7,7 @@ export enum Environment {
 }
 
 export function getEnvironment(): Environment {
+  // @ts-ignore
   const env = process?.env?.NODE_ENV?.toLowerCase();
   switch (env) {
     default:

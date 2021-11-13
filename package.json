@@ -10,6 +10,7 @@
     "clean": "lerna run clean",
     "clear": "lerna run clear && rimraf node_modules",
     "compile": "lerna run compile",
+    "compile-test": "lerna run compile-test",
     "db-create": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",
     "db-drop": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"DROP DATABASE achievements\"",
     "db-recreate": "npm run db-drop && npm run db-create",
@@ -48,7 +49,8 @@
     "husky": "^7.0.2",
     "lerna": "^4.0.0",
     "lint-staged": "^11.1.2",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "typescript": "^4.4.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"

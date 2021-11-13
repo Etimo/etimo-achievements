@@ -3,10 +3,13 @@ name: Deploy to Staging
 concurrency: staging_environment
 
 on:
-  workflow_run:
-    workflows: ['Run tests']
-    types:
-      - completed
+  push:
+    branches: [master]
+    paths:
+      - '.docker/**'
+      - '.github/**'
+      - 'packages/**'
+      - '!packages/**/*.md'
   workflow_dispatch:
     inputs:
       branch:
@@ -20,7 +23,6 @@ defaults:
 
 jobs:
   deploy:
-    if: github.event.workflow_run.conclusion == 'success'
     name: 'Deploy to Staging'
     runs-on: ubuntu-latest
     environment: staging

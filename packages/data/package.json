@@ -11,6 +11,7 @@
     "clean": "rimraf dist && rimraf *.tsbuildinfo",
     "clear": "npm run clean && rimraf node_modules",
     "compile": "tsc --project tsconfig.build.json",
+    "compile-test": "tsc --build",
     "knex:dev": "knex --knexfile src/config/knexfile.ts --env development",
     "knex:local": "knex --knexfile src/config/knexfile.ts --env local",
     "knex:prod": "knex --knexfile src/config/knexfile.ts --env production",
