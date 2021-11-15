@@ -1,10 +1,11 @@
+import { Logger } from '@etimo-achievements/common';
 import Server from './server';
 import { setupEnvironment } from './utils/setup-helper';
 
 function getPort(): number {
   if (process.env.PORT) {
     const port = parseInt(process.env.PORT, 10);
-    console.log(`Found port setting: ${port}`);
+    Logger.log(`Found port setting: ${port}`);
     return port;
   }
 

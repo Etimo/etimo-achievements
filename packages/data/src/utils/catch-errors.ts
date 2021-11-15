@@ -1,4 +1,4 @@
-import { BadRequestError, ConflictError, InternalServerError, NotFoundError } from '@etimo-achievements/common';
+import { BadRequestError, ConflictError, InternalServerError, Logger, NotFoundError } from '@etimo-achievements/common';
 import {
   CheckViolationError,
   ConstraintViolationError,
@@ -13,7 +13,7 @@ export async function catchErrors<T>(fn: () => Promise<T>) {
   try {
     return await fn();
   } catch (e: any) {
-    console.log(e);
+    Logger.log(e);
     throw handleError(e);
   }
 }

@@ -34,10 +34,10 @@ COPY --chown=1000:1000 packages/security/package.json packages/security/package.
 COPY --chown=1000:1000 packages/service/package.json packages/service/package.json
 
 # Install node_modules
-RUN yarn install
+RUN yarn install --immutable
 
 # Copy package sources
 COPY --chown=1000:1000 packages packages
 
 # Build packages
-RUN yarn compile
+RUN npm run compile

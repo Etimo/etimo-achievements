@@ -1,3 +1,4 @@
+import { Logger } from '@etimo-achievements/common';
 import fetch from 'node-fetch';
 
 export const openSlackView = async (view: any) => {
@@ -7,8 +8,8 @@ export const openSlackView = async (view: any) => {
     body: view,
   });
 
-  const content = await response.json();
-  console.log(content);
+  const content = (await response.json()) as any;
+  Logger.log(content);
 };
 
 export const getSlackHeaders = () => {
