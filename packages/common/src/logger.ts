@@ -6,22 +6,26 @@ export class Logger {
       Logger.instance = new Logger();
     }
 
-    Logger.instance.info(message, ...optionalParams);
+    Logger.instance.info(timestamp() + 'xxx' + message, ...optionalParams);
   }
 
   public trace(message: string, ...optionalParams: any[]) {
-    console.trace(message, ...optionalParams);
+    console.trace(timestamp() + message, ...optionalParams);
   }
 
   public info(message: string, ...optionalParams: any[]) {
-    console.info(message, ...optionalParams);
+    console.info(timestamp() + message, ...optionalParams);
   }
 
   public warn(message: string, ...optionalParams: any[]) {
-    console.warn(message, ...optionalParams);
+    console.warn(timestamp() + message, ...optionalParams);
   }
 
   public error(message: string, ...optionalParams: any[]) {
-    console.error(message, ...optionalParams);
+    console.error(timestamp() + message, ...optionalParams);
   }
+}
+
+function timestamp() {
+  return `[${new Date().toTimeString().split(' ')[0]}] `;
 }

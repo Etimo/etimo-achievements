@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { getContext } from '../utils';
 
-let count: number = 0;
 const ignoredPaths: string[] = ['/favicon.ico'];
 
 const reset = '\x1b[0m';
@@ -14,15 +13,16 @@ export const loggingMiddleware = () => {
       return next();
     }
 
-    const { logger, shortRequestId } = getContext();
+    const ctx = getContext();
 
-    const timestamp = new Date().toTimeString().split(' ')[0];
-    const i = `${++count}`.padStart(4, '0');
-
-    logger.info(`${green}[${timestamp}] [${i}] -> ${req.method} ${req.path} {${shortRequestId}} [${req.ip}]${reset}`);
+    ctx.logger.info(
+      `${green}[${ctx.timestamp}] [${ctx.requestCount}] -> ${req.method} ${req.path} {${ctx.shortRequestId}} [${req.ip}]${reset}`
+    );
     next();
     const color = getColor(res.statusCode);
-    logger.info(`${color}[${timestamp}] [${i}] <- ${res.statusCode} {${shortRequestId}}${reset}`);
+    ctx.logger.info(
+      `${color}[${ctx.timestamp}] [${ctx.requestCount}] <- ${res.statusCode} {${ctx.shortRequestId}}${reset}`
+    );
   };
 };
 
