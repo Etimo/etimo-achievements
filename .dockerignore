@@ -1,6 +1,6 @@
 **/node_modules/
 **/dist/
+**/*.tsbuildinfo
 .docker*
 !.docker/resources
 docker-compose*.yml
-*.tsbuildinfo

@@ -1,9 +1,11 @@
 const openApiDocument = require('./openapi.json');
-import { isDevelopment } from '@etimo-achievements/common';
+import { isDevelopment, Logger } from '@etimo-achievements/common';
 import express, { Application, static as serveStatic } from 'express';
+import httpContext from 'express-http-context';
 import * as OpenApiValidator from 'express-openapi-validator';
 import swaggerUi from 'swagger-ui-express';
 import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
+import { contextMiddleware } from './middleware/context-middleware';
 import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
 import { AchievementController } from './resources/achievements/achievement-controller';
@@ -25,7 +27,7 @@ export default class Server {
 
     this.express.listen(this.port);
 
-    console.log(`Server running at port ${this.port}`);
+    Logger.log(`Server running at port ${this.port}`);
   }
 
   public setup() {
@@ -40,7 +42,7 @@ export default class Server {
   }
 
   private setupOpenApi() {
-    console.log('Setting up OpenApi');
+    Logger.log('Setting up OpenApi');
 
     const options = { customSiteTitle: 'EA Swagger' };
     this.express.use('/apidoc.json', serveStatic(`${__dirname}/openapi.json`));
@@ -49,7 +51,10 @@ export default class Server {
   }
 
   private setupMiddleware() {
-    console.log('Applying middleware');
+    Logger.log('Applying middleware');
+
+    this.express.use(httpContext.middleware);
+    this.express.use(contextMiddleware());
 
     if (isDevelopment()) {
       this.express.use(loggingMiddleware());
@@ -63,7 +68,7 @@ export default class Server {
   }
 
   private setupRoutes() {
-    console.log('Setting up routes');
+    Logger.log('Setting up routes');
 
     this.express.use('/', new AchievementController().routes);
     this.express.use('/', new SlackController().routes);
@@ -74,7 +79,7 @@ export default class Server {
   }
 
   private setupErrorHandler() {
-    console.log('Setting up error handling');
+    Logger.log('Setting up error handling');
 
     this.express.use(errorMiddleware());
   }
