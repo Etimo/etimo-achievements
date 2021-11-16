@@ -11,7 +11,6 @@ export enum LoggingColor {
   Dim,
   Green,
   Yellow,
-  Orange,
   Red,
 }
 
@@ -27,7 +26,7 @@ export class Logger {
   }
 
   public trace(message: string, options?: LoggerOptions) {
-    this.output(message, LoggingColor.Dim, console.trace, options);
+    this.output(message, LoggingColor.Dim, console.debug, options);
   }
 
   public debug(message: string, options?: LoggerOptions) {
@@ -39,7 +38,7 @@ export class Logger {
   }
 
   public warn(message: string, options?: LoggerOptions) {
-    this.output(message, LoggingColor.Orange, console.warn, options);
+    this.output(message, LoggingColor.Yellow, console.warn, options);
   }
 
   public error(message: string, options?: LoggerOptions) {
@@ -71,20 +70,18 @@ function colorCode(color: LoggingColor): string {
     case LoggingColor.Bright:
       return '';
     case LoggingColor.Dim:
-      return '\x1b[90m';
+      return '\x1b[2m';
     case LoggingColor.Green:
       return '\x1b[32m';
     case LoggingColor.Yellow:
       return '\x1b[33m';
-    case LoggingColor.Orange:
-      return '\x1b[91m';
     case LoggingColor.Red:
       return '\x1b[31m';
     case LoggingColor.Reset:
       return '\x1b[0m';
     case LoggingColor.Normal:
     default:
-      return '\x1b[2m';
+      return '\x1b[90m';
   }
 }
 
