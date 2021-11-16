@@ -1,7 +1,10 @@
+import { Logger } from '@etimo-achievements/common';
 import * as Knex from 'knex';
+const knexFile = require('../src/config/knexfile');
 
-export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('users', (table: Knex.TableBuilder) => {
+export async function up(knex: Knex) {
+  Logger.log('↑ 20210000000010_users');
+  await knex.schema.createTable('users', (table: Knex.TableBuilder) => {
     // Structure
     table.uuid('id').primary();
     table.string('username', 32).notNullable().unique();
@@ -10,11 +13,14 @@ export async function up(knex: Knex): Promise<void> {
     table.string('slackHandle', 64).notNullable().unique();
 
     // Timestamps
-    table.timestamp('createdAt').notNullable().defaultTo(knex.fn.now());
-    table.timestamp('updatedAt').notNullable().defaultTo(knex.fn.now());
+    table.timestamps(false, true);
+  });
+  await knex.schema.alterTable('users', (_table: Knex.TableBuilder) => {
+    knex.raw(knexFile.onUpdateTrigger('users'));
   });
 }
 
-export async function down(knex: Knex): Promise<void> {
-  return knex.schema.dropTable('users');
+export async function down(knex: Knex) {
+  Logger.log('↓ 20210000000010_users');
+  await knex.schema.dropTable('users');
 }

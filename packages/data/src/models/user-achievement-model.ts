@@ -1,5 +1,5 @@
 import { uuid } from '@etimo-achievements/common';
-import { Model, ModelOptions, QueryContext } from 'objection';
+import { Model, QueryContext } from 'objection';
 
 export interface IUserAchievement {
   id: string;
@@ -33,11 +33,6 @@ export class UserAchievementModel extends Model implements IUserAchievement {
   async $beforeInsert(queryContext: QueryContext) {
     await super.$beforeInsert(queryContext);
     this.id = this.id || uuid();
-  }
-
-  async $beforeUpdate(opt: ModelOptions, queryContext: QueryContext) {
-    await super.$beforeUpdate(opt, queryContext);
-    this.updatedAt = new Date();
   }
 
   id!: string;
