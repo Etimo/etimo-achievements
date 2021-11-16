@@ -1,6 +1,6 @@
 import { Logger } from '@etimo-achievements/common';
 import * as Knex from 'knex';
-const knexFile = require('../src/config/knexfile');
+import { onUpdateTrigger } from '../src/utils/knex-helpers';
 
 export async function up(knex: Knex) {
   Logger.log('↑ 20210000000011_achievements');
@@ -14,7 +14,7 @@ export async function up(knex: Knex) {
     table.timestamps(false, true);
   });
   await knex.schema.alterTable('achievements', (_table: Knex.TableBuilder) => {
-    knex.raw(knexFile.onUpdateTrigger('achievements'));
+    knex.raw(onUpdateTrigger('achievements'));
   });
 }
 

@@ -1,6 +1,6 @@
 import { Logger } from '@etimo-achievements/common';
 import * as Knex from 'knex';
-const knexFile = require('../src/config/knexfile');
+import { onUpdateTrigger } from '../src/utils/knex-helpers';
 
 export async function up(knex: Knex) {
   Logger.log('↑ 20210000000010_users');
@@ -10,13 +10,13 @@ export async function up(knex: Knex) {
     table.string('username', 32).notNullable().unique();
     table.string('password', 255).notNullable();
     table.string('email', 128).notNullable().unique();
-    table.string('slackHandle', 64).notNullable().unique();
+    table.string('slack_handle', 64).notNullable().unique();
 
     // Timestamps
     table.timestamps(false, true);
   });
   await knex.schema.alterTable('users', (_table: Knex.TableBuilder) => {
-    knex.raw(knexFile.onUpdateTrigger('users'));
+    knex.raw(onUpdateTrigger('users'));
   });
 }
 

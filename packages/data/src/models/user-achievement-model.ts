@@ -1,5 +1,6 @@
 import { uuid } from '@etimo-achievements/common';
-import { Model, QueryContext } from 'objection';
+import { QueryContext } from 'objection';
+import { BaseModel } from './base-model';
 
 export interface IUserAchievement {
   id: string;
@@ -10,9 +11,9 @@ export interface IUserAchievement {
 export type INewUserAchievement = Omit<IUserAchievement, 'id'>;
 export type IPartialUserAchievement = Pick<IUserAchievement, 'id'> & Partial<IUserAchievement>;
 
-export class UserAchievementModel extends Model implements IUserAchievement {
+export class UserAchievementModel extends BaseModel implements IUserAchievement {
   static get tableName() {
-    return 'userAchievements';
+    return 'user_achievements';
   }
 
   static get jsonSchema() {
