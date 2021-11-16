@@ -6,7 +6,7 @@ export class Logger {
       Logger.instance = new Logger();
     }
 
-    Logger.instance.info(timestamp() + 'xxx' + message, ...optionalParams);
+    Logger.instance.info(message, ...optionalParams);
   }
 
   public trace(message: string, ...optionalParams: any[]) {
