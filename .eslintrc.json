@@ -4,7 +4,7 @@
     "es2021": true,
     "node": true
   },
-  "extends": ["plugin:react/recommended", "google", "prettier"],
+  "extends": ["google", "prettier"],
   "ignorePatterns": ["**/dist/**/*"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -14,7 +14,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react", "@typescript-eslint"],
+  "plugins": ["@typescript-eslint"],
   "rules": {
     "new-cap": ["error", { "capIsNew": false }],
     "no-invalid-this": "off",
