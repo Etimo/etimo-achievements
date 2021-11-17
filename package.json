@@ -36,8 +36,8 @@
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
     "start-fresh": "yarn install && npm run build && npm run openapi && npm run docker-rebuild && npm run start",
     "support": "docker-compose up -d --build postgres pgadmin nodemon",
-    "test": "for p in packages/*; do (cd $p && npm run test) || exit 1; done",
-    "test-integration": "for p in packages/*; do (cd $p && npm run test-integration) || exit 1; done"
+    "test": "./scripts/run-script.sh test",
+    "test-integration": "./scripts/run-script.sh test-integration"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
