@@ -28,7 +28,7 @@ export class UserController {
      * @openapi
      * /users:
      *   get:
-     *     description: Get a list of users
+     *     description: Get a list of users.
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
@@ -47,7 +47,7 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   get:
-     *     description: Find a user
+     *     description: Find a single user.
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
@@ -57,9 +57,9 @@ export class UserController {
      *       200:
      *         description: The requested user.
      *       400:
-     *         description: Bad request, missing or invalid parameter.
+     *         description: Request contains a missing or invalid argument.
      *       404:
-     *         description: Not found, the user was not found.
+     *         description: The user could not be found.
      *     tags:
      *       - Users
      */
@@ -69,7 +69,7 @@ export class UserController {
      * @openapi
      * /users:
      *   post:
-     *     description: Create a user
+     *     description: Create a user.
      *     requestBody:
      *       required: true
      *       content:
@@ -77,10 +77,10 @@ export class UserController {
      *           schema:
      *             $ref: '#/components/schemas/NewUser'
      *     responses:
-     *       200:
-     *         description: User was created.
+     *       201:
+     *         description: The user was created.
      *       400:
-     *         description: Bad request, missing or invalid parameter.
+     *         description: Request contains a missing or invalid argument.
      *     tags:
      *       - Users
      */

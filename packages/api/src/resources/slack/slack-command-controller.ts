@@ -21,15 +21,15 @@ export class SlackCommandController {
      * @openapi
      * /slack/create-achievement:
      *   post:
-     *     description: Slack command create achievement modal.
+     *     description: Create achievement modal in Slack.
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
      *     responses:
      *       200:
-     *         description: Good request.
+     *         description: The modal was created.
      *       400:
-     *         description: Bad request, missing or invalid parameter.
+     *         description: Request contains a missing or invalid argument.
      *     tags:
      *       - Slack
      */

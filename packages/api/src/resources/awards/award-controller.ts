@@ -25,7 +25,7 @@ export class AwardsController {
      * @openapi
      * /awards:
      *   get:
-     *     description: Get awards.
+     *     description: Get a list of awards.
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
@@ -54,12 +54,12 @@ export class AwardsController {
      *           schema:
      *             $ref: '#/components/schemas/Award'
      *     responses:
-     *       200:
+     *       201:
      *         description: The award was given to the user.
      *       400:
-     *         description: Bad request. The request was badly formed.
+     *         description: Request contains a missing or invalid argument.
      *       404:
-     *         description: The achievement or user was not found.
+     *         description: The award could not be found.
      *     tags:
      *       - Awards
      */
