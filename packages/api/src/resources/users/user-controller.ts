@@ -28,7 +28,8 @@ export class UserController {
      * @openapi
      * /users:
      *   get:
-     *     description: Get a list of users.
+     *     summary: Get a list of users.
+     *     operationId: getUsers
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
@@ -47,7 +48,8 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   get:
-     *     description: Find a single user.
+     *     summary: Find a single user.
+     *     operationId: getUser
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
@@ -69,9 +71,11 @@ export class UserController {
      * @openapi
      * /users:
      *   post:
-     *     description: Create a user.
+     *     summary: Create a user.
+     *     operationId: createUser
      *     requestBody:
      *       required: true
+     *       description: A JSON object that contains the user to create.
      *       content:
      *         application/json:
      *           schema:
@@ -79,6 +83,13 @@ export class UserController {
      *     responses:
      *       201:
      *         description: The user was created.
+     *         content:
+     *           *idObject
+     *         links:
+     *           getUserById:
+     *             operationId: getUser
+     *             parameters:
+     *               userId: '$response.body#/id'
      *       400:
      *         description: Request contains a missing or invalid argument.
      *     tags:
@@ -112,8 +123,7 @@ export class UserController {
 
     const input = UserMapper.toNewUser(payload);
     const user = await this.createUserService.create(input);
-    const output = UserMapper.toUserDto(user);
 
-    return res.status(201).send(output);
+    return res.status(201).send({ id: user.id });
   };
 }

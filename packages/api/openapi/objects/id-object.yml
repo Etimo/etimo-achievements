@@ -1,0 +1,9 @@
+x-template: &idObject
+  application/json:
+    schema:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: ID of the created resource.
