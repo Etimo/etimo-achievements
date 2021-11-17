@@ -6,6 +6,8 @@
  *       title: Award
  *       type: object
  *       properties:
+ *         id:
+ *           *idProperty
  *         userId:
  *           type: string
  *           format: uuid

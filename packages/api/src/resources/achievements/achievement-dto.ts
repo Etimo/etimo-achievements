@@ -7,14 +7,15 @@
  *       type: object
  *       properties:
  *         id:
- *           type: string
- *           format: uuid
+ *           *idProperty
  *         achievement:
  *           type: string
  *           description: The name of the achievement
+ *           example: Coffee Achievement
  *         description:
  *           type: string
  *           description: A description of when the achievement should be awarded
+ *           example: Put on coffee for the gang.
  *       required:
  *         - achievement
  *         - description
