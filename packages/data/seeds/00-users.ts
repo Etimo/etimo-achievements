@@ -12,14 +12,14 @@ export async function seed(knex: Knex): Promise<void> {
       username: 'admin',
       password: hashPassword('admin123'),
       email: 'admin@etimo.se',
-      slackHandle: '@admin',
+      slack_handle: '@admin',
     },
     {
       id: 'b158d926-9ef6-42a5-9059-f810a6d1c980',
       username: 'user',
       password: hashPassword('test123'),
       email: 'user@etimo.se',
-      slackHandle: '@user',
+      slack_handle: '@user',
     },
   ]);
 }

@@ -1,5 +1,6 @@
 import { uuid } from '@etimo-achievements/common';
-import { Model, ModelOptions, QueryContext } from 'objection';
+import { QueryContext } from 'objection';
+import { BaseModel } from './base-model';
 
 export interface IUser {
   id: string;
@@ -12,7 +13,7 @@ export interface IUser {
 export type INewUser = Omit<IUser, 'id'>;
 export type IPartialUser = Pick<IUser, 'id'> & Partial<IUser>;
 
-export class UserModel extends Model implements IUser {
+export class UserModel extends BaseModel implements IUser {
   static get tableName() {
     return 'users';
   }
@@ -24,10 +25,10 @@ export class UserModel extends Model implements IUser {
 
       properties: {
         id: { type: 'string', format: 'uuid' },
-        username: { type: 'string', minLength: 2, maxLength: 32 },
-        password: { type: 'string', minLength: 10, maxLength: 255 },
-        email: { type: 'string', format: 'email', maxLength: 128 },
-        slackHandle: { type: 'string', minLength: 2, maxLength: 64 },
+        username: { type: 'string', maxLength: 32 },
+        password: { type: 'string', maxLength: 255 },
+        email: { type: 'string', maxLength: 128 },
+        slackHandle: { type: 'string', maxLength: 64 },
         createdAt: { type: 'string', format: 'date-time' },
         updatedAt: { type: 'string', format: 'date-time' },
       },
@@ -37,11 +38,6 @@ export class UserModel extends Model implements IUser {
   async $beforeInsert(queryContext: QueryContext) {
     await super.$beforeInsert(queryContext);
     this.id = this.id || uuid();
-  }
-
-  async $beforeUpdate(opt: ModelOptions, queryContext: QueryContext) {
-    await super.$beforeUpdate(opt, queryContext);
-    this.updatedAt = new Date();
   }
 
   id!: string;
