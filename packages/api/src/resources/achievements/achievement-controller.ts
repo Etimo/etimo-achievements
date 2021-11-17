@@ -25,7 +25,7 @@ export class AchievementController {
      * @openapi
      * /achievements:
      *   get:
-     *     description: Get achievements.
+     *     description: Get a list of achievements.
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
@@ -44,7 +44,7 @@ export class AchievementController {
      * @openapi
      * /achievements:
      *   post:
-     *     description: Creates an achievement.
+     *     description: Create an achievement.
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
@@ -54,10 +54,10 @@ export class AchievementController {
      *           schema:
      *             $ref: '#/components/schemas/Achievement'
      *     responses:
-     *       200:
-     *         description: Achievement was created.
+     *       201:
+     *         description: The achievement was created.
      *       400:
-     *         description: Bad request, missing or invalid parameter.
+     *         description: Request contains a missing or invalid argument.
      *     tags:
      *       - Achievements
      */

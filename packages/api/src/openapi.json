@@ -135,7 +135,7 @@
   "paths": {
     "/achievements": {
       "post": {
-        "description": "Creates an achievement.",
+        "description": "Create an achievement.",
         "security": [
           {
             "ApiKeyHeader": []
@@ -154,11 +154,11 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "Achievement was created."
+          "201": {
+            "description": "The achievement was created."
           },
           "400": {
-            "description": "Bad request, missing or invalid parameter."
+            "description": "Request contains a missing or invalid argument."
           }
         },
         "tags": [
@@ -166,7 +166,7 @@
         ]
       },
       "get": {
-        "description": "Get achievements.",
+        "description": "Get a list of achievements.",
         "security": [
           {
             "ApiKeyHeader": []
@@ -227,14 +227,14 @@
           }
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "The award was given to the user."
           },
           "400": {
-            "description": "Bad request. The request was badly formed."
+            "description": "Request contains a missing or invalid argument."
           },
           "404": {
-            "description": "The achievement or user was not found."
+            "description": "The award could not be found."
           }
         },
         "tags": [
@@ -242,7 +242,7 @@
         ]
       },
       "get": {
-        "description": "Get awards.",
+        "description": "Get a list of awards.",
         "security": [
           {
             "ApiKeyHeader": []
@@ -284,7 +284,7 @@
     },
     "/slack/create-achievement": {
       "post": {
-        "description": "Slack command create achievement modal.",
+        "description": "Create achievement modal in Slack.",
         "security": [
           {
             "ApiKeyHeader": []
@@ -295,10 +295,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Good request."
+            "description": "The modal was created."
           },
           "400": {
-            "description": "Bad request, missing or invalid parameter."
+            "description": "Request contains a missing or invalid argument."
           }
         },
         "tags": [
@@ -308,7 +308,7 @@
     },
     "/users": {
       "post": {
-        "description": "Create a user",
+        "description": "Create a user.",
         "requestBody": {
           "required": true,
           "content": {
@@ -320,11 +320,11 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "User was created."
+          "201": {
+            "description": "The user was created."
           },
           "400": {
-            "description": "Bad request, missing or invalid parameter."
+            "description": "Request contains a missing or invalid argument."
           }
         },
         "tags": [
@@ -332,7 +332,7 @@
         ]
       },
       "get": {
-        "description": "Get a list of users",
+        "description": "Get a list of users.",
         "security": [
           {
             "ApiKeyHeader": []
@@ -374,11 +374,11 @@
     },
     "/version": {
       "get": {
-        "description": "Returns version information about the deployed application.",
+        "description": "Get application version information.",
         "security": [],
         "responses": {
           "200": {
-            "description": "Object containing version information."
+            "description": "The deployed application's version information."
           }
         },
         "tags": [
@@ -430,7 +430,7 @@
     },
     "/users/{userId}": {
       "get": {
-        "description": "Find a user",
+        "description": "Find a single user.",
         "security": [
           {
             "ApiKeyHeader": []
@@ -455,10 +455,10 @@
             "description": "The requested user."
           },
           "400": {
-            "description": "Bad request, missing or invalid parameter."
+            "description": "Request contains a missing or invalid argument."
           },
           "404": {
-            "description": "Not found, the user was not found."
+            "description": "The user could not be found."
           }
         },
         "tags": [
