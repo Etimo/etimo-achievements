@@ -306,72 +306,6 @@
         ]
       }
     },
-    "/users": {
-      "post": {
-        "description": "Create a user.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewUser"
-              }
-            }
-          }
-        },
-        "responses": {
-          "201": {
-            "description": "The user was created."
-          },
-          "400": {
-            "description": "Request contains a missing or invalid argument."
-          }
-        },
-        "tags": [
-          "Users"
-        ]
-      },
-      "get": {
-        "description": "Get a list of users.",
-        "security": [
-          {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
-          }
-        ],
-        "parameters": [
-          {
-            "name": "skip",
-            "in": "query",
-            "description": "The number of items to skip before starting to collect the result set.",
-            "schema": {
-              "type": "integer",
-              "minimum": 0
-            }
-          },
-          {
-            "name": "take",
-            "in": "query",
-            "description": "The numbers of items to return.",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 50
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of users."
-          }
-        },
-        "tags": [
-          "Users"
-        ]
-      }
-    },
     "/version": {
       "get": {
         "description": "Get application version information.",
@@ -428,9 +362,101 @@
         ]
       }
     },
+    "/users": {
+      "get": {
+        "summary": "Get a list of users.",
+        "operationId": "getUsers",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of users."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      },
+      "post": {
+        "summary": "Create a user.",
+        "operationId": "createUser",
+        "requestBody": {
+          "required": true,
+          "description": "A JSON object that contains the user to create.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The user was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "getUserById": {
+                "operationId": "getUser",
+                "parameters": {
+                  "userId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request contains a missing or invalid argument."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
     "/users/{userId}": {
       "get": {
-        "description": "Find a single user.",
+        "summary": "Find a single user.",
+        "operationId": "getUser",
         "security": [
           {
             "ApiKeyHeader": []
