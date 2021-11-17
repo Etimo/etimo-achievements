@@ -111,10 +111,8 @@ export class UserController {
   private getUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const user = await this.getUserService.get(userId);
-
-    if (user === undefined) return res.status(404).send();
-
     const userDto = UserMapper.toUserDto(user);
+
     return res.status(200).send(userDto);
   };
 
