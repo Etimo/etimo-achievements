@@ -38,6 +38,7 @@ RUN yarn install --immutable
 
 # Copy package sources
 COPY --chown=1000:1000 packages packages
+COPY --chown=1000:1000 scripts scripts
 
 # Build packages
 RUN npm run compile

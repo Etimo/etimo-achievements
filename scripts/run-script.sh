@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 for package_path in packages/*; do
   [ -d "$package_path" ] && {
