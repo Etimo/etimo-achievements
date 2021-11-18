@@ -8,28 +8,22 @@ It is used by [Etimo](https://www.etimo.se) to create, track and hand out achiev
 
 Clone the repository and follow the instructions in this file to get started.
 
-### Dependencies
-
-Install dependencies (including global dependencies) by running:
-
-```
-yarn install-deps
-```
-
 ### First Run
 
 If this is your first time running this project, bootstrap it by running:
 
 ```
-yarn first-run
+npm run first-run
 ```
+
+This will install local and global dependencies and create a new database.
 
 ## Developing
 
 When developing, simply run:
 
 ```
-yarn start
+npm run start
 ```
 
 This will start the project in development mode, and `nodemon` will monitor the project and rebuild everything when source files change.
@@ -39,7 +33,7 @@ This will start the project in development mode, and `nodemon` will monitor the 
 If you need to recreate, migrate and seed the database, use the following script:
 
 ```
-yarn db-reset
+npm run db-reset
 ```
 
 ### Migrations
@@ -47,19 +41,19 @@ yarn db-reset
 To create a database migration:
 
 ```
-yarn migration-new <migration name>
+npm run migration-new <migration name>
 ```
 
 To apply a database migration:
 
 ```
-yarn migration-apply
+npm run migration-apply
 ```
 
 To revert a database migration:
 
 ```
-yarn migration-revert
+npm run migration-revert
 ```
 
 ### Seeds
@@ -67,13 +61,13 @@ yarn migration-revert
 To create a new seed file:
 
 ```
-yarn seed-new <seed name>
+npm run seed-new <seed name>
 ```
 
 To run the seed files:
 
 ```
-yarn seed-run
+npm run seed-run
 ```
 
 ## Technologies
