@@ -5,12 +5,12 @@
     "packages/*"
   ],
   "scripts": {
-    "api": "lerna run --scope @etimo-achievements/api start",
-    "build": "lerna run build",
-    "clean": "lerna run clean",
-    "clear": "lerna run clear && rimraf node_modules",
-    "compile": "lerna run compile",
-    "compile-test": "lerna run compile-test",
+    "api": "cd packages/api && npm run start",
+    "build": "./scripts/run-script.sh build",
+    "clean": "./scripts/run-script.sh clean",
+    "clear": "./scripts/run-script.sh clear && rimraf node_modules",
+    "compile": "./scripts/run-script.sh compile",
+    "compile-test": "./scripts/run-script.sh compile-test",
     "db-create": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",
     "db-drop": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"DROP DATABASE achievements\"; exit 0",
     "db-recreate": "npm run db-drop; npm run db-create",
@@ -48,7 +48,6 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-react": "^7.26.0",
     "husky": "^7.0.2",
-    "lerna": "^4.0.0",
     "lint-staged": "^11.1.2",
     "prettier": "^2.4.1",
     "typescript": "^4.4.3"
