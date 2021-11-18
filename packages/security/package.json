@@ -7,9 +7,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "yarn clean && yarn compile",
-    "clean": "rimraf dist && rimraf *.tsbuildinfo",
-    "clear": "npm run clean && rimraf node_modules",
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "clear": "npm run clean && rm -rf node_modules",
     "compile": "tsc --project tsconfig.build.json",
     "compile-test": "tsc --build",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",

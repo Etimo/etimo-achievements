@@ -8,7 +8,7 @@
     "api": "cd packages/api && npm run start",
     "build": "./scripts/run-script.sh build",
     "clean": "./scripts/run-script.sh clean",
-    "clear": "./scripts/run-script.sh clear && rimraf node_modules",
+    "clear": "./scripts/run-script.sh clear && rm -rf node_modules",
     "compile": "./scripts/run-script.sh compile",
     "compile-test": "./scripts/run-script.sh compile-test",
     "db-create": "docker exec -it -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",

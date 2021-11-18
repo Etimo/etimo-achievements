@@ -8,8 +8,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npm run clean && npm run compile",
-    "clean": "rimraf dist && rimraf *.tsbuildinfo",
-    "clear": "npm run clean && rimraf node_modules",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "clear": "npm run clean && rm -rf node_modules",
     "compile": "tsc --project tsconfig.build.json",
     "compile-test": "tsc --build",
     "dev": "nodemon",
