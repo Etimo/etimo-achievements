@@ -84,7 +84,6 @@ These are the technologies used in this project:
 | [Husky](https://typicode.github.io/husky/)            | Git hooks.                                                  |
 | [Jest](https://jestjs.io/)                            | Unit testing.                                               |
 | [Knex](https://knexjs.org)                            | DB access, migrations and seed files.                       |
-| [Lerna](https://lerna.js.org/)                        | Monorepo administration.                                    |
 | [Nodemon](https://nodemon.io/)                        | Change monitoring during development.                       |
 | [Objection.js](https://vincit.github.io/objection.js) | ORM for Knex.                                               |
 | [Postgres](https://www.postgresql.org/)               | SQL database.                                               |

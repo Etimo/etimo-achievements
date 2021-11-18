@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wanted_dependencies=("jest" "knex" "lerna" "rimraf" "ts-node" "typescript:tsc")
+wanted_dependencies=("jest" "knex" "rimraf" "ts-node" "typescript:tsc")
 missing_dependencies=()
 
 for dependency in "${wanted_dependencies[@]}"; do
