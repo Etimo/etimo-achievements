@@ -4,7 +4,7 @@ main() {
   packages=$("$_script_path/list-packages.sh")
   for package in $packages; do
     (cd "$_root_path/packages/$package" || exit 1
-    time -p npm run "$*") || exit 1
+    npm run "$*") || exit 1
   done
 }
 

@@ -32,7 +32,9 @@ runs:
   steps:
     - name: Install dependencies
       shell: bash
-      run: yarn install --immutable
+      run: |
+        apt-get update && apt-get install jq -y
+        yarn install --immutable
 
     - name: Build packages
       shell: bash
