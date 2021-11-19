@@ -1,7 +1,7 @@
 packages/**/dist/
+packages/**/.latest_build
 packages/.package_list
 packages/.dependency_list
-packages/.latest_build
 node_modules/
 *.log
 .yarn/*

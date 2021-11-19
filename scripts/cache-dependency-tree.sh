@@ -3,8 +3,6 @@
 # Create a list of packages and their intra-app dependencies
 
 main() {
-  package_count=$(ls "$_root_path/packages" | wc -l)
-
   [ "$1" = "--force" ] && rm -f "$_dependency_list_file"
 
   if ! updated_package_json; then
@@ -24,6 +22,9 @@ main() {
     done
     echo "$package_name: ${dependants[*]}" >> "$_dependency_list_file"
   done
+
+  # Remove empty lines
+  sed -i '/^$/d' "$_dependency_list_file"
 
   cat "$_dependency_list_file"
 }
