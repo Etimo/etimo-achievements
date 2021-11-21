@@ -4,8 +4,13 @@ built_packages=()
 
 main() {
   for package_path in $(find "$_packages_path" -mindepth 1 -maxdepth 1 -type d); do
+    package_name="$(basename "$package_path")"
     ! has_updated_files "$package_path" && continue
-    echo "Detected changes in $(basename "$package_path") -- building"
+    [ "$package_name" = "api" ] && {
+      echo "Rebuilding OpenApi definition"
+      npm run openapi
+    }
+    echo "Detected changes in $package_name -- building"
     build_package_tree "$package_path"
   done
 
@@ -25,7 +30,6 @@ build_package() {
   [[ " ${built_packages[*]} " =~ [[:space:]]"$1"[[:space:]] ]] && return 0
 
   (cd "$_packages_path/$1" || exit 1
-  [ "$1" = "api" ] && npm run openapi
   npm run compile) || exit 1
 
   built_packages+=("$1")
@@ -39,9 +43,7 @@ has_updated_files() {
     echo "1970-01-01T00:00:00" > "$latest_build_file"
   }
 
-  package_mdate=$(cat "$latest_build_file")
-
-  mfiles=$(find "$1" -type f -newermt "$package_mdate" \
+  mfiles=$(find "$1" -type f -newer "$latest_build_file" \
     -not -name ".*" \
     -not -name "*.d.ts" \
     -not -path "*/dist/*" \
