@@ -6,7 +6,7 @@ main() {
   [ "$1" = "--force" ] && rm -f "$_dependency_list_file"
 
   if ! updated_package_json; then
-    cat "$_dependency_list_file"
+    echo "Intra-app dependency list unchanged."
     exit 0
   fi
 
@@ -26,7 +26,7 @@ main() {
   # Remove empty lines
   sed -i '/^$/d' "$_dependency_list_file"
 
-  cat "$_dependency_list_file"
+  echo "Updated intra-app dependency list."
 }
 
 updated_package_json() {

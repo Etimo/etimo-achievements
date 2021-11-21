@@ -25,6 +25,7 @@ build_package() {
   [[ " ${built_packages[*]} " =~ [[:space:]]"$1"[[:space:]] ]] && return 0
 
   (cd "$_packages_path/$1" || exit 1
+  [ "$1" = "api" ] && npm run openapi
   npm run compile) || exit 1
 
   built_packages+=("$1")

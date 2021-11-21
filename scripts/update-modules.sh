@@ -1,22 +1,28 @@
 #!/bin/bash
 
-SCRIPTDIR="$(dirname "$(readlink -f "$0")")"
-ROOTDIR="$(readlink -f "$SCRIPTDIR/..")"
+main() {
+  [ "$1" = "--force" ] && rm -f "$_modules_hash_file"
 
-modules_hash_file=$ROOTDIR/node_modules/.modules_hash
+  modules_hash=$(cat "$_modules_hash_file" 2>/dev/null)
 
-[ "$1" = "--force" ] && rm -f "$modules_hash_file"
+  {
+    find "$_packages_path" -mindepth 2 -maxdepth 2 -name "package.json" -exec jq "{dependencies,devDependencies}" {} \;
+  } | sort | sha1sum | awk '{print $1}' > "$_modules_hash_file"
 
-modules_hash=$(cat "$modules_hash_file" 2>/dev/null)
+  new_modules_hash=$(cat "$_modules_hash_file")
+  if [ "$modules_hash" != "$new_modules_hash" ]; then
+    echo "Dependencies have changed. Running yarn install."
+    yarn install
+    "$_script_path"/cache-dependency-tree.sh
+  else
+    echo "Dependencies have not changed."
+  fi
+}
 
-{
-  find "$ROOTDIR" -name "package.json" -not -path "*/node_modules/*" -exec jq "{dependencies,devDependencies}" {} \;
-} | sort | sha1sum | awk '{print $1}' > "$modules_hash_file"
+# Setup paths
+_script_path="$(dirname "$(readlink -f "$0")")"
+_root_path="$(readlink -f "$_script_path/..")"
+_packages_path="$_root_path/packages"
+_modules_hash_file="$_root_path/node_modules/.modules_hash"
 
-new_modules_hash=$(cat "$modules_hash_file")
-if [ "$modules_hash" != "$new_modules_hash" ]; then
-  echo "Dependencies have changed. Running yarn install."
-  yarn install
-else
-  echo "Dependencies have not changed."
-fi
+main "$1"
