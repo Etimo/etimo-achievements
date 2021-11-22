@@ -2,4 +2,5 @@ FROM ghcr.io/etimo/etimo-achievements/base:latest AS develop
 WORKDIR /app
 COPY --chown=1000:1000 nodemon.json .
 COPY --chown=1000:1000 scripts ./scripts
-CMD ["nodemon"]
+COPY --chown=1000:1000 .docker/entrypoints/nodemon.sh ./entrypoint.sh
+CMD ["./entrypoint.sh"]

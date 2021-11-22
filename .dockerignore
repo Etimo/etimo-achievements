@@ -3,4 +3,5 @@
 **/*.tsbuildinfo
 .docker*
 !.docker/resources
+!.docker/entrypoints
 docker-compose*.yml

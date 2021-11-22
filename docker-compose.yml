@@ -31,6 +31,7 @@ services:
       - 'com.etimo-achievements.monitored'
     volumes:
       - ./packages:/app/packages
+      - ./scripts:/app/scripts
 
   postgres:
     image: postgres:latest

@@ -39,8 +39,8 @@ export interface UserDto {
  *             password:
  *               type: string
  *               minLength: 8
- *         - required:
- *           - password
+ *       required:
+ *         - password
  */
 export interface NewUserDto extends UserDto {
   password: string;

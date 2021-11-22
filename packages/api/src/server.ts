@@ -1,8 +1,6 @@
-const openApiDocument = require('./openapi.json');
 import { isDevelopment, Logger } from '@etimo-achievements/common';
 import express, { Application, static as serveStatic } from 'express';
 import httpContext from 'express-http-context';
-import * as OpenApiValidator from 'express-openapi-validator';
 import swaggerUi from 'swagger-ui-express';
 import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
 import { contextMiddleware } from './middleware/context-middleware';
@@ -32,7 +30,6 @@ export default class Server {
 
   public setup() {
     this.setupMiddleware();
-    this.setupOpenApi();
     this.setupRoutes();
     this.setupErrorHandler();
   }
@@ -41,30 +38,36 @@ export default class Server {
     return this.express;
   }
 
-  private setupOpenApi() {
-    Logger.log('Setting up OpenApi');
-
-    const options = { customSiteTitle: 'EA Swagger' };
-    this.express.use('/apidoc.json', serveStatic(`${__dirname}/openapi.json`));
-    this.express.use('/swagger', swaggerUi.serve, swaggerUi.setup(openApiDocument, options));
-    this.express.use(OpenApiValidator.middleware({ apiSpec: openApiDocument, validateRequests: true }));
-  }
-
   private setupMiddleware() {
     Logger.log('Applying middleware');
 
+    const OpenApiValidator = require('express-openapi-validator');
+    const OpenApiDocument = require('./openapi.json');
+
+    // Context
     this.express.use(httpContext.middleware);
     this.express.use(contextMiddleware());
 
+    // Logging
     if (isDevelopment()) {
       this.express.use(loggingMiddleware());
     } else {
       this.express.use(winstonMiddleware());
     }
 
+    // Body parsers
     this.express.use(express.json());
-    this.express.use(express.urlencoded({ extended: true }));
+    this.express.use(express.text());
+    this.express.use(express.urlencoded({ extended: false }));
+
+    // Security
     this.express.use(apiKeyMiddleware());
+
+    // Documentation
+    const options = { customSiteTitle: 'EA Swagger' };
+    this.express.use('/spec', serveStatic(`${__dirname}/openapi.json`));
+    this.express.use('/swagger', swaggerUi.serve, swaggerUi.setup(OpenApiDocument, options));
+    this.express.use(OpenApiValidator.middleware({ apiSpec: OpenApiDocument, validateRequests: true }));
   }
 
   private setupRoutes() {

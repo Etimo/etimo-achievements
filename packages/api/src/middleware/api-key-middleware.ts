@@ -1,10 +1,10 @@
 import { Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
 
-const excludedPaths = ['/version', '/swagger', '/apidoc.json'];
+const excludedPaths = ['/version', '/swagger', '/spec'];
 
 export const apiKeyMiddleware = () => {
-  return (req: Request, res: Response, next: NextFunction) => {
+  return (req: Request, _res: Response, next: NextFunction) => {
     if (excludedPaths.some((p) => req.path === p || req.path.startsWith(`${p}/`))) {
       Logger.log(`Path ${req.path} is excluded from authentication`);
       return next();

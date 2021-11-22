@@ -1,11 +1,13 @@
+const baseUrl = process.env.API_BASEURL;
+
 export const definition = {
   openapi: '3.0.0',
   info: {
     title: 'Etimo Achievements',
     version: '1.0.0',
     license: {
-      name: 'Licensed Under MIT',
-      url: 'https://spdx.org/licenses/MIT.html',
+      name: 'Swagger spec',
+      url: '/spec',
     },
     contact: {
       name: 'Etimo AB',
@@ -29,6 +31,8 @@ export const definition = {
   security: [
     {
       ApiKeyHeader: [],
+    },
+    {
       ApiKeyParameter: [],
     },
   ],
