@@ -7,10 +7,10 @@ packages=""
 main() {
   package_count=$(ls "$_root_path/packages" | wc -l)
 
-  [ "$1" = "--force" ] && rm -f "$_dependency_tree_file"
+  [ "$1" = "--force" ] && rm -f "$_package_list_file"
 
   if ! updated_package_json; then
-    cat "$_dependency_tree_file"
+    cat "$_package_list_file"
     exit 0
   fi
 
@@ -21,14 +21,14 @@ main() {
     done
   done
 
-  echo "$packages" | tee "$_dependency_tree_file"
+  echo "$packages" | tee "$_package_list_file"
 }
 
 updated_package_json() {
-  [ ! -f "$_dependency_tree_file" ] && return 0
+  [ ! -f "$_package_list_file" ] && return 0
 
   latest_mdate=$(find "$_root_path"/packages/ -mindepth 2 -maxdepth 2 -name "package.json" -exec date +%s -r {} \; | sort | tail -n 1)
-  cache_mdate=$(date +%s -r "$_dependency_tree_file")
+  cache_mdate=$(date +%s -r "$_package_list_file")
 
   [ "$latest_mdate" -gt "$cache_mdate" ]
 }
@@ -75,6 +75,6 @@ list_dependencies() {
 # Setup paths
 _script_path="$(dirname "$(readlink -f "$0")")"
 _root_path="$(readlink -f "$_script_path/..")"
-_dependency_tree_file="$_root_path/packages/.dependency_tree"
+_package_list_file="$_root_path/packages/.package_list"
 
 main "$1"

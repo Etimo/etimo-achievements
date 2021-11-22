@@ -1,5 +1,7 @@
 packages/**/dist/
-packages/.dependency_tree
+packages/**/.latest_build
+packages/.package_list
+packages/.dependency_list
 node_modules/
 *.log
 .yarn/*
