@@ -1,5 +1,6 @@
+import { IAchievement, INewAchievement, IPartialAchievement } from '@etimo-achievements/types';
 import { Database } from '..';
-import { AchievementModel, IAchievement, INewAchievement, IPartialAchievement } from '../models/achievement-model';
+import { AchievementModel } from '../models/achievement-model';
 import { catchErrors } from '../utils';
 
 export class AchievementRepository {

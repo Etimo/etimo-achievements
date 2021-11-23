@@ -1,4 +1,4 @@
-import { IUser } from '@etimo-achievements/data';
+import { IUser } from '@etimo-achievements/types';
 import { NewUserDto, UserDto } from './user-dto';
 
 export class UserMapper {

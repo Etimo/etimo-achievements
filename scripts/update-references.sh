@@ -6,9 +6,6 @@ _namespace="@etimo-achievements"
 main() {
   update_package_tsconfigs
   update_base_tsconfig
-  (cd "$_root_path" \
-    && echo "Running prettier" \
-    && yarn prettier &>/dev/null)
   exit 0
 }
 
@@ -18,10 +15,14 @@ update_package_tsconfigs() {
   for file in $(find ./packages -mindepth 2 -maxdepth 2 -name package.json); do
     echo "Updating package references for $(basename "$(dirname "$file")")"
 
+    contents=$()
+    [ -z "$contents" ] && continue
+
     tsconfig="$(dirname "$file")/tsconfig.json"
+
     dependencies=()
-    dependencies+=$(cat "$file" | jq .dependencies | jq -r 'keys[] as $k | "\($k)"' | grep "$_namespace" | sed -r "s+$_namespace+..+")
-    dependencies+=$(cat "$file" | jq .devDependencies | jq -r 'keys[] as $k | "\($k)"' | grep "$_namespace" | sed -r "s+$_namespace+..+")
+    dependencies+=$(echo "$contents" | jq .dependencies | jq -r 'keys[] as $k | "\($k)"' | grep "$_namespace" | sed -r "s+$_namespace+..+")
+    dependencies+=$(echo "$contents" | jq .devDependencies | jq -r 'keys[] as $k | "\($k)"' | grep "$_namespace" | sed -r "s+$_namespace+..+")
     expression=""
     for path in $dependencies; do
       expression+="{\"path\":\"$path\"},"

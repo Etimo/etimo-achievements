@@ -101,7 +101,10 @@ export class AchievementController {
   private getAchievements = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
     const achievements = await this.getAchievementsService.getAll(skip, take);
-    const output = { ...achievements, data: achievements.data.map(AchievementMapper.toAchievementDto) };
+    const output = {
+      ...achievements,
+      data: achievements.data.map(AchievementMapper.toAchievementDto),
+    };
 
     return res.status(200).send(output);
   };

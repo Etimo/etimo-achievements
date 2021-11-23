@@ -1,5 +1,6 @@
+import { INewUser, IPartialUser, IUser } from '@etimo-achievements/types';
 import { Database } from '..';
-import { INewUser, IPartialUser, IUser, UserModel } from '../models/user-model';
+import { UserModel } from '../models/user-model';
 import { catchErrors } from '../utils';
 
 export class UserRepository {

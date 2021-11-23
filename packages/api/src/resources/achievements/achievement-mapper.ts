@@ -1,4 +1,4 @@
-import { IAchievement } from '@etimo-achievements/data';
+import { IAchievement } from '@etimo-achievements/types';
 import { AchievementDto } from './achievement-dto';
 
 export class AchievementMapper {

@@ -1,4 +1,5 @@
-import { IUser, UserRepository } from '@etimo-achievements/data';
+import { UserRepository } from '@etimo-achievements/data';
+import { IUser } from '@etimo-achievements/types';
 import { ServiceOptions } from '../common/service-options';
 
 export class GetUserService {

@@ -1,5 +1,6 @@
 import { uuid } from '@etimo-achievements/common';
-import { Database, INewUser } from '@etimo-achievements/data';
+import { Database } from '@etimo-achievements/data';
+import { INewUser } from '@etimo-achievements/types';
 import { CreateUserService, GetUserService } from '.';
 
 beforeEach(() => {

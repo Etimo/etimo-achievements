@@ -1,4 +1,5 @@
-import { INewUserAchievement, IUserAchievement, UserAchievementRepository } from '@etimo-achievements/data';
+import { UserAchievementRepository } from '@etimo-achievements/data';
+import { INewUserAchievement, IUserAchievement } from '@etimo-achievements/types';
 import { ServiceOptions } from '../common/service-options';
 
 export class CreateAwardsService {

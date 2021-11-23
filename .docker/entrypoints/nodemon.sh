@@ -1,4 +1,5 @@
 #!/bin/sh
 
-npm run build
+./scripts/update-references.sh
+./scripts/cache-dependency-tree.sh
 nodemon

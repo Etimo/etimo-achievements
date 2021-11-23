@@ -11,7 +11,7 @@ main() {
   echo "Latest build: $latest_build"
 
   updated_package="$(get_updated_packages)"
-  [ -z "$updated_package" ] && return 0
+  [ -z "$updated_package" ] && exit 0
 
   echo "Updated package: $updated_package"
 
@@ -22,7 +22,7 @@ main() {
     npm run openapi
   }
 
-  build_package_tree "$package_path"
+  build_package_tree "$package_path" || exit 1
 
   "$_script_path"/cache-dependency-tree.sh
 }
@@ -30,9 +30,9 @@ main() {
 build_package_tree() {
   package_name=$(basename "$1")
   dependants=$(get_dependants "$package_name")
-  build_package "$package_name"
+  build_package "$package_name" || return 1
   for p in ${dependants[*]}; do
-    build_package_tree "$p"
+    build_package_tree "$p" || return 1
   done
 }
 
@@ -42,7 +42,7 @@ build_package() {
   echo "Building package: $1"
 
   (cd "$_packages_path/$1" || exit 1
-  npm run compile) || exit 1
+  npm run compile) || return 1
 
   built_packages+=("$1")
   date +%Y-%m-%dT%H:%M:%S > "$_latest_build_file"

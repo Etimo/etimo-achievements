@@ -1,17 +1,7 @@
 import { uuid } from '@etimo-achievements/common';
+import { IUser } from '@etimo-achievements/types';
 import { QueryContext } from 'objection';
 import { BaseModel } from './base-model';
-
-export interface IUser {
-  id: string;
-  username: string;
-  password: string;
-  email: string;
-  slackHandle: string;
-}
-
-export type INewUser = Omit<IUser, 'id'>;
-export type IPartialUser = Pick<IUser, 'id'> & Partial<IUser>;
 
 export class UserModel extends BaseModel implements IUser {
   static get tableName() {

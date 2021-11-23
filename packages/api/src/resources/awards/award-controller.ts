@@ -103,7 +103,10 @@ export class AwardsController {
   private getAwards = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
     const awards = await this.getAwardsService.getAll(skip, take);
-    const output = { ...awards, data: awards.data.map(AwardMapper.toAwardsDto) };
+    const output = {
+      ...awards,
+      data: awards.data.map(AwardMapper.toAwardsDto),
+    };
 
     return res.status(200).send(output);
   };

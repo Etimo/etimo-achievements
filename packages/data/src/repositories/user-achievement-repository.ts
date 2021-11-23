@@ -1,10 +1,6 @@
+import { INewUserAchievement, IPartialUserAchievement, IUserAchievement } from '@etimo-achievements/types';
 import { Database } from '..';
-import {
-  INewUserAchievement,
-  IPartialUserAchievement,
-  IUserAchievement,
-  UserAchievementModel,
-} from '../models/user-achievement-model';
+import { UserAchievementModel } from '../models/user-achievement-model';
 import { catchErrors } from '../utils';
 
 export class UserAchievementRepository {
