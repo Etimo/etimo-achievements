@@ -34,7 +34,7 @@
     "seed-new": "cd packages/data && npm run seed-new",
     "seed-run": "cd packages/data && npm run seed-run",
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
-    "start-fresh": "yarn install && npm run build && npm run openapi && npm run docker-rebuild && npm run start",
+    "start-fresh": "yarn install && npm run build && npm run openapi && npm run docker-rebuild && npm run db-reset-force && npm run start",
     "support": "docker-compose up -d --build postgres pgadmin nodemon",
     "test": "./scripts/run-script.sh test",
     "test-integration": "./scripts/run-script.sh test-integration"
