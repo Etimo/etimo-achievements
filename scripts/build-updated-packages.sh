@@ -3,17 +3,28 @@
 built_packages=()
 
 main() {
-  for package_path in $(find "$_packages_path" -mindepth 1 -maxdepth 1 -type d); do
-    package_name="$(basename "$package_path")"
-    ! has_updated_files "$package_path" && continue
-    [ "$package_name" = "api" ] && {
-      echo "Rebuilding OpenApi definition"
-      npm run openapi
-    }
-    echo "Detected changes in $package_name -- building"
-    build_package_tree "$package_path"
-  done
+  [ ! -f "$_latest_build_file" ] && {
+    echo "1970-01-01T00:00:00" > "$_latest_build_file"
+  }
 
+  latest_build="$(date +%Y-%m-%dT%H:%M:%S -d @"$(stat -c %Y "$_latest_build_file")")"
+  echo "Latest build: $latest_build"
+
+  updated_package="$(get_updated_packages)"
+  [ -z "$updated_package" ] && return 0
+
+  echo "Updated package: $updated_package"
+
+  package_path="$_packages_path/$updated_package"
+  package_name="$(basename "$package_path")"
+  [ "$package_name" = "api" ] && {
+    echo "Rebuilding OpenApi definition"
+    npm run openapi
+  }
+
+  build_package_tree "$package_path"
+
+  "$_script_path"/cache-dependency-tree.sh
 }
 
 build_package_tree() {
@@ -21,37 +32,34 @@ build_package_tree() {
   dependants=$(get_dependants "$package_name")
   build_package "$package_name"
   for p in ${dependants[*]}; do
-    echo "Building dependant package $p"
-    build_package_tree "$_packages_path/$p"
+    build_package_tree "$p"
   done
 }
 
 build_package() {
   [[ " ${built_packages[*]} " =~ [[:space:]]"$1"[[:space:]] ]] && return 0
 
+  echo "Building package: $1"
+
   (cd "$_packages_path/$1" || exit 1
   npm run compile) || exit 1
 
   built_packages+=("$1")
-  date +%Y-%m-%dT%H:%M:%S > "$_packages_path/$1/.latest_build"
+  date +%Y-%m-%dT%H:%M:%S > "$_latest_build_file"
 }
 
-has_updated_files() {
-  latest_build_file="$1/.latest_build"
-
-  [ ! -f "$latest_build_file" ] && {
-    echo "1970-01-01T00:00:00" > "$latest_build_file"
-  }
-
-  mfiles=$(find "$1" -type f -newer "$latest_build_file" \
+get_updated_packages() {
+  cd "$_packages_path" || exit 1
+  find . -type f -newer "$_latest_build_file" \
     -not -name ".*" \
     -not -name "*.d.ts" \
     -not -path "*/dist/*" \
     -not -path "*/build/*" \
     -not -path "*/node_modules/*" \
-    -not -path "*/migrations/*" | wc -l)
-
-  (( mfiles ))
+    -not -path "*/migrations/*" \
+    -print -quit \
+  | sed -r "s/^.\///" | cut -f1 -d/
+  cd - >/dev/null || exit 1
 }
 
 get_dependants() {
@@ -62,6 +70,7 @@ get_dependants() {
 _script_path="$(dirname "$(readlink -f "$0")")"
 _root_path="$(readlink -f "$_script_path/..")"
 _packages_path="$_root_path/packages"
+_latest_build_file="$_packages_path/.latest_build"
 _dependency_list_file="$_packages_path/.dependency_list"
 
 main

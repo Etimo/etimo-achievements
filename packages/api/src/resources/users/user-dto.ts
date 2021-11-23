@@ -6,15 +6,20 @@
  *       title: User
  *       type: object
  *       properties:
+ *         id:
+ *           *idProperty
  *         username:
  *           type: string
  *           minLength: 3
+ *           example: niclaslindstedt
  *         email:
  *           type: string
  *           format: email
+ *           example: niclas.lindstedt@etimo.se
  *         slackHandle:
  *           type: string
  *           description: The @slack handle of the user
+ *           example: '@niclas'
  *       required:
  *         - username
  *         - email
@@ -39,8 +44,8 @@ export interface UserDto {
  *             password:
  *               type: string
  *               minLength: 8
- *         - required:
- *           - password
+ *       required:
+ *         - password
  */
 export interface NewUserDto extends UserDto {
   password: string;

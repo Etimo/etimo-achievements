@@ -25,6 +25,14 @@ export class Logger {
     Logger.instance.info(message, options);
   }
 
+  public static error(error: Error, options?: LoggerOptions) {
+    if (!Logger.instance) {
+      Logger.instance = new Logger();
+    }
+
+    Logger.instance.error(error.message, { ...options, extras: [error] });
+  }
+
   public trace(message: string, options?: LoggerOptions) {
     this.output(message, LoggingColor.Dim, console.debug, options);
   }

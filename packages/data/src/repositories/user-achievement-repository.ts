@@ -10,20 +10,20 @@ import { catchErrors } from '../utils';
 export class UserAchievementRepository {
   async count(): Promise<number> {
     return catchErrors(async () => {
-      const result = await Database.knex.raw('select count(*) from "userAchievements"');
+      const result = await Database.knex.raw('select count(*) from "user_achievements"');
       return parseInt(result.rows[0]['count'], 10);
     });
   }
 
   findByUserId(id: string): Promise<Array<IUserAchievement>> {
     return catchErrors(async () => {
-      return UserAchievementModel.query().where('userId', id);
+      return UserAchievementModel.query().where('user_id', id);
     });
   }
 
   findByAchievementId(id: string): Promise<Array<IUserAchievement>> {
     return catchErrors(async () => {
-      return UserAchievementModel.query().where('achievementId', id);
+      return UserAchievementModel.query().where('achievement_id', id);
     });
   }
 

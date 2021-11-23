@@ -20,7 +20,7 @@ export class SlackController {
      * @openapi
      * /slack/achievements:
      *   get:
-     *     description: Show Slack achievements modal.
+     *     summary: Show Slack achievements modal
      *     security:
      *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []

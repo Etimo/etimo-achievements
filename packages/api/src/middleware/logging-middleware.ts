@@ -17,10 +17,34 @@ export const loggingMiddleware = () => {
     let color = LoggingColor.Green;
     ctx.logger.info(`[${count}] -> ${req.method} ${req.path} {${rid}} [${req.ip}]`, { color });
 
-    next();
+    const logResponse = (res: Response, message: string) => {
+      color = getColor(res.statusCode);
+      ctx.logger.info(message, { color });
+    };
+    const removeHandlers = () => {
+      res.off('close', logClose);
+      res.off('error', logError);
+      res.off('finish', logFinish);
+    };
+    const logError = (error: any) => {
+      removeHandlers();
+      logResponse(res, `[${count}] <- ${res.statusCode} ${error.message} {${rid}}`);
+    };
+    const logClose = () => {
+      removeHandlers();
+      logResponse(res, `[${count}] X aborted {${rid}}`);
+    };
+    const logFinish = () => {
+      removeHandlers();
+      logResponse(res, `[${count}] <- ${res.statusCode} {${rid}}`);
+    };
 
-    color = getColor(res.statusCode);
-    ctx.logger.info(`[${count}] <- ${res.statusCode} {${rid}}`, { color });
+    req.on('error', logError);
+    res.on('close', logClose);
+    res.on('error', logError);
+    res.on('finish', logFinish);
+
+    next();
   };
 };
 

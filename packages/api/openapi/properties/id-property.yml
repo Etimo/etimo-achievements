@@ -1,0 +1,4 @@
+x-template: &idProperty
+  type: string
+  format: uuid
+  readOnly: true
