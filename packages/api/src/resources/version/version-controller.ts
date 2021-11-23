@@ -9,7 +9,7 @@ export class VersionController {
      * @openapi
      * /version:
      *   get:
-     *     description: Get application version information.
+     *     summary: Get application version information
      *     security: []
      *     responses:
      *       200:

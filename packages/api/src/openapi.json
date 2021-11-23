@@ -48,69 +48,6 @@
       }
     },
     "schemas": {
-      "Achievement": {
-        "title": "Achievement",
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "achievement": {
-            "type": "string",
-            "description": "The name of the achievement"
-          },
-          "description": {
-            "type": "string",
-            "description": "A description of when the achievement should be awarded"
-          }
-        },
-        "required": [
-          "achievement",
-          "description"
-        ]
-      },
-      "Award": {
-        "title": "Award",
-        "type": "object",
-        "properties": {
-          "userId": {
-            "type": "string",
-            "format": "uuid"
-          },
-          "achievementId": {
-            "type": "string",
-            "format": "uuid"
-          }
-        },
-        "required": [
-          "userId",
-          "achievementId"
-        ]
-      },
-      "User": {
-        "title": "User",
-        "type": "object",
-        "properties": {
-          "username": {
-            "type": "string",
-            "minLength": 3
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          },
-          "slackHandle": {
-            "type": "string",
-            "description": "The @slack handle of the user"
-          }
-        },
-        "required": [
-          "username",
-          "email",
-          "slackHandle"
-        ]
-      },
       "NewUser": {
         "title": "User (for creation)",
         "allOf": [
@@ -129,13 +66,92 @@
         "required": [
           "password"
         ]
+      },
+      "Achievement": {
+        "title": "Achievement",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "achievement": {
+            "type": "string",
+            "description": "The name of the achievement",
+            "example": "Coffee Achievement"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of when the achievement should be awarded",
+            "example": "Put on coffee for the gang."
+          }
+        },
+        "required": [
+          "achievement",
+          "description"
+        ]
+      },
+      "Award": {
+        "title": "Award",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "achievementId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "userId",
+          "achievementId"
+        ]
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "username": {
+            "type": "string",
+            "minLength": 3,
+            "example": "niclaslindstedt"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "niclas.lindstedt@etimo.se"
+          },
+          "slackHandle": {
+            "type": "string",
+            "description": "The @slack handle of the user",
+            "example": "@niclas"
+          }
+        },
+        "required": [
+          "username",
+          "email",
+          "slackHandle"
+        ]
       }
     }
   },
   "paths": {
-    "/achievements": {
+    "/slack/create-achievement": {
       "post": {
-        "description": "Create an achievement.",
+        "summary": "Create achievement modal in Slack.",
         "security": [
           {
             "ApiKeyHeader": []
@@ -144,29 +160,37 @@
             "ApiKeyParameter": []
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Achievement"
-              }
-            }
-          }
-        },
         "responses": {
-          "201": {
-            "description": "The achievement was created."
+          "200": {
+            "description": "The modal was created."
           },
           "400": {
             "description": "Request contains a missing or invalid argument."
           }
         },
         "tags": [
-          "Achievements"
+          "Slack"
         ]
-      },
+      }
+    },
+    "/version": {
       "get": {
-        "description": "Get a list of achievements.",
+        "summary": "Get application version information",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "The deployed application's version information."
+          }
+        },
+        "tags": [
+          "Version"
+        ]
+      }
+    },
+    "/achievements": {
+      "get": {
+        "summary": "Get a list of achievements",
+        "operationId": "getAchievements",
         "security": [
           {
             "ApiKeyHeader": []
@@ -204,11 +228,10 @@
         "tags": [
           "Achievements"
         ]
-      }
-    },
-    "/awards": {
+      },
       "post": {
-        "description": "Give a user an award.",
+        "summary": "Create an achievement",
+        "operationId": "createAchievement",
         "security": [
           {
             "ApiKeyHeader": []
@@ -221,28 +244,89 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Award"
+                "$ref": "#/components/schemas/Achievement"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "The award was given to the user."
+            "description": "The achievement was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetAchievementById": {
+                "operationId": "getAchievement",
+                "parameters": {
+                  "achievementId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request contains a missing or invalid argument."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
+      }
+    },
+    "/achievements/{achievementId}": {
+      "get": {
+        "summary": "Get a single achievement",
+        "operationId": "getAchievement",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "achievementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The requested achievement."
           },
           "400": {
             "description": "Request contains a missing or invalid argument."
           },
           "404": {
-            "description": "The award could not be found."
+            "description": "The achievement could not be found."
           }
         },
         "tags": [
-          "Awards"
+          "Achievements"
         ]
-      },
+      }
+    },
+    "/awards": {
       "get": {
-        "description": "Get a list of awards.",
+        "summary": "Get a list of awards",
+        "operationId": "getAwards",
         "security": [
           {
             "ApiKeyHeader": []
@@ -280,11 +364,10 @@
         "tags": [
           "Awards"
         ]
-      }
-    },
-    "/slack/create-achievement": {
+      },
       "post": {
-        "description": "Create achievement modal in Slack.",
+        "summary": "Give a user an award",
+        "operationId": "createAward",
         "security": [
           {
             "ApiKeyHeader": []
@@ -293,36 +376,95 @@
             "ApiKeyParameter": []
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Award"
+              }
+            }
+          }
+        },
         "responses": {
-          "200": {
-            "description": "The modal was created."
+          "201": {
+            "description": "The award was given to the user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetAwardById": {
+                "operationId": "getAward",
+                "parameters": {
+                  "userId": "$response.body#/id"
+                }
+              }
+            }
           },
           "400": {
             "description": "Request contains a missing or invalid argument."
+          },
+          "404": {
+            "description": "The award could not be found."
           }
         },
         "tags": [
-          "Slack"
+          "Awards"
         ]
       }
     },
-    "/version": {
+    "/awards/{awardId}": {
       "get": {
-        "description": "Get application version information.",
-        "security": [],
+        "summary": "Get a single award",
+        "operationId": "getAward",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
         "responses": {
           "200": {
-            "description": "The deployed application's version information."
+            "description": "The requested award."
+          },
+          "400": {
+            "description": "Request contains a missing or invalid argument."
+          },
+          "404": {
+            "description": "The user could not be found."
           }
         },
         "tags": [
-          "Version"
+          "Awards"
         ]
       }
     },
     "/slack/achievements": {
       "get": {
-        "description": "Show Slack achievements modal.",
+        "summary": "Show Slack achievements modal",
         "security": [
           {
             "ApiKeyHeader": []
@@ -364,7 +506,7 @@
     },
     "/users": {
       "get": {
-        "summary": "Get a list of users.",
+        "summary": "Get a list of users",
         "operationId": "getUsers",
         "security": [
           {
@@ -405,7 +547,7 @@
         ]
       },
       "post": {
-        "summary": "Create a user.",
+        "summary": "Create a user",
         "operationId": "createUser",
         "requestBody": {
           "required": true,
@@ -436,7 +578,7 @@
               }
             },
             "links": {
-              "getUserById": {
+              "GetUserById": {
                 "operationId": "getUser",
                 "parameters": {
                   "userId": "$response.body#/id"
@@ -455,7 +597,7 @@
     },
     "/users/{userId}": {
       "get": {
-        "summary": "Find a single user.",
+        "summary": "Find a single user",
         "operationId": "getUser",
         "security": [
           {

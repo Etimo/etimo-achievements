@@ -1,6 +1,6 @@
 import { CreateUserService, GetUserService, GetUsersService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { endpoint } from '../../utils';
+import { createdResponse, endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { UserMapper } from './user-mapper';
 
@@ -28,7 +28,7 @@ export class UserController {
      * @openapi
      * /users:
      *   get:
-     *     summary: Get a list of users.
+     *     summary: Get a list of users
      *     operationId: getUsers
      *     security:
      *       - ApiKeyHeader: []
@@ -48,7 +48,7 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   get:
-     *     summary: Find a single user.
+     *     summary: Find a single user
      *     operationId: getUser
      *     security:
      *       - ApiKeyHeader: []
@@ -71,7 +71,7 @@ export class UserController {
      * @openapi
      * /users:
      *   post:
-     *     summary: Create a user.
+     *     summary: Create a user
      *     operationId: createUser
      *     requestBody:
      *       required: true
@@ -86,7 +86,7 @@ export class UserController {
      *         content:
      *           *idObject
      *         links:
-     *           getUserById:
+     *           GetUserById:
      *             operationId: getUser
      *             parameters:
      *               userId: '$response.body#/id'
@@ -111,10 +111,8 @@ export class UserController {
   private getUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const user = await this.getUserService.get(userId);
-
-    if (user === undefined) return res.status(404).send();
-
     const userDto = UserMapper.toUserDto(user);
+
     return res.status(200).send(userDto);
   };
 
@@ -124,6 +122,6 @@ export class UserController {
     const input = UserMapper.toNewUser(payload);
     const user = await this.createUserService.create(input);
 
-    return res.status(201).send({ id: user.id });
+    return createdResponse('/users', user, res);
   };
 }
