@@ -44,6 +44,7 @@ export interface UserDto {
  *             password:
  *               type: string
  *               minLength: 8
+ *               example: 'R8l3t3t1n'
  *       required:
  *         - password
  */
