@@ -1716,6 +1716,7 @@ __metadata:
   dependencies:
     "@etimo-achievements/common": ^1.0.0
     "@etimo-achievements/data": ^1.0.0
+    "@etimo-achievements/types": ^1.0.0
     "@types/jest": ^27.0.2
     "@types/node": ^16.10.2
     "@types/node-fetch": ^2.5.12
