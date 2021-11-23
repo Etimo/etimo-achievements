@@ -18,6 +18,7 @@
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/data": "^1.0.0",
+    "@etimo-achievements/types": "^1.0.0",
     "node-fetch": "^2.6.5"
   },
   "devDependencies": {

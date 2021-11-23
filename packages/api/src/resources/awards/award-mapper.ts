@@ -1,4 +1,4 @@
-import { IUserAchievement } from '@etimo-achievements/data';
+import { IUserAchievement } from '@etimo-achievements/types';
 import { AwardDto } from './award-dto';
 
 export class AwardMapper {
