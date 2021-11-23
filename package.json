@@ -6,6 +6,7 @@
   ],
   "scripts": {
     "api": "cd packages/api && npm run start",
+    "bootstrap": "./scripts/update-references.sh && ./scripts/cache-dependency-tree.sh && npm run docker-rebuild",
     "build": "./scripts/run-script.sh build",
     "clean": "./scripts/run-script.sh clean",
     "clear": "./scripts/run-script.sh clear && rm -rf node_modules",

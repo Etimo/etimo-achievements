@@ -26,6 +26,7 @@
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/security": "^1.0.0",
+    "@etimo-achievements/types": "^1.0.0",
     "knex": "~0.21.21",
     "objection": "^2.2.16",
     "pg": "^8.7.1",

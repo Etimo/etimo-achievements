@@ -10,6 +10,8 @@ main() {
     exit 0
   fi
 
+  "$_script_path"/update-references.sh
+
   echo > "$_dependency_list_file"
   for package_path in $(find $_packages_path -mindepth 1 -maxdepth 1 -type d); do
     package_name="$(basename "$package_path")"

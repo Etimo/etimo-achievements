@@ -1634,6 +1634,7 @@ __metadata:
     "@etimo-achievements/common": ^1.0.0
     "@etimo-achievements/security": ^1.0.0
     "@etimo-achievements/service": ^1.0.0
+    "@etimo-achievements/types": ^1.0.0
     "@types/dotenv": ^8.2.0
     "@types/express": ^4.17.13
     "@types/jest": ^27.0.2
@@ -1678,6 +1679,7 @@ __metadata:
   dependencies:
     "@etimo-achievements/common": ^1.0.0
     "@etimo-achievements/security": ^1.0.0
+    "@etimo-achievements/types": ^1.0.0
     "@types/jest": ^27.0.2
     "@types/node": ^16.11.0
     jest: ^27.2.5
@@ -1721,6 +1723,17 @@ __metadata:
     node-fetch: ^2.6.5
     ts-jest: ^27.0.6
     ts-node: ^10.2.1
+    typescript: ^4.4.3
+  languageName: unknown
+  linkType: soft
+
+"@etimo-achievements/types@^1.0.0, @etimo-achievements/types@workspace:packages/types":
+  version: 0.0.0-use.local
+  resolution: "@etimo-achievements/types@workspace:packages/types"
+  dependencies:
+    "@types/jest": ^27.0.2
+    jest: ^27.2.5
+    ts-jest: ^27.0.6
     typescript: ^4.4.3
   languageName: unknown
   linkType: soft
