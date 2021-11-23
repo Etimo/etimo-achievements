@@ -20,8 +20,6 @@ export const apiKeyMiddleware = () => {
       return next();
     }
 
-    res.status(401);
-
     throw new UnauthorizedError('Invalid API key');
   };
 };
