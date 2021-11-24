@@ -1,5 +1,26 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run lint && npm run test
+title() {
+  title_str="$*"
+  title_len=${#title_str}
+  hash_len=$((title_len + 9))
+  hash_str=$(seq -s# $hash_len | tr -d '[:digit:]')
+
+  echo
+  echo "$hash_str"
+  echo "### $(echo "$*" | tr '[:lower:]' '[:upper:]') ###"
+  echo "$hash_str"
+}
+
+title "Package references"
+npm run reference-gen
+
+title "OpenAPI"
+npm run openapi
+
+title "Tests"
+npm run test
+
+title "Linting"
 npx lint-staged
