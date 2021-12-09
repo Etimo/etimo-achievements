@@ -8,6 +8,8 @@ It is used by [Etimo](https://www.etimo.se) to create, track and hand out achiev
 
 Clone the repository and follow the instructions in this file to get started.
 
+You will need Linux (or WSL on Windows) to run this project.
+
 ### First Run
 
 If this is your first time running this project, bootstrap it by running:
