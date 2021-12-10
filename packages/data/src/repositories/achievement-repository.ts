@@ -41,9 +41,15 @@ export class AchievementRepository {
     });
   }
 
-  getAll(skip: number, take: number): Promise<IAchievement[]> {
+  getMany(skip: number, take: number): Promise<IAchievement[]> {
     return catchErrors(async () => {
       return AchievementModel.query().limit(take).offset(skip);
+    });
+  }
+
+  getAll(): Promise<IAchievement[]> {
+    return catchErrors(async () => {
+      return AchievementModel.query();
     });
   }
 }

@@ -53,5 +53,5 @@ const getColor = (statusCode?: number) => {
     return LoggingColor.Red;
   }
 
-  return statusCode >= 200 && statusCode <= 299 ? LoggingColor.Green : LoggingColor.Red;
+  return (statusCode >= 200 && statusCode <= 299) || statusCode === 304 ? LoggingColor.Green : LoggingColor.Red;
 };

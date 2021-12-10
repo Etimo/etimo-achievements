@@ -7,7 +7,7 @@ export const definition = {
     version: '1.0.0',
     license: {
       name: 'Swagger spec',
-      url: '/spec',
+      url: '/swagger.json',
     },
     contact: {
       name: 'Etimo AB',
@@ -18,6 +18,10 @@ export const definition = {
     {
       url: 'http://localhost:3000',
       description: 'Development server',
+    },
+    {
+      url: 'http://45.77.89.90:4000',
+      description: 'Etimo server',
     },
     {
       url: 'https://etimo-achievements-staging.herokuapp.com',

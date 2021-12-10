@@ -8,13 +8,15 @@ export const openSlackView = async (view: any) => {
     body: view,
   });
 
-  const content = (await response.json()) as any;
+  const content = await response.json();
   Logger.log(content);
+
+  return response;
 };
 
 export const getSlackHeaders = () => {
   return {
-    'Content-type': 'application/json',
+    'Content-type': 'application/json; charset:utf-8',
     Authorization: `Bearer ${process.env['SLACK_ACCESS_TOKEN']}`,
   };
 };
