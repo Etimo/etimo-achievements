@@ -1,15 +1,10 @@
 import { getEnvironment, isDevelopment, isLocal, isTest, Logger } from '@etimo-achievements/common';
-import Knex, { Config } from 'knex';
+import Knex from 'knex';
 import { Model } from 'objection';
-const knexfile = require('./config/knexfile');
 
 export class Database {
   private knex!: Knex;
   private static instance: Database | undefined;
-
-  public static getOptions() {
-    return this.getInstance().getOptions();
-  }
 
   public static connect(): void {
     this.getInstance();
@@ -38,12 +33,6 @@ export class Database {
     return Database.instance;
   }
 
-  public getOptions(): Config {
-    const env = process.env.NODE_ENV || 'development';
-
-    return knexfile[env];
-  }
-
   public async close() {
     await this.knex.destroy();
   }
@@ -51,6 +40,7 @@ export class Database {
   private init(): void {
     Logger.log('Initializing database');
 
+    const knexfile = require('./config/knexfile');
     const env = getEnvironment();
     const settings = knexfile[env];
     this.knex = Knex(settings);

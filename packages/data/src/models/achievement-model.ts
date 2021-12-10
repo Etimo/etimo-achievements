@@ -11,12 +11,14 @@ export class AchievementModel extends BaseModel implements IAchievement {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['id', 'achievement', 'description'],
+      required: ['name', 'description'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
-        achievement: { type: 'string', maxLength: 255 },
+        name: { type: 'string', maxLength: 255 },
         description: { type: 'string', maxLength: 255 },
+        achievementPoints: { type: 'integer' },
+        cooldownMinutes: { type: 'integer' },
         createdAt: { type: 'string', format: 'date-time' },
         updatedAt: { type: 'string', format: 'date-time' },
       },
@@ -29,8 +31,10 @@ export class AchievementModel extends BaseModel implements IAchievement {
   }
 
   id!: string;
-  achievement!: string;
+  name!: string;
   description!: string;
+  achievementPoints!: number;
+  cooldownMinutes!: number;
   createdAt!: Date;
   updatedAt!: Date;
 }
