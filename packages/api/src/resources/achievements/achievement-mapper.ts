@@ -5,16 +5,20 @@ export class AchievementMapper {
   public static toAchievementDto(achievement: IAchievement): AchievementDto {
     return {
       id: achievement.id,
-      achievement: achievement.achievement,
+      name: achievement.name,
       description: achievement.description,
+      achievementPoints: achievement.achievementPoints,
+      cooldownMinutes: achievement.cooldownMinutes,
     };
   }
 
   public static toAchievement(achievementDto: AchievementDto): IAchievement {
     return {
       id: achievementDto.id,
-      achievement: achievementDto.achievement,
+      name: achievementDto.name,
       description: achievementDto.description,
+      achievementPoints: achievementDto.achievementPoints,
+      cooldownMinutes: achievementDto.cooldownMinutes,
     };
   }
 }

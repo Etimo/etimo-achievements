@@ -1,3 +1,4 @@
+import { Logger } from '@etimo-achievements/common';
 import { IAchievement, INewAchievement, IPartialAchievement } from '@etimo-achievements/types';
 import { Database } from '..';
 import { AchievementModel } from '../models/achievement-model';
@@ -24,6 +25,7 @@ export class AchievementRepository {
   }
 
   create(achievement: INewAchievement): Promise<IAchievement> {
+    Logger.log(JSON.stringify(achievement));
     return catchErrors(async () => {
       return AchievementModel.query().insert(achievement);
     });

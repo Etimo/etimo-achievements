@@ -30,7 +30,7 @@ export class AwardSlackAchievementsService {
     const achievementOptions: PlainTextOption[] = achievements.map((a) => ({
       text: {
         type: 'plain_text',
-        text: `:trophy: ${a.achievement}: ${a.description}`,
+        text: `:trophy: ${a.name}: ${a.description}`,
         emoji: true,
       },
       value: a.id,
