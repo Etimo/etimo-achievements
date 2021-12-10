@@ -10,6 +10,8 @@ Clone the repository and follow the instructions in this file to get started.
 
 ### Dependencies
 
+You will need Linux (or WSL on Windows) to run this project.
+
 You need to install `nodejs`, `docker` and `jq` on your Linux distro (or WSL).
 
 ### First Run
