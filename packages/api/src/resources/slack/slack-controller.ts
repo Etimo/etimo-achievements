@@ -1,4 +1,8 @@
-import { CreateSlackAchievementsService, ShowSlackAchievementsService } from '@etimo-achievements/service';
+import {
+  CreateSlackAchievementsService,
+  ShowSlackAchievementsService,
+  SlackInteractService,
+} from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
@@ -6,16 +10,19 @@ import { getPaginationOptions } from '../../utils/pagination-helper';
 export type SlackControllerOptions = {
   showSlackAchievementsService?: ShowSlackAchievementsService;
   createSlackAchievementsService?: CreateSlackAchievementsService;
+  createSlackInteractService?: SlackInteractService;
 };
 
 export class SlackController {
   private showSlackAchievementsService: ShowSlackAchievementsService;
   private createSlackAchievementsService: CreateSlackAchievementsService;
+  private slackInteractService: SlackInteractService;
 
   constructor(options?: SlackControllerOptions) {
     this.showSlackAchievementsService = options?.showSlackAchievementsService ?? new ShowSlackAchievementsService();
     this.createSlackAchievementsService =
       options?.createSlackAchievementsService ?? new CreateSlackAchievementsService();
+    this.slackInteractService = options?.createSlackInteractService ?? new SlackInteractService();
   }
 
   public get routes(): Router {
@@ -42,6 +49,22 @@ export class SlackController {
 
     /**
      * @openapi
+     * /slack/interact:
+     *   post:
+     *     summary: Endpoint for slack to respond to interact messages (modals etc...)
+     *     security:
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
+     *     responses:
+     *       200:
+     *         description: The modal was created.
+     *     tags:
+     *       - Slack
+     */
+    router.post('/slack/interact', endpoint(this.interact));
+
+    /**
+     * @openapi
      * /slack/create-achievement:
      *   post:
      *     summary: Display achievement creation modal in Slack
@@ -65,9 +88,15 @@ export class SlackController {
     const [skip, take] = getPaginationOptions(req);
 
     const triggerId = req.body.trigger_id;
-    await this.showSlackAchievementsService.show(triggerId, skip, take);
+    const channelId = req.body.channel_id;
+    await this.showSlackAchievementsService.show(triggerId, channelId, skip, take);
 
     return res.status(200).send();
+  };
+
+  private interact = async (req: Request, res: Response) => {
+    const payload = JSON.parse(req.body.payload);
+    this.slackInteractService.handleInteract(payload);
   };
 
   private displayAchievementModal = async (req: Request, res: Response) => {

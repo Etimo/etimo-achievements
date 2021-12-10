@@ -154,6 +154,27 @@
     }
   },
   "paths": {
+    "/slack/interact": {
+      "post": {
+        "summary": "Endpoint for slack to respond to interact messages (modals etc...)",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The modal was created."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
     "/slack/create-achievement": {
       "post": {
         "summary": "Display achievement creation modal in Slack",
