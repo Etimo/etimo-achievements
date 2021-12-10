@@ -5,7 +5,7 @@ import { BaseModel } from './base-model';
 
 export class AwardModel extends BaseModel implements IAward {
   static get tableName() {
-    return 'award';
+    return 'awards';
   }
 
   static get jsonSchema() {
