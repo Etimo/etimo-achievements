@@ -2,10 +2,10 @@ import * as Knex from 'knex';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
-  await knex('user_achievements').del();
+  await knex('awards').del();
 
   // Inserts seed entries
-  await knex('user_achievements').insert([
+  await knex('awards').insert([
     {
       id: '675e7949-6d92-4db8-837b-2266aec83680',
       achievement_id: 'b95f4933-fd18-4918-ba8d-dbef8d4895fa',
