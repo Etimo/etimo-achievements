@@ -7,7 +7,7 @@ import { contextMiddleware } from './middleware/context-middleware';
 import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
 import { AchievementController } from './resources/achievements/achievement-controller';
-import { AwardsController } from './resources/awards/award-controller';
+import { AwardController } from './resources/awards/award-controller';
 import { SlackController } from './resources/slack';
 import { UserController } from './resources/users/user-controller';
 
@@ -76,7 +76,7 @@ export default class Server {
     this.express.use('/', new AchievementController().routes);
     this.express.use('/', new SlackController().routes);
     this.express.use('/', new UserController().routes);
-    this.express.use('/', new AwardsController().routes);
+    this.express.use('/', new AwardController().routes);
     this.express.use('/', new VersionController().routes);
   }
 

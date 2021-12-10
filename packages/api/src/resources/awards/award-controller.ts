@@ -1,21 +1,21 @@
-import { CreateAwardsService, GetAwardsService } from '@etimo-achievements/service';
+import { CreateAwardService, GetAwardsService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { createdResponse, endpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AwardMapper } from './award-mapper';
 
-export type AwardsControllerOptions = {
+export type AwardControllerOptions = {
   getAwardsService?: GetAwardsService;
-  createAwardsService?: CreateAwardsService;
+  createAwardService?: CreateAwardService;
 };
 
-export class AwardsController {
+export class AwardController {
   private getAwardsService: GetAwardsService;
-  private createAwardsService: CreateAwardsService;
+  private createAwardService: CreateAwardService;
 
-  constructor(options?: AwardsControllerOptions) {
+  constructor(options?: AwardControllerOptions) {
     this.getAwardsService = options?.getAwardsService ?? new GetAwardsService();
-    this.createAwardsService = options?.createAwardsService ?? new CreateAwardsService();
+    this.createAwardService = options?.createAwardService ?? new CreateAwardService();
   }
 
   public get routes(): Router {
@@ -95,17 +95,17 @@ export class AwardsController {
      *     tags:
      *       - Awards
      */
-    router.post('/awards', endpoint(this.createAwards));
+    router.post('/awards', endpoint(this.createAward));
 
     return router;
   }
 
   private getAwards = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
-    const awards = await this.getAwardsService.getAll(skip, take);
+    const awards = await this.getAwardsService.getMany(skip, take);
     const output = {
       ...awards,
-      data: awards.data.map(AwardMapper.toAwardsDto),
+      data: awards.data.map(AwardMapper.toAwardDto),
     };
 
     return res.status(200).send(output);
@@ -115,11 +115,11 @@ export class AwardsController {
     return res.status(501).send('Not implemented');
   };
 
-  private createAwards = async (req: Request, res: Response) => {
+  private createAward = async (req: Request, res: Response) => {
     const payload = req.body;
 
-    const input = AwardMapper.toUserAchievement(payload);
-    const award = await this.createAwardsService.create(input);
+    const input = AwardMapper.toAward(payload);
+    const award = await this.createAwardService.create(input);
 
     return createdResponse('/awards', award, res);
   };

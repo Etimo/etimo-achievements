@@ -1,20 +1,20 @@
-import { IUserAchievement } from '@etimo-achievements/types';
+import { IAward } from '@etimo-achievements/types';
 import { AwardDto } from './award-dto';
 
 export class AwardMapper {
-  public static toAwardsDto(userAchevement: IUserAchievement): AwardDto {
+  public static toAwardDto(award: IAward): AwardDto {
     return {
-      id: userAchevement.id,
-      achievementId: userAchevement.achievementId,
-      userId: userAchevement.userId,
+      id: award.id,
+      achievementId: award.achievementId,
+      userId: award.userId,
     };
   }
 
-  public static toUserAchievement(awardsDto: AwardDto): IUserAchievement {
+  public static toAward(awardDto: AwardDto): IAward {
     return {
-      id: awardsDto.id,
-      achievementId: awardsDto.achievementId,
-      userId: awardsDto.userId,
+      id: awardDto.id,
+      achievementId: awardDto.achievementId,
+      userId: awardDto.userId,
     };
   }
 }

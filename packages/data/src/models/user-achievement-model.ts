@@ -1,11 +1,11 @@
 import { uuid } from '@etimo-achievements/common';
-import { IUserAchievement } from '@etimo-achievements/types';
+import { IAward } from '@etimo-achievements/types';
 import { QueryContext } from 'objection';
 import { BaseModel } from './base-model';
 
-export class UserAchievementModel extends BaseModel implements IUserAchievement {
+export class AwardModel extends BaseModel implements IAward {
   static get tableName() {
-    return 'user_achievements';
+    return 'award';
   }
 
   static get jsonSchema() {

@@ -1,15 +1,15 @@
-import { UserAchievementRepository } from '@etimo-achievements/data';
-import { INewUserAchievement, IUserAchievement } from '@etimo-achievements/types';
+import { AwardRepository } from '@etimo-achievements/data';
+import { IAward, INewAward } from '@etimo-achievements/types';
 import { ServiceOptions } from '../common/service-options';
 
-export class CreateAwardsService {
-  private userAchievementRepo: UserAchievementRepository;
+export class CreateAwardService {
+  private awardRepo: AwardRepository;
 
   constructor(options?: ServiceOptions) {
-    this.userAchievementRepo = options?.userAchievementRepository ?? new UserAchievementRepository();
+    this.awardRepo = options?.awardRepository ?? new AwardRepository();
   }
 
-  public async create(award: INewUserAchievement): Promise<IUserAchievement> {
-    return await this.userAchievementRepo.create(award);
+  public async create(award: INewAward): Promise<IAward> {
+    return await this.awardRepo.create(award);
   }
 }
