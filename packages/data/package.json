@@ -14,6 +14,7 @@
     "compile-test": "tsc --build",
     "knex:dev": "knex --knexfile src/config/knexfile.ts --env development",
     "knex:local": "knex --knexfile src/config/knexfile.ts --env local",
+    "knex:test": "knex --knexfile src/config/knexfile.ts --env test",
     "knex:prod": "knex --knexfile src/config/knexfile.ts --env production",
     "migration-apply": "npm run knex:local migrate:latest",
     "migration-new": "npm run knex:local migrate:make",

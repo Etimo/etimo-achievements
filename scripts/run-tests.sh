@@ -38,13 +38,13 @@ pg_command() {
 migrate_database() {
   echo "Migrating database"
   (cd "$_root_path/packages/data" || return 1
-  DB_NAME="$DB_NAME" npm run knex:local migrate:latest)
+  DB_NAME="$DB_NAME" npm run knex:test migrate:latest)
 }
 
 seed_database() {
   echo "Seeding database"
   (cd "$_root_path/packages/data" || return 1
-  DB_NAME="$DB_NAME" npm run knex:local seed:run)
+  DB_NAME="$DB_NAME" npm run knex:test seed:run)
 }
 
 run_unit_tests() {

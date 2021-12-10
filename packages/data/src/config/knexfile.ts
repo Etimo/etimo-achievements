@@ -36,6 +36,14 @@ const useEnv = {
   },
 };
 
+const testEnv = {
+  ...useEnv,
+  connection: {
+    ...useEnv.connection,
+    database: 'achievements_ci',
+  },
+};
+
 const production = {
   client: 'postgresql',
   connection: {
@@ -50,6 +58,6 @@ const production = {
 module.exports = {
   local: fixedLocalhost,
   development: useEnv,
-  test: useEnv,
+  test: testEnv,
   production,
 };
