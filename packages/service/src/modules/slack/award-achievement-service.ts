@@ -4,7 +4,7 @@ import { IAchievement } from '@etimo-achievements/types';
 import { PlainTextOption, View, WebClient } from '@slack/web-api';
 import { ServiceOptions } from '..';
 
-export class ShowSlackAchievementsService {
+export class AwardSlackAchievementsService {
   private achievementRepo: AchievementRepository;
   private web: WebClient;
 
@@ -15,8 +15,8 @@ export class ShowSlackAchievementsService {
     this.web = new WebClient(token);
   }
 
-  public async show(triggerId: string, channelId: string, skip: number, take: number) {
-    const achievements = await this.achievementRepo.getAll(skip, take);
+  public async showModal(triggerId: string, channelId: string) {
+    const achievements = await this.achievementRepo.getAll();
     const view = this.generateView(channelId, achievements);
     try {
       const result = await this.web.views.open({ view, trigger_id: triggerId });
@@ -35,8 +35,9 @@ export class ShowSlackAchievementsService {
       },
       value: a.id,
     }));
+
     return {
-      callback_id: 'give-achievement',
+      callback_id: 'award-achievement',
       title: {
         type: 'plain_text',
         text: 'Achievements',
@@ -53,7 +54,7 @@ export class ShowSlackAchievementsService {
             type: 'static_select',
             placeholder: {
               type: 'plain_text',
-              text: 'Select an achivement',
+              text: 'Select an achievement',
               emoji: true,
             },
             options: achievementOptions,
@@ -61,7 +62,7 @@ export class ShowSlackAchievementsService {
           },
           label: {
             type: 'plain_text',
-            text: 'Select an achievement to give',
+            text: 'Select an achievement to award',
             emoji: true,
           },
         },

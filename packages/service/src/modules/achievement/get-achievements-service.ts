@@ -10,8 +10,8 @@ export class GetAchievementsService {
     this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
   }
 
-  public async getAll(skip: number, take: number): Promise<PaginationType<IAchievement>> {
-    const achievements = await this.achievementRepo.getAll(skip, take);
+  public async getMany(skip: number, take: number): Promise<PaginationType<IAchievement>> {
+    const achievements = await this.achievementRepo.getMany(skip, take);
     const count = await this.achievementRepo.count();
     return paginate(achievements, skip, take, count);
   }

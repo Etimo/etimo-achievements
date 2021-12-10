@@ -154,6 +154,27 @@
     }
   },
   "paths": {
+    "/slack/award-achievement": {
+      "post": {
+        "summary": "Show award achievement list modal in Slack",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The modal was created."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
     "/slack/interact": {
       "post": {
         "summary": "Endpoint for slack to respond to interact messages (modals etc...)",

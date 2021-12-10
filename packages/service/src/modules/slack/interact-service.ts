@@ -23,14 +23,17 @@ export class SlackInteractService {
     await action.function(payload);
   }
 
-  private async giveAchievement(payload: any) {
+  private async awardAchievement(payload: any) {
     const fromUser = payload.user;
     const metadata = JSON.parse(payload.view.private_metadata);
     const channel = metadata.channelId;
     const values = payload.view.state.values;
     const achievement = values['achievement-input']['static_select-action'].selected_option.text.text;
     const toUsers = values['user-input']['multi_users_select-action'].selected_users;
-    const message = `<@${fromUser.id}> Gave <@${toUsers[0]}> the achievement: ${achievement}`;
+
+    const usersMessage = this.joinStrings(toUsers.map((user: string) => `<@${user}>`));
+
+    const message = `<@${fromUser.id}> Gave ${usersMessage} the achievement: ${achievement}`;
     Logger.log(message);
 
     await this.web.chat.postMessage({
@@ -40,8 +43,19 @@ export class SlackInteractService {
   }
 
   private actions: ActionByCallbackId = {
-    'give-achievement': {
-      function: this.giveAchievement.bind(this),
+    'award-achievement': {
+      function: this.awardAchievement.bind(this),
     },
   };
+
+  //Function to join strings with commas + 'and'
+  private joinStrings(strings: string[]) {
+    if (strings.length === 1) {
+      return strings[0];
+    }
+    if (strings.length === 2) {
+      return `${strings[0]} and ${strings[1]}`;
+    }
+    return `${strings.slice(0, -1).join(', ')} and ${strings[strings.length - 1]}`;
+  }
 }
