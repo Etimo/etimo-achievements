@@ -3,6 +3,12 @@
 main() {
   [ "$1" = "--force" ] && rm -f "$_modules_hash_file"
 
+  [ ! -d "$_modules_path" ] && {
+    echo "No modules. Running yarn install."
+    install_modules
+    exit 0
+  }
+
   modules_hash=$(cat "$_modules_hash_file" 2>/dev/null)
 
   {
@@ -12,17 +18,22 @@ main() {
   new_modules_hash=$(cat "$_modules_hash_file")
   if [ "$modules_hash" != "$new_modules_hash" ]; then
     echo "Dependencies have changed. Running yarn install."
-    yarn install
-    "$_script_path"/cache-dependency-tree.sh
+    install_modules
   else
     echo "Dependencies have not changed."
   fi
 }
 
+install_modules() {
+  yarn install
+  "$_script_path"/cache-dependency-tree.sh
+}
+
 # Setup paths
-_script_path="$(dirname "$(readlink -f "$0")")"
-_root_path="$(readlink -f "$_script_path/..")"
+_script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_root_path="$_script_path/.."
 _packages_path="$_root_path/packages"
-_modules_hash_file="$_root_path/node_modules/.modules_hash"
+_modules_path="$_root_path/node_modules"
+_modules_hash_file="$_modules_path/.modules_hash"
 
 main "$1"

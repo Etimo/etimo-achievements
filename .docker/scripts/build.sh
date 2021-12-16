@@ -93,7 +93,7 @@ done
 
 # Setup paths
 _script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-_root_path="$(readlink -f "$_script_path/../..")"
-_dockerfiles_path="$(readlink -f "$_root_path/.docker/Dockerfiles")"
+_root_path="$_script_path/../.."
+_dockerfiles_path="$_root_path/.docker/Dockerfiles"
 
 time main ${positional[*]}

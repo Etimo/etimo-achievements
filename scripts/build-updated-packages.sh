@@ -67,8 +67,8 @@ get_dependants() {
 }
 
 # Setup paths
-_script_path="$(dirname "$(readlink -f "$0")")"
-_root_path="$(readlink -f "$_script_path/..")"
+_script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_root_path="$_script_path/.."
 _packages_path="$_root_path/packages"
 _latest_build_file="$_packages_path/.latest_build"
 _dependency_list_file="$_packages_path/.dependency_list"

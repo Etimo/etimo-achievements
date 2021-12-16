@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # List packages in dependency order
 
@@ -27,8 +27,11 @@ main() {
 updated_package_json() {
   [ ! -f "$_package_list_file" ] && return 0
 
-  latest_mdate=$(find "$_root_path"/packages/ -mindepth 2 -maxdepth 2 -name "package.json" -exec date +%s -r {} \; | sort | tail -n 1)
-  cache_mdate=$(date +%s -r "$_package_list_file")
+  #TODO: Fix this .. not working on OS X
+  #sh: -c: line 1: syntax error: unexpected end of file
+  #sh: -c: line 0: unexpected EOF while looking for matching `"'
+  latest_mdate=$(find "$_root_path"/packages/ -mindepth 2 -maxdepth 2 -name "package.json" -exec sh -c "stat -t %s '{}' | cut -d\  -f11 | cut -d\" -f2" \; | sort | tail -n 1)
+  cache_mdate=$(stat -t %s "$_package_list_file" | cut -d\  -f11 | cut -d\" -f2)
 
   [ "$latest_mdate" -gt "$cache_mdate" ]
 }
@@ -73,8 +76,8 @@ list_dependencies() {
 }
 
 # Setup paths
-_script_path="$(dirname "$(readlink -f "$0")")"
-_root_path="$(readlink -f "$_script_path/..")"
+_script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_root_path="$_script_path/.."
 _package_list_file="$_root_path/packages/.package_list"
 
 main "$1"

@@ -52,6 +52,6 @@ update_base_tsconfig() {
 
 # Setup paths
 _script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-_root_path="$(readlink -f "$_script_path/..")"
+_root_path="$_script_path/.."
 
 main

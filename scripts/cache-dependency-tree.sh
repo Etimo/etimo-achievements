@@ -26,7 +26,7 @@ main() {
   done
 
   # Remove empty lines
-  sed -i '/^$/d' "$_dependency_list_file"
+  sed -i '' '/^$/d' "$_dependency_list_file"
 
   echo "Updated intra-app dependency list."
 }
@@ -34,8 +34,8 @@ main() {
 updated_package_json() {
   [ ! -f "$_dependency_list_file" ] && return 0
 
-  latest_mdate=$(find "$_root_path"/packages/ -mindepth 2 -maxdepth 2 -name "package.json" -exec date +%s -r {} \; | sort | tail -n 1)
-  cache_mdate=$(date +%s -r "$_dependency_list_file")
+  latest_mdate=$(find "$_root_path"/packages/ -mindepth 2 -maxdepth 2 -name "package.json" -exec sh -c "stat -t %s '{}' | cut -d\  -f11 | cut -d\" -f2" \; | sort | tail -n 1)
+  cache_mdate=$(stat -t %s "$_dependency_list_file" | cut -d\  -f11 | cut -d\" -f2)
 
   [ "$latest_mdate" -gt "$cache_mdate" ]
 }
@@ -45,8 +45,8 @@ list_dependencies() {
 }
 
 # Setup paths
-_script_path="$(dirname "$(readlink -f "$0")")"
-_root_path="$(readlink -f "$_script_path/..")"
+_script_path="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+_root_path="$_script_path/.."
 _packages_path="$_root_path/packages"
 _dependency_list_file="$_packages_path/.dependency_list"
 
