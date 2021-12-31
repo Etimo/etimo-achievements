@@ -1,9 +1,9 @@
-const fs = require('fs');
-const { getPackageDirectories } = require('./path-helper');
+import * as fs from 'fs';
+import { getPackageDirectories } from './path-helper.js';
 
 let buildOrder;
 
-const getBuildOrder = () => {
+export default function getBuildOrder() {
   buildOrder = [];
   const packageDirs = getPackageDirectories();
   for (const packageDir of packageDirs) {
@@ -35,7 +35,3 @@ function buildDependencyTree(package, packageDir) {
     buildOrder.push(package);
   }
 }
-
-module.exports = {
-  getBuildOrder,
-};

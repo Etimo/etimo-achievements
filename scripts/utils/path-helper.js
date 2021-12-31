@@ -1,17 +1,17 @@
-const path = require('path');
+import * as path from 'path';
 
-const getRootPackageJson = () => require(__dirname + '/../../package.json');
+export function getRootPackageJson() {
+  return require(__dirname + '/../../package.json')
+}
 
-const getPackageDirectory = () => __dirname + '/../../packages';
+export function getPackageDirectory() {
+  return __dirname + '/../../packages';
+}
 
-const getPackageDirectories = () =>
-  getRootPackageJson().workspaces.map((w) => __dirname + '/../../' + w.replace('/*', '')) ?? [];
+export function getPackageDirectories() {
+  return getRootPackageJson().workspaces.map((w) => __dirname + '/../../' + w.replace('/*', '')) ?? [];
+}
 
-const getBuildDateFile = () => path.join(getPackageDirectory(), '.latest_build');
-
-module.exports = {
-  getBuildDateFile,
-  getRootPackageJson,
-  getPackageDirectory,
-  getPackageDirectories,
-};
+export function getBuildDateFile() {
+  return path.join(getPackageDirectory(), '.latest_build');
+}

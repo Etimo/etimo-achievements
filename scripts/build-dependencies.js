@@ -1,6 +1,6 @@
-const { execSync } = require('child_process');
-const { getBuildOrder } = require('./utils/get-build-order');
-const { getPackageDirectory } = require('./utils/path-helper');
+import { execSync } from 'child_process';
+import { getBuildOrder } from './utils/get-build-order.js';
+import { getPackageDirectory } from './utils/path-helper.js';
 
 const packages = getBuildOrder();
 const packageDir = getPackageDirectory();

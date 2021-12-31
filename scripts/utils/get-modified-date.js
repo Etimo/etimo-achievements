@@ -1,10 +1,6 @@
-const fs = require('fs');
+import * as fs from 'fs';
 
-const getModifiedDate = (path) => {
+export default function getModifiedDate(path) {
   stat = fs.statSync(path);
   return new Date(stat.mtime);
 }
-
-module.exports = {
-  getModifiedDate,
-};

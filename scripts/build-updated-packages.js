@@ -1,11 +1,11 @@
-const { execSync } = require('child_process');
-const path = require('path');
-const FileHound = require('filehound');
-const { getBuildDate } = require('./utils/get-build-date')
-const { getBuildOrder } = require('./utils/get-build-order');
-const { getPackageDirectory } = require('./utils/path-helper');
-const { getModifiedDate } = require('./utils/get-modified-date');
-const { setBuildDate } = require('./utils/set-build-date');
+import { execSync } from 'child_process';
+import FileHound from 'filehound';
+import path from 'path';
+import { getBuildDate } from './utils/get-build-date.js';
+import { getBuildOrder } from './utils/get-build-order.js';
+import { getModifiedDate } from './utils/get-modified-date.js';
+import { getPackageDirectory } from './utils/path-helper.js';
+import { setBuildDate } from './utils/set-build-date.js';
 
 const packages = getBuildOrder();
 const packageDir = getPackageDirectory();

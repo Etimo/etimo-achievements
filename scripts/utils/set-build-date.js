@@ -1,5 +1,5 @@
-const fs = require('fs');
-const { getBuildDateFile } = require('./path-helper');
+import * as fs from 'fs';
+import { getBuildDateFile } from './path-helper.js';
 
 const setBuildDate = (package, date) => {
   const buildDateFile = getBuildDateFile(package);

@@ -1,9 +1,9 @@
-const fs = require('fs');
-const { getBuildDateFile } = require('./path-helper');
+import * as fs from 'fs';
+import { getBuildDateFile } from './path-helper.js';
 
 const noBuildDate = new Date(1970, 0, 1);
 
-const getBuildDate = (package) => {
+export default function getBuildDate(package) {
   const buildDateFile = getBuildDateFile(package);
   if (fs.existsSync(buildDateFile)) {
     const content = fs.readFileSync(buildDateFile, 'utf8');
@@ -12,8 +12,4 @@ const getBuildDate = (package) => {
   }
 
   return noBuildDate;
-};
-
-module.exports = {
-  getBuildDate,
 };
