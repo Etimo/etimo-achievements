@@ -1,7 +1,13 @@
+import * as fs from 'fs';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function getRootPackageJson() {
-  return require(__dirname + '/../../package.json')
+  const filePath = __dirname + '/../../package.json';
+  return JSON.parse(fs.readFileSync(filePath));
 }
 
 export function getPackageDirectory() {
