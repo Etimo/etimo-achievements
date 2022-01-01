@@ -1,32 +1,23 @@
-import { execSync } from 'child_process';
 import FileHound from 'filehound';
 import path from 'path';
+import buildPackage from './utils/build-package.js';
 import { getBuildDate } from './utils/get-build-date.js';
 import { getBuildOrder } from './utils/get-build-order.js';
 import { getModifiedDate } from './utils/get-modified-date.js';
-import { getPackageDirectory } from './utils/path-helper.js';
 import { setBuildDate } from './utils/set-build-date.js';
 
 const packages = getBuildOrder();
-const packageDir = getPackageDirectory();
 let buildRemaining = false;
 
-function buildPackage(package) {
-  console.log('Building package:', package);
-  execSync('npm run compile', { cwd: `${packageDir}/${package}` }, (error, stdout, stderr) => {
-    console.log(stdout);
-  });
-  buildRemaining = true;
-}
-
 async function buildUpdatedPackages() {
-  for (const package of packages) {
+  for (const packageName of packages) {
     if (buildRemaining) {
-      buildPackage(package);
+      const success = buildPackage(packageName);
+      if (!success) { process.exit(1); }
       continue;
     }
 
-    const cwd = `${packageDir}/${package}`;
+    const cwd = `${packageDir}/${packageName}`;
     const files = await FileHound.create()
       .paths(cwd)
       .ext('.ts', '.js', '.tsx', '.jsx', '.json')
@@ -35,18 +26,20 @@ async function buildUpdatedPackages() {
 
     const filteredFiles = files.filter((f) => !f.includes('node_modules') && !f.includes('dist'));
     if (filteredFiles.length > 0) {
-      const buildDate = getBuildDate(package);
+      const buildDate = getBuildDate(packageName);
       const latestUpdate = filteredFiles.map(f => getModifiedDate(f));
 
       if (latestUpdate.some(f => f.getTime() > buildDate.getTime())) {
         console.log(
-          `Detected updated files in ${package}: ${filteredFiles.map((f) => path.relative(cwd, f)).join(', ')}`
+          `Detected updated files in ${packageName}: ${filteredFiles.map((f) => path.relative(cwd, f)).join(', ')}`
         );
-        buildPackage(package);
-        setBuildDate(package);
+        const success = buildPackage(packageName);
+        if (!success) { process.exit(1); }
+        setBuildDate(packageName);
+        buildRemaining = true;
       }
     } else {
-      console.log('No updated files found for', package);
+      console.log('No updated files found for', packageName);
     }
   }
 }

@@ -1,13 +1,10 @@
-import { execSync } from 'child_process';
+import buildPackage from './utils/build-package.js';
 import getBuildOrder from './utils/get-build-order.js';
-import { getPackageDirectory } from './utils/path-helper.js';
 
 const packages = getBuildOrder();
-const packageDir = getPackageDirectory();
 
-for (const pkg of packages) {
-  console.log('npm run build:', pkg);
-  execSync('npm run build', { cwd: `${packageDir}/${pkg}` }, (error, stdout, stderr) => {
-    console.log(stdout);
-  });
+for (const packageName of packages) {
+  console.log('npm run build:', packageName);
+  const success = buildPackage(packageName);
+  if (!success) { process.exit(1); }
 }
