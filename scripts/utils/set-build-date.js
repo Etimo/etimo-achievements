@@ -1,11 +1,7 @@
 import * as fs from 'fs';
 import { getBuildDateFile } from './path-helper.js';
 
-const setBuildDate = (package, date) => {
-  const buildDateFile = getBuildDateFile(package);
+export default function setBuildDate(date) {
+  const buildDateFile = getBuildDateFile();
   fs.writeFileSync(buildDateFile, JSON.stringify(date ?? new Date()));
-};
-
-module.exports = {
-  setBuildDate,
 };
