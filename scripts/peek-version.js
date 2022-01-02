@@ -4,6 +4,5 @@ import getVersionInfo from './utils/get-version-info.js';
 
 const env = getEnvironment(process.argv[2]);
 const url = getApiUrl(env);
-console.log(`Fetching version information for ${env} from ${url}`);
 
-getVersionInfo(url).then(data => console.log(data));
+getVersionInfo(url).then(data => console.log(`api-${env}: ${data[0].substring(0, 7)} compiled at ${data[1]}`));
