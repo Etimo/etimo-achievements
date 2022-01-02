@@ -1,17 +1,12 @@
-import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { getRootPackageJson } from './file-helper.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export function getRootPackageJson() {
-  const filePath = __dirname + '/../../package.json';
-  return JSON.parse(fs.readFileSync(filePath));
-}
-
-export function getPackageDirectory() {
-  return __dirname + '/../../packages';
+export function getPackageDirectory(packageName) {
+  return __dirname + '/../../packages' + (packageName ? `/${packageName}` : '');
 }
 
 export function getPackageDirectories() {
