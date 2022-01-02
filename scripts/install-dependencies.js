@@ -1,3 +1,4 @@
+import runCommand from './utils/run-command.js';
 import which from './utils/which.js';
 
 const wantedDependencies = [
@@ -17,8 +18,15 @@ for (const dependency of wantedDependencies) {
 
 if (missingDependencies.length) {
   console.log(`Installing missing global dependencies: ${missingDependencies.join(', ')}`);
-  const success = runCommand('sudo', ['npm', 'install', '-g', ...missingDependencies]);
+  let success = false;
+  if (process.platform === 'win32') {
+    success = runCommand('npm', ['install', '-g', ...missingDependencies]);
+  }
+  else {
+    success = runCommand('sudo', ['npm', 'install', '-g', ...missingDependencies]);
+  }
   if (!success) { process.exit(1); }
+  console.log('Dependencies successfully installed');
 } else {
-  console.log('Dependencies already installed')
+  console.log('Dependencies already installed');
 }
