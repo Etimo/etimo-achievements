@@ -1,12 +1,20 @@
 import { getRootDirectory } from './utils/path-helper.js';
 import runCommand from './utils/run-command.js';
+import startPostgres from './utils/start-postgres.js';
 
 const dbName = 'achievements_ci';
 const rootDir = getRootDirectory();
 
+async function runTests() {
+  buildPackages();
+  await startPostgres();
+}
+
 function buildPackages() {
   const success = runCommand('yarn', ['build'], rootDir);
-  if (!success) { error('Build failed'); }
+  if (!success) {
+    error('Build failed');
+  }
 }
 
 function error(message) {
@@ -14,27 +22,14 @@ function error(message) {
   process.exit(1);
 }
 
-buildPackages();
 /*
 main() {
-  (build_packages \
-  && start_postgres \
   && create_database \
   && migrate_database \
   && seed_database \
   && run_unit_tests \
   && run_integration_tests \
   && echo "Tests passed") || { echo "Tests failed"; exit 1; }
-}
-
-build_packages() {
-  echo "Building packages"
-  cd "$_script_path" || exit 1
-  yarn build
-}
-
-start_postgres() {
-  "$_script_path/start-postgres.sh"
 }
 
 create_database() {
