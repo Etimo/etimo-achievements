@@ -1,5 +1,4 @@
 #!/bin/sh
 
-./scripts/update-references.sh
-./scripts/cache-dependency-tree.sh
+node ./scripts/update-references.js
 nodemon

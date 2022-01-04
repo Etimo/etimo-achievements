@@ -15,7 +15,14 @@
     },
     {
       "path": "../service"
+    },
+    {
+      "path": "../types"
     }
   ],
-  "include": ["./src", "./src/**/version.json", "./src/openapi.json"]
+  "include": [
+    "./src",
+    "./src/**/version.json",
+    "./src/openapi.json"
+  ]
 }

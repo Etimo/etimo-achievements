@@ -30,7 +30,7 @@
     "openapi": "cd packages/api && npm run openapi",
     "prepare": "husky install",
     "prettier": "prettier --write .",
-    "reference-gen": "./scripts/update-references.sh && ./scripts/cache-dependency-tree.sh",
+    "reference-gen": "node ./scripts/update-references.js",
     "reset": "npm run clear && yarn install && npm run docker-rebuild && npm run compile",
     "restart": "docker stop $(docker ps -aq --filter 'label=com.etimo-achievements.monitored') && npm run build && npm run start",
     "script": "node ./scripts/run-script.js",

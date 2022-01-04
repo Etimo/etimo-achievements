@@ -8,23 +8,23 @@
   "extends": "@tsconfig/node14/tsconfig.json",
   "baseUrl": ".",
   "paths": {
-    "@etimo-achievements/types/*": [
-      "types/src/*"
-    ],
-    "@etimo-achievements/security/*": [
-      "security/src/*"
+    "@etimo-achievements/api/*": [
+      "api/src/*"
     ],
     "@etimo-achievements/common/*": [
       "common/src/*"
     ],
-    "@etimo-achievements/api/*": [
-      "api/src/*"
+    "@etimo-achievements/data/*": [
+      "data/src/*"
+    ],
+    "@etimo-achievements/security/*": [
+      "security/src/*"
     ],
     "@etimo-achievements/service/*": [
       "service/src/*"
     ],
-    "@etimo-achievements/data/*": [
-      "data/src/*"
+    "@etimo-achievements/types/*": [
+      "types/src/*"
     ]
   }
 }
