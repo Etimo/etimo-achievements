@@ -7,8 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export function loadFileAsObject(path) {
-  const pathWithSlash = path.startsWith('/') ? path : `/${path}`;
-  return JSON.parse(fs.readFileSync(getRootDirectory() + pathWithSlash));
+  const pathWithSlash = path.startsWith('/') ? path : `${getRootDirectory()}/${path}`;
+  return JSON.parse(fs.readFileSync(pathWithSlash));
 }
 
 export function getRootPackageJson() {

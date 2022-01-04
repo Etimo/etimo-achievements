@@ -1,5 +1,5 @@
-import runCommand from './utils/run-command.js';
-import which from './utils/which.js';
+import runCommand from './run-command.js';
+import which from './which.js';
 
 const missingDependencies = [];
 

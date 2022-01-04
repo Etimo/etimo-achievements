@@ -22,7 +22,7 @@
     "docker-rebuild": "./.docker/scripts/build.sh --nodemon",
     "env": "rsync --ignore-existing packages/api/.env.example packages/api/.env",
     "env-force": "cp packages/api/.env.example packages/api/.env",
-    "install-deps": "./scripts/install-dependencies.sh && ./scripts/update-modules.sh",
+    "install-deps": "node ./scripts/install-dependencies.js && npm run update",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
     "migration-apply": "cd packages/data && npm run migration-apply",
     "migration-new": "cd packages/data && npm run migration-new",
@@ -40,12 +40,14 @@
     "start-fresh": "yarn install && npm run build && npm run openapi && npm run docker-rebuild && npm run db-reset-force && npm run start",
     "support": "docker-compose up -d --build postgres pgadmin nodemon",
     "test": "npm run script test",
-    "test-integration": "npm run script test-integration"
+    "test-integration": "npm run script test-integration",
+    "update": "node ./scripts/update-modules.js"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.32.0",
     "@typescript-eslint/parser": "^4.32.0",
+    "crypto": "^1.0.1",
     "dotenv-defaults": "^3.0.0",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",

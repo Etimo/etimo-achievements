@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { getPackageDirectories } from './path-helper.js';
+import { getPackageDirectories, getPackageNames } from './path-helper.js';
 
 let buildOrder;
 
@@ -7,11 +7,7 @@ export default function getBuildOrder() {
   buildOrder = [];
   const packageDirs = getPackageDirectories();
   for (const packageDir of packageDirs) {
-    const packages = fs
-      .readdirSync(packageDir, { withFileTypes: true })
-      .filter((e) => e.isDirectory())
-      .map((e) => e.name);
-
+    const packages = getPackageNames(packageDir);
     for (const pkg of packages) {
       buildDependencyTree(pkg, packageDir);
     }

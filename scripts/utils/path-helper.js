@@ -1,3 +1,4 @@
+import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { getRootPackageJson } from './file-helper.js';
@@ -15,6 +16,13 @@ export function getPackageDirectory(packageName) {
 
 export function getPackageDirectories() {
   return getRootPackageJson().workspaces.map((w) => __dirname + '/../../' + w.replace('/*', '')) ?? [];
+}
+
+export function getPackageNames(directory) {
+  return fs
+    .readdirSync(directory, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name);
 }
 
 export function getBuildDateFile() {
