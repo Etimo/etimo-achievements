@@ -1,6 +1,6 @@
-import getBuildOrder from './utils/get-build-order.js';
-import { getPackageDirectory } from './utils/path-helper.js';
-import runCommand from './utils/run-command.js';
+import getBuildOrder from './get-build-order.js';
+import { getPackageDirectory } from './path-helper.js';
+import runCommand from './run-command.js';
 
 export default async function runScript(script, params) {
   const packages = getBuildOrder();

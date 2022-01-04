@@ -1,7 +1,14 @@
 {
-  "watch": ["packages/**"],
+  "watch": [
+    "packages/**"
+  ],
   "ext": "ts,json,yml",
-  "ignore": ["**/dist/**", "**/*.spec.ts", "**/openapi.json", "**.tsconfig.*"],
-  "exec": "./scripts/build-updated-packages.sh; touch packages/api/src/index.ts; exit 0",
+  "ignore": [
+    "**/dist/**",
+    "**/*.spec.ts",
+    "**/openapi.json",
+    "**.tsconfig.*"
+  ],
+  "exec": "node ./scripts/build-updated-packages.js; touch packages/api/src/index.ts; exit 0",
   "verbose": true
 }

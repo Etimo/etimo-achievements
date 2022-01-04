@@ -1,8 +1,7 @@
 export default function getEnvironment(environment) {
   switch (environment.toLowerCase()) {
-    case 'acc':
-    case 'acceptance':
-      return 'acc';
+    case 'staging':
+      return 'staging';
     case 'prod':
     case 'production':
       return 'prod';

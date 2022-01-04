@@ -10,6 +10,10 @@ export function getRootDirectory() {
   return __dirname + '/../..';
 }
 
+export function getDockerFileDirectory() {
+  return path.join(getRootDirectory(), '.docker/Dockerfiles');
+}
+
 export function getPackageDirectory(packageName) {
   return __dirname + '/../../packages' + (packageName ? `/${packageName}` : '');
 }
