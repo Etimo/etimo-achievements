@@ -1,6 +1,6 @@
 import { INewAward, IPartialAward, IAward } from '@etimo-achievements/types';
 import { Database } from '..';
-import { AwardModel } from '../models/user-achievement-model';
+import { AwardModel } from '../models/award-model';
 import { catchErrors } from '../utils';
 
 export class AwardRepository {

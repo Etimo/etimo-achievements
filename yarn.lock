@@ -3217,6 +3217,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"bluebird@npm:^3.4.7, bluebird@npm:^3.7.2":
+  version: 3.7.2
+  resolution: "bluebird@npm:3.7.2"
+  checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
+  languageName: node
+  linkType: hard
+
 "body-parser@npm:1.19.0":
   version: 1.19.0
   resolution: "body-parser@npm:1.19.0"
@@ -4345,6 +4352,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"err-code@npm:^1.0.0":
+  version: 1.1.2
+  resolution: "err-code@npm:1.1.2"
+  checksum: a1c6a194d21084241c09e0ea78db4c503030042098048903f2d940ef48c1484bbf97e99d32d6b35e5f8871dd6b292fabf904f115914f5792a591157ac6584e31
+  languageName: node
+  linkType: hard
+
 "err-code@npm:^2.0.2":
   version: 2.0.3
   resolution: "err-code@npm:2.0.3"
@@ -4944,6 +4958,31 @@ __metadata:
   dependencies:
     flat-cache: ^3.0.4
   checksum: f49701feaa6314c8127c3c2f6173cfefff17612f5ed2daaafc6da13b5c91fd43e3b2a58fd0d63f9f94478a501b167615931e7200e31485e320f74a33885a9c74
+  languageName: node
+  linkType: hard
+
+"file-js@npm:0.3.0":
+  version: 0.3.0
+  resolution: "file-js@npm:0.3.0"
+  dependencies:
+    bluebird: ^3.4.7
+    minimatch: ^3.0.3
+    proper-lockfile: ^1.2.0
+  checksum: 5469717eb2cf13471387fc7c5cb67bbdeb020e0668b7df2726421196bba4c8972c6c11994bf27ebf3a37e6d3f1bf0e8094c237779000d3a88af6a9a4b31f939a
+  languageName: node
+  linkType: hard
+
+"filehound@npm:^1.17.5":
+  version: 1.17.5
+  resolution: "filehound@npm:1.17.5"
+  dependencies:
+    bluebird: ^3.7.2
+    file-js: 0.3.0
+    lodash: ^4.17.21
+    minimatch: ^3.0.4
+    moment: ^2.29.1
+    unit-compare: ^1.0.1
+  checksum: 1574eb52f25a113505a7ad84cf90aa3449a2289755bc32d73c04688e9a234de4a1323d597fa1bae81d94fd4c2bfc06fb999523fd8a8c9f468ac5f63d268a911b
   languageName: node
   linkType: hard
 
@@ -7515,7 +7554,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^3.0.4":
+"minimatch@npm:^3.0.3, minimatch@npm:^3.0.4":
   version: 3.0.4
   resolution: "minimatch@npm:3.0.4"
   dependencies:
@@ -7628,6 +7667,13 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: a96865108c6c3b1b8e1d5e9f11843de1e077e57737602de1b82030815f311be11f96f09cce59bd5b903d0b29834733e5313f9301e3ed6d6f6fba2eae0df4298f
+  languageName: node
+  linkType: hard
+
+"moment@npm:^2.14.1, moment@npm:^2.29.1":
+  version: 2.29.1
+  resolution: "moment@npm:2.29.1"
+  checksum: 1e14d5f422a2687996be11dd2d50c8de3bd577c4a4ca79ba5d02c397242a933e5b941655de6c8cb90ac18f01cc4127e55b4a12ae3c527a6c0a274e455979345e
   languageName: node
   linkType: hard
 
@@ -8549,6 +8595,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proper-lockfile@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "proper-lockfile@npm:1.2.0"
+  dependencies:
+    err-code: ^1.0.0
+    extend: ^3.0.0
+    graceful-fs: ^4.1.2
+    retry: ^0.10.0
+  checksum: 84483e8a5aeb65a2cc9dcdab57ba700c3e8077ed533a60233c155d53b943ae98bd428ff7c082d7a6538cdad1a85ad4ca41e5a051a38d596ac5f45f0cee80f873
+  languageName: node
+  linkType: hard
+
 "proxy-addr@npm:~2.0.5":
   version: 2.0.7
   resolution: "proxy-addr@npm:2.0.7"
@@ -8968,6 +9026,13 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"retry@npm:^0.10.0":
+  version: 0.10.1
+  resolution: "retry@npm:0.10.1"
+  checksum: 133ef7c2028bcb09544a6fb9bed9f8266fffeaf72c855f73c2918ace9ef2abd7ccba03744564bcd1a8e948ed70518f8970852f46e649f9e3db6fefb0148cda35
+  languageName: node
+  linkType: hard
+
 "retry@npm:^0.12.0":
   version: 0.12.0
   resolution: "retry@npm:0.12.0"
@@ -9011,6 +9076,7 @@ resolve@^2.0.0-next.3:
     eslint-config-google: ^0.14.0
     eslint-config-prettier: ^8.3.0
     eslint-plugin-react: ^7.26.0
+    filehound: ^1.17.5
     husky: ^7.0.2
     lint-staged: ^11.1.2
     prettier: ^2.4.1
@@ -10297,6 +10363,15 @@ typescript@^4.4.3:
   dependencies:
     crypto-random-string: ^2.0.0
   checksum: ef68f639136bcfe040cf7e3cd7a8dff076a665288122855148a6f7134092e6ed33bf83a7f3a9185e46c98dddc445a0da6ac25612afa1a7c38b8b654d6c02498e
+  languageName: node
+  linkType: hard
+
+"unit-compare@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "unit-compare@npm:1.0.1"
+  dependencies:
+    moment: ^2.14.1
+  checksum: c2f4d163f0c600d0b26b79b76648517f52005ed47d1e07d45e414a04f6bfb8e5a83fa8f52787f0790caf66a7c2ad1249a5e2d57f3067189e4a5b17749c3007de
   languageName: node
   linkType: hard
 
