@@ -15,7 +15,7 @@ async function buildUpdatedPackages() {
   const buildDate = getBuildDate();
   for (const packageName of packages) {
     if (buildRemaining) {
-      const success = buildPackage(packageName);
+      const success = await buildPackage(packageName);
       if (!success) { process.exit(1); }
       continue;
     }
@@ -35,7 +35,7 @@ async function buildUpdatedPackages() {
         console.log(
           `Detected updated files in ${packageName}: ${filteredFiles.map((f) => path.relative(cwd, f)).join(', ')}`
         );
-        const success = buildPackage(packageName);
+        const success = await buildPackage(packageName);
         if (!success) { process.exit(1); }
         buildRemaining = true;
       }

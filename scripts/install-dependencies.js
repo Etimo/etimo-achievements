@@ -7,26 +7,30 @@ const wantedDependencies = [
 
 const missingDependencies = [];
 
-for (const dependency of wantedDependencies) {
-  const parts = dependency.split(':');
-  const name = parts[0];
-  const command = parts.length > 1 ? parts[1] : name;
-  if (!which(command)) {
-    missingDependencies.push(name);
+async function installDependencies() {
+  for (const dependency of wantedDependencies) {
+    const parts = dependency.split(':');
+    const name = parts[0];
+    const command = parts.length > 1 ? parts[1] : name;
+    if (!which(command)) {
+      missingDependencies.push(name);
+    }
+  }
+
+  if (missingDependencies.length) {
+    console.log(`Installing missing global dependencies: ${missingDependencies.join(', ')}`);
+    let success = false;
+    if (process.platform === 'win32') {
+      success = await runCommand('npm', ['install', '-g', ...missingDependencies]);
+    }
+    else {
+      success = await runCommand('sudo', ['npm', 'install', '-g', ...missingDependencies]);
+    }
+    if (!success) { process.exit(1); }
+    console.log('Dependencies successfully installed');
+  } else {
+    console.log('Dependencies already installed');
   }
 }
 
-if (missingDependencies.length) {
-  console.log(`Installing missing global dependencies: ${missingDependencies.join(', ')}`);
-  let success = false;
-  if (process.platform === 'win32') {
-    success = runCommand('npm', ['install', '-g', ...missingDependencies]);
-  }
-  else {
-    success = runCommand('sudo', ['npm', 'install', '-g', ...missingDependencies]);
-  }
-  if (!success) { process.exit(1); }
-  console.log('Dependencies successfully installed');
-} else {
-  console.log('Dependencies already installed');
-}
+installDependencies();

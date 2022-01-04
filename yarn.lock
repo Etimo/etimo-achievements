@@ -4253,6 +4253,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv-defaults@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "dotenv-defaults@npm:3.0.0"
+  dependencies:
+    dotenv: ^10.0.0
+  checksum: e356d51efc810c6ae4b88a293e8ad4d63d6a83fa55b08c4cd58515b3aa42ac16ac718568cc666c3c7af28e868a172d7d72456d4e90ba699c6df48b5f1e1eae5f
+  languageName: node
+  linkType: hard
+
 "dotenv@npm:*, dotenv@npm:^10.0.0":
   version: 10.0.0
   resolution: "dotenv@npm:10.0.0"
@@ -9108,6 +9117,7 @@ resolve@^2.0.0-next.3:
     "@tsconfig/node14": ^1.0.1
     "@typescript-eslint/eslint-plugin": ^4.32.0
     "@typescript-eslint/parser": ^4.32.0
+    dotenv-defaults: ^3.0.0
     eslint: ^7.32.0
     eslint-config-google: ^0.14.0
     eslint-config-prettier: ^8.3.0
