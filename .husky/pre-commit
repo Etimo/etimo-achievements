@@ -14,13 +14,13 @@ title() {
 }
 
 title "Package references"
-npm run reference-gen
+npm run generate-references
 
 title "Jest config"
-npm run jest-gen
+npm run generate-jest
 
 title "OpenAPI"
-npm run openapi
+npm run generate-openapi
 
 title "Tests"
 npm run test
