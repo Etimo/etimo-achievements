@@ -3,13 +3,13 @@ import getCurrentCommit from './utils/get-current-commit.js';
 import { getDockerFileDirectory, getPackageDirectory, getPackageNames, getRootDirectory } from './utils/path-helper.js';
 import runCommand from './utils/run-command.js';
 
-const noCache = process.argv.some(a => a === '--no-cache');
-const noBase = process.argv.some(a => a === '--no-base');
-const buildNodemon = process.argv.some(a => a === '--nodemon');
+const noCache = process.argv.some((a) => a === '--no-cache');
+const noBase = process.argv.some((a) => a === '--no-base');
+const buildNodemon = process.argv.some((a) => a === '--nodemon');
 const dockerFileDir = getDockerFileDirectory();
 const packagesDir = getPackageDirectory();
 const packageNames = getPackageNames(getPackageDirectory());
-const buildPackages = process.argv.slice(2).filter(a => packageNames.some(p => p === a));
+const buildPackages = process.argv.slice(2).filter((a) => packageNames.some((p) => p === a));
 
 async function buildDocker(packages) {
   if (!noBase) {
@@ -35,7 +35,7 @@ async function buildDocker(packages) {
   for (const dockerFile of dockerFiles) {
     // Check if package exists
     if (fs.existsSync(`${packagesDir}/${dockerFile}/package.json`)) {
-      if (packages.some(p => p === dockerFile)) {
+      if (packages.some((p) => p === dockerFile)) {
         await buildDockerFile(dockerFile);
       }
     }

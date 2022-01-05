@@ -15,23 +15,20 @@ async function updateModules() {
     }
   }
 
-  if (!fs.existsSync(modulesPath)) {
-    console.log('Node modules not found. Installing...');
-    await runCommand('yarn', [], rootDir);
-  }
-
   const hash = generateDependencyHash();
   let existingHash = '';
   if (fs.existsSync(modulesHashFile)) {
     existingHash = fs.readFileSync(modulesHashFile, { encoding: 'utf8' });
   }
 
-  if (hash !== existingHash) {
+  if (!fs.existsSync(modulesPath)) {
+    console.log('Node modules not found. Installing...');
+    await runCommand('yarn', [], rootDir);
+  } else if (hash !== existingHash) {
     console.log('Node module dependencies have been changed. Updating...');
     await runCommand('yarn', [], rootDir);
-  }
-  else {
-    console.log('Node modules up-to-date')
+  } else {
+    console.log('Node modules up-to-date');
   }
 
   fs.writeFileSync(modulesHashFile, hash);
@@ -69,7 +66,7 @@ function getDependencies(packageJsonPath) {
         result.push(`${key}:${value}`);
       }
     }
-  }
+  };
 
   pushDeps(packageJson.dependencies);
   pushDeps(packageJson.devDependencies);

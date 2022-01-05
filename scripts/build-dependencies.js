@@ -7,7 +7,9 @@ async function buildDependencies() {
   for (const packageName of packages) {
     console.log('npm run build:', packageName);
     const success = await buildPackage(packageName);
-    if (!success) { process.exit(1); }
+    if (!success) {
+      process.exit(1);
+    }
   }
 }
 
