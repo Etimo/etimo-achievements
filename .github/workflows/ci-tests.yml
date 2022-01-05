@@ -80,12 +80,16 @@ jobs:
       - name: Generate OpenAPI spec
         run: npm run openapi
 
+      - name: Generate jest configurations
+        run: npm run jest-gen
+
       - name: Check for changed files
         uses: tj-actions/verify-changed-files@v8.3
         id: changed-files
         with:
           files: |
             openapi.json
+            package.json
 
       - name: Files changed
         if: steps.changed-files.outputs.files_changed == 'true'
