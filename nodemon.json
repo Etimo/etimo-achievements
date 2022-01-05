@@ -9,6 +9,6 @@
     "**/openapi.json",
     "**.tsconfig.*"
   ],
-  "exec": "node ./scripts/build-updated-packages.js; touch packages/api/src/index.ts; exit 0",
+  "exec": "node ./scripts/build-updated-packages.js; exit 0",
   "verbose": true
 }

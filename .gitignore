@@ -13,3 +13,4 @@ node_modules/
 !.yarn/versions
 *.tsbuildinfo
 .env
+.modules_hash
