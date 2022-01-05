@@ -1,19 +1,32 @@
 import * as fs from 'fs';
 import getCurrentCommit from './utils/get-current-commit.js';
-import { getDockerFileDirectory, getPackageDirectory, getRootDirectory } from './utils/path-helper.js';
+import { getDockerFileDirectory, getPackageDirectory, getPackageNames, getRootDirectory } from './utils/path-helper.js';
 import runCommand from './utils/run-command.js';
 
 const noCache = process.argv.some(a => a === '--no-cache');
 const noBase = process.argv.some(a => a === '--no-base');
 const buildNodemon = process.argv.some(a => a === '--nodemon');
+const dockerFileDir = getDockerFileDirectory();
+const packagesDir = getPackageDirectory();
+const packageNames = getPackageNames(getPackageDirectory());
+const buildPackages = process.argv.slice(2).filter(a => packageNames.some(p => p === a));
 
-async function buildDocker() {
-  const dockerFileDir = getDockerFileDirectory();
-  const packagesDir = getPackageDirectory();
-
+async function buildDocker(packages) {
   if (!noBase) {
+    console.log('Building base image');
     await buildDockerFile('base');
   }
+
+  if (buildNodemon) {
+    console.log('Building nodemon image');
+    await buildDockerFile('nodemon');
+  }
+
+  if (!packages?.length) {
+    packages = packageNames;
+  }
+
+  console.log(`Building images: ${packages.join(' ')}`);
 
   const dockerFiles = fs
     .readdirSync(dockerFileDir, { withFileTypes: true })
@@ -22,11 +35,9 @@ async function buildDocker() {
   for (const dockerFile of dockerFiles) {
     // Check if package exists
     if (fs.existsSync(`${packagesDir}/${dockerFile}/package.json`)) {
-      await buildDockerFile(dockerFile);
-    }
-    // Nodemon special case
-    if (dockerFile === 'nodemon' && buildNodemon) {
-      await buildDockerFile('nodemon');
+      if (packages.some(p => p === dockerFile)) {
+        await buildDockerFile(dockerFile);
+      }
     }
   }
 }
@@ -64,4 +75,4 @@ async function buildApp(appName, tags, buildArgs) {
   }
 }
 
-buildDocker();
+buildDocker(buildPackages);

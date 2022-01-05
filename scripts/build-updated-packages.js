@@ -1,5 +1,6 @@
 import FileHound from 'filehound';
 import path from 'path';
+import spacetime from 'spacetime';
 import buildPackage from './utils/build-package.js';
 import getBuildDate from './utils/get-build-date.js';
 import getBuildOrder from './utils/get-build-order.js';
@@ -12,7 +13,7 @@ const packageDir = getPackageDirectory();
 let buildRemaining = false;
 
 async function buildUpdatedPackages() {
-  const buildDate = getBuildDate();
+  const buildDate = spacetime(getBuildDate());
   for (const packageName of packages) {
     if (buildRemaining) {
       const success = await buildPackage(packageName);
@@ -24,23 +25,28 @@ async function buildUpdatedPackages() {
     const files = await FileHound.create()
       .paths(cwd)
       .ext('.ts', '.js', '.tsx', '.jsx', '.json')
-      .modified('< 30 minutes')
+      .modified('< 2 minutes')
       .find();
 
     const filteredFiles = files.filter((f) => !f.includes('node_modules') && !f.includes('dist'));
     if (filteredFiles.length > 0) {
-      const latestUpdate = filteredFiles.map(f => getModifiedDate(f));
+      const updatedFiles = filteredFiles
+        .map(f => [f, spacetime(getModifiedDate(f))])
+        .filter(a => a[1].isAfter(buildDate));
 
-      if (latestUpdate.some(f => f.getTime() > buildDate.getTime())) {
-        console.log(
-          `Detected updated files in ${packageName}: ${filteredFiles.map((f) => path.relative(cwd, f)).join(', ')}`
-        );
+      if (updatedFiles.length) {
+        for (const [updatedFile, updatedDate] of updatedFiles) {
+          const strDate = Math.abs(updatedDate.diff(buildDate, 'second'));
+          console.log(
+            `Detected change in ${packageName}: ${path.relative(cwd, updatedFile)} (${strDate}s ago)`
+          );
+        }
+
         const success = await buildPackage(packageName);
         if (!success) { process.exit(1); }
         buildRemaining = true;
+        continue;
       }
-    } else {
-      console.log('No updated files found for', packageName);
     }
   }
   setBuildDate();
