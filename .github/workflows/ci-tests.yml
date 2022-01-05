@@ -65,7 +65,7 @@ jobs:
         run: npm run test-integration
 
   checks:
-    name: 'Check for errors'
+    name: 'Check for mistakes'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -78,10 +78,10 @@ jobs:
         run: yarn install --immutable
 
       - name: Generate OpenAPI spec
-        run: npm run openapi
+        run: npm run generate-openapi
 
       - name: Generate jest configurations
-        run: npm run jest-gen
+        run: npm run generate-jest
 
       - name: Check for changed files
         uses: tj-actions/verify-changed-files@v8.3

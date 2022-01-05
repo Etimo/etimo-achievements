@@ -1,7 +1,7 @@
 import { getPackageDirectory, getPackageNames } from './scripts/utils/path-helper.js';
 
 /**
- *  Run `npm run jest-gen` to export this config to the packages' configurations.
+ *  Run `npm run generate-jest` to export this config to the packages' configurations.
  */
 
 const packageDir = getPackageDirectory();
