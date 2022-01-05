@@ -18,7 +18,7 @@ function updateJestConfig() {
         packageJson.jest = frontendConfig;
       }
 
-      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n');
     }
   }
 }
