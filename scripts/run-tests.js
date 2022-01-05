@@ -38,7 +38,9 @@ async function migrateDatabase(dbName) {
   const cwd = getPackageDirectory('data');
   process.env.DB_NAME = dbName;
   const success = await runCommand('npm', ['run', 'knex:test', 'migrate:latest'], cwd);
-  if (!success) { error('Migration of database failed'); }
+  if (!success) {
+    error('Migration of database failed');
+  }
 }
 
 async function seedDatabase(dbName) {
@@ -46,19 +48,25 @@ async function seedDatabase(dbName) {
   const cwd = getPackageDirectory('data');
   process.env.DB_NAME = dbName;
   const success = await runCommand('npm', ['run', 'knex:test', 'seed:run'], cwd);
-  if (!success) { error('Seeding of database failed'); }
+  if (!success) {
+    error('Seeding of database failed');
+  }
 }
 
 async function runUnitTests() {
   console.log('Running unit tests');
   const success = await runCommand('npm', ['run', 'test']);
-  if (!success) { error('Unit tests failed'); }
+  if (!success) {
+    error('Unit tests failed');
+  }
 }
 
 async function runIntegrationTests() {
   console.log('Running integration tests');
   const success = await runCommand('npm', ['run', 'test-integration']);
-  if (!success) { error('Integration tests failed'); }
+  if (!success) {
+    error('Integration tests failed');
+  }
 }
 
 function error(message) {
