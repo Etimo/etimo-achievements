@@ -23,6 +23,7 @@
     "env": "rsync --ignore-existing packages/api/.env.example packages/api/.env",
     "env-force": "cp packages/api/.env.example packages/api/.env",
     "install-deps": "node ./scripts/install-dependencies.js && npm run update",
+    "jest-gen": "node ./scripts/update-jest-config.js",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
     "migration-apply": "cd packages/data && npm run migration-apply",
     "migration-new": "cd packages/data && npm run migration-new",

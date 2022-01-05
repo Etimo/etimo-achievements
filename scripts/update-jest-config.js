@@ -1,0 +1,35 @@
+import * as fs from 'fs';
+import { frontendConfig, nodeConfig } from '../jest.config.js';
+import { loadFileAsObject } from './utils/file-helper.js';
+import { getPackageDirectories, getPackageNames } from './utils/path-helper.js';
+
+function updateJestConfig() {
+  const packageDirs = getPackageDirectories();
+  for (const packageDir of packageDirs) {
+    const packageNames = getPackageNames(packageDir);
+    for (const packageName of packageNames) {
+      const packageJsonPath = `${packageDir}/${packageName}/package.json`;
+      const packageJson = loadFileAsObject(packageJsonPath);
+
+      // Determine project type
+      if (isNodeProject(packageJson)) {
+        packageJson.jest = nodeConfig;
+      } else {
+        packageJson.jest = frontendConfig;
+      }
+
+      fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2));
+    }
+  }
+}
+
+function isNodeProject(packageJson) {
+  for (const [key, _] of Object.entries(packageJson.devDependencies)) {
+    if (key === 'ts-node') {
+      return true;
+    }
+  }
+  return false;
+}
+
+updateJestConfig();

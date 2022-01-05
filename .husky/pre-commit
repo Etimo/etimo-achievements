@@ -16,6 +16,9 @@ title() {
 title "Package references"
 npm run reference-gen
 
+title "Jest config"
+npm run jest-gen
+
 title "OpenAPI"
 npm run openapi
 
