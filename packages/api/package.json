@@ -52,7 +52,7 @@
     "typescript": "^4.4.3"
   },
   "jest": {
-    "detectOpenHandles": false,
+    "detectOpenHandles": true,
     "preset": "ts-jest",
     "testMatch": [
       "**/src/**/*.test.ts",
