@@ -47,7 +47,7 @@
     "test": "npm run script test",
     "test-integration": "npm run script test-integration",
     "update": "node ./scripts/update-modules.js",
-    "postinstall": "husky install"
+    "postinstall": "npx husky install"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
