@@ -4,7 +4,7 @@
 title() {
   title_str="$*"
   title_len=${#title_str}
-  hash_len=$((title_len + 9))
+  hash_len=$((title_len + 8))
   hash_str=$(seq -s# $hash_len | tr -d '[:digit:]')
 
   echo

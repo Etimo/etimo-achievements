@@ -11,6 +11,39 @@ defaults:
     shell: bash
 
 jobs:
+  build:
+    name: 'Build images'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io/etimo
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_PACKAGES_TOKEN }}
+
+      - name: Setup cache
+        uses: ./.github/actions/setup-cache
+
+      - name: Build base image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: base
+          image-name: etimo-achievements/base
+          target: base
+          tag: latest
+
+      - name: Build api image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: api
+          image-name: etimo-achievements/api-ci
+          push: false
+
   test:
     name: 'Run tests'
     runs-on: ubuntu-latest

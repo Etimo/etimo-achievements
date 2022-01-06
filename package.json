@@ -42,12 +42,12 @@
     "start": "docker-compose up -d --build && docker-compose logs --tail 100 -f",
     "start-api": "cd packages/api && npm run dev",
     "start-fresh": "yarn install && npm run build && npm run generate-openapi && npm run docker-rebuild && npm run db-reset-force && npm run start",
-    "start-host": "docker-compose stop api nodemon && ./node_modules/.bin/concurrently \"npm run start-api\" \"nodemon\" \"npm run db\"",
+    "start-host": "docker-compose stop api nodemon && npx concurrently \"npm run start-api\" \"nodemon\" \"npm run db\"",
     "support": "npm run db && npm run nodemon",
     "test": "npm run script test",
     "test-integration": "npm run script test-integration",
     "update": "node ./scripts/update-modules.js",
-    "postinstall": "husky install"
+    "postinstall": "npx husky install"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
