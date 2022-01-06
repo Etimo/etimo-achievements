@@ -33,9 +33,9 @@ jobs:
         uses: ./.github/actions/docker-build-push
         with:
           dockerfile: base
-          image-name: etimo-achievements/base-ci
+          image-name: etimo-achievements/base
           target: base
-          push: false
+          tag: latest
 
       - name: Build api image
         uses: ./.github/actions/docker-build-push
