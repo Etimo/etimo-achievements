@@ -4,7 +4,7 @@ import sleep from './sleep.js';
 export default async function verifyRelease(expectedCommit, urls, timeout = 900) {
   let secondsWaited = 0;
   const commits = new Map();
-  let remainingUrls = urls.filter(u => commits.get(u) !== expectedCommit);
+  let remainingUrls = urls.filter((u) => commits.get(u) !== expectedCommit);
 
   while (secondsWaited < timeout) {
     for (const url of remainingUrls) {
@@ -18,7 +18,7 @@ export default async function verifyRelease(expectedCommit, urls, timeout = 900)
       commits.set(url, commit);
     }
 
-    remainingUrls = urls.filter(u => commits.get(u) !== expectedCommit);
+    remainingUrls = urls.filter((u) => commits.get(u) !== expectedCommit);
     if (!remainingUrls.length) {
       console.log('Deployment successful!');
       return;

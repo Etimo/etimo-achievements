@@ -18,11 +18,12 @@ export default async function installDependencies(dependencies) {
     let success = false;
     if (process.platform === 'win32') {
       success = await runCommand('npm', ['install', '-g', ...missingDependencies]);
-    }
-    else {
+    } else {
       success = await runCommand('sudo', ['npm', 'install', '-g', ...missingDependencies]);
     }
-    if (!success) { process.exit(1); }
+    if (!success) {
+      process.exit(1);
+    }
     console.log('Dependencies successfully installed');
   } else {
     console.log('Dependencies already installed');

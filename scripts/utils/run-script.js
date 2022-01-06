@@ -7,8 +7,10 @@ export default async function runScript(script, params) {
   for (const packageName of packages) {
     const cwd = getPackageDirectory(packageName);
     const paramsStr = params.length ? ` ${params.join(' ')}` : '';
-    console.log(`Running 'npm run ${script}${paramsStr}' on ${packageName}...`)
+    console.log(`Running 'npm run ${script}${paramsStr}' on ${packageName}...`);
     const success = await runCommand('npm', ['run', script, ...params], cwd);
-    if (!success) { process.exit(1); }
+    if (!success) {
+      process.exit(1);
+    }
   }
 }

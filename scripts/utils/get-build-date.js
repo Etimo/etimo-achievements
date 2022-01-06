@@ -12,4 +12,4 @@ export default function getBuildDate(packageName) {
   }
 
   return noBuildDate;
-};
+}
