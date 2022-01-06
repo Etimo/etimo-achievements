@@ -1,10 +1,14 @@
 import { isDevelopment, Logger } from '@etimo-achievements/common';
+import {
+  apiKeyMiddleware,
+  contextMiddleware,
+  errorMiddleware,
+  loggingMiddleware,
+  setContextMiddleware,
+  winstonMiddleware,
+} from '@etimo-achievements/express-middleware';
 import express, { Application, static as serveStatic } from 'express';
-import httpContext from 'express-http-context';
 import swaggerUi from 'swagger-ui-express';
-import { apiKeyMiddleware, loggingMiddleware, winstonMiddleware } from './middleware';
-import { contextMiddleware } from './middleware/context-middleware';
-import { errorMiddleware } from './middleware/error-middleware';
 import { VersionController } from './resources';
 import { AchievementController } from './resources/achievements/achievement-controller';
 import { AwardController } from './resources/awards/award-controller';
@@ -45,8 +49,8 @@ export default class Server {
     const OpenApiDocument = require('./openapi.json');
 
     // Context
-    this.express.use(httpContext.middleware);
     this.express.use(contextMiddleware());
+    this.express.use(setContextMiddleware());
 
     // Logging
     if (isDevelopment()) {
