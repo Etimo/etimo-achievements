@@ -11,6 +11,9 @@
       "path": "../common"
     },
     {
+      "path": "../express-middleware"
+    },
+    {
       "path": "../security"
     },
     {
@@ -20,9 +23,5 @@
       "path": "../types"
     }
   ],
-  "include": [
-    "./src",
-    "./src/**/version.json",
-    "./src/openapi.json"
-  ]
+  "include": ["./src", "./src/**/version.json", "./src/openapi.json"]
 }
