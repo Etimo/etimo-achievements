@@ -8,8 +8,8 @@ export default function runCommand(command, params, cwd) {
     child.stdout.on('data', console.log);
     child.stderr.setEncoding('utf8');
     child.stderr.on('data', console.error);
-    child.on('close', exitCode => {
+    child.on('close', (exitCode) => {
       resolve(exitCode === 0);
     });
-  })
+  });
 }

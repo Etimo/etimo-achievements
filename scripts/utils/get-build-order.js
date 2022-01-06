@@ -13,7 +13,7 @@ export default function getBuildOrder() {
     }
   }
   return buildOrder;
-};
+}
 
 function buildDependencyTree(pkg, packageDir) {
   if (buildOrder.filter((o) => o === pkg).length > 0) {

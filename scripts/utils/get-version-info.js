@@ -7,8 +7,7 @@ export default async function getVersionInfo(url) {
     const commit = body.commit;
     const date = body.date;
     return [commit, date];
-  }
-  catch (err) {
+  } catch (err) {
     console.log(`Something went wrong: ${err.message}`);
   }
   return [null, null];

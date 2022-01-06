@@ -23,7 +23,7 @@ function updateRootPaths(namespace) {
 
   const tsConfigPath = `${getRootDirectory()}/tsconfig.json`;
   const tsConfig = loadFileAsObject(tsConfigPath);
-  const paths = Object.fromEntries(dependencies.map(k => [`${namespace}/${k}/*`, [`${k}/src/*`]]));
+  const paths = Object.fromEntries(dependencies.map((k) => [`${namespace}/${k}/*`, [`${k}/src/*`]]));
   tsConfig.paths = paths;
   fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2) + '\n');
   console.log('<root> tsconfig.json updated');
@@ -38,8 +38,8 @@ async function updatePackagePaths(namespace) {
       const tsConfigPath = `${packageDir}/${packageName}/tsconfig.json`;
       if (fs.existsSync(packageJsonPath)) {
         const dependencies = getDependencies(packageJsonPath, namespace);
-        const paths = dependencies.map(d => ({
-          path: `../${d.replace(`${namespace}/`, '')}`
+        const paths = dependencies.map((d) => ({
+          path: `../${d.replace(`${namespace}/`, '')}`,
         }));
         const tsConfig = loadFileAsObject(tsConfigPath);
         tsConfig.references = paths;
@@ -63,7 +63,7 @@ function getDependencies(packageJsonPath, namespace) {
         }
       }
     }
-  }
+  };
 
   pushDeps(packageJson.dependencies);
   pushDeps(packageJson.devDependencies);
