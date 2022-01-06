@@ -34,13 +34,11 @@ jobs:
         with:
           dockerfile: base
           image-name: etimo-achievements/base-ci
-          target: base
           push: false
 
       - name: Build api image
         uses: ./.github/actions/docker-build-push
         with:
-          registry: ${{ env.HEROKU_REGISTRY }}
           dockerfile: api
           image-name: etimo-achievements/api-ci
           push: false
