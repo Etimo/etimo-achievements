@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "npm run install-deps && npm run prepare && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
+    "bootstrap": "npm run install-deps && npm run postinstall && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
     "build": "npm run script build",
     "clean": "npm run script clean",
     "clear": "npm run script clear && rm -rf node_modules",
@@ -33,7 +33,6 @@
     "migration-revert": "cd packages/data && npm run migration-revert",
     "nodemon": "docker-compose up -d --build nodemon",
     "peek": "node ./scripts/peek-version.js",
-    "prepare": "husky install",
     "prettier": "prettier --write .",
     "reset": "npm run clear && yarn install && npm run docker-rebuild && npm run compile",
     "restart": "docker stop $(docker ps -aq --filter 'label=com.etimo-achievements.monitored') && npm run build && npm run start",
@@ -47,7 +46,8 @@
     "support": "npm run db && npm run nodemon",
     "test": "npm run script test",
     "test-integration": "npm run script test-integration",
-    "update": "node ./scripts/update-modules.js"
+    "update": "node ./scripts/update-modules.js",
+    "postinstall": "husky install"
   },
   "devDependencies": {
     "@tsconfig/node14": "^1.0.1",
@@ -70,6 +70,8 @@
     "typescript": "^4.4.3"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "**/*": "prettier --write --ignore-unknown",
+    "*.{js,ts}": "eslint --cache --fix",
+    "*.{css,md}": "prettier --write"
   }
 }
