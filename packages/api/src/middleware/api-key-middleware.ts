@@ -1,7 +1,7 @@
 import { Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
 
-const excludedPaths = ['/version', '/swagger', '/swagger.json'];
+const excludedPaths = ['/version', '/swagger', '/swagger.json', '/favicon.ico'];
 
 export const apiKeyMiddleware = () => {
   return (req: Request, _res: Response, next: NextFunction) => {
