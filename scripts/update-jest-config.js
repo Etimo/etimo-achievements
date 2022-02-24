@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { frontendConfig, nodeConfig } from '../jest.config.js';
 import { loadFileAsObject } from './utils/file-helper.js';
 import { getPackageDirectories, getPackageNames } from './utils/path-helper.js';
+import runCommand from './utils/run-command.js';
 
 function updateJestConfig() {
   const packageDirs = getPackageDirectories();
@@ -39,3 +40,4 @@ function isNodeProject(packageJson) {
 }
 
 updateJestConfig();
+runCommand('npm', ['run', 'prettier-configs']);
