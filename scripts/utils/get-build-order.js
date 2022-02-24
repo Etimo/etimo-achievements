@@ -1,6 +1,8 @@
 import * as fs from 'fs';
 import { getPackageDirectories, getPackageNames } from './path-helper.js';
 
+const ignoredPackages = ['web'];
+
 let buildOrder;
 
 export default function getBuildOrder() {
@@ -16,7 +18,7 @@ export default function getBuildOrder() {
 }
 
 function buildDependencyTree(pkg, packageDir) {
-  if (buildOrder.filter((o) => o === pkg).length > 0) {
+  if (buildOrder.filter((o) => o === pkg).length > 0 || ignoredPackages.includes(pkg)) {
     return;
   }
 
