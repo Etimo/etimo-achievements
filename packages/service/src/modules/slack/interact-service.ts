@@ -1,6 +1,6 @@
 import { Logger } from '@etimo-achievements/common';
 import { AchievementRepository, AwardRepository } from '@etimo-achievements/data';
-import { Block, ChatPostMessageArguments, ImageBlock, KnownBlock, WebClient } from '@slack/web-api';
+import { ChatPostMessageArguments, WebClient } from '@slack/web-api';
 import { ServiceOptions } from '..';
 
 interface ActionByCallbackId {
@@ -71,6 +71,7 @@ export class SlackInteractService {
       ],
     };
 
+    Logger.log(JSON.stringify(message));
     await this.web.chat.postMessage(message);
   }
 
@@ -80,7 +81,7 @@ export class SlackInteractService {
     },
   };
 
-  //Function to join strings with commas + 'and'
+  // Function to join strings with commas + 'and'
   private joinStrings(strings: string[]) {
     if (strings.length === 1) {
       return strings[0];

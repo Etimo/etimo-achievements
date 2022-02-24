@@ -26,6 +26,7 @@
     "eject": "react-scripts eject",
     "openapi": "ts-node generate-openapi.ts",
     "start": "PORT=3001 react-scripts start",
+    "start-watch": "PORT=3001 react-scripts start --watch",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },

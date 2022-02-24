@@ -31,7 +31,10 @@ async function buildUpdatedPackages() {
       .modified('< 2 minutes')
       .find();
 
-    const filteredFiles = files.filter((f) => !f.includes('node_modules') && !f.includes('dist'));
+    const filteredFiles = files.filter(
+      (f) => !f.includes('node_modules') && !f.includes('dist') && !f.includes('build')
+    );
+
     if (filteredFiles.length > 0) {
       const updatedFiles = filteredFiles
         .map((f) => [f, spacetime(getModifiedDate(f))])
