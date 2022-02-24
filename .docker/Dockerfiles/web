@@ -1,0 +1,26 @@
+FROM ghcr.io/etimo/etimo-achievements/base:latest AS base
+WORKDIR /app/packages/web
+ARG COMMIT_SHA=abcdef
+COPY .docker/resources/version.json.template /tmp
+COPY --chown=1000:1000 packages/web .
+RUN export COMPILE_DATE="$(date +'%Y-%m-%d %H:%M:%S')" \
+  && export COMMIT_SHA=$COMMIT_SHA \
+  && envsubst '$COMMIT_SHA $COMPILE_DATE' < /tmp/version.json.template > ./src/version.json
+
+FROM base AS develop
+ENV PORT=3001
+EXPOSE $PORT
+CMD ["nodemon"]
+
+FROM develop AS build
+RUN npm run compile
+RUN yarn workspaces focus --all --production
+
+FROM node:14-alpine AS production
+ENV PORT=3000
+WORKDIR /app
+COPY --chown=1000:1000 --from=build /app/packages/web/build .
+COPY --chown=1000:1000 --from=build /app/node_modules ./node_modules
+COPY --chown=1000:1000 --from=build /app/packages ./packages
+EXPOSE $PORT
+CMD ["node", "index.js"]

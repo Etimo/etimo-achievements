@@ -14,6 +14,7 @@
     "@etimo-achievements/express-middleware/*": ["express-middleware/src/*"],
     "@etimo-achievements/security/*": ["security/src/*"],
     "@etimo-achievements/service/*": ["service/src/*"],
-    "@etimo-achievements/types/*": ["types/src/*"]
+    "@etimo-achievements/types/*": ["types/src/*"],
+    "@etimo-achievements/web/*": ["web/src/*"]
   }
 }

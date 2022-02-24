@@ -40,7 +40,8 @@
       "@etimo-achievements/express-middleware(.*)$": "<rootDir>/../express-middleware/src/$1",
       "@etimo-achievements/security(.*)$": "<rootDir>/../security/src/$1",
       "@etimo-achievements/service(.*)$": "<rootDir>/../service/src/$1",
-      "@etimo-achievements/types(.*)$": "<rootDir>/../types/src/$1"
+      "@etimo-achievements/types(.*)$": "<rootDir>/../types/src/$1",
+      "@etimo-achievements/web(.*)$": "<rootDir>/../web/src/$1"
     }
   }
 }

@@ -22,6 +22,22 @@ services:
     volumes:
       - ./packages:/app/packages
 
+  web:
+    build:
+      dockerfile: .docker/Dockerfiles/web
+      context: .
+      target: develop
+    env_file: ${WEB_ENV:-packages/web/.env}
+    environment:
+      - DB_HOSTNAME=postgres
+    ports:
+      - 3001:3001
+    user: 1000:1000
+    labels:
+      - 'com.etimo-achievements.monitored'
+    volumes:
+      - ./packages:/app/packages
+
   nodemon:
     build:
       dockerfile: .docker/Dockerfiles/nodemon
