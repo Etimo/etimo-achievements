@@ -21,6 +21,10 @@ export function copyNoClobber(source, target) {
   }
 }
 
+export function copy(source, target) {
+  fs.copyFileSync(source, target);
+}
+
 export function removePath(pathToRemove, recursive) {
   if (fs.existsSync(pathToRemove)) {
     if (fs.lstatSync(pathToRemove).isDirectory()) {

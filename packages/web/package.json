@@ -17,7 +17,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'",
     "eject": "react-scripts eject"
