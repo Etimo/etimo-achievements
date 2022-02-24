@@ -20,7 +20,7 @@
     "db-reset-force": "docker-compose stop pgadmin; docker-compose up -d postgres && sleep 10 && npm run db-reset && docker-compose up -d pgadmin",
     "docker-build": "node ./scripts/build-docker.js --no-base",
     "docker-rebuild": "node ./scripts/build-docker.js --nodemon",
-    "env": "rsync --ignore-existing packages/api/.env.defaults packages/api/.env",
+    "env": "node ./scripts/copy-env.js packages/api/.env.defaults packages/api/.env",
     "env-force": "cp packages/api/.env.defaults packages/api/.env",
     "generate-jest": "node ./scripts/update-jest-config.js",
     "generate-openapi": "cd packages/api && npm run openapi",
