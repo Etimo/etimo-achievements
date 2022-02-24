@@ -10,6 +10,9 @@ function updateJestConfig() {
     for (const packageName of packageNames) {
       const packageJsonPath = `${packageDir}/${packageName}/package.json`;
       const packageJson = loadFileAsObject(packageJsonPath);
+      if (!packageJson) {
+        continue;
+      }
 
       // Determine project type
       if (isNodeProject(packageJson)) {
@@ -24,6 +27,9 @@ function updateJestConfig() {
 }
 
 function isNodeProject(packageJson) {
+  if (!packageJson.devDependencies) {
+    return false;
+  }
   for (const [key, _] of Object.entries(packageJson.devDependencies)) {
     if (key === 'ts-node') {
       return true;
