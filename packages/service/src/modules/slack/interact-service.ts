@@ -71,13 +71,6 @@ export class SlackInteractService {
       ],
     };
 
-    // for (var user in toUsers) {
-    //   await this.awardRepo.create({
-    //     achievementId: achievementId,
-    //     userId: user,
-    //   });
-    // }
-
     await this.web.chat.postMessage(message);
   }
 
