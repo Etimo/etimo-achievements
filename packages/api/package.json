@@ -20,12 +20,12 @@
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
+    "@etimo-achievements/express-middleware": "^1.0.0",
     "@etimo-achievements/security": "^1.0.0",
     "@etimo-achievements/service": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-http-context": "^1.2.4",
     "express-openapi-validator": "^4.13.2",
     "express-winston": "^4.2.0",
     "swagger-jsdoc": "^6.1.0",
@@ -50,5 +50,22 @@
     "ts-jest": "^27.0.6",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.3"
+  },
+  "jest": {
+    "detectOpenHandles": true,
+    "preset": "ts-jest",
+    "testMatch": [
+      "**/src/**/*.test.ts",
+      "**/src/**/*.spec.ts"
+    ],
+    "moduleNameMapper": {
+      "@etimo-achievements/api(.*)$": "<rootDir>/../api/src/$1",
+      "@etimo-achievements/common(.*)$": "<rootDir>/../common/src/$1",
+      "@etimo-achievements/data(.*)$": "<rootDir>/../data/src/$1",
+      "@etimo-achievements/express-middleware(.*)$": "<rootDir>/../express-middleware/src/$1",
+      "@etimo-achievements/security(.*)$": "<rootDir>/../security/src/$1",
+      "@etimo-achievements/service(.*)$": "<rootDir>/../service/src/$1",
+      "@etimo-achievements/types(.*)$": "<rootDir>/../types/src/$1"
+    }
   }
 }

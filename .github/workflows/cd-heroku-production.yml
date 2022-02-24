@@ -74,4 +74,4 @@ jobs:
           password: ${{ secrets.DB_PASSWORD }}
 
       - name: Verify release
-        run: ./scripts/verify-release.sh production ${{ steps.commit.outputs.sha }}
+        run: node ./scripts/verify-release.js production ${{ steps.commit.outputs.sha }}

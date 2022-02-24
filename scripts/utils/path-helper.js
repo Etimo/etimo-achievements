@@ -1,12 +1,34 @@
-const getRootPackageJson = () => require(__dirname + '/../../package.json');
+import * as fs from 'fs';
+import * as path from 'path';
+import { fileURLToPath } from 'url';
+import { getRootPackageJson } from './file-helper.js';
 
-const getPackageDirectory = () => __dirname + '/../../packages';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const getPackageDirectories = () =>
-  getRootPackageJson().workspaces.map((w) => __dirname + '/../../' + w.replace('/*', '')) ?? [];
+export function getRootDirectory() {
+  return __dirname + '/../..';
+}
 
-module.exports = {
-  getRootPackageJson,
-  getPackageDirectory,
-  getPackageDirectories,
-};
+export function getDockerFileDirectory() {
+  return path.join(getRootDirectory(), '.docker/Dockerfiles');
+}
+
+export function getPackageDirectory(packageName) {
+  return __dirname + '/../../packages' + (packageName ? `/${packageName}` : '');
+}
+
+export function getPackageDirectories() {
+  return getRootPackageJson().workspaces.map((w) => __dirname + '/../../' + w.replace('/*', '')) ?? [];
+}
+
+export function getPackageNames(directory) {
+  return fs
+    .readdirSync(directory, { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name);
+}
+
+export function getBuildDateFile() {
+  return path.join(getPackageDirectory(), '.latest_build');
+}

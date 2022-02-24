@@ -93,4 +93,4 @@ jobs:
           password: ${{ secrets.DB_PASSWORD }}
 
       - name: Verify release
-        run: ./scripts/verify-release.sh staging $GITHUB_SHA
+        run: node ./scripts/verify-release.js staging $GITHUB_SHA

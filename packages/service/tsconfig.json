@@ -11,7 +11,12 @@
     },
     {
       "path": "../data"
+    },
+    {
+      "path": "../types"
     }
   ],
-  "include": ["./src"]
+  "include": [
+    "./src"
+  ]
 }

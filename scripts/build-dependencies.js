@@ -1,13 +1,16 @@
-const { execSync } = require('child_process');
-const { getBuildOrder } = require('./utils/get-build-order');
-const { getPackageDirectory } = require('./utils/path-helper');
+import buildPackage from './utils/build-package.js';
+import getBuildOrder from './utils/get-build-order.js';
 
-const packages = getBuildOrder();
-const packageDir = getPackageDirectory();
+async function buildDependencies() {
+  const packages = getBuildOrder();
 
-for (const package of packages) {
-  console.log('npm run build:', package);
-  execSync('npm run build', { cwd: `${packageDir}/${package}` }, (error, stdout, stderr) => {
-    console.log(stdout);
-  });
+  for (const packageName of packages) {
+    console.log('npm run build:', packageName);
+    const success = await buildPackage(packageName);
+    if (!success) {
+      process.exit(1);
+    }
+  }
 }
+
+buildDependencies();
