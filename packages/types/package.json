@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "../../node_modules/.bin/tsc --project tsconfig.build.json",
+    "compile": "node ../../scripts/compile.js $npm_package_name",
     "compile-test": "../../node_modules/.bin/tsc --build",
     "test-integration": "exit 0; npx jest --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",
     "test": "exit 0; npx jest --testMatch '**/src/**/*.test.ts'"
