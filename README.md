@@ -6,7 +6,7 @@ It is used by [Etimo](https://www.etimo.se) to create, track and hand out achiev
 
 ## Contributing
 
-If you want to contribute to this project, see the [Contributing](https://github.com/Etimo/etimo-achievements/wiki/Contributing) wiki page for information on how to get started.
+If you want to contribute to this project, see the [Contributing](https://github.com/Etimo/etimo-achievements/blob/master/CONTRIBUTING.md) file for information on how to get started.
 
 ## Technologies
 
