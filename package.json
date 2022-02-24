@@ -9,7 +9,7 @@
     "bootstrap": "npm run install-deps && npm run postinstall && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
     "build": "npm run script build",
     "clean": "npm run script clean",
-    "clear": "npm run script clear && rm -rf node_modules",
+    "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
     "compile": "npm run script compile",
     "compile-test": "npm run script compile-test",
     "db": "docker-compose up -d postgres pgadmin",

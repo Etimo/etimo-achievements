@@ -19,8 +19,8 @@ export function copyNoClobber(source, target) {
 
 export function removePath(pathToRemove, recursive) {
   if (fs.existsSync(pathToRemove)) {
-    if (recursive && fs.lstatSync(pathToRemove).isDirectory()) {
-      fs.rmdirSync(pathToRemove, { recursive: true });
+    if (fs.lstatSync(pathToRemove).isDirectory()) {
+      fs.rmSync(pathToRemove, { recursive });
     } else {
       fs.unlinkSync(pathToRemove);
     }
