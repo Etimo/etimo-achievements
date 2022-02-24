@@ -37,7 +37,7 @@ export class SlackInteractService {
 
     const usersMessage = this.joinStrings(toUsers.map((user: string) => `<@${user}>`));
 
-    const messageText = ` <@${fromUser.id}> Gave ${usersMessage} an award!`;
+    const messageText = ` <@${fromUser.id}> gave ${usersMessage} an award!`;
 
     const selfMention = toUsers.length == 1 && toUsers[0] == fromUser.id;
 
