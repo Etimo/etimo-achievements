@@ -8,8 +8,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npm run clean && npm run compile",
-    "clean": "rm -rf dist *.tsbuildinfo",
-    "clear": "npm run clean && rm -rf node_modules",
+    "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
+    "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
     "compile": "tsc --project tsconfig.build.json",
     "compile-test": "tsc --build",
     "test-integration": "jest --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",

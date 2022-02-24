@@ -10,3 +10,19 @@ export function loadFileAsObject(filePath) {
 export function getRootPackageJson() {
   return loadFileAsObject('package.json');
 }
+
+export function copyNoClobber(source, target) {
+  if (!fs.existsSync(target)) {
+    fs.copyFileSync(source, target);
+  }
+}
+
+export function removePath(pathToRemove, recursive) {
+  if (fs.existsSync(pathToRemove)) {
+    if (fs.lstatSync(pathToRemove).isDirectory()) {
+      fs.rmSync(pathToRemove, { recursive });
+    } else {
+      fs.unlinkSync(pathToRemove);
+    }
+  }
+}
