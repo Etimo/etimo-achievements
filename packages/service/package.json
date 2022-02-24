@@ -10,7 +10,7 @@
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "node ../../scripts/compile.js $npm_package_name",
+    "compile": "../../node_modules/.bin/tsc --project tsconfig.build.json",
     "compile-test": "../../node_modules/.bin/tsc --build",
     "test-integration": "npx jest --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",
     "test": "exit 0; npx jest --testMatch '**/src/**/*.test.ts'"
@@ -20,16 +20,16 @@
     "@etimo-achievements/data": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "@slack/web-api": "^6.5.1",
-    "node-fetch": "^3.1.0"
+    "node-fetch": "^2.6.5"
   },
   "devDependencies": {
-    "@types/jest": "^27.4.1",
-    "@types/node": "^16.11.25",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.10.2",
     "@types/node-fetch": "^2.5.12",
     "jest": "^27.2.5",
     "ts-jest": "^27.0.6",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.5"
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
   },
   "jest": {
     "detectOpenHandles": true,

@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "yarn && npm run postinstall && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
+    "bootstrap": "npm run update && npm run postinstall && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
     "build": "npm run script build",
     "clean": "npm run script clean",
     "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
@@ -68,8 +68,7 @@
     "nodemon": "^2.0.15",
     "prettier": "^2.4.1",
     "spacetime": "^6.16.3",
-    "syncpack": "^6.2.0",
-    "typescript": "^4.5.5"
+    "typescript": "^4.4.3"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
