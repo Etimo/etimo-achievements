@@ -3,6 +3,10 @@ import * as path from 'path';
 import { getRootDirectory } from './path-helper.js';
 
 export function loadFileAsObject(filePath) {
+  if (!fs.existsSync(filePath)) {
+    return;
+  }
+
   const pathWithSlash = path.isAbsolute(filePath) ? filePath : `${getRootDirectory()}/${filePath}`;
   return JSON.parse(fs.readFileSync(pathWithSlash));
 }
