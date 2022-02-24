@@ -5,7 +5,13 @@ WORKDIR /app
 RUN apk add --update \
     bash \
     gettext \
-    jq
+    jq \
+  && npm install -g \
+    jest \
+    knex \
+    nodemon \
+    ts-node \
+    typescript
 
 RUN chown 1000:1000 /app
 USER 1000:1000
