@@ -220,6 +220,27 @@
         ]
       }
     },
+    "/slack/sync-users": {
+      "post": {
+        "summary": "Sync slack users with the database",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users was synced."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
     "/version": {
       "get": {
         "summary": "Get application version information",
