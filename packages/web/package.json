@@ -31,10 +31,7 @@
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": []
   },
   "browserslist": {
     "production": [
@@ -65,5 +62,8 @@
       "@etimo-achievements/types(.*)$": "<rootDir>/../types/src/$1",
       "@etimo-achievements/web(.*)$": "<rootDir>/../web/src/$1"
     }
+  },
+  "devDependencies": {
+    "@types/react-router-dom": "^5.3.3"
   }
 }
