@@ -57,19 +57,7 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/User"
-          },
-          {
-            "properties": {
-              "password": {
-                "type": "string",
-                "minLength": 8,
-                "example": "R8l3t3t1n"
-              }
-            }
           }
-        ],
-        "required": [
-          "password"
         ]
       },
       "Achievement": {
@@ -145,10 +133,10 @@
             "format": "uuid",
             "readOnly": true
           },
-          "username": {
+          "name": {
             "type": "string",
             "minLength": 3,
-            "example": "niclaslindstedt"
+            "example": "Niclas Lindstedt"
           },
           "email": {
             "type": "string",
@@ -162,7 +150,7 @@
           }
         },
         "required": [
-          "username",
+          "name",
           "email",
           "slackHandle"
         ]
@@ -229,6 +217,27 @@
           },
           "400": {
             "description": "Request contains a missing or invalid argument."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
+    "/slack/sync-users": {
+      "post": {
+        "summary": "Sync slack users with the database",
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users was synced."
           }
         },
         "tags": [

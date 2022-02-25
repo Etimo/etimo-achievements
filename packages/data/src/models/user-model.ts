@@ -11,12 +11,11 @@ export class UserModel extends BaseModel implements IUser {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['username', 'password', 'email'],
+      required: ['email'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
-        username: { type: 'string', maxLength: 32 },
-        password: { type: 'string', maxLength: 255 },
+        name: { type: 'string', maxLength: 255 },
         email: { type: 'string', maxLength: 128 },
         slackHandle: { type: 'string', maxLength: 64 },
         createdAt: { type: 'string', format: 'date-time' },
@@ -31,8 +30,7 @@ export class UserModel extends BaseModel implements IUser {
   }
 
   id!: string;
-  username!: string;
-  password!: string;
+  name!: string;
   email!: string;
   slackHandle!: string;
   createdAt!: Date;

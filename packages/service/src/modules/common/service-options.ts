@@ -3,5 +3,5 @@ import { AchievementRepository, AwardRepository, UserRepository } from '@etimo-a
 export type ServiceOptions = {
   userRepository?: UserRepository;
   achievementRepository?: AchievementRepository;
-  awardRepository: AwardRepository;
+  awardRepository?: AwardRepository;
 };
