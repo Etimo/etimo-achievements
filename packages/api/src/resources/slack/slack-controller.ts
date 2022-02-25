@@ -1,7 +1,8 @@
 import {
-  CreateSlackAchievementsService,
   AwardSlackAchievementsService,
+  CreateSlackAchievementsService,
   SlackInteractService,
+  SyncSlackUsersService,
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { endpoint } from '../../utils';
@@ -11,18 +12,21 @@ export type SlackControllerOptions = {
   awardSlackAchievementsService?: AwardSlackAchievementsService;
   createSlackAchievementsService?: CreateSlackAchievementsService;
   createSlackInteractService?: SlackInteractService;
+  syncSlackUsersService?: SyncSlackUsersService;
 };
 
 export class SlackController {
   private awardSlackAchievementsService: AwardSlackAchievementsService;
   private createSlackAchievementsService: CreateSlackAchievementsService;
   private slackInteractService: SlackInteractService;
+  private syncSlackUsersService: SyncSlackUsersService;
 
   constructor(options?: SlackControllerOptions) {
     this.awardSlackAchievementsService = options?.awardSlackAchievementsService ?? new AwardSlackAchievementsService();
     this.createSlackAchievementsService =
       options?.createSlackAchievementsService ?? new CreateSlackAchievementsService();
     this.slackInteractService = options?.createSlackInteractService ?? new SlackInteractService();
+    this.syncSlackUsersService = options?.syncSlackUsersService ?? new SyncSlackUsersService();
   }
 
   public get routes(): Router {
@@ -97,6 +101,22 @@ export class SlackController {
      */
     router.post('/slack/create-achievement', endpoint(this.displayAchievementModal));
 
+    /**
+     * @openapi
+     * /slack/sync-users:
+     *   post:
+     *     summary: Sync slack users with the database
+     *     security:
+     *       - ApiKeyHeader: []
+     *       - ApiKeyParameter: []
+     *     responses:
+     *       200:
+     *         description: Users was synced.
+     *     tags:
+     *       - Slack
+     */
+    router.post('/slack/sync-users', endpoint(this.syncUsers));
+
     return router;
   }
 
@@ -122,6 +142,12 @@ export class SlackController {
 
   private displayAchievementModal = async (req: Request, res: Response) => {
     await this.createSlackAchievementsService.getModal(req.body.trigger_id);
+
+    return res.status(200).send();
+  };
+
+  private syncUsers = async (req: Request, res: Response) => {
+    await this.syncSlackUsersService.syncUsers();
 
     return res.status(200).send();
   };
