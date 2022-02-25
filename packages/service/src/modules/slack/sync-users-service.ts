@@ -1,5 +1,3 @@
-// Use the slack api to get all users from a specific team and create users in the database
-
 import { Logger } from '@etimo-achievements/common';
 import { UserRepository } from '@etimo-achievements/data';
 import { WebClient } from '@slack/web-api';
