@@ -11,6 +11,9 @@
  *         userId:
  *           type: string
  *           format: uuid
+ *         awardedByUserId:
+ *           type: string
+ *           format: uuid
  *         achievementId:
  *           type: string
  *           format: uuid
@@ -21,5 +24,6 @@
 export interface AwardDto {
   id: string;
   userId: string;
+  awardedByUserId: string;
   achievementId: string;
 }

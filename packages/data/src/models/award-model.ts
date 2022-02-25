@@ -16,6 +16,7 @@ export class AwardModel extends BaseModel implements IAward {
       properties: {
         id: { type: 'string', format: 'uuid' },
         achievementId: { type: 'string', format: 'uuid' },
+        awardedByUserId: { type: 'string', format: 'uuid' },
         userId: { type: 'string', format: 'uuid' },
         createdAt: { type: 'string', format: 'date-time' },
         updatedAt: { type: 'string', format: 'date-time' },
@@ -30,6 +31,7 @@ export class AwardModel extends BaseModel implements IAward {
 
   id!: string;
   achievementId!: string;
+  awardedByUserId!: string;
   userId!: string;
   createdAt!: Date;
   updatedAt!: Date;

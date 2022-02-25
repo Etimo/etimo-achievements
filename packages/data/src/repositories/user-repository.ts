@@ -35,6 +35,18 @@ export class UserRepository {
     });
   }
 
+  findBySlackHandle(slackHandle: string): Promise<IUser> {
+    return catchErrors(async () => {
+      return UserModel.query().findOne({ slack_handle: slackHandle });
+    });
+  }
+
+  findBySlackHandles(slackHandles: string[]): Promise<IUser[]> {
+    return catchErrors(async () => {
+      return UserModel.query().whereIn('slack_handle', slackHandles);
+    });
+  }
+
   create(user: INewUser): Promise<IUser> {
     return catchErrors(async () => {
       return UserModel.query().insert(user);

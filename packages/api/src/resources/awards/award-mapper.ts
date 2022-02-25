@@ -6,6 +6,7 @@ export class AwardMapper {
     return {
       id: award.id,
       achievementId: award.achievementId,
+      awardedByUserId: award.awardedByUserId,
       userId: award.userId,
     };
   }
@@ -14,6 +15,7 @@ export class AwardMapper {
     return {
       id: awardDto.id,
       achievementId: awardDto.achievementId,
+      awardedByUserId: awardDto.awardedByUserId,
       userId: awardDto.userId,
     };
   }
