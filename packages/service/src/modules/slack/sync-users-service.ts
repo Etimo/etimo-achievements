@@ -22,15 +22,15 @@ export class SyncSlackUsersService {
     for (const user of etimoUsers) {
       const foundUser = await this.userRepo.findByEmail(user.profile?.email!);
       if (!foundUser) {
-        Logger.log(`Creating user ${user.profile?.email}`);
+        Logger.log(`Creating user ${user.profile?.real_name}`);
         await this.userRepo.create({
           email: user.profile?.email!,
           slackHandle: user.id!,
-          name: user.real_name!,
+          name: user.profile?.real_name!,
         });
       } else {
-        Logger.log(`Updating user ${user.real_name}`);
-        await this.userRepo.update({ id: foundUser.id, slackHandle: user.id });
+        Logger.log(`Updating user ${user.profile?.real_name}`);
+        await this.userRepo.update({ id: foundUser.id, slackHandle: user.id, name: user.profile?.real_name });
       }
     }
   }

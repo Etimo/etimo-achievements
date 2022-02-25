@@ -1,4 +1,3 @@
-import { Logger } from '@etimo-achievements/common';
 import { AchievementRepository, UserRepository } from '@etimo-achievements/data';
 import { IAchievement, INewAward } from '@etimo-achievements/types';
 import { ChatPostMessageArguments, WebClient } from '@slack/web-api';
@@ -15,10 +14,7 @@ export class AwardSlackAchievementsInteractService {
   private web: WebClient;
 
   constructor(options?: awardSlackAchivementInteractServiceOptions) {
-    Logger.log('AwardSlackAchievementsInteractService::constructor()');
-    Logger.log(JSON.stringify(options));
     this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
-    Logger.log(JSON.stringify(this.achievementRepo));
     this.userRepo = options?.userRepository ?? new UserRepository();
     this.createAwardService = options?.createAwardService ?? new CreateAwardService();
 
@@ -37,6 +33,15 @@ export class AwardSlackAchievementsInteractService {
     const achievement = await this.achievementRepo.findById(achievementId);
     const fromUser = await this.userRepo.findBySlackHandle(fromUserSlackHandle);
     const toUsers = await this.userRepo.findBySlackHandles(toUserSlackHandles);
+
+    // TODO: Improve error handling.
+    if (achievement == null) {
+      throw new Error('Achievement not found');
+    } else if (fromUser == null) {
+      throw new Error('From user not found');
+    } else if (toUsers.length == 0) {
+      throw new Error('To user not found');
+    }
 
     const awards = toUsers.map(
       (toUser) =>
@@ -83,6 +88,7 @@ export class AwardSlackAchievementsInteractService {
             type: 'mrkdwn',
             text: `*${achievement.name}*\n${achievement.description}`,
           },
+          // TODO: Change how images are handled. This is just temporary.
           accessory: {
             type: 'image',
             image_url: selfMention
