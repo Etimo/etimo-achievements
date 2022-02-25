@@ -1,14 +1,13 @@
 import React from 'react';
 import './App.css';
+import Router from './Router';
 
-function App() {
+const App = (): JSX.Element => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello Etimo</p>
-      </header>
-    </div>
+    <React.StrictMode>
+      <Router />
+    </React.StrictMode>
   );
-}
+};
 
 export default App;
