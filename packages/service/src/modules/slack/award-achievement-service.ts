@@ -20,7 +20,6 @@ export class AwardSlackAchievementsService {
     const view = this.generateView(channelId, achievements);
     try {
       const result = await this.web.views.open({ view, trigger_id: triggerId });
-      Logger.log(JSON.stringify(result));
     } catch (error: any) {
       Logger.log(error);
     }

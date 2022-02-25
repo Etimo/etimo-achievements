@@ -37,7 +37,7 @@ export class UserRepository {
 
   findBySlackHandle(slackHandle: string): Promise<IUser> {
     return catchErrors(async () => {
-      return UserModel.query().findOne({ slackHandle });
+      return UserModel.query().findOne({ slack_handle: slackHandle });
     });
   }
 

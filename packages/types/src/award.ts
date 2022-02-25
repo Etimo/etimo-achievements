@@ -1,6 +1,7 @@
 export interface IAward {
   id: string;
   achievementId: string;
+  awardedByUserId: string;
   userId: string;
 }
 
