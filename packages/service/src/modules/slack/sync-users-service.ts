@@ -18,21 +18,19 @@ export class SyncSlackUsersService {
   public async syncUsers() {
     const slackUsers = (await this.web.users.list({ team_id: process.env.SLACK_TEAM_ID })).members as Member[];
     const etimoUsers = slackUsers.filter((user) => user.profile?.email?.endsWith('@etimo.se'));
-    const users = etimoUsers.map((user) => ({ email: user.profile?.email, slackId: user.id }));
 
-    for (const user of users) {
-      const foundUser = await this.userRepo.findByEmail(user.email!);
+    for (const user of etimoUsers) {
+      const foundUser = await this.userRepo.findByEmail(user.profile?.email!);
       if (!foundUser) {
-        Logger.log(`Creating user ${user.email}`);
+        Logger.log(`Creating user ${user.profile?.email}`);
         await this.userRepo.create({
-          email: user.email!,
-          slackHandle: user.slackId!,
-          username: user.email!.split('@')[0],
-          password: '',
+          email: user.profile?.email!,
+          slackHandle: user.id!,
+          name: user.real_name!,
         });
       } else {
-        Logger.log(`Updating user ${user.email}`);
-        await this.userRepo.update({ id: foundUser.id, slackHandle: user.slackId });
+        Logger.log(`Updating user ${user.real_name}`);
+        await this.userRepo.update({ id: foundUser.id, slackHandle: user.id });
       }
     }
   }
