@@ -8,7 +8,7 @@ export const openSlackView = async (view: any) => {
     body: view,
   });
 
-  const content = JSON.parse(await response.json() as string);
+  const content = JSON.parse((await response.json()) as string);
   Logger.log(content);
 
   return response;
