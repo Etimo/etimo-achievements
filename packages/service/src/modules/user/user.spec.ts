@@ -15,8 +15,7 @@ describe('CreateUserService', () => {
   test('should create a user', async () => {
     const id = uuid().substring(0, 8);
     const user: INewUser = {
-      username: 'user-' + id,
-      password: 'Test12345!',
+      name: 'user-' + id,
       email: id + '@example.com',
       slackHandle: '@user' + id,
     };
@@ -24,6 +23,6 @@ describe('CreateUserService', () => {
     const getService = new GetUserService();
     const createdUser = await createService.create(user);
     const fetchedUser = await getService.get(createdUser.id);
-    expect(fetchedUser.username).toBe(user.username);
+    expect(fetchedUser.name).toBe(user.name);
   });
 });
