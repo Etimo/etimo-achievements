@@ -14,3 +14,4 @@ node_modules/
 *.tsbuildinfo
 .env
 .modules_hash
+.eslintcache
