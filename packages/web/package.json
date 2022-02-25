@@ -20,13 +20,15 @@
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile-test": "../../node_modules/.bin/tsc --build",
-    "compile": "npx react-scripts build",
-    "eject": "npx react-scripts eject",
-    "start": "PORT=3001 npx react-scripts start",
-    "start-watch": "PORT=3001 npx react-scripts start --watch",
-    "test-integration": "exit 0; npx jest --testMatch '**/src/**/*.spec.ts'",
-    "test": "exit 0; npx jest --testMatch '**/src/**/*.test.ts'"
+    "compile-test": "tsc --build",
+    "compile": "react-scripts build",
+    "dev": "nodemon",
+    "eject": "react-scripts eject",
+    "openapi": "ts-node generate-openapi.ts",
+    "start": "PORT=3001 react-scripts start",
+    "start-watch": "PORT=3001 react-scripts start --watch",
+    "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
+    "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },
   "eslintConfig": {
     "extends": [
