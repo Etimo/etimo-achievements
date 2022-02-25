@@ -29,10 +29,7 @@
     "test": "exit 0; npx jest --testMatch '**/src/**/*.test.ts'"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "extends": []
   },
   "browserslist": {
     "production": [
