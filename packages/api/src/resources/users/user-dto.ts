@@ -8,10 +8,10 @@
  *       properties:
  *         id:
  *           *idProperty
- *         username:
+ *         name:
  *           type: string
  *           minLength: 3
- *           example: niclaslindstedt
+ *           example: Niclas Lindstedt
  *         email:
  *           type: string
  *           format: email
@@ -21,13 +21,13 @@
  *           description: The @slack handle of the user
  *           example: '@niclas'
  *       required:
- *         - username
+ *         - name
  *         - email
  *         - slackHandle
  */
 export interface UserDto {
   id: string;
-  username: string;
+  name: string;
   email: string;
   slackHandle: string;
 }
@@ -40,14 +40,5 @@ export interface UserDto {
  *       title: User (for creation)
  *       allOf:
  *         - $ref: '#/components/schemas/User'
- *         - properties:
- *             password:
- *               type: string
- *               minLength: 8
- *               example: 'R8l3t3t1n'
- *       required:
- *         - password
  */
-export interface NewUserDto extends UserDto {
-  password: string;
-}
+export interface NewUserDto extends UserDto {}

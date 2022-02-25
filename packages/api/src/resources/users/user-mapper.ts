@@ -5,7 +5,7 @@ export class UserMapper {
   public static toUserDto(user: IUser): UserDto {
     return {
       id: user.id,
-      username: user.username,
+      name: user.name,
       email: user.email,
       slackHandle: user.slackHandle,
     };
@@ -14,7 +14,7 @@ export class UserMapper {
   public static toUser(userDto: UserDto): Omit<IUser, 'password'> {
     return {
       id: userDto.id,
-      username: userDto.username,
+      name: userDto.name,
       email: userDto.email,
       slackHandle: userDto.slackHandle,
     };
@@ -23,8 +23,7 @@ export class UserMapper {
   public static toNewUser(newUserDto: NewUserDto): IUser {
     return {
       id: newUserDto.id,
-      username: newUserDto.username,
-      password: newUserDto.password,
+      name: newUserDto.name,
       email: newUserDto.email,
       slackHandle: newUserDto.slackHandle,
     };
