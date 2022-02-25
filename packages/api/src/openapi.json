@@ -132,7 +132,7 @@
           "name": {
             "type": "string",
             "minLength": 3,
-            "example": "niclaslindstedt"
+            "example": "Niclas Lindstedt"
           },
           "email": {
             "type": "string",
@@ -146,6 +146,7 @@
           }
         },
         "required": [
+          "name",
           "email",
           "slackHandle"
         ]

@@ -11,7 +11,7 @@
  *         name:
  *           type: string
  *           minLength: 3
- *           example: niclaslindstedt
+ *           example: Niclas Lindstedt
  *         email:
  *           type: string
  *           format: email
@@ -21,6 +21,7 @@
  *           description: The @slack handle of the user
  *           example: '@niclas'
  *       required:
+ *         - name
  *         - email
  *         - slackHandle
  */
