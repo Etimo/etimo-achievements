@@ -2,6 +2,12 @@
 
 Clone the repository and follow the instructions in this file to get started.
 
+### Prerequisites
+
+You will need Docker, NodeJS and Yarn to run this project.
+
+On Windows, you should install Docker Desktop regardless of whether you use WSL or not.
+
 ### First Run
 
 If this is your first time running this project, bootstrap it by running:
