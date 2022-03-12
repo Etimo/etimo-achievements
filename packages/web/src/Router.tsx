@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import HomePage from './views/public/HomePage';
