@@ -10,17 +10,15 @@ RUN export COMPILE_DATE="$(date +'%Y-%m-%d %H:%M:%S')" \
 FROM base AS develop
 ENV PORT=3001
 EXPOSE $PORT
-CMD ["nodemon"]
+CMD ["npm", "run", "dev"]
 
 FROM develop AS build
 RUN npm run compile
 RUN yarn workspaces focus --all --production
 
-FROM node:14-alpine AS production
-ENV PORT=3000
-WORKDIR /app
-COPY --chown=1000:1000 --from=build /app/packages/web/build .
-COPY --chown=1000:1000 --from=build /app/node_modules ./node_modules
-COPY --chown=1000:1000 --from=build /app/packages ./packages
-EXPOSE $PORT
-CMD ["node", "index.js"]
+FROM nginx:1.18 AS nginx-base
+WORKDIR /usr/share/nginx/html/
+COPY --chown=1000:1000 .docker/entrypoints/web.sh /entrypoint.sh
+COPY --chown=1000:1000 packages/web/.env.defaults /.env
+COPY --chown=1000:1000 --from=build /app/packages/web/dist .
+CMD [ "/entrypoint.sh"]
