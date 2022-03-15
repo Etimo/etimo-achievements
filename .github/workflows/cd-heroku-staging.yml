@@ -169,5 +169,10 @@ jobs:
         with:
           ref: 'refs/heads/${{ steps.branch.outputs.checkout-branch }}'
 
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
       - name: Verify release
         run: node ./scripts/verify-release.js staging $GITHUB_SHA
