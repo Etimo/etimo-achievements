@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { getPackageDirectories, getPackageNames } from './path-helper.js';
 
-const ignoredPackages = ['web'];
+const ignoredPackages = [];
 
 let buildOrder;
 

@@ -2,7 +2,7 @@
   "name": "@etimo-achievements/api",
   "version": "1.0.0",
   "description": "Authenticates a user with OAuth2",
-  "author": "Niclas Lindstedt <niclas.lindstedt@etimo.se>",
+  "author": "Etimo AB",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
