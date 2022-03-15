@@ -4,7 +4,7 @@ concurrency: staging_environment
 
 on:
   push:
-    branches: [master]
+    branches: [heroku]
     paths:
       - '.docker/**'
       - '.github/**'
@@ -15,22 +15,23 @@ on:
       branch:
         description: 'Branch to deploy'
         required: true
-        default: 'master'
+        default: 'heroku'
 
 defaults:
   run:
     shell: bash
 
+env:
+  DEFAULT_BRANCH: heroku
+  HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
+  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+  HEROKU_REGISTRY: registry.heroku.com
+
 jobs:
-  deploy:
-    name: 'Deploy to Staging'
+  deploy-api:
+    name: 'Deploy API to Staging'
     runs-on: ubuntu-latest
     environment: staging
-    env:
-      DEFAULT_BRANCH: master
-      HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
-      HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      HEROKU_REGISTRY: registry.heroku.com
 
     steps:
       - name: Determine branch
@@ -91,6 +92,82 @@ jobs:
           hostname: ${{ secrets.DB_HOSTNAME }}
           username: ${{ secrets.DB_USERNAME }}
           password: ${{ secrets.DB_PASSWORD }}
+
+  deploy-web:
+    name: 'Deploy to Staging'
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Determine branch
+        id: branch
+        run: |
+          echo "::set-output name=checkout-branch::$DEFAULT_BRANCH"
+          manual="${{ github.event.inputs.branch }}"
+          [[ ! -z "$manual" ]] && echo "::set-output name=checkout-branch::$manual"
+          exit 0
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: 'refs/heads/${{ steps.branch.outputs.checkout-branch }}'
+
+      - name: Login to Heroku registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.HEROKU_REGISTRY }}
+          username: _
+          password: ${{ secrets.HEROKU_API_KEY }}
+
+      - name: Login to GitHub registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io/etimo
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_PACKAGES_TOKEN }}
+
+      - name: Setup cache
+        uses: ./.github/actions/setup-cache
+
+      - name: Build & push base image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: base
+          image-name: etimo-achievements/base
+          target: base
+          tag: latest
+
+      - name: Build & push web image
+        uses: ./.github/actions/docker-build-push
+        with:
+          registry: ${{ env.HEROKU_REGISTRY }}
+          dockerfile: web
+          image-name: etimo-achievements-web-staging
+          image-suffix: /web
+          tag: latest
+
+      - name: Deploy to Heroku
+        shell: bash
+        run: heroku container:release web --app etimo-achievements-web-staging
+
+  verify:
+    name: 'Verify Release'
+    runs-on: ubuntu-latest
+    environment: staging
+
+    steps:
+      - name: Determine branch
+        id: branch
+        run: |
+          echo "::set-output name=checkout-branch::$DEFAULT_BRANCH"
+          manual="${{ github.event.inputs.branch }}"
+          [[ ! -z "$manual" ]] && echo "::set-output name=checkout-branch::$manual"
+          exit 0
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: 'refs/heads/${{ steps.branch.outputs.checkout-branch }}'
 
       - name: Verify release
         run: node ./scripts/verify-release.js staging $GITHUB_SHA
