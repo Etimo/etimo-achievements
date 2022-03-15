@@ -4,7 +4,7 @@
   "description": "Frontend of Etimo Achievements",
   "author": "Etimo AB",
   "license": "ISC",
-  "main": "dist/index.js",
+  "main": "dist/main.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "npm run clean && npm run compile",
@@ -14,7 +14,7 @@
     "compile": "npx webpack-cli build --config ./webpack.config.js --mode production",
     "dev": "npm run start",
     "openapi": "ts-node generate-openapi.ts",
-    "start": "npx webpack-cli serve --config ./webpack.config.js --mode development --port 3001",
+    "start": "npx webpack-cli serve --config ./webpack.config.js --mode development",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },

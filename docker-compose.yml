@@ -28,8 +28,6 @@ services:
       context: .
       target: develop
     env_file: ${WEB_ENV:-packages/web/.env}
-    environment:
-      - DB_HOSTNAME=postgres
     ports:
       - 3001:3001
     user: 1000:1000

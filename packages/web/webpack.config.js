@@ -3,8 +3,9 @@ const HtmlPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
+require('dotenv').config();
+
 module.exports = {
-  mode: 'none',
   entry: path.resolve(__dirname, './src/index.tsx'),
   target: 'web',
   devtool: 'eval-source-map',
@@ -40,5 +41,6 @@ module.exports = {
   ],
   devServer: {
     hot: true,
+    port: process.env.PORT,
   },
 };
