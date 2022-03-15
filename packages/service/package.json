@@ -2,7 +2,7 @@
   "name": "@etimo-achievements/service",
   "version": "1.0.0",
   "description": "Service-related functions",
-  "author": "Rickard Löfberg <rickard.lofberg@etimo.se>",
+  "author": "Etimo AB",
   "license": "ISC",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

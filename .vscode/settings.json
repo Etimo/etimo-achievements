@@ -15,5 +15,6 @@
   "javascript.updateImportsOnFileMove.enabled": "always",
   "jestrunner.configPath": "jest.config.js",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "typescript.updateImportsOnFileMove.enabled": "always"
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
