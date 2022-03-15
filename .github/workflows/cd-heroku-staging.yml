@@ -29,7 +29,7 @@ env:
 
 jobs:
   deploy-api:
-    name: 'Deploy api to Staging'
+    name: 'Deploy API'
     runs-on: ubuntu-latest
     environment: staging
 
@@ -94,7 +94,7 @@ jobs:
           password: ${{ secrets.DB_PASSWORD }}
 
   deploy-web:
-    name: 'Deploy web to Staging'
+    name: 'Deploy Web'
     runs-on: ubuntu-latest
     environment: staging
 
