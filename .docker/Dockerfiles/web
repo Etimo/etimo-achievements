@@ -16,7 +16,7 @@ FROM develop AS build
 RUN npm run compile
 RUN yarn workspaces focus --all --production
 
-FROM nginx:1.18 AS nginx-base
+FROM nginx:1.18 AS production
 WORKDIR /usr/share/nginx/html/
 COPY --chown=1000:1000 .docker/entrypoints/web.sh /entrypoint.sh
 COPY --chown=1000:1000 packages/web/.env.defaults /.env
