@@ -11,9 +11,9 @@
       "outFiles": ["${workspaceFolder}/packages/**/dist/**/*.js"]
     },
     {
-      "type": "node",
-      "request": "launch",
       "name": "Debug api",
+      "request": "launch",
+      "type": "node",
       "program": "${workspaceFolder}/packages/api/src/index.ts",
       "preLaunchTask": "tsc: build - packages/api/tsconfig.json",
       "outFiles": ["${workspaceFolder}/packages/**/dist/**/*.js"]
