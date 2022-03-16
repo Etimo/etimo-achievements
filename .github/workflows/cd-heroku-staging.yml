@@ -4,7 +4,7 @@ concurrency: staging_environment
 
 on:
   push:
-    branches: [heroku]
+    branches: [master]
     paths:
       - '.docker/**'
       - '.github/**'
@@ -15,14 +15,14 @@ on:
       branch:
         description: 'Branch to deploy'
         required: true
-        default: 'heroku'
+        default: 'master'
 
 defaults:
   run:
     shell: bash
 
 env:
-  DEFAULT_BRANCH: heroku
+  DEFAULT_BRANCH: master
   HEROKU_EMAIL: ${{ secrets.HEROKU_EMAIL }}
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   HEROKU_REGISTRY: registry.heroku.com
