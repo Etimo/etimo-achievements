@@ -8,7 +8,7 @@ volumes:
 services:
   api:
     container_name: achievements-api
-    env_file: ${API_ENV:-../../packages/api/.env}
+    env_file: ../../packages/api/.env
     environment:
       - DB_HOSTNAME=postgres
     ports:
@@ -17,7 +17,7 @@ services:
 
   web:
     container_name: achievements-web
-    env_file: ${WEB_ENV:-../../packages/web/.env}
+    env_file: ../../packages/web/.env
     ports:
       - 3001:3001
 
