@@ -51,7 +51,7 @@ jobs:
         # outputs "tagged" == "true" if the tag was created
         run: ./.github/scripts/tag-release.sh ${{ steps.commit.outputs.sha }}
 
-      - name: Promote Docker image
+      - name: Promote API Docker image
         if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/docker-promote
         with:
@@ -59,10 +59,23 @@ jobs:
           from-image-name: etimo-achievements-staging/web
           to-image-name: etimo-achievements/web
 
-      - name: Deploy to Heroku
+      - name: Promote Web Docker image
+        if: steps.tag.outputs.tagged == 'true'
+        uses: ./.github/actions/docker-promote
+        with:
+          registry: ${{ env.HEROKU_REGISTRY }}
+          from-image-name: etimo-achievements-web-staging/web
+          to-image-name: etimo-achievements-web/web
+
+      - name: Deploy API to Heroku
         if: steps.tag.outputs.tagged == 'true'
         shell: bash
         run: heroku container:release web --app etimo-achievements
+
+      - name: Deploy Web to Heroku
+        if: steps.tag.outputs.tagged == 'true'
+        shell: bash
+        run: heroku container:release web --app etimo-achievements-web
 
       - name: Migrate database
         if: steps.tag.outputs.tagged == 'true'

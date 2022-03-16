@@ -5,16 +5,19 @@ import runCommand from './utils/run-command.js';
 
 const noCache = process.argv.some((a) => a === '--no-cache');
 const noBase = process.argv.some((a) => a === '--no-base');
+const onlyBase = process.argv.some((a) => a === '--only-base');
 const buildNodemon = process.argv.some((a) => a === '--nodemon');
+
 const dockerFileDir = getDockerFileDirectory();
 const packagesDir = getPackageDirectory();
 const packageNames = getPackageNames(getPackageDirectory());
 const buildPackages = process.argv.slice(2).filter((a) => packageNames.some((p) => p === a));
 
 async function buildDocker(packages) {
-  if (!noBase) {
+  if (!noBase || onlyBase) {
     console.log('Building base image');
     await buildDockerFile('base');
+    if (onlyBase) return;
   }
 
   if (buildNodemon) {

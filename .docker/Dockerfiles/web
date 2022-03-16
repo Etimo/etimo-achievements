@@ -18,7 +18,9 @@ RUN yarn workspaces focus --all --production
 
 FROM nginx:1.18 AS production
 WORKDIR /usr/share/nginx/html/
+COPY --chown=1000:1000 .docker/resources/nginx.conf /etc/nginx/nginx.conf
 COPY --chown=1000:1000 .docker/entrypoints/web.sh /entrypoint.sh
 COPY --chown=1000:1000 packages/web/.env.defaults /.env
+COPY --chown=1000:1000 --from=base /app/packages/web/src/version.json .
 COPY --chown=1000:1000 --from=build /app/packages/web/dist .
 CMD [ "/entrypoint.sh"]

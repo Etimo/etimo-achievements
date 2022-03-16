@@ -1,0 +1,8 @@
+version: '3.7'
+
+services:
+  api:
+    image: ghcr.io/etimo/etimo-achievements/api:latest
+
+  web:
+    image: ghcr.io/etimo/etimo-achievements/web:latest

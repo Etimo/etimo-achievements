@@ -11,8 +11,7 @@ RUN apk add --update \
     knex \
     nodemon \
     ts-node \
-    typescript \
-    react-scripts
+    typescript
 
 RUN chown 1000:1000 /app
 USER 1000:1000
