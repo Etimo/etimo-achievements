@@ -18,7 +18,7 @@ export function isContainerRunning(id) {
 
 export function startComposeService(serviceName) {
   const cwd = getRootDirectory();
-  const output = getCommandOutput('docker-compose', ['up', '-d', serviceName], cwd);
+  const output = getCommandOutput('npm', ['run', 'dc', 'up', '--', '-d', serviceName], cwd);
   if (output[0] !== 0) {
     console.log(`Could not start container: ${output[3]?.trim('\n')}`);
     process.exit(1);

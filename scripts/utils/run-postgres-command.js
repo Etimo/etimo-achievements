@@ -4,8 +4,10 @@ import { getRootDirectory } from './path-helper.js';
 export default function runPostgresCommand(command) {
   const cwd = getRootDirectory();
   const output = getCommandOutput(
-    'docker-compose',
+    'npm',
     [
+      'run',
+      'dc',
       'exec',
       '-T',
       '-e',
