@@ -4,31 +4,32 @@ services:
   api:
     build:
       dockerfile: .docker/Dockerfiles/api
-      context: .
+      context: ../..
       target: develop
     labels:
       - 'com.etimo-achievements.monitored'
     volumes:
-      - ./packages:/app/packages
+      - ../../packages:/app/packages
 
   web:
     build:
       dockerfile: .docker/Dockerfiles/web
-      context: .
+      context: ../..
       target: develop
     labels:
       - 'com.etimo-achievements.monitored'
     volumes:
-      - ./packages:/app/packages
+      - ../../packages:/app/packages
     user: 1000:1000
 
   nodemon:
     build:
       dockerfile: .docker/Dockerfiles/nodemon
-      context: .
+      context: ../..
+    container_name: achievements-nodemon
     user: 1000:1000
     labels:
       - 'com.etimo-achievements.monitored'
     volumes:
-      - ./packages:/app/packages
-      - ./scripts:/app/scripts
+      - ../../packages:/app/packages
+      - ../../scripts:/app/scripts

@@ -8,7 +8,7 @@ volumes:
 services:
   api:
     container_name: achievements-api
-    env_file: ${API_ENV:-packages/api/.env}
+    env_file: ${API_ENV:-../../packages/api/.env}
     environment:
       - DB_HOSTNAME=postgres
     ports:
@@ -17,14 +17,14 @@ services:
 
   web:
     container_name: achievements-web
-    env_file: ${WEB_ENV:-packages/web/.env}
+    env_file: ${WEB_ENV:-../../packages/web/.env}
     ports:
       - 3001:3001
 
   postgres:
     image: postgres:latest
     container_name: achievements-pg
-    env_file: .env.defaults
+    env_file: ../../.env.defaults
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
@@ -35,8 +35,8 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: achievements-pgadmin
-    env_file: .env.defaults
+    env_file: ../../.env.defaults
     ports:
-      - '8011:80'
+      - 8011:80
     depends_on:
       - postgres

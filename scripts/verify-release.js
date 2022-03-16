@@ -1,6 +1,6 @@
-import getUrl from './utils/get-api-url.js';
 import getCurrentCommit from './utils/get-current-commit.js';
 import getEnvironment from './utils/get-environment.js';
+import getUrl from './utils/get-url.js';
 import verifyRelease from './utils/verify-release.js';
 
 const env = getEnvironment(process.argv[2] ?? 'staging');

@@ -1,5 +1,5 @@
 import getEnvironment from './utils/get-environment.js';
-import getUrl from './utils/get-api-url.js';
+import getUrl from './utils/get-url.js';
 import getVersionInfo from './utils/get-version-info.js';
 
 const env = getEnvironment(process.argv[2] ?? 'staging');
