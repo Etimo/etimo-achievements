@@ -7,54 +7,24 @@ volumes:
 
 services:
   api:
-    build:
-      dockerfile: .docker/Dockerfiles/api
-      context: .
-      target: develop
+    container_name: achievements-api
     env_file: ${API_ENV:-packages/api/.env}
     environment:
       - DB_HOSTNAME=postgres
     ports:
       - 3000:3000
     user: 1000:1000
-    labels:
-      - 'com.etimo-achievements.monitored'
-    volumes:
-      - ./packages:/app/packages
 
   web:
-    build:
-      dockerfile: .docker/Dockerfiles/web
-      context: .
-      target: develop
+    container_name: achievements-web
     env_file: ${WEB_ENV:-packages/web/.env}
     ports:
       - 3001:3001
-    user: 1000:1000
-    labels:
-      - 'com.etimo-achievements.monitored'
-    volumes:
-      - ./packages:/app/packages
-
-  nodemon:
-    build:
-      dockerfile: .docker/Dockerfiles/nodemon
-      context: .
-    user: 1000:1000
-    labels:
-      - 'com.etimo-achievements.monitored'
-    volumes:
-      - ./packages:/app/packages
-      - ./scripts:/app/scripts
 
   postgres:
     image: postgres:latest
     container_name: achievements-pg
-    environment:
-      DATABASE_HOST: 127.0.0.1
-      POSTGRES_DB: root
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
+    env_file: .env.defaults
     volumes:
       - db-data:/var/lib/postgresql/data
     ports:
@@ -65,9 +35,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: achievements-pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@etimo.se
-      PGADMIN_DEFAULT_PASSWORD: test123!
+    env_file: .env.defaults
     ports:
       - '8011:80'
     depends_on:
