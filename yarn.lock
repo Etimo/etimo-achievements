@@ -1682,6 +1682,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@etimo-achievements/common@workspace:packages/common"
   dependencies:
+    "@etimo-achievements/types": ^1.0.0
     "@types/jest": ^27.0.2
     "@types/uuid": ^8.3.1
     jest: ^27.2.5
