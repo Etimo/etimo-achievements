@@ -1,4 +1,5 @@
 import { UnauthorizedError } from '@etimo-achievements/common';
+import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, JwtService } from '@etimo-achievements/security';
 import { NextFunction, Request, Response } from 'express';
 
@@ -21,7 +22,8 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
       throw new UnauthorizedError('Unauthorized');
     }
     try {
-      JwtService.verify(token);
+      const ctx = getContext();
+      ctx.jwt = JwtService.verify(token);
     } catch {
       throw new UnauthorizedError('Access token could not be verified');
     }

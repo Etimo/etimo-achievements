@@ -1,4 +1,4 @@
-export type AccessToken = {
+export type JWT = {
   jti: string;
   sub: string;
   name: string;

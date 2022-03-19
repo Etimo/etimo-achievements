@@ -17,6 +17,7 @@
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
+    "@etimo-achievements/types": "^1.0.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

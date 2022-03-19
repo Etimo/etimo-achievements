@@ -32,10 +32,10 @@
   ],
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "ea-jwt"
       },
       "ApiKeyParameter": {
         "type": "apiKey",
@@ -67,6 +67,52 @@
             "type": "string",
             "description": "The refresh token that can be used to get a new access token.",
             "example": "V2R3ARQDwpzrLPXhsBZgexPMCp7mPQfsnATPie6h5RCdmmkU4UAqKfWvypPkhbHG"
+          }
+        }
+      },
+      "UserInfo": {
+        "title": "UserInfo",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The user's id.",
+            "example": "238ec288-ffc2-41ad-918b-7aa1f4f855dd"
+          },
+          "email": {
+            "type": "string",
+            "description": "The user's e-mail.",
+            "example": "niclas.lindstedt@etimo.se"
+          },
+          "verified_email": {
+            "type": "boolean",
+            "description": "Whether the e-mail has been verified or not.",
+            "example": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The user's full name.",
+            "example": "Niclas Lindstedt"
+          },
+          "given_name": {
+            "type": "string",
+            "description": "The user's given name.",
+            "example": "Niclas"
+          },
+          "family_name": {
+            "type": "string",
+            "description": "The user's family name.",
+            "example": "Lindstedt"
+          },
+          "picture": {
+            "type": "string",
+            "description": "An url to the user's picture.",
+            "example": "https://picsum.photos/200"
+          },
+          "hd": {
+            "type": "string",
+            "description": "The hosted domain of the user.",
+            "example": "etimo.se"
           }
         }
       },
@@ -174,7 +220,7 @@
         "operationId": "getAchievements",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "parameters": [
@@ -225,7 +271,7 @@
         "operationId": "createAchievement",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "requestBody": {
@@ -282,7 +328,7 @@
         "operationId": "getAchievement",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "parameters": [
@@ -360,8 +406,8 @@
     "/auth/callback/{provider}": {
       "get": {
         "summary": "Callback URL for OAuth2 code flow",
-        "security": [],
         "operationId": "authCallback",
+        "security": [],
         "x-allow-unknown-query-parameters": true,
         "parameters": [
           {
@@ -393,10 +439,47 @@
                   "$ref": "#/components/schemas/AccessToken"
                 }
               }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "ea-jwt=abcde12345; Path=/; HttpOnly"
+                }
+              }
             }
           },
           "400": {
             "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/userinfo": {
+      "get": {
+        "summary": "Get token claims",
+        "operationId": "authUserInfo",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
           },
           "401": {
             "description": "The request was unauthorized."
@@ -413,7 +496,7 @@
         "operationId": "getAwards",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "parameters": [
@@ -464,7 +547,7 @@
         "operationId": "createAward",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "requestBody": {
@@ -524,7 +607,7 @@
         "operationId": "getAward",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "parameters": [
@@ -711,7 +794,7 @@
         "operationId": "getUsers",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "parameters": [
@@ -759,7 +842,7 @@
         "operationId": "createUser",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "requestBody": {
@@ -816,7 +899,7 @@
         "operationId": "getUser",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "parameters": [

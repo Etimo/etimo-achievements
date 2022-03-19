@@ -1,6 +1,6 @@
 import { AccessTokenRepository } from '@etimo-achievements/data';
-import { AccessToken, hashPassword, JwtService, randomPassword } from '@etimo-achievements/security';
-import { IAccessToken, INewAccessToken } from '@etimo-achievements/types';
+import { hashPassword, JwtService, randomPassword } from '@etimo-achievements/security';
+import { IAccessToken, INewAccessToken, JWT } from '@etimo-achievements/types';
 import { ServiceOptions } from '..';
 
 export class AccessTokenService {
@@ -10,7 +10,7 @@ export class AccessTokenService {
     this.repo = options?.accessTokenRepository ?? new AccessTokenRepository();
   }
 
-  public async create(token: AccessToken): Promise<IAccessToken> {
+  public async create(token: JWT): Promise<IAccessToken> {
     const refreshToken = randomPassword(64);
 
     const newToken: INewAccessToken = {

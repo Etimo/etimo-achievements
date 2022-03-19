@@ -1,8 +1,11 @@
+import { UnauthorizedError } from '@etimo-achievements/common';
+import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { endpoint } from '../../utils';
+import { endpoint, protectedEndpoint } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
+import { UserInfoDto } from './user-info-dto';
 
 export class AuthController {
   public get routes(): Router {
@@ -36,8 +39,8 @@ export class AuthController {
      * /auth/callback/{provider}:
      *   get:
      *     summary: Callback URL for OAuth2 code flow
-     *     security: []
      *     operationId: authCallback
+     *     security: []
      *     x-allow-unknown-query-parameters: true
      *     parameters:
      *       - *providerParam
@@ -52,12 +55,35 @@ export class AuthController {
      *       200:
      *         description: Authentication success.
      *         content: *accessTokenContent
+     *         headers:
+     *           Set-Cookie:
+     *             schema:
+     *               type: string
+     *               example: ea-jwt=abcde12345; Path=/; HttpOnly
      *       400: *badRequestResponse
      *       401: *unauthorizedResponse
      *     tags:
      *       - Auth
      */
     router.get('/auth/callback/:provider', endpoint(this.callback));
+
+    /**
+     * @openapi
+     * /auth/userinfo:
+     *   get:
+     *     summary: Get token claims
+     *     operationId: authUserInfo
+     *     security:
+     *       - cookieAuth: []
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *userInfoContent
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Auth
+     */
+    router.get('/auth/userinfo', protectedEndpoint(this.userInfo));
 
     return router;
   }
@@ -79,6 +105,21 @@ export class AuthController {
     const dto = AccessTokenMapper.toAccessTokenDto(token);
 
     res.cookie(CookieName.Jwt, dto.access_token, { httpOnly: true });
+
+    return res.status(200).send(dto);
+  };
+
+  private userInfo = async (req: Request, res: Response) => {
+    const { jwt } = getContext();
+    if (!jwt) {
+      throw new UnauthorizedError('Not authorized');
+    }
+
+    const dto = {
+      id: jwt.sub,
+      email: jwt.email,
+      name: jwt.name,
+    } as UserInfoDto;
 
     return res.status(200).send(dto);
   };

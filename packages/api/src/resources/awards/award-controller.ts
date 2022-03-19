@@ -28,7 +28,7 @@ export class AwardController {
      *     summary: Get a list of awards
      *     operationId: getAwards
      *     security:
-     *       - bearerAuth: []
+     *       - cookieAuth: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -49,7 +49,7 @@ export class AwardController {
      *     summary: Get a single award
      *     operationId: getAward
      *     security:
-     *       - bearerAuth: []
+     *       - cookieAuth: []
      *     parameters:
      *       - *awardIdParam
      *     responses:
@@ -71,7 +71,7 @@ export class AwardController {
      *     summary: Give a user an award
      *     operationId: createAward
      *     security:
-     *       - bearerAuth: []
+     *       - cookieAuth: []
      *     requestBody:
      *       required: true
      *       content: *awardContent
