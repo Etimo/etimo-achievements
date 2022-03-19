@@ -31,7 +31,7 @@ export class UserController {
      *     summary: Get a list of users
      *     operationId: getUsers
      *     security:
-     *       - bearerAuth: []
+     *       - cookieAuth: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -51,7 +51,7 @@ export class UserController {
      *     summary: Get a single user
      *     operationId: getUser
      *     security:
-     *       - bearerAuth: []
+     *       - cookieAuth: []
      *     parameters:
      *       - *userIdParam
      *     responses:
@@ -73,7 +73,7 @@ export class UserController {
      *     summary: Create a user
      *     operationId: createUser
      *     security:
-     *       - bearerAuth: []
+     *       - cookieAuth: []
      *     requestBody:
      *       required: true
      *       content: *userContent

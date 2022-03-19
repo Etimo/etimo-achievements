@@ -1,11 +1,10 @@
 import { ConfigurationError, uuid } from '@etimo-achievements/common';
-import { IUser } from '@etimo-achievements/types';
+import { IUser, JWT } from '@etimo-achievements/types';
 import jwt from 'jsonwebtoken';
-import { AccessToken } from '.';
 
 export class JwtService {
-  public static create(user: IUser): AccessToken {
-    const token: AccessToken = {
+  public static create(user: IUser): JWT {
+    const token: JWT = {
       jti: uuid(),
       sub: user.id,
       name: user.name,
@@ -23,9 +22,9 @@ export class JwtService {
     return jwt.sign(payload, this.getSecret());
   }
 
-  public static verify(token: string): AccessToken {
+  public static verify(token: string): JWT {
     const unencrypted = jwt.verify(token, this.getSecret());
-    return unencrypted as AccessToken;
+    return unencrypted as JWT;
   }
 
   private static getSecret() {

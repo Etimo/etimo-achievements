@@ -34,10 +34,10 @@ export const definition = {
   ],
   components: {
     securitySchemes: {
-      bearerAuth: {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
+      cookieAuth: {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'ea-jwt',
       },
       ApiKeyParameter: {
         type: 'apiKey',
