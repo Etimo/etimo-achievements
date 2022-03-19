@@ -2,7 +2,7 @@ export interface IUser {
   id: string;
   name: string;
   email: string;
-  slackHandle: string;
+  slackHandle?: string;
 }
 
 export type INewUser = Omit<IUser, 'id'>;

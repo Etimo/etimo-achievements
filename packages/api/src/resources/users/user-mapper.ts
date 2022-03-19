@@ -1,5 +1,5 @@
 import { IUser } from '@etimo-achievements/types';
-import { NewUserDto, UserDto } from './user-dto';
+import { UserDto } from './user-dto';
 
 export class UserMapper {
   public static toUserDto(user: IUser): UserDto {
@@ -11,21 +11,12 @@ export class UserMapper {
     };
   }
 
-  public static toUser(userDto: UserDto): Omit<IUser, 'password'> {
+  public static toUser(userDto: UserDto): IUser {
     return {
       id: userDto.id,
       name: userDto.name,
       email: userDto.email,
       slackHandle: userDto.slackHandle,
-    };
-  }
-
-  public static toNewUser(newUserDto: NewUserDto): IUser {
-    return {
-      id: newUserDto.id,
-      name: newUserDto.name,
-      email: newUserDto.email,
-      slackHandle: newUserDto.slackHandle,
     };
   }
 }

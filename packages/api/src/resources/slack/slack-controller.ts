@@ -5,7 +5,7 @@ import {
   SyncSlackUsersService,
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { endpoint } from '../../utils';
+import { apiKeyEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 
 export type SlackControllerOptions = {
@@ -38,7 +38,6 @@ export class SlackController {
      *   post:
      *     summary: Display achievement list modal in Slack
      *     security:
-     *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
      *     parameters:
      *       - *skipParam
@@ -46,10 +45,12 @@ export class SlackController {
      *     responses:
      *       200:
      *         description: The modal was created.
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Slack
      */
-    router.post('/slack/list-achievements', endpoint(this.listAchievements));
+    router.post('/slack/list-achievements', apiKeyEndpoint(this.listAchievements));
 
     /**
      * @openapi
@@ -57,15 +58,16 @@ export class SlackController {
      *   post:
      *     summary: Show award achievement list modal in Slack
      *     security:
-     *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
      *     responses:
      *       200:
      *         description: The modal was created.
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Slack
      */
-    router.post('/slack/award-achievement', endpoint(this.awardAchievement));
+    router.post('/slack/award-achievement', apiKeyEndpoint(this.awardAchievement));
 
     /**
      * @openapi
@@ -73,15 +75,16 @@ export class SlackController {
      *   post:
      *     summary: Endpoint for slack to respond to interact messages (modals etc...)
      *     security:
-     *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
      *     responses:
      *       200:
      *         description: The modal was created.
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Slack
      */
-    router.post('/slack/interact', endpoint(this.interact));
+    router.post('/slack/interact', apiKeyEndpoint(this.interact));
 
     /**
      * @openapi
@@ -89,17 +92,16 @@ export class SlackController {
      *   post:
      *     summary: Display achievement creation modal in Slack
      *     security:
-     *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
      *     responses:
      *       200:
      *         description: The modal was created.
-     *       400:
-     *         description: Request contains a missing or invalid argument.
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Slack
      */
-    router.post('/slack/create-achievement', endpoint(this.displayAchievementModal));
+    router.post('/slack/create-achievement', apiKeyEndpoint(this.displayAchievementModal));
 
     /**
      * @openapi
@@ -107,15 +109,16 @@ export class SlackController {
      *   post:
      *     summary: Sync slack users with the database
      *     security:
-     *       - ApiKeyHeader: []
      *       - ApiKeyParameter: []
      *     responses:
      *       200:
      *         description: Users was synced.
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Slack
      */
-    router.post('/slack/sync-users', endpoint(this.syncUsers));
+    router.post('/slack/sync-users', apiKeyEndpoint(this.syncUsers));
 
     return router;
   }

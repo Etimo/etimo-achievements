@@ -18,8 +18,8 @@ export class UserModel extends BaseModel implements IUser {
         name: { type: 'string', maxLength: 255 },
         email: { type: 'string', maxLength: 128 },
         slackHandle: { type: 'string', maxLength: 64 },
-        createdAt: { type: 'string', format: 'date-time' },
-        updatedAt: { type: 'string', format: 'date-time' },
+        createdAt: { type: 'timestamp' },
+        updatedAt: { type: 'timestamp' },
       },
     };
   }
@@ -32,7 +32,7 @@ export class UserModel extends BaseModel implements IUser {
   id!: string;
   name!: string;
   email!: string;
-  slackHandle!: string;
+  slackHandle!: string | undefined;
   createdAt!: Date;
   updatedAt!: Date;
 }

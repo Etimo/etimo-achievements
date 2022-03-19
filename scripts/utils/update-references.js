@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { loadFileAsObject } from './file-helper.js';
 import { getPackageDirectories, getPackageNames, getRootDirectory } from './path-helper.js';
+import runCommand from './run-command.js';
 
 export default async function updateReferences(namespace) {
   updateRootPaths(namespace);
@@ -48,6 +49,7 @@ async function updatePackagePaths(namespace) {
       }
     }
   }
+  await runCommand('npx', ['prettier', '--write', '**/tsconfig.json'], getRootDirectory());
 }
 
 function getDependencies(packageJsonPath, namespace) {

@@ -13,10 +13,11 @@
       "path": "../data"
     },
     {
+      "path": "../security"
+    },
+    {
       "path": "../types"
     }
   ],
-  "include": [
-    "./src"
-  ]
+  "include": ["./src"]
 }

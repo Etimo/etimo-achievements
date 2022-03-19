@@ -3,7 +3,11 @@ import SwaggerJSDoc from 'swagger-jsdoc';
 import { definition } from './openapi/definition';
 
 const options = {
-  apis: [`${__dirname}/src/resources/**/*.ts`, `${__dirname}/openapi/**/*.yml`],
+  apis: [
+    `${__dirname}/src/resources/**/*.ts`,
+    `${__dirname}/src/resources/**/openapi/*.yml`,
+    `${__dirname}/openapi/**/*.yml`,
+  ],
   definition,
 };
 

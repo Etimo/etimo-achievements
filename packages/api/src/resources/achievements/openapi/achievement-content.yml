@@ -1,0 +1,4 @@
+x-template: &achievementContent
+  application/json:
+    schema:
+      $ref: '#/components/schemas/Achievement'

@@ -1,0 +1,6 @@
+x-template: &awardsContent
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/Award'

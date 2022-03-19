@@ -1,0 +1,7 @@
+x-template: &providerParam
+  name: provider
+  in: path
+  description: The OAuth provider to use for login.
+  required: true
+  schema:
+    type: string

@@ -1,0 +1,4 @@
+x-template: &userContent
+  application/json:
+    schema:
+      $ref: '#/components/schemas/User'

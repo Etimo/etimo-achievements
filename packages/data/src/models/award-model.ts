@@ -18,8 +18,8 @@ export class AwardModel extends BaseModel implements IAward {
         achievementId: { type: 'string', format: 'uuid' },
         awardedByUserId: { type: 'string', format: 'uuid' },
         userId: { type: 'string', format: 'uuid' },
-        createdAt: { type: 'string', format: 'date-time' },
-        updatedAt: { type: 'string', format: 'date-time' },
+        createdAt: { type: 'timestamp' },
+        updatedAt: { type: 'timestamp' },
       },
     };
   }

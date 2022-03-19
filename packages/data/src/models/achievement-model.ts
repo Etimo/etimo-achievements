@@ -19,8 +19,8 @@ export class AchievementModel extends BaseModel implements IAchievement {
         description: { type: 'string', maxLength: 255 },
         achievementPoints: { type: 'integer' },
         cooldownMinutes: { type: 'integer' },
-        createdAt: { type: 'string', format: 'date-time' },
-        updatedAt: { type: 'string', format: 'date-time' },
+        createdAt: { type: 'timestamp' },
+        updatedAt: { type: 'timestamp' },
       },
     };
   }

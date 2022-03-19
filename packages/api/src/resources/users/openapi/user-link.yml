@@ -1,0 +1,5 @@
+x-template: &userLink
+  GetUserById:
+    operationId: getUser
+    parameters:
+      userId: '$response.body#/id'

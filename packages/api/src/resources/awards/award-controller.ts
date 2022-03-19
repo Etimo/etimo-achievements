@@ -1,6 +1,6 @@
 import { CreateAwardService, GetAwardsService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, endpoint } from '../../utils';
+import { createdResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AwardMapper } from './award-mapper';
 
@@ -28,18 +28,19 @@ export class AwardController {
      *     summary: Get a list of awards
      *     operationId: getAwards
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
      *     responses:
      *       200:
-     *         description: A list of awards.
+     *         description: The request was successful.
+     *         content: *awardsContent
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Awards
      */
-    router.get('/awards', endpoint(this.getAwards));
+    router.get('/awards', protectedEndpoint(this.getAwards));
 
     /**
      * @openapi
@@ -48,21 +49,20 @@ export class AwardController {
      *     summary: Get a single award
      *     operationId: getAward
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     parameters:
      *       - *awardIdParam
      *     responses:
      *       200:
-     *         description: The requested award.
-     *       400:
-     *         description: Request contains a missing or invalid argument.
-     *       404:
-     *         description: The user could not be found.
+     *         description: The request was successful.
+     *         content: *awardContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
      *     tags:
      *       - Awards
      */
-    router.get('/awards/:awardId', endpoint(this.getAward));
+    router.get('/awards/:awardId', protectedEndpoint(this.getAward));
 
     /**
      * @openapi
@@ -71,31 +71,23 @@ export class AwardController {
      *     summary: Give a user an award
      *     operationId: createAward
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     requestBody:
-     *       content:
-     *         application/json:
-     *           schema:
-     *             $ref: '#/components/schemas/Award'
+     *       required: true
+     *       content: *awardContent
      *     responses:
      *       201:
-     *         description: The award was given to the user.
-     *         content:
-     *           *idObject
-     *         links:
-     *           GetAwardById:
-     *             operationId: getAward
-     *             parameters:
-     *               userId: '$response.body#/id'
-     *       400:
-     *         description: Request contains a missing or invalid argument.
+     *         description: The request was successful.
+     *         content: *idObject
+     *         links: *awardLink
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *       404:
-     *         description: The award could not be found.
+     *         description: The user/achievement could not be found.
      *     tags:
      *       - Awards
      */
-    router.post('/awards', endpoint(this.createAward));
+    router.post('/awards', protectedEndpoint(this.createAward));
 
     return router;
   }
