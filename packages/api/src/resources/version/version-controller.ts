@@ -12,8 +12,7 @@ export class VersionController {
      *     summary: Get application version information
      *     security: []
      *     responses:
-     *       200:
-     *         description: The deployed application's version information.
+     *       200: *okResponse
      *     tags:
      *       - Version
      */

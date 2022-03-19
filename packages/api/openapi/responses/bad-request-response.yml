@@ -1,0 +1,2 @@
+x-template: &badRequestResponse
+  description: The request was invalid and could/would not be processed.

@@ -1,0 +1,4 @@
+x-template: &accessTokenContent
+  application/json:
+    schema:
+      $ref: '#/components/schemas/AccessToken'

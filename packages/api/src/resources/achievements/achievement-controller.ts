@@ -1,6 +1,6 @@
 import { CreateAchievementService, GetAchievementsService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, endpoint } from '../../utils';
+import { createdResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AchievementMapper } from './achievement-mapper';
 
@@ -28,18 +28,19 @@ export class AchievementController {
      *     summary: Get a list of achievements
      *     operationId: getAchievements
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
      *     responses:
      *       200:
-     *         description: A list of achievements.
+     *         description: The request was successful.
+     *         content: *achievementsContent
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Achievements
      */
-    router.get('/achievements', endpoint(this.getAchievements));
+    router.get('/achievements', protectedEndpoint(this.getAchievements));
 
     /**
      * @openapi
@@ -48,21 +49,20 @@ export class AchievementController {
      *     summary: Get a single achievement
      *     operationId: getAchievement
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     parameters:
      *       - *achievementIdParam
      *     responses:
      *       200:
-     *         description: The requested achievement.
-     *       400:
-     *         description: Request contains a missing or invalid argument.
-     *       404:
-     *         description: The achievement could not be found.
+     *         description: The request was successful.
+     *         content: *achievementContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
      *     tags:
      *       - Achievements
      */
-    router.get('/achievements/:achievementId', endpoint(this.getAchievement));
+    router.get('/achievements/:achievementId', protectedEndpoint(this.getAchievement));
 
     /**
      * @openapi
@@ -71,29 +71,21 @@ export class AchievementController {
      *     summary: Create an achievement
      *     operationId: createAchievement
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     requestBody:
-     *       content:
-     *         application/json:
-     *           schema:
-     *             $ref: '#/components/schemas/Achievement'
+     *       required: true
+     *       content: *achievementContent
      *     responses:
      *       201:
-     *         description: The achievement was created.
-     *         content:
-     *           *idObject
-     *         links:
-     *           GetAchievementById:
-     *             operationId: getAchievement
-     *             parameters:
-     *               achievementId: '$response.body#/id'
-     *       400:
-     *         description: Request contains a missing or invalid argument.
+     *         description: The request was successful.
+     *         content: *idObject
+     *         links: *achievementLink
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Achievements
      */
-    router.post('/achievements', endpoint(this.createAchievements));
+    router.post('/achievements', protectedEndpoint(this.createAchievements));
 
     return router;
   }

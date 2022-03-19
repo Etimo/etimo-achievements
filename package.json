@@ -12,7 +12,7 @@
     "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
     "compile": "npm run script compile",
     "compile-test": "npm run script compile-test",
-    "db": "npm run dc up -d postgres pgadmin",
+    "db": "npm run dc up -- -d postgres pgadmin",
     "db-create": "docker exec -e PGPASSWORD=root achievements-pg psql -U root -c \"CREATE DATABASE achievements\"",
     "db-drop": "docker exec -e PGPASSWORD=root achievements-pg psql -U root -c \"DROP DATABASE IF EXISTS achievements\"",
     "db-recreate": "node ./scripts/db-recreate.js",
@@ -21,10 +21,12 @@
     "dc": "docker-compose -f .docker/compose/docker-compose.yml -f .docker/compose/docker-compose.dev.yml",
     "dc-prod": "docker-compose -f .docker/compose/docker-compose.yml -f .docker/compose/docker-compose.prod.yml",
     "docker-base": "node ./scripts/build-docker.js --only-base",
+    "docker-nodemon": "node ./scripts/build-docker.js --nodemon --no-base --no-packages",
     "docker-build": "node ./scripts/build-docker.js --no-base",
     "docker-rebuild": "node ./scripts/build-docker.js --nodemon",
     "env": "node ./scripts/copy-env.js",
     "env-force": "node ./scripts/copy-env.js --force",
+    "generate": "npm run generate-jest && npm run generate-openapi && npm run generate-references",
     "generate-jest": "node ./scripts/update-jest-config.js",
     "generate-openapi": "cd packages/api && npm run openapi",
     "generate-references": "node ./scripts/update-references.js",
@@ -34,7 +36,7 @@
     "migration-apply": "cd packages/data && npm run migration-apply",
     "migration-new": "cd packages/data && npm run migration-new",
     "migration-revert": "cd packages/data && npm run migration-revert",
-    "nodemon": "npm run dc up -d --build nodemon",
+    "nodemon": "npm run dc up -- -d --build nodemon",
     "peek": "node ./scripts/peek-version.js",
     "postinstall": "npx husky install",
     "prettier": "prettier --write .",
@@ -43,11 +45,11 @@
     "script": "node ./scripts/run-script.js",
     "seed-new": "cd packages/data && npm run seed-new",
     "seed-run": "cd packages/data && npm run seed-run",
-    "start": "npm run dc up -d --build && npm run dc logs --tail 100 -f",
+    "start": "npm run dc up -- -d --build && npm run dc logs -- --tail 100 -f",
     "start-api": "cd packages/api && npm run dev",
     "start-fresh": "yarn install && npm run build && npm run generate-openapi && npm run docker-rebuild && npm run db-reset-force && npm run start",
     "start-host": "npm run dc stop api web nodemon && npx concurrently \"npm run start-api\" \"npm run start-web\" \"nodemon\" \"npm run db\"",
-    "start-prod": "npm run dc-prod up -d --remove-orphans",
+    "start-prod": "npm run dc-prod up -- -d --remove-orphans",
     "start-web": "cd packages/web && npm run dev",
     "support": "npm run db && npm run nodemon",
     "test": "npm run script test",
@@ -80,6 +82,6 @@
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown",
     "*.{js,ts}": "eslint --cache --fix",
-    "*.{css,md}": "prettier --write"
+    "*.{css,md,json}": "prettier --write"
   }
 }

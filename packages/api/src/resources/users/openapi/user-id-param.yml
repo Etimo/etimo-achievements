@@ -1,0 +1,7 @@
+x-template: &userIdParam
+  name: userId
+  in: path
+  required: true
+  schema:
+    type: string
+    format: uuid

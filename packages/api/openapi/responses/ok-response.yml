@@ -1,0 +1,2 @@
+x-template: &okResponse
+  description: The request was successful

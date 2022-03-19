@@ -13,6 +13,7 @@ export const errorMiddleware = () => {
         res.statusCode = 401;
         break;
 
+      case 'Not Found':
       case 'NotFoundError':
         res.statusCode = 404;
         break;

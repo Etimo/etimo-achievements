@@ -29,16 +29,5 @@ export interface UserDto {
   id: string;
   name: string;
   email: string;
-  slackHandle: string;
+  slackHandle?: string;
 }
-
-/**
- * @openapi
- * components:
- *   schemas:
- *     NewUser:
- *       title: User (for creation)
- *       allOf:
- *         - $ref: '#/components/schemas/User'
- */
-export interface NewUserDto extends UserDto {}

@@ -5,8 +5,13 @@
     "outDir": "dist",
     "rootDir": "src"
   },
-  "references": [],
-  "include": [
-    "./src"
-  ]
+  "references": [
+    {
+      "path": "../common"
+    },
+    {
+      "path": "../types"
+    }
+  ],
+  "include": ["./src"]
 }

@@ -30,20 +30,12 @@
       "description": "Production server"
     }
   ],
-  "security": [
-    {
-      "ApiKeyHeader": []
-    },
-    {
-      "ApiKeyParameter": []
-    }
-  ],
   "components": {
     "securitySchemes": {
-      "ApiKeyHeader": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "X-API-Key"
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       },
       "ApiKeyParameter": {
         "type": "apiKey",
@@ -52,13 +44,31 @@
       }
     },
     "schemas": {
-      "NewUser": {
-        "title": "User (for creation)",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/User"
+      "AccessToken": {
+        "title": "AccessToken",
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "Bearer access token used for authorization.",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzZmRmMGNhNi1mNWI5LTRlMTUtYWFlOC04MWM0NTRmZGZmYjAiLCJzdWIiOiIzZDQxYjVkNC0zMmZhLTQxZDYtOTM5OS01NTFmOThmNWIxMjAiLCJuYW1lIjoiTmljbGFzIExpbmRzdGVkdCIsImVtYWlsIjoibmljbGFzLmxpbmRzdGVkdEBldGltby5zZSIsImlzcyI6ImV0aW1vLWFjaGlldmVtZW50cyIsImF1ZCI6ImV0aW1vLWFjaGlldmVtZW50cyIsImV4cCI6MTY0NzY4OTA5NywiaWF0IjoxNjQ3Njg1NDk3fQ.npzbTJxvdHYF5qYPbAq8cjWReDiQkGbEIEiMCVWNkic"
+          },
+          "token_type": {
+            "type": "string",
+            "description": "The type of token issued.",
+            "example": "bearer"
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "In how many seconds the token will expire.",
+            "example": 3600
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "The refresh token that can be used to get a new access token.",
+            "example": "V2R3ARQDwpzrLPXhsBZgexPMCp7mPQfsnATPie6h5RCdmmkU4UAqKfWvypPkhbHG"
           }
-        ]
+        }
       },
       "Achievement": {
         "title": "Achievement",
@@ -158,117 +168,13 @@
     }
   },
   "paths": {
-    "/slack/award-achievement": {
-      "post": {
-        "summary": "Show award achievement list modal in Slack",
-        "security": [
-          {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The modal was created."
-          }
-        },
-        "tags": [
-          "Slack"
-        ]
-      }
-    },
-    "/slack/interact": {
-      "post": {
-        "summary": "Endpoint for slack to respond to interact messages (modals etc...)",
-        "security": [
-          {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The modal was created."
-          }
-        },
-        "tags": [
-          "Slack"
-        ]
-      }
-    },
-    "/slack/create-achievement": {
-      "post": {
-        "summary": "Display achievement creation modal in Slack",
-        "security": [
-          {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The modal was created."
-          },
-          "400": {
-            "description": "Request contains a missing or invalid argument."
-          }
-        },
-        "tags": [
-          "Slack"
-        ]
-      }
-    },
-    "/slack/sync-users": {
-      "post": {
-        "summary": "Sync slack users with the database",
-        "security": [
-          {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Users was synced."
-          }
-        },
-        "tags": [
-          "Slack"
-        ]
-      }
-    },
-    "/version": {
-      "get": {
-        "summary": "Get application version information",
-        "security": [],
-        "responses": {
-          "200": {
-            "description": "The deployed application's version information."
-          }
-        },
-        "tags": [
-          "Version"
-        ]
-      }
-    },
     "/achievements": {
       "get": {
         "summary": "Get a list of achievements",
         "operationId": "getAchievements",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -294,7 +200,20 @@
         ],
         "responses": {
           "200": {
-            "description": "A list of achievements."
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Achievement"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
           }
         },
         "tags": [
@@ -306,13 +225,11 @@
         "operationId": "createAchievement",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -323,7 +240,7 @@
         },
         "responses": {
           "201": {
-            "description": "The achievement was created.",
+            "description": "The request was successful.",
             "content": {
               "application/json": {
                 "schema": {
@@ -348,7 +265,10 @@
             }
           },
           "400": {
-            "description": "Request contains a missing or invalid argument."
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           }
         },
         "tags": [
@@ -362,10 +282,7 @@
         "operationId": "getAchievement",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -381,17 +298,112 @@
         ],
         "responses": {
           "200": {
-            "description": "The requested achievement."
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Achievement"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Request contains a missing or invalid argument."
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           },
           "404": {
-            "description": "The achievement could not be found."
+            "description": "The requested resource could not be found."
           }
         },
         "tags": [
           "Achievements"
+        ]
+      }
+    },
+    "/auth/login/{provider}": {
+      "get": {
+        "summary": "Start a login request",
+        "operationId": "authLogin",
+        "security": [],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "description": "The OAuth provider to use for login.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "301": {
+            "description": "Redirection to OAuth2 service.",
+            "headers": {
+              "Location": {
+                "description": "URI to OAuth2 token endpoint.",
+                "schema": {
+                  "type": "string",
+                  "format": "uri"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/callback/{provider}": {
+      "get": {
+        "summary": "Callback URL for OAuth2 code flow",
+        "security": [],
+        "operationId": "authCallback",
+        "x-allow-unknown-query-parameters": true,
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "path",
+            "description": "The OAuth provider to use for login.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "description": "The OAuth2 code to exchange for an access token.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "allowReserved": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Authentication success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessToken"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Auth"
         ]
       }
     },
@@ -401,10 +413,7 @@
         "operationId": "getAwards",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -430,7 +439,20 @@
         ],
         "responses": {
           "200": {
-            "description": "A list of awards."
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Award"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
           }
         },
         "tags": [
@@ -442,13 +464,11 @@
         "operationId": "createAward",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "requestBody": {
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
@@ -459,7 +479,7 @@
         },
         "responses": {
           "201": {
-            "description": "The award was given to the user.",
+            "description": "The request was successful.",
             "content": {
               "application/json": {
                 "schema": {
@@ -484,10 +504,13 @@
             }
           },
           "400": {
-            "description": "Request contains a missing or invalid argument."
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           },
           "404": {
-            "description": "The award could not be found."
+            "description": "The user/achievement could not be found."
           }
         },
         "tags": [
@@ -501,10 +524,7 @@
         "operationId": "getAward",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -520,13 +540,23 @@
         ],
         "responses": {
           "200": {
-            "description": "The requested award."
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Award"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Request contains a missing or invalid argument."
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           },
           "404": {
-            "description": "The user could not be found."
+            "description": "The requested resource could not be found."
           }
         },
         "tags": [
@@ -538,9 +568,6 @@
       "post": {
         "summary": "Display achievement list modal in Slack",
         "security": [
-          {
-            "ApiKeyHeader": []
-          },
           {
             "ApiKeyParameter": []
           }
@@ -569,6 +596,108 @@
         "responses": {
           "200": {
             "description": "The modal was created."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
+    "/slack/award-achievement": {
+      "post": {
+        "summary": "Show award achievement list modal in Slack",
+        "security": [
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The modal was created."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
+    "/slack/interact": {
+      "post": {
+        "summary": "Endpoint for slack to respond to interact messages (modals etc...)",
+        "security": [
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The modal was created."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
+    "/slack/create-achievement": {
+      "post": {
+        "summary": "Display achievement creation modal in Slack",
+        "security": [
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The modal was created."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Slack"
+        ]
+      }
+    },
+    "/slack/sync-users": {
+      "post": {
+        "summary": "Sync slack users with the database",
+        "security": [
+          {
+            "ApiKeyParameter": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users was synced."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           }
         },
         "tags": [
@@ -582,10 +711,7 @@
         "operationId": "getUsers",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -611,7 +737,17 @@
         ],
         "responses": {
           "200": {
-            "description": "A list of users."
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
@@ -621,13 +757,17 @@
       "post": {
         "summary": "Create a user",
         "operationId": "createUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
-          "description": "A JSON object that contains the user to create.",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewUser"
+                "$ref": "#/components/schemas/User"
               }
             }
           }
@@ -659,7 +799,10 @@
             }
           },
           "400": {
-            "description": "Request contains a missing or invalid argument."
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           }
         },
         "tags": [
@@ -669,14 +812,11 @@
     },
     "/users/{userId}": {
       "get": {
-        "summary": "Find a single user",
+        "summary": "Get a single user",
         "operationId": "getUser",
         "security": [
           {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyParameter": []
+            "bearerAuth": []
           }
         ],
         "parameters": [
@@ -692,17 +832,41 @@
         ],
         "responses": {
           "200": {
-            "description": "The requested user."
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           },
           "400": {
-            "description": "Request contains a missing or invalid argument."
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           },
           "404": {
-            "description": "The user could not be found."
+            "description": "The requested resource could not be found."
           }
         },
         "tags": [
           "Users"
+        ]
+      }
+    },
+    "/version": {
+      "get": {
+        "summary": "Get application version information",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Version"
         ]
       }
     }

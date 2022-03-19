@@ -1,6 +1,6 @@
 import { CreateUserService, GetUserService, GetUsersService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, endpoint } from '../../utils';
+import { createdResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { UserMapper } from './user-mapper';
 
@@ -31,41 +31,40 @@ export class UserController {
      *     summary: Get a list of users
      *     operationId: getUsers
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
      *     responses:
      *       200:
-     *         description: A list of users.
+     *         description: The request was successful.
+     *         content: *usersContent
      *     tags:
      *       - Users
      */
-    router.get('/users', endpoint(this.getUsers));
+    router.get('/users', protectedEndpoint(this.getUsers));
 
     /**
      * @openapi
      * /users/{userId}:
      *   get:
-     *     summary: Find a single user
+     *     summary: Get a single user
      *     operationId: getUser
      *     security:
-     *       - ApiKeyHeader: []
-     *       - ApiKeyParameter: []
+     *       - bearerAuth: []
      *     parameters:
      *       - *userIdParam
      *     responses:
      *       200:
-     *         description: The requested user.
-     *       400:
-     *         description: Request contains a missing or invalid argument.
-     *       404:
-     *         description: The user could not be found.
+     *         description: The request was successful.
+     *         content: *userContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
      *     tags:
      *       - Users
      */
-    router.get('/users/:userId', endpoint(this.getUser));
+    router.get('/users/:userId', protectedEndpoint(this.getUser));
 
     /**
      * @openapi
@@ -73,29 +72,22 @@ export class UserController {
      *   post:
      *     summary: Create a user
      *     operationId: createUser
+     *     security:
+     *       - bearerAuth: []
      *     requestBody:
      *       required: true
-     *       description: A JSON object that contains the user to create.
-     *       content:
-     *         application/json:
-     *           schema:
-     *             $ref: '#/components/schemas/NewUser'
+     *       content: *userContent
      *     responses:
      *       201:
      *         description: The user was created.
-     *         content:
-     *           *idObject
-     *         links:
-     *           GetUserById:
-     *             operationId: getUser
-     *             parameters:
-     *               userId: '$response.body#/id'
-     *       400:
-     *         description: Request contains a missing or invalid argument.
+     *         content: *idObject
+     *         links: *userLink
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
      *     tags:
      *       - Users
      */
-    router.post('/users', endpoint(this.createUser));
+    router.post('/users', protectedEndpoint(this.createUser));
 
     return router;
   }
@@ -119,7 +111,7 @@ export class UserController {
   private createUser = async (req: Request, res: Response) => {
     const payload = req.body;
 
-    const input = UserMapper.toNewUser(payload);
+    const input = UserMapper.toUser(payload);
     const user = await this.createUserService.create(input);
 
     return createdResponse('/users', user, res);

@@ -12,4 +12,8 @@ export class GetUserService {
   public async get(userId: string): Promise<IUser> {
     return this.userRepo.findById(userId);
   }
+
+  public async getByEmail(email: string): Promise<IUser> {
+    return this.userRepo.findByEmail(email);
+  }
 }

@@ -1,0 +1,6 @@
+x-template: &usersContent
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/User'

@@ -1,0 +1,5 @@
+x-template: &achievementLink
+  GetAchievementById:
+    operationId: getAchievement
+    parameters:
+      achievementId: '$response.body#/id'

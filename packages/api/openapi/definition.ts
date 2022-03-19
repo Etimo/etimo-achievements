@@ -32,20 +32,12 @@ export const definition = {
       description: 'Production server',
     },
   ],
-  security: [
-    {
-      ApiKeyHeader: [],
-    },
-    {
-      ApiKeyParameter: [],
-    },
-  ],
   components: {
     securitySchemes: {
-      ApiKeyHeader: {
-        type: 'apiKey',
-        in: 'header',
-        name: 'X-API-Key',
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
       },
       ApiKeyParameter: {
         type: 'apiKey',
