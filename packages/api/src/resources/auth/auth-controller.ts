@@ -5,6 +5,7 @@ import { LoginService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { endpoint, protectedEndpoint } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
+import { AccessTokenValidationDto } from './access-token-validation-dto';
 import { UserInfoDto } from './user-info-dto';
 
 export class AuthController {
@@ -71,7 +72,7 @@ export class AuthController {
      * @openapi
      * /auth/userinfo:
      *   get:
-     *     summary: Get token claims
+     *     summary: Get userinfo from token
      *     operationId: authUserInfo
      *     security:
      *       - cookieAuth: []
@@ -84,6 +85,24 @@ export class AuthController {
      *       - Auth
      */
     router.get('/auth/userinfo', protectedEndpoint(this.userInfo));
+
+    /**
+     * @openapi
+     * /auth/validate:
+     *   get:
+     *     summary: Validate JWT token
+     *     operationId: authValidate
+     *     security:
+     *       - cookieAuth: []
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *accessTokenValidationContent
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Auth
+     */
+    router.get('/auth/validate', protectedEndpoint(this.validate));
 
     return router;
   }
@@ -119,7 +138,20 @@ export class AuthController {
       id: jwt.sub,
       email: jwt.email,
       name: jwt.name,
-    } as UserInfoDto;
+    } as Partial<UserInfoDto>;
+
+    return res.status(200).send(dto);
+  };
+
+  private validate = async (req: Request, res: Response) => {
+    const { jwt } = getContext();
+    if (!jwt) {
+      throw new UnauthorizedError('Not authorized');
+    }
+
+    const dto = {
+      expires_in: Math.floor(jwt.exp - new Date().getTime() / 1000),
+    } as AccessTokenValidationDto;
 
     return res.status(200).send(dto);
   };

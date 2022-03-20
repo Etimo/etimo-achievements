@@ -1,0 +1,4 @@
+x-template: &accessTokenValidationContent
+  application/json:
+    schema:
+      $ref: '#/components/schemas/AccessTokenValidation'
