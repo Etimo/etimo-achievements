@@ -70,6 +70,17 @@
           }
         }
       },
+      "AccessTokenValidation": {
+        "title": "AccessTokenValidation",
+        "type": "object",
+        "properties": {
+          "expires_in": {
+            "type": "integer",
+            "description": "In how many seconds the token will expire.",
+            "example": 3600
+          }
+        }
+      },
       "UserInfo": {
         "title": "UserInfo",
         "type": "object",
@@ -463,7 +474,7 @@
     },
     "/auth/userinfo": {
       "get": {
-        "summary": "Get token claims",
+        "summary": "Get userinfo from token",
         "operationId": "authUserInfo",
         "security": [
           {
@@ -477,6 +488,35 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/validate": {
+      "get": {
+        "summary": "Validate JWT token",
+        "operationId": "authValidate",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessTokenValidation"
                 }
               }
             }
