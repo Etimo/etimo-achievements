@@ -1,7 +1,7 @@
 import { UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
-import { LoginService } from '@etimo-achievements/service';
+import { LoginService, LogoutService, ValidateTokenService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { endpoint, protectedEndpoint } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
@@ -34,6 +34,21 @@ export class AuthController {
      *       - Auth
      */
     router.get('/auth/login/:provider', endpoint(this.login));
+
+    /**
+     * @openapi
+     * /auth/logout:
+     *   get:
+     *     summary: Logout
+     *     operationId: authLogout
+     *     security:
+     *       - cookieAuth: []
+     *     responses:
+     *       200: *okResponse
+     *     tags:
+     *       - Auth
+     */
+    router.get('/auth/logout', protectedEndpoint(this.logout));
 
     /**
      * @openapi
@@ -115,6 +130,16 @@ export class AuthController {
     return res.status(301).header({ Location: url, 'Cache-Control': 'no-cache' }).send();
   };
 
+  private logout = async (_req: Request, res: Response) => {
+    const { jwt } = getContext();
+    if (jwt) {
+      const service = new LogoutService();
+      service.logout(jwt);
+    }
+
+    return res.status(200).send();
+  };
+
   private callback = async (req: Request, res: Response) => {
     const { provider } = req.params;
     const code = req.query.code?.toString();
@@ -128,7 +153,7 @@ export class AuthController {
     return res.status(200).send(dto);
   };
 
-  private userInfo = async (req: Request, res: Response) => {
+  private userInfo = async (_req: Request, res: Response) => {
     const { jwt } = getContext();
     if (!jwt) {
       throw new UnauthorizedError('Not authorized');
@@ -143,9 +168,11 @@ export class AuthController {
     return res.status(200).send(dto);
   };
 
-  private validate = async (req: Request, res: Response) => {
+  private validate = async (_req: Request, res: Response) => {
     const { jwt } = getContext();
-    if (!jwt) {
+
+    const service = new ValidateTokenService();
+    if (!jwt || !(await service.validate(jwt))) {
       throw new UnauthorizedError('Not authorized');
     }
 
