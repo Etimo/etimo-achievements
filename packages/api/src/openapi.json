@@ -414,6 +414,25 @@
         ]
       }
     },
+    "/auth/logout": {
+      "get": {
+        "summary": "Logout",
+        "operationId": "authLogout",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/auth/callback/{provider}": {
       "get": {
         "summary": "Callback URL for OAuth2 code flow",

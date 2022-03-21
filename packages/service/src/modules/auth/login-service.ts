@@ -1,14 +1,22 @@
 import { Logger } from '@etimo-achievements/common';
-import { IOAuthService, JwtService, OAuthServiceFactory } from '@etimo-achievements/security';
-import { IAccessToken } from '@etimo-achievements/types';
-import { CreateUserService, GetUserService } from '..';
-import { AccessTokenService } from './access-token-service';
+import { AccessTokenRepository } from '@etimo-achievements/data';
+import {
+  hashPassword,
+  IOAuthService,
+  JwtService,
+  OAuthServiceFactory,
+  randomPassword,
+} from '@etimo-achievements/security';
+import { IAccessToken, INewAccessToken, JWT } from '@etimo-achievements/types';
+import { CreateUserService, GetUserService, ServiceOptions } from '..';
 
 export class LoginService {
   private service: IOAuthService;
+  private repo: AccessTokenRepository;
 
-  constructor(provider: string) {
+  constructor(provider: string, options?: ServiceOptions) {
     this.service = OAuthServiceFactory.create(provider);
+    this.repo = options?.accessTokenRepository ?? new AccessTokenRepository();
   }
 
   public async login(code: string): Promise<IAccessToken> {
@@ -33,9 +41,25 @@ export class LoginService {
     const token = JwtService.create(user);
 
     // Store token in database
-    const tokenService = new AccessTokenService();
-    const createdToken = await tokenService.create(token);
+    const createdToken = await this.createAccessToken(token);
 
     return createdToken;
+  }
+
+  public async createAccessToken(token: JWT): Promise<IAccessToken> {
+    const refreshToken = randomPassword(64);
+
+    const newToken: INewAccessToken = {
+      id: token.jti,
+      userId: token.sub,
+      refreshToken: await hashPassword(refreshToken),
+      disabled: false,
+      expiresAt: new Date(token.exp * 1000),
+    };
+
+    const accessToken = await this.repo.create(newToken);
+    const signedToken = JwtService.sign(token);
+
+    return { ...accessToken, signedToken, refreshToken };
   }
 }
