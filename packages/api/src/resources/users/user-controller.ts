@@ -42,7 +42,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.get('/users', protectedEndpoint(this.getUsers));
+    router.get('/users', protectedEndpoint(this.getUsers, ['rw:users', 'r:users']));
 
     /**
      * @openapi
@@ -64,7 +64,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.get('/users/:userId', protectedEndpoint(this.getUser));
+    router.get('/users/:userId', protectedEndpoint(this.getUser, ['rw:users', 'r:users']));
 
     /**
      * @openapi
@@ -87,7 +87,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.post('/users', protectedEndpoint(this.createUser));
+    router.post('/users', protectedEndpoint(this.createUser, ['rw:users', 'w:users']));
 
     return router;
   }

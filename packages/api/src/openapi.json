@@ -67,6 +67,14 @@
             "type": "string",
             "description": "The refresh token that can be used to get a new access token.",
             "example": "V2R3ARQDwpzrLPXhsBZgexPMCp7mPQfsnATPie6h5RCdmmkU4UAqKfWvypPkhbHG"
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The scopes assigned to the access token.",
+            "example": "r:achievements rw:awards r:users"
           }
         }
       },
@@ -78,6 +86,14 @@
             "type": "integer",
             "description": "In how many seconds the token will expire.",
             "example": 3600
+          },
+          "scopes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The scopes assigned to the access token.",
+            "example": "r:achievements rw:awards r:users"
           }
         }
       },

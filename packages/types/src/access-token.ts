@@ -3,6 +3,7 @@ export interface IAccessToken {
   userId: string;
   signedToken?: string;
   refreshToken: string;
+  scopes: string[];
   expiresAt: Date;
   disabled: boolean;
 }

@@ -7,4 +7,5 @@ export type JWT = {
   aud: string;
   exp: number;
   iat: number;
+  scope: string;
 };

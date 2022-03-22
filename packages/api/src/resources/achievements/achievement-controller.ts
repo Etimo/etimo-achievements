@@ -40,7 +40,7 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.get('/achievements', protectedEndpoint(this.getAchievements));
+    router.get('/achievements', protectedEndpoint(this.getAchievements, ['rw:achievements', 'r:achievements']));
 
     /**
      * @openapi
@@ -62,7 +62,10 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.get('/achievements/:achievementId', protectedEndpoint(this.getAchievement));
+    router.get(
+      '/achievements/:achievementId',
+      protectedEndpoint(this.getAchievement, ['rw:achievements', 'r:achievements'])
+    );
 
     /**
      * @openapi
@@ -85,7 +88,7 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.post('/achievements', protectedEndpoint(this.createAchievements));
+    router.post('/achievements', protectedEndpoint(this.createAchievements, ['rw:achievements', 'w:achievements']));
 
     return router;
   }
