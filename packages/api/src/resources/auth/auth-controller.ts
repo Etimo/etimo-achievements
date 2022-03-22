@@ -1,11 +1,10 @@
 import { UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
-import { LoginService, LogoutService, ValidateTokenService } from '@etimo-achievements/service';
+import { LoginService, LogoutService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { endpoint, protectedEndpoint } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
-import { AccessTokenValidationDto } from './access-token-validation-dto';
 import { UserInfoDto } from './user-info-dto';
 
 export class AuthController {
@@ -110,14 +109,30 @@ export class AuthController {
      *     security:
      *       - cookieAuth: []
      *     responses:
-     *       200:
-     *         description: The request was successful.
-     *         content: *accessTokenValidationContent
+     *       200: *okResponse
      *       401: *unauthorizedResponse
      *     tags:
      *       - Auth
      */
     router.get('/auth/validate', protectedEndpoint(this.validate));
+
+    /**
+     * @openapi
+     * /auth/introspect:
+     *   get:
+     *     summary: Token introspection
+     *     operationId: authIntrospect
+     *     security:
+     *       - cookieAuth: []
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *tokenInfoContent
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Auth
+     */
+    router.get('/auth/introspect', protectedEndpoint(this.introspect));
 
     return router;
   }
@@ -170,16 +185,18 @@ export class AuthController {
 
   private validate = async (_req: Request, res: Response) => {
     const { jwt } = getContext();
+    if (!jwt) throw new UnauthorizedError('Not authorized');
 
-    const service = new ValidateTokenService();
-    if (!jwt || !(await service.validate(jwt))) {
-      throw new UnauthorizedError('Not authorized');
-    }
-
-    const dto = {
+    return res.status(200).send({
       expires_in: Math.floor(jwt.exp - new Date().getTime() / 1000),
-      scopes: jwt.scope,
-    } as AccessTokenValidationDto;
+    });
+  };
+
+  private introspect = async (_req: Request, res: Response) => {
+    const { jwt } = getContext();
+    if (!jwt) throw new UnauthorizedError('Not authorized');
+
+    const dto = AccessTokenMapper.toTokenInfoDto(jwt);
 
     return res.status(200).send(dto);
   };

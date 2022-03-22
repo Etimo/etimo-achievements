@@ -18,23 +18,20 @@ export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Prom
 export function protectedEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>, scopes?: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies[CookieName.Jwt];
-    if (!token) {
-      throw new UnauthorizedError('Unauthorized');
-    }
-    try {
-      const ctx = getContext();
-      ctx.jwt = JwtService.verify(token);
+    const ctx = getContext();
 
-      if (scopes) {
-        const tokenScopes = ctx.jwt.scope.split(' ');
-        if (!tokenScopes.some((scope) => scopes.includes(scope))) {
-          Logger.log('User does not have required scopes');
-          throw new UnauthorizedError('Unauthorized');
-        }
-      }
+    try {
+      ctx.jwt = JwtService.verify(token);
+      ctx.scopes = ctx.jwt?.scope?.split(' ') ?? [];
     } catch {
-      throw new UnauthorizedError('Unauthorized');
+      throw new UnauthorizedError('The token has expired');
     }
+
+    if (scopes && !ctx.scopes.some((scope) => scopes.includes(scope))) {
+      Logger.log('User does not have required scopes');
+      throw new UnauthorizedError('Insufficient scope');
+    }
+
     endpointFn(req, res).catch((error) => next(error));
   };
 }
