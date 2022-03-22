@@ -1734,12 +1734,14 @@ __metadata:
     "@etimo-achievements/common": ^1.0.0
     "@etimo-achievements/types": ^1.0.0
     "@types/bcrypt": ^5.0.0
+    "@types/cryptr": ^4.0.1
     "@types/jest": ^27.0.2
     "@types/jsonwebtoken": ^8.5.8
     "@types/node": ^16.10.2
     "@types/node-fetch": ^2.5.12
     "@types/secure-random-password": ^0.2.1
     bcrypt: ^5.0.1
+    cryptr: ^6.0.2
     google-auth-library: ^7.14.0
     jest: ^27.2.5
     jsonwebtoken: ^8.5.1
@@ -2361,6 +2363,13 @@ __metadata:
   version: 2.1.2
   resolution: "@types/cookiejar@npm:2.1.2"
   checksum: f6e1903454007f86edd6c3520cbb4d553e1d4e17eaf1f77f6f75e3270f48cc828d74397a113a36942f5fe52f9fa71067bcfa738f53ad468fcca0bc52cb1cbd28
+  languageName: node
+  linkType: hard
+
+"@types/cryptr@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@types/cryptr@npm:4.0.1"
+  checksum: 65c55557c202ebd10bdd3f230da3480d5fc6a817e15c74a266a282fa52acfdfd077caa806437f42f2e5de4526a44ae58febb85b8ae64ef56905947386d7fa979
   languageName: node
   linkType: hard
 
@@ -4754,6 +4763,13 @@ __metadata:
   version: 1.0.1
   resolution: "crypto@npm:1.0.1"
   checksum: 087fe3165bd94c333a49e6ed66a0193911f63eac38a24f379b3001a5fe260a59c413646e53a0f67875ba13902b2686d81dc703cb2c147a4ec727dcdc04e5645e
+  languageName: node
+  linkType: hard
+
+"cryptr@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "cryptr@npm:6.0.2"
+  checksum: 309b4b40a6c69f337e73ef399ddc85689dfda51817beef47c4d1579db3cc3e067b1dfc97d05a8bc1364f222255dd63757cc3e4a780725c8638448055f6e549df
   languageName: node
   linkType: hard
 

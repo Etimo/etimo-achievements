@@ -1,22 +1,33 @@
 import { Logger } from '@etimo-achievements/common';
-import { AccessTokenRepository } from '@etimo-achievements/data';
+import { AccessTokenRepository, RefreshTokenRepository } from '@etimo-achievements/data';
 import {
+  encrypt,
   hashPassword,
   IOAuthService,
   JwtService,
   OAuthServiceFactory,
   randomPassword,
 } from '@etimo-achievements/security';
-import { IAccessToken, INewAccessToken, JWT } from '@etimo-achievements/types';
+import {
+  IAccessToken,
+  INewAccessToken,
+  INewRefreshToken,
+  IRefreshToken,
+  IRefreshTokenData,
+  JWT,
+} from '@etimo-achievements/types';
+import spacetime from 'spacetime';
 import { CreateUserService, GetUserService, ServiceOptions } from '..';
 
 export class LoginService {
   private service: IOAuthService;
-  private repo: AccessTokenRepository;
+  private accessTokenRepo: AccessTokenRepository;
+  private refreshTokenRepo: RefreshTokenRepository;
 
   constructor(provider: string, options?: ServiceOptions) {
     this.service = OAuthServiceFactory.create(provider);
-    this.repo = options?.accessTokenRepository ?? new AccessTokenRepository();
+    this.accessTokenRepo = options?.accessTokenRepository ?? new AccessTokenRepository();
+    this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
   }
 
   public async login(code: string): Promise<IAccessToken> {
@@ -42,6 +53,7 @@ export class LoginService {
 
     // Store token in database
     const createdToken = await this.createAccessToken(token);
+    await this.createRefreshToken(createdToken);
 
     return createdToken;
   }
@@ -58,9 +70,34 @@ export class LoginService {
       scopes: token.scope.split(' '),
     };
 
-    const accessToken = await this.repo.create(newToken);
+    const accessToken = await this.accessTokenRepo.create(newToken);
     const signedToken = JwtService.sign(token);
 
+    Logger.log(`Stored access token for user ${newToken.userId}`);
+
     return { ...accessToken, signedToken, refreshToken };
+  }
+
+  public async createRefreshToken(token: IAccessToken): Promise<IRefreshToken> {
+    const data: IRefreshTokenData = {
+      userId: token.userId,
+      scopes: token.scopes,
+    };
+    const encryptedData = encrypt(data, token.refreshToken);
+
+    const newRefreshToken: INewRefreshToken = {
+      id: token.id,
+      refreshToken: token.refreshToken,
+      data: encryptedData,
+      disabled: false,
+      used: false,
+      expiresAt: spacetime().add(30, 'day').toNativeDate(),
+    };
+
+    const refreshToken = await this.refreshTokenRepo.create(newRefreshToken);
+
+    Logger.log(`Stored refresh token for user ${data.userId}`);
+
+    return refreshToken;
   }
 }
