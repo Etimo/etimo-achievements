@@ -38,7 +38,7 @@ export class LoginService {
     }
 
     // Create a token for the user
-    const token = JwtService.create(user);
+    const token = JwtService.create(user, ['w:achievements', 'r:awards', 'rw:users']);
 
     // Store token in database
     const createdToken = await this.createAccessToken(token);
@@ -55,6 +55,7 @@ export class LoginService {
       refreshToken: await hashPassword(refreshToken),
       disabled: false,
       expiresAt: new Date(token.exp * 1000),
+      scopes: token.scope.split(' '),
     };
 
     const accessToken = await this.repo.create(newToken);

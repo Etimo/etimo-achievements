@@ -6,7 +6,7 @@ import { catchErrors } from '../utils';
 export class AwardRepository {
   async count(): Promise<number> {
     return catchErrors(async () => {
-      const result = await Database.knex.raw('select count(*) from "user_achievements"');
+      const result = await Database.knex.raw('select count(*) from "awards"');
       return parseInt(result.rows[0]['count'], 10);
     });
   }

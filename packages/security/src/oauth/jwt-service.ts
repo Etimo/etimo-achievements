@@ -3,7 +3,7 @@ import { IUser, JWT } from '@etimo-achievements/types';
 import jwt from 'jsonwebtoken';
 
 export class JwtService {
-  public static create(user: IUser): JWT {
+  public static create(user: IUser, scopes: string[]): JWT {
     const token: JWT = {
       jti: uuid(),
       sub: user.id,
@@ -13,6 +13,7 @@ export class JwtService {
       aud: 'etimo-achievements',
       exp: Math.round(new Date().getTime() / 1000 + 3600),
       iat: Math.round(new Date().getTime() / 1000),
+      scope: scopes.join(' '),
     };
 
     return token;

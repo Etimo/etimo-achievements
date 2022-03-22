@@ -13,6 +13,7 @@ export class AccessTokenMapper {
       token_type: 'bearer',
       expires_in: Math.round((token.expiresAt.getTime() - new Date().getTime()) / 1000),
       refresh_token: token.refreshToken,
+      scopes: token.scopes,
     };
   }
 }

@@ -178,6 +178,7 @@ export class AuthController {
 
     const dto = {
       expires_in: Math.floor(jwt.exp - new Date().getTime() / 1000),
+      scopes: jwt.scope,
     } as AccessTokenValidationDto;
 
     return res.status(200).send(dto);

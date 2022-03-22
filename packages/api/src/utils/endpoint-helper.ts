@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '@etimo-achievements/common';
+import { Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, JwtService } from '@etimo-achievements/security';
 import { NextFunction, Request, Response } from 'express';
@@ -15,7 +15,7 @@ export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Prom
   };
 }
 
-export function protectedEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>) {
+export function protectedEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>, scopes?: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies[CookieName.Jwt];
     if (!token) {
@@ -24,8 +24,16 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
     try {
       const ctx = getContext();
       ctx.jwt = JwtService.verify(token);
+
+      if (scopes) {
+        const tokenScopes = ctx.jwt.scope.split(' ');
+        if (!tokenScopes.some((scope) => scopes.includes(scope))) {
+          Logger.log('User does not have required scopes');
+          throw new UnauthorizedError('Unauthorized');
+        }
+      }
     } catch {
-      throw new UnauthorizedError('Access token could not be verified');
+      throw new UnauthorizedError('Unauthorized');
     }
     endpointFn(req, res).catch((error) => next(error));
   };

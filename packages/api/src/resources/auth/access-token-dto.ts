@@ -24,10 +24,17 @@
  *           type: string
  *           description: The refresh token that can be used to get a new access token.
  *           example: V2R3ARQDwpzrLPXhsBZgexPMCp7mPQfsnATPie6h5RCdmmkU4UAqKfWvypPkhbHG
+ *         scopes:
+ *           type: array
+ *           items:
+ *             type: string
+ *           description: The scopes assigned to the access token.
+ *           example: r:achievements rw:awards r:users
  */
 export type AccessTokenDto = {
   access_token: string;
   token_type: 'bearer';
   expires_in: number;
   refresh_token?: string;
+  scopes: string[];
 };
