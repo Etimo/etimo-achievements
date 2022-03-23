@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import SideMenu from './components/SideMenu';
-import Home from './views/public/Home';
-import Login from './views/public/Login';
-import Profile from './views/public/Profile';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Profile from './pages/Profile';
 
 const App = (): JSX.Element => {
   return (

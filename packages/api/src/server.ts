@@ -56,8 +56,9 @@ export default class Server {
     // CORS
     this.express.use(
       cors({
-        origin: 'http://localhost:3001',
-        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+        origin: getEnvVariable(Env.FRONTEND_URL),
+        optionsSuccessStatus: 200,
+        credentials: true,
       })
     );
 
