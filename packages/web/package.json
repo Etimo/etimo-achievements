@@ -36,7 +36,6 @@
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
     "postcss": "^8.4.12",
-    "postcss-cli": "^9.1.0",
     "postcss-loader": "^6.2.1",
     "react-hot-loader": "^4.13.0",
     "style-loader": "^3.3.1",

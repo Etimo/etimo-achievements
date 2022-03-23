@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Login = () => {
+const Login = (): JSX.Element => {
   return <h1 className="text-3xl text-center">Login</h1>;
 };
 
