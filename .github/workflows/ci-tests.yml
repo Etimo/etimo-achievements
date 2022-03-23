@@ -44,6 +44,13 @@ jobs:
           image-name: etimo-achievements/api-ci
           push: false
 
+      - name: Build web image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: web
+          image-name: etimo-achievements/web-ci
+          push: false
+
   test:
     name: 'Run tests'
     runs-on: ubuntu-latest
@@ -113,8 +120,11 @@ jobs:
       - name: Generate OpenAPI spec
         run: npm run generate-openapi
 
-      - name: Generate jest configurations
+      - name: Generate jest configs
         run: npm run generate-jest
+
+      - name: Generate TypeScript configs
+        run: npm run generate-references
 
       - name: Check for changed files
         uses: tj-actions/verify-changed-files@v8.3
