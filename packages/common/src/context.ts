@@ -9,6 +9,7 @@ export class Context {
   public requestDate: Date;
   public timestamp: string;
   public jwt?: JWT;
+  public scopes?: string[];
 
   constructor() {
     this.logger = new Logger();

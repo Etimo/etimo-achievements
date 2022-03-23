@@ -9,9 +9,11 @@ export const errorMiddleware = () => {
         res.statusCode = 400;
         break;
 
+      case 'Unauthorized': // express-openapi-validator
       case 'UnauthorizedError':
         res.statusCode = 401;
-        break;
+        res.header('WWW-Authenticate', 'Bearer error="invalid_token", error_description="' + error.message + '"');
+        return res.send({ error: 'Unauthorized' });
 
       case 'Not Found':
       case 'NotFoundError':

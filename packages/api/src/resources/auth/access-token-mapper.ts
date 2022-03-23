@@ -1,6 +1,7 @@
 import { InternalServerError } from '@etimo-achievements/common';
-import { IAccessToken } from '@etimo-achievements/types';
+import { IAccessToken, JWT } from '@etimo-achievements/types';
 import { AccessTokenDto } from './access-token-dto';
+import { TokenInfoDto } from './token-info-dto';
 
 export class AccessTokenMapper {
   public static toAccessTokenDto(token: IAccessToken): AccessTokenDto {
@@ -14,6 +15,21 @@ export class AccessTokenMapper {
       expires_in: Math.round((token.expiresAt.getTime() - new Date().getTime()) / 1000),
       refresh_token: token.refreshToken,
       scopes: token.scopes,
+    };
+  }
+
+  public static toTokenInfoDto(jwt: JWT): TokenInfoDto {
+    return {
+      active: true,
+      scope: jwt.scope,
+      username: jwt.email,
+      token_type: 'bearer',
+      jti: jwt.jti,
+      sub: jwt.sub,
+      iss: jwt.iss,
+      aud: jwt.aud,
+      exp: jwt.exp,
+      iat: jwt.iat,
     };
   }
 }

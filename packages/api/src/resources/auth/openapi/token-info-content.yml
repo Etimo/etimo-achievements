@@ -1,0 +1,4 @@
+x-template: &tokenInfoContent
+  application/json:
+    schema:
+      $ref: '#/components/schemas/TokenInfo'
