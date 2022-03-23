@@ -182,8 +182,20 @@ export class AuthController {
       const loginResponse = await service.refresh(refreshTokenId, refreshTokenKey);
       const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
-      res.cookie(CookieName.Jwt, encrypt(dto.access_token), { httpOnly: true });
-      res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), { httpOnly: true });
+      res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
+        signed: true,
+        httpOnly: true,
+        secure: true,
+        expires: loginResponse.expiresAt,
+        sameSite: 'strict',
+      });
+      res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
+        signed: true,
+        httpOnly: true,
+        secure: true,
+        expires: loginResponse.refreshTokenExpiresAt,
+        sameSite: 'strict',
+      });
 
       return res.status(200).send(dto);
     }
@@ -212,8 +224,20 @@ export class AuthController {
     const loginResponse = await service.login(code!);
     const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
-    res.cookie(CookieName.Jwt, encrypt(dto.access_token), { httpOnly: true });
-    res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), { httpOnly: true });
+    res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
+      signed: true,
+      httpOnly: true,
+      secure: true,
+      expires: loginResponse.expiresAt,
+      sameSite: 'strict',
+    });
+    res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
+      signed: true,
+      httpOnly: true,
+      secure: true,
+      expires: loginResponse.refreshTokenExpiresAt,
+      sameSite: 'strict',
+    });
 
     return res.status(200).send(dto);
   };

@@ -17,8 +17,8 @@ export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Prom
 
 export function protectedEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>, scopes?: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies[CookieName.Jwt];
-    const refreshToken = req.cookies[CookieName.RefreshToken];
+    const token = req.signedCookies[CookieName.Jwt];
+    const refreshToken = req.signedCookies[CookieName.RefreshToken];
     const ctx = getContext();
 
     try {
