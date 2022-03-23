@@ -21,9 +21,9 @@ export class RefreshTokenRepository {
     });
   }
 
-  update(refreshToken: IPartialRefreshToken): Promise<IRefreshToken> {
+  update(refreshToken: IPartialRefreshToken): Promise<number> {
     return catchErrors(async () => {
-      return RefreshTokenModel.query().patchAndFetchById(refreshToken.id, refreshToken);
+      return RefreshTokenModel.query().findById(refreshToken.id).patch(refreshToken);
     });
   }
 

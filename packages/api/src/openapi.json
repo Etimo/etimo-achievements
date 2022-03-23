@@ -280,6 +280,33 @@
     }
   },
   "paths": {
+    "/auth/logout": {
+      "get": {
+        "summary": "Logout",
+        "operationId": "authLogout",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout success.",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "ea-jwt=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT, ea-rt=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/achievements": {
       "get": {
         "summary": "Get a list of achievements",
@@ -469,10 +496,10 @@
         ]
       }
     },
-    "/auth/logout": {
+    "/auth/refresh": {
       "get": {
-        "summary": "Logout",
-        "operationId": "authLogout",
+        "summary": "Renew access token",
+        "operationId": "authRefresh",
         "security": [
           {
             "cookieAuth": []
@@ -480,7 +507,28 @@
         ],
         "responses": {
           "200": {
-            "description": "The request was successful"
+            "description": "Authentication success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessToken"
+                }
+              }
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "ea-jwt=abcde12345; Path=/; Secure; HttpOnly, ea-rt=abcde12345; Path=/; Secure; HttpOnly"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           }
         },
         "tags": [

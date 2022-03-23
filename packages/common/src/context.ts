@@ -1,4 +1,4 @@
-import { JWT } from '@etimo-achievements/types';
+import { IRefreshTokenKey, JWT } from '@etimo-achievements/types';
 import { Logger, uuid } from '.';
 
 let count: number = 0;
@@ -10,6 +10,7 @@ export class Context {
   public timestamp: string;
   public jwt?: JWT;
   public scopes?: string[];
+  public refreshToken?: IRefreshTokenKey;
 
   constructor() {
     this.logger = new Logger();

@@ -1,3 +1,8 @@
+export interface IRefreshTokenKey {
+  id: string;
+  key: string;
+}
+
 export interface IRefreshTokenData {
   userId: string;
   scopes: string[];
