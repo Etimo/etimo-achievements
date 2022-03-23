@@ -34,7 +34,9 @@ export class CreateTokenService {
     const createdRefreshToken = await this.createRefreshToken(createdToken, refreshTokenKey);
     const refreshToken = toBase64(createdRefreshToken.id + '.' + refreshTokenKey);
 
-    return { ...createdToken, signedToken, refreshToken };
+    const expiresIn = Math.round((createdToken.expiresAt.getTime() - new Date().getTime()) / 1000);
+
+    return { ...createdToken, signedToken, refreshToken, expiresIn };
   }
 
   public async createAccessToken(token: JWT): Promise<IAccessToken> {

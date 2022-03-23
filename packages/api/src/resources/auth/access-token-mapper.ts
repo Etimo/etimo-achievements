@@ -1,21 +1,16 @@
-import { InternalServerError } from '@etimo-achievements/common';
 import { LoginResponse } from '@etimo-achievements/service';
 import { JWT } from '@etimo-achievements/types';
 import { AccessTokenDto } from './access-token-dto';
 import { TokenInfoDto } from './token-info-dto';
 
 export class AccessTokenMapper {
-  public static toAccessTokenDto(token: LoginResponse): AccessTokenDto {
-    if (!token.signedToken) {
-      throw new InternalServerError('signedToken cannot be null when mapping to access token');
-    }
-
+  public static toAccessTokenDto(loginResponse: LoginResponse): AccessTokenDto {
     return {
-      access_token: token.signedToken,
+      access_token: loginResponse.signedToken,
       token_type: 'bearer',
-      expires_in: Math.round((token.expiresAt.getTime() - new Date().getTime()) / 1000),
-      refresh_token: token.refreshToken,
-      scopes: token.scopes,
+      expires_in: loginResponse.expiresIn,
+      refresh_token: loginResponse.refreshToken,
+      scopes: loginResponse.scopes,
     };
   }
 
