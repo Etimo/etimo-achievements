@@ -17,7 +17,6 @@ const App = (): JSX.Element => {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/login/callback" element={<Login />} />
           </Routes>
         </div>
       </div>
