@@ -1,4 +1,5 @@
-import { faAward, faKey, faRankingStar, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faAward, faRankingStar, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
@@ -33,8 +34,8 @@ const SideMenu = (): JSX.Element => {
         </MenuItem>
       </Menu>
       <Menu iconShape="square">
-        <MenuItem icon={<FontAwesomeIcon icon={faKey} />}>
-          Login
+        <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
+          Sign in with Google
           <Link to="/login" />
         </MenuItem>
       </Menu>

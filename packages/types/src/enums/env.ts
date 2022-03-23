@@ -1,4 +1,5 @@
 export enum Env {
+  FRONTEND_URL = 'FRONTEND_URL',
   JWT_SECRET = 'JWT_SECRET',
   COOKIE_SECRET = 'COOKIE_SECRET',
 }
