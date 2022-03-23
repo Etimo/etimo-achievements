@@ -8,6 +8,7 @@ import {
 } from '@etimo-achievements/express-middleware';
 import { Env } from '@etimo-achievements/types';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express, { Application, static as serveStatic } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import {
@@ -51,6 +52,14 @@ export default class Server {
 
     const OpenApiValidator = require('express-openapi-validator');
     const OpenApiDocument = require('./openapi.json');
+
+    // CORS
+    this.express.use(
+      cors({
+        origin: 'http://localhost:3001',
+        optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+      })
+    );
 
     // Context
     this.express.use(contextMiddleware());

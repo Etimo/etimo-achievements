@@ -1653,6 +1653,7 @@ __metadata:
     "@etimo-achievements/service": ^1.0.0
     "@etimo-achievements/types": ^1.0.0
     "@types/cookie-parser": ^1.4.2
+    "@types/cors": ^2.8.12
     "@types/dotenv": ^8.2.0
     "@types/express": ^4.17.13
     "@types/jest": ^27.0.2
@@ -1662,6 +1663,7 @@ __metadata:
     "@types/swagger-ui-express": ^4.1.3
     babel-jest: ^27.3.1
     cookie-parser: ^1.4.6
+    cors: ^2.8.5
     dotenv: ^10.0.0
     express: ^4.17.1
     express-openapi-validator: ^4.13.2
@@ -1790,6 +1792,7 @@ __metadata:
   resolution: "@etimo-achievements/web@workspace:packages/web"
   dependencies:
     "@fortawesome/fontawesome-svg-core": ^6.1.1
+    "@fortawesome/free-brands-svg-icons": ^6.1.1
     "@fortawesome/free-solid-svg-icons": ^6.1.1
     "@fortawesome/react-fontawesome": ^0.1.18
     "@types/react": ^17.0.40
@@ -1797,10 +1800,12 @@ __metadata:
     autoprefixer: ^10.4.4
     copy-webpack-plugin: ^10.2.4
     css-loader: ^6.7.1
+    dotenv-webpack: ^7.1.0
     html-webpack-plugin: ^5.5.0
     postcss: ^8.4.12
     postcss-loader: ^6.2.1
     react: ^17.0.2
+    react-cookie: ^4.1.1
     react-dom: ^17.0.2
     react-hot-loader: ^4.13.0
     react-pro-sidebar: ^0.7.1
@@ -1829,6 +1834,15 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-common-types": 6.1.1
   checksum: bf3b09a1ec3c5d6be30ea04c83dffb921c5a457c547fb1b99b814591489efabf939f669878cc5b48deb9771ef705209a1bb1b3088e66f6873cc9b34cbf4c781c
+  languageName: node
+  linkType: hard
+
+"@fortawesome/free-brands-svg-icons@npm:^6.1.1":
+  version: 6.1.1
+  resolution: "@fortawesome/free-brands-svg-icons@npm:6.1.1"
+  dependencies:
+    "@fortawesome/fontawesome-common-types": 6.1.1
+  checksum: a878cc764ec74f1d0fe8cf8e6c4e7dd4bf829f614b741a39416b155adb23c37e70f7e077d76b301a269a7f7b28cdcc3af9191460986aa470b31c40d04ee7d59d
   languageName: node
   linkType: hard
 
@@ -2412,10 +2426,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/cookie@npm:^0.3.3":
+  version: 0.3.3
+  resolution: "@types/cookie@npm:0.3.3"
+  checksum: 450c930d792a4fd5a93645b4123f02596368f904dbb1fe6fbb5043bce8f6ecf877a08511c6ba11c8e28168f62bc278e68d214f002fab927c9056c0bc69f21370
+  languageName: node
+  linkType: hard
+
 "@types/cookiejar@npm:*":
   version: 2.1.2
   resolution: "@types/cookiejar@npm:2.1.2"
   checksum: f6e1903454007f86edd6c3520cbb4d553e1d4e17eaf1f77f6f75e3270f48cc828d74397a113a36942f5fe52f9fa71067bcfa738f53ad468fcca0bc52cb1cbd28
+  languageName: node
+  linkType: hard
+
+"@types/cors@npm:^2.8.12":
+  version: 2.8.12
+  resolution: "@types/cors@npm:2.8.12"
+  checksum: 8c45f112c7d1d2d831b4b266f2e6ed33a1887a35dcbfe2a18b28370751fababb7cd045e745ef84a523c33a25932678097bf79afaa367c6cb3fa0daa7a6438257
   languageName: node
   linkType: hard
 
@@ -2502,6 +2530,16 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: d076bb61f45d0fc42dee496ef8b1c2f8742e15d5e47e90e20d0243386e426c04d4efd408a48875ab432f7960b4ce3414db20ed0fbbfc7bcc89d84e574f6e045a
+  languageName: node
+  linkType: hard
+
+"@types/hoist-non-react-statics@npm:^3.0.1":
+  version: 3.3.1
+  resolution: "@types/hoist-non-react-statics@npm:3.3.1"
+  dependencies:
+    "@types/react": "*"
+    hoist-non-react-statics: ^3.3.0
+  checksum: 2c0778570d9a01d05afabc781b32163f28409bb98f7245c38d5eaf082416fdb73034003f5825eb5e21313044e8d2d9e1f3fe2831e345d3d1b1d20bcd12270719
   languageName: node
   linkType: hard
 
@@ -4799,6 +4837,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cookie@npm:^0.4.0":
+  version: 0.4.2
+  resolution: "cookie@npm:0.4.2"
+  checksum: a00833c998bedf8e787b4c342defe5fa419abd96b32f4464f718b91022586b8f1bafbddd499288e75c037642493c83083da426c6a9080d309e3bd90fd11baa9b
+  languageName: node
+  linkType: hard
+
 "cookiejar@npm:^2.1.2":
   version: 2.1.3
   resolution: "cookiejar@npm:2.1.3"
@@ -4843,6 +4888,16 @@ __metadata:
   version: 1.0.3
   resolution: "core-util-is@npm:1.0.3"
   checksum: 9de8597363a8e9b9952491ebe18167e3b36e7707569eed0ebf14f8bba773611376466ae34575bca8cfe3c767890c859c74056084738f09d4e4a6f902b2ad7d99
+  languageName: node
+  linkType: hard
+
+"cors@npm:^2.8.5":
+  version: 2.8.5
+  resolution: "cors@npm:2.8.5"
+  dependencies:
+    object-assign: ^4
+    vary: ^1
+  checksum: ced838404ccd184f61ab4fdc5847035b681c90db7ac17e428f3d81d69e2989d2b680cc254da0e2554f5ed4f8a341820a1ce3d1c16b499f6e2f47a1b9b07b5006
   languageName: node
   linkType: hard
 
@@ -5441,6 +5496,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv-defaults@npm:^2.0.2":
+  version: 2.0.2
+  resolution: "dotenv-defaults@npm:2.0.2"
+  dependencies:
+    dotenv: ^8.2.0
+  checksum: c005960bd048e2189c4799e729c41f362e415e6e0b54313d3f31e853a84b049bf770b25cb21c112c2805bb13a8376edc9de451fb514abf8546392d327c27f6e5
+  languageName: node
+  linkType: hard
+
 "dotenv-defaults@npm:^3.0.0":
   version: 3.0.0
   resolution: "dotenv-defaults@npm:3.0.0"
@@ -5450,10 +5514,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"dotenv-webpack@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "dotenv-webpack@npm:7.1.0"
+  dependencies:
+    dotenv-defaults: ^2.0.2
+  peerDependencies:
+    webpack: ^4 || ^5
+  checksum: e69f5b5de16f99a0acc35f2bc75e1dd40a587053cdb62ffb2fe80cea197ba703a829771f6db270a01e96ca8f52c8160671c243875a7b9c7c040bc32fc3d400f1
+  languageName: node
+  linkType: hard
+
 "dotenv@npm:*, dotenv@npm:^10.0.0":
   version: 10.0.0
   resolution: "dotenv@npm:10.0.0"
   checksum: f412c5fe8c24fbe313d302d2500e247ba8a1946492db405a4de4d30dd0eb186a88a43f13c958c5a7de303938949c4231c56994f97d05c4bc1f22478d631b4005
+  languageName: node
+  linkType: hard
+
+"dotenv@npm:^8.2.0":
+  version: 8.6.0
+  resolution: "dotenv@npm:8.6.0"
+  checksum: 38e902c80b0666ab59e9310a3d24ed237029a7ce34d976796349765ac96b8d769f6df19090f1f471b77a25ca391971efde8a1ea63bb83111bd8bec8e5cc9b2cd
   languageName: node
   linkType: hard
 
@@ -7085,7 +7167,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0":
+"hoist-non-react-statics@npm:^3.0.0, hoist-non-react-statics@npm:^3.3.0":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -10030,7 +10112,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
+"object-assign@npm:^4, object-assign@npm:^4.1.0, object-assign@npm:^4.1.1":
   version: 4.1.1
   resolution: "object-assign@npm:4.1.1"
   checksum: fcc6e4ea8c7fe48abfbb552578b1c53e0d194086e2e6bbbf59e0a536381a292f39943c6e9628af05b5528aa5e3318bb30d6b2e53cadaf5b8fe9e12c4b69af23f
@@ -11080,6 +11162,19 @@ __metadata:
   bin:
     rc: ./cli.js
   checksum: 2e26e052f8be2abd64e6d1dabfbd7be03f80ec18ccbc49562d31f617d0015fbdbcf0f9eed30346ea6ab789e0fdfe4337f033f8016efdbee0df5354751842080e
+  languageName: node
+  linkType: hard
+
+"react-cookie@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "react-cookie@npm:4.1.1"
+  dependencies:
+    "@types/hoist-non-react-statics": ^3.0.1
+    hoist-non-react-statics: ^3.0.0
+    universal-cookie: ^4.0.0
+  peerDependencies:
+    react: ">= 16.3.0"
+  checksum: b734dcad35d790ced8c8fc3b19e3eb1f546e0923c637bad888c7c0096dbe2c996668416a49b48827ec7ad2d81522f1b57567694c791e1a5fb89ca41b39158a74
   languageName: node
   linkType: hard
 
@@ -13306,6 +13401,16 @@ typescript@^4.5.5:
   languageName: node
   linkType: hard
 
+"universal-cookie@npm:^4.0.0":
+  version: 4.0.4
+  resolution: "universal-cookie@npm:4.0.4"
+  dependencies:
+    "@types/cookie": ^0.3.3
+    cookie: ^0.4.0
+  checksum: bb2bafa7eb7e213e5448924329572dd1a913be00e23906189be2a0dc889b0eea1750f9c33462fc1c911d89092dbd82f6e220c2d61c4057bb3f69e7665d9d8ddf
+  languageName: node
+  linkType: hard
+
 "universalify@npm:^0.1.2":
   version: 0.1.2
   resolution: "universalify@npm:0.1.2"
@@ -13455,7 +13560,7 @@ typescript@^4.5.5:
   languageName: node
   linkType: hard
 
-"vary@npm:~1.1.2":
+"vary@npm:^1, vary@npm:~1.1.2":
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: ae0123222c6df65b437669d63dfa8c36cee20a504101b2fcd97b8bf76f91259c17f9f2b4d70a1e3c6bbcee7f51b28392833adb6b2770b23b01abec84e369660b

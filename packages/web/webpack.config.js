@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const Dotenv = require('dotenv-webpack');
 const HtmlPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
@@ -28,6 +29,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: '[name].js',
+    publicPath: '/',
   },
   plugins: [
     new CopyPlugin({
@@ -38,9 +40,11 @@ module.exports = {
       template: path.join(__dirname, 'src', 'index.html'),
       assetPath: '/assets',
     }),
+    new Dotenv(),
   ],
   devServer: {
     hot: true,
     port: process.env.PORT,
+    historyApiFallback: true,
   },
 };
