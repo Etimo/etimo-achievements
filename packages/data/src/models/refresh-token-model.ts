@@ -1,23 +1,23 @@
 import { uuid } from '@etimo-achievements/common';
-import { IAccessToken } from '@etimo-achievements/types';
+import { IRefreshToken } from '@etimo-achievements/types';
 import { QueryContext } from 'objection';
 import { BaseModel } from './base-model';
 
-export class AccessTokenModel extends BaseModel implements IAccessToken {
+export class RefreshTokenModel extends BaseModel implements IRefreshToken {
   static get tableName() {
-    return 'access_tokens';
+    return 'refresh_tokens';
   }
 
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'disabled', 'expiresAt'],
+      required: ['id', 'data', 'disabled', 'used', 'expiresAt'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
-        userId: { type: 'string', format: 'uuid' },
-        scopes: { type: 'array', items: { type: 'string' } },
+        data: { type: 'string' },
         disabled: { type: 'boolean' },
+        used: { type: 'boolean' },
         expiresAt: { type: 'timestamp' },
         createdAt: { type: 'timestamp' },
         updatedAt: { type: 'timestamp' },
@@ -31,9 +31,9 @@ export class AccessTokenModel extends BaseModel implements IAccessToken {
   }
 
   id!: string;
-  userId!: string;
-  scopes!: string[];
+  data!: string;
   disabled!: boolean;
+  used!: boolean;
   expiresAt!: Date;
   createdAt!: Date;
   updatedAt!: Date;

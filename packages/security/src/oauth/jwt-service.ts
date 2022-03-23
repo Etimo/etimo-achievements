@@ -1,5 +1,5 @@
-import { ConfigurationError, uuid } from '@etimo-achievements/common';
-import { IUser, JWT } from '@etimo-achievements/types';
+import { getEnvVariable, uuid } from '@etimo-achievements/common';
+import { Env, IUser, JWT } from '@etimo-achievements/types';
 import jwt from 'jsonwebtoken';
 
 export class JwtService {
@@ -20,19 +20,11 @@ export class JwtService {
   }
 
   public static sign(payload: any): string {
-    return jwt.sign(payload, this.getSecret());
+    return jwt.sign(payload, getEnvVariable(Env.JWT_SECRET));
   }
 
   public static verify(token: string): JWT {
-    const unencrypted = jwt.verify(token, this.getSecret());
-    return unencrypted as JWT;
-  }
-
-  private static getSecret() {
-    const secret = process.env.JWT_SECRET;
-    if (!secret) {
-      throw new ConfigurationError('JWT_SECRET is not set');
-    }
-    return secret;
+    const payload = jwt.verify(token, getEnvVariable(Env.JWT_SECRET));
+    return payload as JWT;
   }
 }

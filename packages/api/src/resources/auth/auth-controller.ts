@@ -1,7 +1,7 @@
 import { UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
-import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
-import { LoginService, LogoutService } from '@etimo-achievements/service';
+import { CookieName, encrypt, OAuthServiceFactory } from '@etimo-achievements/security';
+import { LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { endpoint, protectedEndpoint } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
@@ -36,6 +36,30 @@ export class AuthController {
 
     /**
      * @openapi
+     * /auth/refresh:
+     *   get:
+     *     summary: Renew access token
+     *     operationId: authRefresh
+     *     security:
+     *       - cookieAuth: []
+     *     responses:
+     *       200:
+     *         description: Authentication success.
+     *         content: *accessTokenContent
+     *         headers:
+     *           Set-Cookie:
+     *             schema:
+     *               type: string
+     *               example: ea-jwt=abcde12345; Path=/; Secure; HttpOnly, ea-rt=abcde12345; Path=/; Secure; HttpOnly
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Auth
+     */
+    router.get('/auth/refresh', protectedEndpoint(this.refresh));
+
+    /**
+     * @openapi
      * /auth/logout:
      *   get:
      *     summary: Logout
@@ -43,7 +67,13 @@ export class AuthController {
      *     security:
      *       - cookieAuth: []
      *     responses:
-     *       200: *okResponse
+     *       200:
+     *         description: Logout success.
+     *         headers:
+     *           Set-Cookie:
+     *             schema:
+     *               type: string
+     *               example: ea-jwt=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT, ea-rt=deleted; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT
      *     tags:
      *       - Auth
      */
@@ -74,7 +104,7 @@ export class AuthController {
      *           Set-Cookie:
      *             schema:
      *               type: string
-     *               example: ea-jwt=abcde12345; Path=/; HttpOnly
+     *               example: ea-jwt=abcde12345; Path=/; Secure; HttpOnly, ea-rt=abcde12345; Path=/; Secure; HttpOnly
      *       400: *badRequestResponse
      *       401: *unauthorizedResponse
      *     tags:
@@ -145,12 +175,43 @@ export class AuthController {
     return res.status(301).header({ Location: url, 'Cache-Control': 'no-cache' }).send();
   };
 
+  private refresh = async (_req: Request, res: Response) => {
+    const { refreshTokenId, refreshTokenKey } = getContext();
+    if (refreshTokenId && refreshTokenKey) {
+      const service = new RefreshLoginService();
+      const loginResponse = await service.refresh(refreshTokenId, refreshTokenKey);
+      const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
+
+      res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
+        signed: true,
+        httpOnly: true,
+        secure: true,
+        expires: loginResponse.expiresAt,
+        sameSite: 'strict',
+      });
+      res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
+        signed: true,
+        httpOnly: true,
+        secure: true,
+        expires: loginResponse.refreshTokenExpiresAt,
+        sameSite: 'strict',
+      });
+
+      return res.status(200).send(dto);
+    }
+
+    throw new UnauthorizedError('No refresh token');
+  };
+
   private logout = async (_req: Request, res: Response) => {
-    const { jwt } = getContext();
+    const { jwt, refreshTokenId } = getContext();
     if (jwt) {
       const service = new LogoutService();
-      service.logout(jwt);
+      await service.logout(jwt, refreshTokenId);
     }
+
+    res.cookie(CookieName.Jwt, 'deleted', { expires: new Date(0) });
+    res.cookie(CookieName.RefreshToken, 'deleted', { expires: new Date(0) });
 
     return res.status(200).send();
   };
@@ -160,10 +221,23 @@ export class AuthController {
     const code = req.query.code?.toString();
 
     const service = new LoginService(provider);
-    const token = await service.login(code!);
-    const dto = AccessTokenMapper.toAccessTokenDto(token);
+    const loginResponse = await service.login(code!);
+    const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
-    res.cookie(CookieName.Jwt, dto.access_token, { httpOnly: true });
+    res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
+      signed: true,
+      httpOnly: true,
+      secure: true,
+      expires: loginResponse.expiresAt,
+      sameSite: 'strict',
+    });
+    res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
+      signed: true,
+      httpOnly: true,
+      secure: true,
+      expires: loginResponse.refreshTokenExpiresAt,
+      sameSite: 'strict',
+    });
 
     return res.status(200).send(dto);
   };

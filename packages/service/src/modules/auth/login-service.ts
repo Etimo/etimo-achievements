@@ -1,66 +1,38 @@
 import { Logger } from '@etimo-achievements/common';
-import { AccessTokenRepository } from '@etimo-achievements/data';
-import {
-  hashPassword,
-  IOAuthService,
-  JwtService,
-  OAuthServiceFactory,
-  randomPassword,
-} from '@etimo-achievements/security';
-import { IAccessToken, INewAccessToken, JWT } from '@etimo-achievements/types';
+import { IOAuthService, OAuthServiceFactory } from '@etimo-achievements/security';
 import { CreateUserService, GetUserService, ServiceOptions } from '..';
+import { CreateTokenService } from './create-token-service';
+import { LoginResponse } from './types/login-response';
 
 export class LoginService {
-  private service: IOAuthService;
-  private repo: AccessTokenRepository;
+  private oauthService: IOAuthService;
+  private getUserService: GetUserService;
+  private createUserService: CreateUserService;
+  private createTokenService: CreateTokenService;
 
   constructor(provider: string, options?: ServiceOptions) {
-    this.service = OAuthServiceFactory.create(provider);
-    this.repo = options?.accessTokenRepository ?? new AccessTokenRepository();
+    this.oauthService = OAuthServiceFactory.create(provider);
+    this.getUserService = new GetUserService(options);
+    this.createUserService = new CreateUserService(options);
+    this.createTokenService = new CreateTokenService(options);
   }
 
-  public async login(code: string): Promise<IAccessToken> {
+  public async login(code: string): Promise<LoginResponse> {
     // Get user from provider service
-    const userInfo = await this.service.getUserInfo(code);
+    const userInfo = await this.oauthService.getUserInfo(code);
 
     // Check if user exists in our store
-    const userService = new GetUserService();
-    let user = await userService.getByEmail(userInfo.email);
+    let user = await this.getUserService.getByEmail(userInfo.email);
 
     // If user doesn't exist, create it
     if (!user) {
       Logger.log(`User ${userInfo.email} is not found. Creating a new user.`);
-      const createUserService = new CreateUserService();
-      user = await createUserService.create({
+      user = await this.createUserService.create({
         name: userInfo.name,
         email: userInfo.email,
       });
     }
 
-    // Create a token for the user
-    const token = JwtService.create(user, ['w:achievements', 'r:awards', 'rw:users']);
-
-    // Store token in database
-    const createdToken = await this.createAccessToken(token);
-
-    return createdToken;
-  }
-
-  public async createAccessToken(token: JWT): Promise<IAccessToken> {
-    const refreshToken = randomPassword(64);
-
-    const newToken: INewAccessToken = {
-      id: token.jti,
-      userId: token.sub,
-      refreshToken: await hashPassword(refreshToken),
-      disabled: false,
-      expiresAt: new Date(token.exp * 1000),
-      scopes: token.scope.split(' '),
-    };
-
-    const accessToken = await this.repo.create(newToken);
-    const signedToken = JwtService.sign(token);
-
-    return { ...accessToken, signedToken, refreshToken };
+    return this.createTokenService.create(user, ['w:achievements', 'r:awards', 'rw:users']);
   }
 }

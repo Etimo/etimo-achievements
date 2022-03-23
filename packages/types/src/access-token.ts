@@ -1,12 +1,10 @@
 export interface IAccessToken {
   id: string;
   userId: string;
-  signedToken?: string;
-  refreshToken: string;
   scopes: string[];
   expiresAt: Date;
   disabled: boolean;
 }
 
-export type INewAccessToken = Omit<IAccessToken, 'signedToken'>;
+export type INewAccessToken = IAccessToken;
 export type IPartialAccessToken = Pick<IAccessToken, 'id'> & Partial<IAccessToken>;

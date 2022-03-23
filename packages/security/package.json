@@ -19,6 +19,7 @@
     "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "bcrypt": "^5.0.1",
+    "cryptr": "^6.0.2",
     "google-auth-library": "^7.14.0",
     "jsonwebtoken": "^8.5.1",
     "node-fetch": "^2.6.5",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
+    "@types/cryptr": "^4.0.1",
     "@types/jest": "^27.0.2",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^16.10.2",

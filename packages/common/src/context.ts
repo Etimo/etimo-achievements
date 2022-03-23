@@ -10,6 +10,8 @@ export class Context {
   public timestamp: string;
   public jwt?: JWT;
   public scopes?: string[];
+  public refreshTokenId?: string;
+  public refreshTokenKey?: string;
 
   constructor() {
     this.logger = new Logger();

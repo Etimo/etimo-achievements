@@ -1,4 +1,4 @@
-import { isDevelopment, Logger } from '@etimo-achievements/common';
+import { getEnvVariable, isDevelopment, Logger } from '@etimo-achievements/common';
 import {
   contextMiddleware,
   errorMiddleware,
@@ -6,6 +6,7 @@ import {
   setContextMiddleware,
   winstonMiddleware,
 } from '@etimo-achievements/express-middleware';
+import { Env } from '@etimo-achievements/types';
 import cookieParser from 'cookie-parser';
 import express, { Application, static as serveStatic } from 'express';
 import swaggerUi from 'swagger-ui-express';
@@ -68,7 +69,7 @@ export default class Server {
     this.express.use(express.urlencoded({ extended: false }));
 
     // Security
-    this.express.use(cookieParser());
+    this.express.use(cookieParser(getEnvVariable(Env.COOKIE_SECRET)));
 
     // Documentation
     const options = { customSiteTitle: 'EA Swagger' };

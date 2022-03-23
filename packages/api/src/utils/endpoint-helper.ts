@@ -1,6 +1,6 @@
-import { Logger, UnauthorizedError } from '@etimo-achievements/common';
+import { fromBase64, Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
-import { CookieName, JwtService } from '@etimo-achievements/security';
+import { CookieName, decrypt, JwtService } from '@etimo-achievements/security';
 import { NextFunction, Request, Response } from 'express';
 
 export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>) {
@@ -17,17 +17,27 @@ export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Prom
 
 export function protectedEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>, scopes?: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const token = req.cookies[CookieName.Jwt];
+    const token = req.signedCookies[CookieName.Jwt];
+    const refreshToken = req.signedCookies[CookieName.RefreshToken];
     const ctx = getContext();
 
     try {
-      ctx.jwt = JwtService.verify(token);
+      const decryptedToken = decrypt(token);
+      ctx.jwt = JwtService.verify(decryptedToken);
       ctx.scopes = ctx.jwt?.scope?.split(' ') ?? [];
     } catch {
       throw new UnauthorizedError('The token has expired');
     }
 
-    if (scopes && !ctx.scopes.some((scope) => scopes.includes(scope))) {
+    try {
+      const refreshTokenParts = fromBase64(decrypt(refreshToken)).split('.');
+      ctx.refreshTokenId = refreshTokenParts[0];
+      ctx.refreshTokenKey = refreshTokenParts[1];
+    } catch {
+      Logger.log('User does not have a refresh token');
+    }
+
+    if (scopes && !ctx.scopes?.some((scope) => scopes.includes(scope))) {
       Logger.log('User does not have required scopes');
       throw new UnauthorizedError('Insufficient scope');
     }
