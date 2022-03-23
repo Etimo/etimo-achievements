@@ -1,13 +1,7 @@
 import React from 'react';
 
-const Home = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>Hello Etimo</p>
-      </header>
-    </div>
-  );
+const Home = (): JSX.Element => {
+  return <h1 className="text-3xl text-center">Home</h1>;
 };
 
 export default Home;
