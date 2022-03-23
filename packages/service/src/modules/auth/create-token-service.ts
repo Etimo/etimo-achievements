@@ -1,4 +1,4 @@
-import { Logger, uuid } from '@etimo-achievements/common';
+import { Logger, toBase64, uuid } from '@etimo-achievements/common';
 import { AccessTokenRepository, RefreshTokenRepository } from '@etimo-achievements/data';
 import { encrypt, JwtService, randomPassword } from '@etimo-achievements/security';
 import {
@@ -31,9 +31,10 @@ export class CreateTokenService {
     const createdToken = await this.createAccessToken(token);
     const signedToken = JwtService.sign(token);
     const refreshTokenKey = randomPassword(64);
-    const refreshToken = await this.createRefreshToken(createdToken, refreshTokenKey);
+    const createdRefreshToken = await this.createRefreshToken(createdToken, refreshTokenKey);
+    const refreshToken = toBase64(createdRefreshToken.id + '.' + refreshTokenKey);
 
-    return { ...createdToken, signedToken, refreshTokenId: refreshToken.id, refreshTokenKey };
+    return { ...createdToken, signedToken, refreshToken };
   }
 
   public async createAccessToken(token: JWT): Promise<IAccessToken> {

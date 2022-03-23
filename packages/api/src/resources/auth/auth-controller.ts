@@ -176,10 +176,10 @@ export class AuthController {
   };
 
   private refresh = async (_req: Request, res: Response) => {
-    const { refreshToken } = getContext();
-    if (refreshToken) {
+    const { refreshTokenId, refreshTokenKey } = getContext();
+    if (refreshTokenId && refreshTokenKey) {
       const service = new RefreshLoginService();
-      const loginResponse = await service.refresh(refreshToken);
+      const loginResponse = await service.refresh(refreshTokenId, refreshTokenKey);
       const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
       res.cookie(CookieName.Jwt, encrypt(dto.access_token), { httpOnly: true });
@@ -192,10 +192,10 @@ export class AuthController {
   };
 
   private logout = async (_req: Request, res: Response) => {
-    const { jwt, refreshToken } = getContext();
+    const { jwt, refreshTokenId } = getContext();
     if (jwt) {
       const service = new LogoutService();
-      await service.logout(jwt, refreshToken?.id);
+      await service.logout(jwt, refreshTokenId);
     }
 
     res.cookie(CookieName.Jwt, 'deleted', { expires: new Date(0) });

@@ -31,9 +31,8 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
 
     try {
       const refreshTokenParts = fromBase64(decrypt(refreshToken)).split('.');
-      const refreshTokenId = refreshTokenParts[0];
-      const refreshTokenKey = refreshTokenParts[1];
-      ctx.refreshToken = { id: refreshTokenId, key: refreshTokenKey };
+      ctx.refreshTokenId = refreshTokenParts[0];
+      ctx.refreshTokenKey = refreshTokenParts[1];
     } catch {
       Logger.log('User does not have a refresh token');
     }

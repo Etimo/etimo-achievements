@@ -1,3 +1,5 @@
+import { ConfigurationError } from '.';
+
 export enum Environment {
   Local = 'local',
   Development = 'development',
@@ -38,4 +40,12 @@ export function isStaging(): boolean {
 
 export function isProduction(): boolean {
   return getEnvironment() === Environment.Production;
+}
+
+export function getEnvVariable(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new ConfigurationError(`Environment variable ${name} is not defined`);
+  }
+  return value;
 }

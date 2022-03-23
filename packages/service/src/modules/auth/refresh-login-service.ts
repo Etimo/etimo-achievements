@@ -1,7 +1,7 @@
 import { BadRequestError, UnauthorizedError } from '@etimo-achievements/common';
 import { RefreshTokenRepository } from '@etimo-achievements/data';
 import { decryptAs } from '@etimo-achievements/security';
-import { IRefreshTokenData, IRefreshTokenKey } from '@etimo-achievements/types';
+import { IRefreshTokenData } from '@etimo-achievements/types';
 import { GetUserService, ServiceOptions } from '..';
 import { CreateTokenService } from './create-token-service';
 import { LoginResponse } from './types/login-response';
@@ -17,13 +17,13 @@ export class RefreshLoginService {
     this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
   }
 
-  public async refresh(key: IRefreshTokenKey): Promise<LoginResponse> {
-    const refreshToken = await this.refreshTokenRepo.findById(key.id);
+  public async refresh(refreshTokenId: string, key: string): Promise<LoginResponse> {
+    const refreshToken = await this.refreshTokenRepo.findById(refreshTokenId);
     if (!refreshToken) throw new UnauthorizedError('Refresh token not found');
     if (refreshToken.expiresAt < new Date()) throw new UnauthorizedError('Refresh token has expired');
     if (refreshToken.used) throw new UnauthorizedError('Refresh token has already been used');
 
-    const data = decryptAs<IRefreshTokenData>(refreshToken.data, key.key);
+    const data = decryptAs<IRefreshTokenData>(refreshToken.data, key);
     const user = await this.getUserService.get(data.userId);
     if (!user) throw new BadRequestError('User not found');
 

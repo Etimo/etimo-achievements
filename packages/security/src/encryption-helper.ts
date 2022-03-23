@@ -1,8 +1,10 @@
+import { getEnvVariable } from '@etimo-achievements/common';
+import { Env } from '@etimo-achievements/types';
 import Cryptr from 'cryptr';
 
 export function encrypt(data: any, key?: string): string {
   if (!key) {
-    key = getJwtSecret();
+    key = getEnvVariable(Env.JWT_SECRET);
   }
 
   if (typeof data !== 'string') {
@@ -15,7 +17,7 @@ export function encrypt(data: any, key?: string): string {
 
 export function decrypt(encryptedData: string, key?: string): string {
   if (!key) {
-    key = getJwtSecret();
+    key = getEnvVariable(Env.JWT_SECRET);
   }
 
   const cryptr = new Cryptr(key);
@@ -24,8 +26,4 @@ export function decrypt(encryptedData: string, key?: string): string {
 
 export function decryptAs<T>(encryptedData: string, key?: string): T {
   return JSON.parse(decrypt(encryptedData, key)) as T;
-}
-
-function getJwtSecret(): string {
-  return process.env.JWT_SECRET || 'secret';
 }

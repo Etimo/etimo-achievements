@@ -1,4 +1,4 @@
-import { InternalServerError, toBase64 } from '@etimo-achievements/common';
+import { InternalServerError } from '@etimo-achievements/common';
 import { LoginResponse } from '@etimo-achievements/service';
 import { JWT } from '@etimo-achievements/types';
 import { AccessTokenDto } from './access-token-dto';
@@ -14,7 +14,7 @@ export class AccessTokenMapper {
       access_token: token.signedToken,
       token_type: 'bearer',
       expires_in: Math.round((token.expiresAt.getTime() - new Date().getTime()) / 1000),
-      refresh_token: toBase64(token.refreshTokenId + '.' + token.refreshTokenKey),
+      refresh_token: token.refreshToken,
       scopes: token.scopes,
     };
   }
