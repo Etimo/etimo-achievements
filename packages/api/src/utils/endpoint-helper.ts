@@ -1,6 +1,6 @@
 import { Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
-import { CookieName, JwtService } from '@etimo-achievements/security';
+import { CookieName, decrypt, JwtService } from '@etimo-achievements/security';
 import { NextFunction, Request, Response } from 'express';
 
 export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>) {
@@ -21,13 +21,14 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
     const ctx = getContext();
 
     try {
-      ctx.jwt = JwtService.verify(token);
+      const decryptedToken = decrypt(token);
+      ctx.jwt = JwtService.verify(decryptedToken);
       ctx.scopes = ctx.jwt?.scope?.split(' ') ?? [];
     } catch {
       throw new UnauthorizedError('The token has expired');
     }
 
-    if (scopes && !ctx.scopes.some((scope) => scopes.includes(scope))) {
+    if (scopes && !ctx.scopes?.some((scope) => scopes.includes(scope))) {
       Logger.log('User does not have required scopes');
       throw new UnauthorizedError('Insufficient scope');
     }

@@ -11,12 +11,11 @@ export class AccessTokenModel extends BaseModel implements IAccessToken {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'refreshToken', 'disabled', 'expiresAt'],
+      required: ['userId', 'disabled', 'expiresAt'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
         userId: { type: 'string', format: 'uuid' },
-        refreshToken: { type: 'string', minLength: 20, maxLength: 64 },
         scopes: { type: 'array', items: { type: 'string' } },
         disabled: { type: 'boolean' },
         expiresAt: { type: 'timestamp' },
@@ -33,7 +32,6 @@ export class AccessTokenModel extends BaseModel implements IAccessToken {
 
   id!: string;
   userId!: string;
-  refreshToken!: string;
   scopes!: string[];
   disabled!: boolean;
   expiresAt!: Date;

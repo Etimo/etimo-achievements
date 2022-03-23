@@ -1,7 +1,7 @@
 import runCommand from './utils/run-command.js';
 import sleep from './utils/sleep.js';
 
-await runCommand('npm', ['run', 'dc', 'stop', 'pgadmin']);
+await runCommand('docker', ['rm', '-f', 'achievements-pg', 'achievements-pgadmin']);
 if (!(await runCommand('npm', ['run', 'dc', 'up', '--', '-d', 'postgres']))) process.exit(1);
 
 console.log('Waiting for 10 seconds...');

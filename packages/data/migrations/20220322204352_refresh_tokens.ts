@@ -7,8 +7,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema
     .createTable('refresh_tokens', function (table) {
       table.uuid('id').primary();
-      table.string('refresh_token', 64).notNullable();
-      table.string('data');
+      table.text('data');
       table.boolean('disabled').notNullable().defaultTo(false);
       table.boolean('used').notNullable().defaultTo(false);
       table.timestamp('expires_at').notNullable();

@@ -529,7 +529,7 @@
               "Set-Cookie": {
                 "schema": {
                   "type": "string",
-                  "example": "ea-jwt=abcde12345; Path=/; HttpOnly"
+                  "example": "ea-jwt=abcde12345; Path=/; Secure; HttpOnly, ea-rt=abcde12345; Path=/; Secure; HttpOnly"
                 }
               }
             }

@@ -15,15 +15,15 @@ export class RefreshTokenRepository {
     });
   }
 
-  create(RefreshToken: INewRefreshToken): Promise<IRefreshToken> {
+  create(refreshToken: INewRefreshToken): Promise<IRefreshToken> {
     return catchErrors(async () => {
-      return RefreshTokenModel.query().insert(RefreshToken);
+      return RefreshTokenModel.query().insert(refreshToken);
     });
   }
 
-  update(RefreshToken: IPartialRefreshToken): Promise<IRefreshToken> {
+  update(refreshToken: IPartialRefreshToken): Promise<IRefreshToken> {
     return catchErrors(async () => {
-      return RefreshTokenModel.query().patchAndFetchById(RefreshToken.id, RefreshToken);
+      return RefreshTokenModel.query().patchAndFetchById(refreshToken.id, refreshToken);
     });
   }
 

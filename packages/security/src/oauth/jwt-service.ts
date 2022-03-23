@@ -24,8 +24,8 @@ export class JwtService {
   }
 
   public static verify(token: string): JWT {
-    const unencrypted = jwt.verify(token, this.getSecret());
-    return unencrypted as JWT;
+    const payload = jwt.verify(token, this.getSecret());
+    return payload as JWT;
   }
 
   private static getSecret() {

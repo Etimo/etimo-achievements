@@ -1,13 +1,6 @@
-import { Logger } from '@etimo-achievements/common';
+import { Logger, uuid } from '@etimo-achievements/common';
 import { AccessTokenRepository, RefreshTokenRepository } from '@etimo-achievements/data';
-import {
-  encrypt,
-  hashPassword,
-  IOAuthService,
-  JwtService,
-  OAuthServiceFactory,
-  randomPassword,
-} from '@etimo-achievements/security';
+import { encrypt, IOAuthService, JwtService, OAuthServiceFactory, randomPassword } from '@etimo-achievements/security';
 import {
   IAccessToken,
   INewAccessToken,
@@ -18,6 +11,12 @@ import {
 } from '@etimo-achievements/types';
 import spacetime from 'spacetime';
 import { CreateUserService, GetUserService, ServiceOptions } from '..';
+
+export type LoginResponse = IAccessToken & {
+  refreshTokenKey: string;
+  refreshTokenId: string;
+  signedToken: string;
+};
 
 export class LoginService {
   private service: IOAuthService;
@@ -30,7 +29,7 @@ export class LoginService {
     this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
   }
 
-  public async login(code: string): Promise<IAccessToken> {
+  public async login(code: string): Promise<LoginResponse> {
     // Get user from provider service
     const userInfo = await this.service.getUserInfo(code);
 
@@ -53,41 +52,39 @@ export class LoginService {
 
     // Store token in database
     const createdToken = await this.createAccessToken(token);
-    await this.createRefreshToken(createdToken);
+    const signedToken = JwtService.sign(token);
+    const refreshTokenKey = randomPassword(64);
+    const refreshToken = await this.createRefreshToken(createdToken, refreshTokenKey);
 
-    return createdToken;
+    return { ...createdToken, signedToken, refreshTokenId: refreshToken.id, refreshTokenKey };
   }
 
   public async createAccessToken(token: JWT): Promise<IAccessToken> {
-    const refreshToken = randomPassword(64);
-
     const newToken: INewAccessToken = {
       id: token.jti,
       userId: token.sub,
-      refreshToken: await hashPassword(refreshToken),
       disabled: false,
       expiresAt: new Date(token.exp * 1000),
       scopes: token.scope.split(' '),
     };
 
     const accessToken = await this.accessTokenRepo.create(newToken);
-    const signedToken = JwtService.sign(token);
 
     Logger.log(`Stored access token for user ${newToken.userId}`);
 
-    return { ...accessToken, signedToken, refreshToken };
+    return accessToken;
   }
 
-  public async createRefreshToken(token: IAccessToken): Promise<IRefreshToken> {
+  public async createRefreshToken(token: IAccessToken, key: string): Promise<IRefreshToken> {
+    const refreshTokenId = uuid();
     const data: IRefreshTokenData = {
       userId: token.userId,
       scopes: token.scopes,
     };
-    const encryptedData = encrypt(data, token.refreshToken);
+    const encryptedData = encrypt(data, key);
 
     const newRefreshToken: INewRefreshToken = {
-      id: token.id,
-      refreshToken: token.refreshToken,
+      id: refreshTokenId,
       data: encryptedData,
       disabled: false,
       used: false,
@@ -96,7 +93,7 @@ export class LoginService {
 
     const refreshToken = await this.refreshTokenRepo.create(newRefreshToken);
 
-    Logger.log(`Stored refresh token for user ${data.userId}`);
+    Logger.log(`Stored refresh token (${refreshToken.id}) for user ${data.userId}`);
 
     return refreshToken;
   }

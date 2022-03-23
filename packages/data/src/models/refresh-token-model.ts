@@ -11,11 +11,10 @@ export class RefreshTokenModel extends BaseModel implements IRefreshToken {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['id', 'refreshToken', 'data', 'disabled', 'used', 'expiresAt'],
+      required: ['id', 'data', 'disabled', 'used', 'expiresAt'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
-        refreshToken: { type: 'string' },
         data: { type: 'string' },
         disabled: { type: 'boolean' },
         used: { type: 'boolean' },
@@ -32,7 +31,6 @@ export class RefreshTokenModel extends BaseModel implements IRefreshToken {
   }
 
   id!: string;
-  refreshToken!: string;
   data!: string;
   disabled!: boolean;
   used!: boolean;

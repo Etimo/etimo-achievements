@@ -1,6 +1,6 @@
 import { UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
-import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
+import { CookieName, encrypt, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginService, LogoutService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { endpoint, protectedEndpoint } from '../../utils';
@@ -74,7 +74,7 @@ export class AuthController {
      *           Set-Cookie:
      *             schema:
      *               type: string
-     *               example: ea-jwt=abcde12345; Path=/; HttpOnly
+     *               example: ea-jwt=abcde12345; Path=/; Secure; HttpOnly, ea-rt=abcde12345; Path=/; Secure; HttpOnly
      *       400: *badRequestResponse
      *       401: *unauthorizedResponse
      *     tags:
@@ -160,10 +160,11 @@ export class AuthController {
     const code = req.query.code?.toString();
 
     const service = new LoginService(provider);
-    const token = await service.login(code!);
-    const dto = AccessTokenMapper.toAccessTokenDto(token);
+    const loginResponse = await service.login(code!);
+    const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
-    res.cookie(CookieName.Jwt, dto.access_token, { httpOnly: true });
+    res.cookie(CookieName.Jwt, encrypt(dto.access_token), { httpOnly: true });
+    res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), { httpOnly: true });
 
     return res.status(200).send(dto);
   };

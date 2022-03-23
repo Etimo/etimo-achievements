@@ -5,7 +5,6 @@ export interface IRefreshTokenData {
 
 export interface IRefreshToken {
   id: string;
-  refreshToken: string;
   data: string;
   disabled: boolean;
   used: boolean;
