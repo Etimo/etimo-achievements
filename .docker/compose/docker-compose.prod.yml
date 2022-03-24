@@ -6,5 +6,3 @@ services:
 
   web:
     image: ghcr.io/etimo/etimo-achievements/web:latest
-    environment:
-      - API_URL=http://localhost:4000
