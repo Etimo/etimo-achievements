@@ -1,15 +1,10 @@
-const webpack = require('webpack');
-const Dotenv = require('dotenv-webpack');
 const HtmlPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
-require('dotenv').config();
-
 module.exports = {
   entry: path.resolve(__dirname, './src/index.tsx'),
   target: 'web',
-  devtool: 'eval-source-map',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
   },
@@ -35,16 +30,9 @@ module.exports = {
     new CopyPlugin({
       patterns: [{ from: './assets', to: './assets' }],
     }),
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlPlugin({
       template: path.join(__dirname, 'src', 'index.html'),
       assetPath: '/assets',
     }),
-    new Dotenv(),
   ],
-  devServer: {
-    hot: true,
-    port: process.env.PORT,
-    historyApiFallback: true,
-  },
 };

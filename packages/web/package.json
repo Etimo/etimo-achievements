@@ -10,11 +10,12 @@
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "npx webpack-cli build --config ./webpack.config.js --mode production",
+    "compile": "npx webpack-cli build --config ./webpack.dev.js",
+    "compile-prod": "npx webpack-cli build --config ./webpack.prod.js",
     "compile-test": "tsc --build",
     "dev": "npm run start",
     "openapi": "ts-node generate-openapi.ts",
-    "start": "npx webpack-cli serve --config ./webpack.config.js --mode development",
+    "start": "npx webpack-cli serve --config ./webpack.dev.js",
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'"
   },
@@ -46,7 +47,8 @@
     "typescript": "^4.4.3",
     "webpack": "^5.70.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.7.4"
+    "webpack-dev-server": "^4.7.4",
+    "webpack-merge": "^5.8.0"
   },
   "eslintConfig": {
     "extends": []

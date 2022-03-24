@@ -13,7 +13,7 @@ EXPOSE $PORT
 CMD ["npm", "run", "dev"]
 
 FROM develop AS build
-RUN npm run compile
+RUN npm run compile-prod
 RUN yarn workspaces focus --all --production
 
 FROM nginx:1.18 AS production
