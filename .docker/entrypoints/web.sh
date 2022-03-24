@@ -27,5 +27,8 @@ for f in ./**/*.js; do
 done
 substitute /etc/nginx/nginx.conf
 
+echo "Environment variables:"
+env
+
 echo "Starting nginx"
 nginx -g 'daemon off;'
