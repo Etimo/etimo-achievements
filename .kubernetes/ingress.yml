@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: achievements-ingress
+  annotations:
+    kubernetes.io/ingress.class: 'nginx'
+    cert-manager.io/cluster-issuer: 'le-wildcard-issuer'
+spec:
+  rules:
+    - host: 'achievements-staging.etimo-test.live' # replace i pipeline med rätt domän
+      http:
+        paths:
+          - pathType: Prefix
+            path: '/'
+            backend:
+              service:
+                name: web
+                port:
+                  number: 80
