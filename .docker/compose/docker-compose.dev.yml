@@ -3,7 +3,7 @@ version: '3.7'
 services:
   api:
     build:
-      dockerfile: .docker/Dockerfiles/api
+      dockerfile: .docker/dockerfiles/api
       context: ../..
       target: develop
     labels:
@@ -13,7 +13,7 @@ services:
 
   web:
     build:
-      dockerfile: .docker/Dockerfiles/web
+      dockerfile: .docker/dockerfiles/web
       context: ../..
       target: develop
     labels:
@@ -24,7 +24,7 @@ services:
 
   nodemon:
     build:
-      dockerfile: .docker/Dockerfiles/nodemon
+      dockerfile: .docker/dockerfiles/nodemon
       context: ../..
     container_name: achievements-nodemon
     user: 1000:1000

@@ -11,7 +11,7 @@ export function getRootDirectory() {
 }
 
 export function getDockerFileDirectory() {
-  return path.join(getRootDirectory(), '.docker/Dockerfiles');
+  return path.join(getRootDirectory(), '.docker/dockerfiles');
 }
 
 export function getPackageDirectory(packageName) {
