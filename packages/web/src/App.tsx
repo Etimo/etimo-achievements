@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import SideMenu from './components/SideMenu';
 import Home from './pages/Home';
 import Login from './pages/Login';
+import LoginCallback from './pages/LoginCallback';
 import Profile from './pages/Profile';
 
 const App = (): JSX.Element => {
@@ -17,6 +18,7 @@ const App = (): JSX.Element => {
             <Route path="/" element={<Home />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/login/callback" element={<LoginCallback />} />
           </Routes>
         </div>
       </div>
