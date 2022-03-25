@@ -1,9 +1,11 @@
-import { Logger, UnauthorizedError } from '@etimo-achievements/common';
+import { getEnvVariable, Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, encrypt, OAuthServiceFactory } from '@etimo-achievements/security';
-import { LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
+import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
+import { Env } from '@etimo-achievements/types';
 import { Request, Response, Router } from 'express';
 import { endpoint, protectedEndpoint } from '../../utils';
+import { AccessTokenDto } from './access-token-dto';
 import { AccessTokenMapper } from './access-token-mapper';
 import { UserInfoDto } from './user-info-dto';
 
@@ -182,21 +184,7 @@ export class AuthController {
       const loginResponse = await service.refresh(refreshTokenId, refreshTokenKey);
       const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
-      Logger.log(`Creating JWT with expiration date ${loginResponse.expiresAt}`);
-      res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
-        signed: true,
-        httpOnly: true,
-        secure: true,
-        expires: loginResponse.expiresAt,
-      });
-
-      Logger.log(`Creating refresh token with expiration date ${loginResponse.refreshTokenExpiresAt}`);
-      res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
-        signed: true,
-        httpOnly: true,
-        secure: true,
-        expires: loginResponse.refreshTokenExpiresAt,
-      });
+      this.setCookies(res, dto, loginResponse);
 
       return res.status(200).send(dto);
     }
@@ -225,21 +213,7 @@ export class AuthController {
     const loginResponse = await service.login(code!);
     const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
-    Logger.log(`Creating JWT with expiration date ${loginResponse.expiresAt}`);
-    res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
-      signed: true,
-      httpOnly: true,
-      secure: true,
-      expires: loginResponse.expiresAt,
-    });
-
-    Logger.log(`Creating refresh token with expiration date ${loginResponse.refreshTokenExpiresAt}`);
-    res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
-      signed: true,
-      httpOnly: true,
-      secure: true,
-      expires: loginResponse.refreshTokenExpiresAt,
-    });
+    this.setCookies(res, dto, loginResponse);
 
     return res.status(200).send(dto);
   };
@@ -276,4 +250,33 @@ export class AuthController {
 
     return res.status(200).send(dto);
   };
+
+  private setCookies(res: Response, dto: AccessTokenDto, loginResponse: LoginResponse) {
+    const domain = this.getCookieDomain();
+
+    Logger.log(`Creating cookie ${CookieName.Jwt} @ ${domain} with expiration date ${loginResponse.expiresAt}`);
+    res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
+      domain,
+      signed: true,
+      httpOnly: true,
+      secure: true,
+      expires: loginResponse.expiresAt,
+    });
+
+    Logger.log(
+      `Creating cookie ${CookieName.RefreshToken} @ ${domain} with expiration date ${loginResponse.refreshTokenExpiresAt}`
+    );
+    res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
+      domain,
+      signed: true,
+      httpOnly: true,
+      secure: true,
+      expires: loginResponse.refreshTokenExpiresAt,
+    });
+  }
+
+  private getCookieDomain() {
+    const url = new URL(getEnvVariable(Env.FRONTEND_URL));
+    return url.protocol + '//' + url.host;
+  }
 }
