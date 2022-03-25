@@ -1,4 +1,4 @@
-import { UnauthorizedError } from '@etimo-achievements/common';
+import { Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, encrypt, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
@@ -182,19 +182,20 @@ export class AuthController {
       const loginResponse = await service.refresh(refreshTokenId, refreshTokenKey);
       const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
+      Logger.log(`Creating JWT with expiration date ${loginResponse.expiresAt}`);
       res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
         signed: true,
         httpOnly: true,
         secure: true,
         expires: loginResponse.expiresAt,
-        sameSite: 'strict',
       });
+
+      Logger.log(`Creating refresh token with expiration date ${loginResponse.refreshTokenExpiresAt}`);
       res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
         signed: true,
         httpOnly: true,
         secure: true,
         expires: loginResponse.refreshTokenExpiresAt,
-        sameSite: 'strict',
       });
 
       return res.status(200).send(dto);
@@ -224,19 +225,20 @@ export class AuthController {
     const loginResponse = await service.login(code!);
     const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
+    Logger.log(`Creating JWT with expiration date ${loginResponse.expiresAt}`);
     res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
       signed: true,
       httpOnly: true,
       secure: true,
       expires: loginResponse.expiresAt,
-      sameSite: 'strict',
     });
+
+    Logger.log(`Creating refresh token with expiration date ${loginResponse.refreshTokenExpiresAt}`);
     res.cookie(CookieName.RefreshToken, encrypt(dto.refresh_token), {
       signed: true,
       httpOnly: true,
       secure: true,
       expires: loginResponse.refreshTokenExpiresAt,
-      sameSite: 'strict',
     });
 
     return res.status(200).send(dto);
