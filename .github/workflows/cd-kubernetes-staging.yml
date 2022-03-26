@@ -71,4 +71,4 @@ jobs:
           kubeconfig: ${{ secrets.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           cluster: ${{ env.KUBERNETES_CLUSTER }}
-          tag: $GITHUB_SHA
+          tag: ${{ github.sha }}
