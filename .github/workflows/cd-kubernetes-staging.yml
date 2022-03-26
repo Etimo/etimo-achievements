@@ -17,6 +17,7 @@ jobs:
     environment: staging
     env:
       KUBERNETES_NAMESPACE: achievements
+      KUBERNETES_CLUSTER: staging
 
     steps:
       - name: Checkout code
@@ -69,4 +70,5 @@ jobs:
         with:
           kubeconfig: ${{ secrets.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
+          cluster: ${{ env.KUBERNETES_CLUSTER }}
           tag: $GITHUB_SHA
