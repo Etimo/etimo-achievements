@@ -15,6 +15,8 @@ jobs:
     name: 'Deploy to Staging K8S'
     runs-on: ubuntu-latest
     environment: staging
+    env:
+      - KUBERNETES_NAMESPACE=achievements
 
     steps:
       - name: Checkout code
@@ -44,7 +46,7 @@ jobs:
           target: base
           tag: latest
 
-      - name: Build & push base image
+      - name: Build & push api image
         uses: ./.github/actions/docker-build-push
         with:
           registry: docker.io
@@ -53,7 +55,7 @@ jobs:
           target: production
           tag: latest
 
-      - name: Build & push base image
+      - name: Build & push web image
         uses: ./.github/actions/docker-build-push
         with:
           registry: docker.io
@@ -61,3 +63,9 @@ jobs:
           image-name: niclaslindstedt/etimo-achievements-web
           target: production
           tag: latest
+
+      - name: Deploy to Kubernetes
+        run: |
+          base64 --decode "${{ secrets.KUBERNETES_CONFIG }}" > kubernetes.yaml
+          kubectl --kubeconfig=kubernetes.yaml --namespace $KUBERNETES_NAMESPACE \
+            get pods
