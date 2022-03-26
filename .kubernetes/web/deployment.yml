@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: achievements-web
-          image: docker.io/niclaslindstedt/etimo-achievements-web:${IMAGE_TAG}
+          image: niclaslindstedt/etimo-achievements-web:${IMAGE_TAG}

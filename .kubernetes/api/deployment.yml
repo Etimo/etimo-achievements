@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: achievements-api
-          image: docker.io/niclaslindstedt/etimo-achievements-api:${IMAGE_TAG}
+          image: niclaslindstedt/etimo-achievements-api:${IMAGE_TAG}
