@@ -19,6 +19,7 @@ runs:
   using: composite
   steps:
     - name: Generate Kubernetes deployment spec
+      shell: bash
       env:
         IMAGE_TAG: ${{ inputs.tag }}
         KUBERNETES_NAMESPACE: ${{ inputs.namespace }}
@@ -30,6 +31,7 @@ runs:
         envsubst '$IMAGE_TAG $KUBERNETES_NAMESPACE $KUBERNETES_CLUSTER' < deployment.yml.template > kubernetes.yml
 
     - name: Deploy to Kubernetes
+      shell: bash
       env:
         KUBERNETES_NAMESPACE: ${{ inputs.namespace }}
       run: |
