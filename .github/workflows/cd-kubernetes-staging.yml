@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: staging
     env:
-      - KUBERNETES_NAMESPACE=achievements
+      KUBERNETES_NAMESPACE: achievements
 
     steps:
       - name: Checkout code
