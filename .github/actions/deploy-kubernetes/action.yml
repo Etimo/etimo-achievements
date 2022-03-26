@@ -32,6 +32,7 @@ runs:
         :>__deploy_template
         for f in ${{ inputs.object-path }}/**/*.yml; do cat $f >> __deploy_template; echo --- >> __deploy_template; done
         envsubst '$IMAGE_TAG $KUBERNETES_NAMESPACE $KUBERNETES_CLUSTER' < __deploy_template > __deployment.yaml
+        cat __deployment.yaml
 
     - name: Deploy to Kubernetes
       shell: bash
