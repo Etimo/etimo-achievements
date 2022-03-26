@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: web-service
+  name: api-service
 spec:
   type: ClusterIP
   selector:
-    app: web
+    app: api
   ports:
     - protocol: TCP
-      port: 3001
-      targetPort: 3001
+      port: 3000
+      targetPort: 3000

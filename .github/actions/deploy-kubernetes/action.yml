@@ -1,0 +1,38 @@
+name: Docker Build
+description: Build and push an app
+
+inputs:
+  kubeconfig:
+    description: The kubeconfig file contents, with newlines replaced with '\n' (use a secret)
+    required: true
+  namespace:
+    description: The namespace in the Kubernetes cluster
+    required: true
+  cluster:
+    description: The cluster that is being deployed to (staging | production)
+    default: staging
+  tag:
+    description: The image tag to deploy (all images need to have the same tag)
+    default: ${{ github.sha }}
+
+runs:
+  using: composite
+  steps:
+    - name: Generate Kubernetes deployment spec
+      env:
+        IMAGE_TAG: ${{ inputs.tag }}
+        KUBERNETES_NAMESPACE: ${{ inputs.namespace }}
+        KUBERNETES_CLUSTER: ${{ inputs.cluster }}
+      run: |
+        shopt -s globstar
+        :>deployment.yml.template
+        for f in .kubernetes/**/*.yml; do cat $f >> deployment.yml.template; echo --- >> deployment.yml.template; done
+        envsubst '$IMAGE_TAG $KUBERNETES_NAMESPACE $KUBERNETES_CLUSTER' < deployment.yml.template > kubernetes.yml
+
+    - name: Deploy to Kubernetes
+      env:
+        KUBERNETES_NAMESPACE: ${{ inputs.namespace }}
+      run: |
+        echo -e "${{ inputs.kubeconfig }}" > kubeconfig
+        kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
+          apply -f deployment.yml

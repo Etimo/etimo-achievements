@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web
+  name: web-deployment
   labels:
     app: web
 spec:
@@ -15,5 +15,5 @@ spec:
         app: web
     spec:
       containers:
-        - name: nginx
-          image: nginxdemos/hello:latest # envsubst i pipeline
+        - name: achievements-web
+          image: docker.io/niclaslindstedt/etimo-achievements-web:${IMAGE_TAG}

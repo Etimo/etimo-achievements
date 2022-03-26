@@ -7,13 +7,20 @@ metadata:
     cert-manager.io/cluster-issuer: 'le-wildcard-issuer'
 spec:
   rules:
-    - host: 'achievements-staging.etimo-test.live' # replace i pipeline med rätt domän
+    - host: '${KUBERNETES_NAMESPACE}-${KUBERNETES_CLUSTER}.etimo-test.live'
       http:
         paths:
           - pathType: Prefix
             path: '/'
             backend:
               service:
-                name: web
+                name: web-service
                 port:
-                  number: 80
+                  number: 3001
+          - pathType: Prefix
+            path: '/api/'
+            backend:
+              service:
+                name: api-service
+                port:
+                  number: 3000

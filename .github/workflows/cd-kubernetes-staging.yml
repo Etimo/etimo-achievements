@@ -65,7 +65,8 @@ jobs:
           tag: latest
 
       - name: Deploy to Kubernetes
-        run: |
-          echo -e "${{ secrets.KUBERNETES_CONFIG }}" > kubernetes.yaml
-          kubectl --kubeconfig=kubernetes.yaml --namespace $KUBERNETES_NAMESPACE \
-            get pods
+        uses: ./.github/actions/deploy-kubernetes
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+          namespace: ${{ env.KUBERNETES_NAMESPACE }}
+          tag: $GITHUB_SHA
