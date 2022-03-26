@@ -49,7 +49,7 @@ jobs:
         with:
           registry: docker.io
           dockerfile: api
-          image-name: niclaslindstedt/etimo-achievements/api
+          image-name: niclaslindstedt/etimo-achievements-api
           target: production
           tag: latest
 
@@ -58,6 +58,6 @@ jobs:
         with:
           registry: docker.io
           dockerfile: web
-          image-name: niclaslindstedt/etimo-achievements/web
+          image-name: niclaslindstedt/etimo-achievements-web
           target: production
           tag: latest
