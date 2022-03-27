@@ -8,5 +8,5 @@ spec:
     app: api
   ports:
     - protocol: TCP
-      port: 3000
-      targetPort: 3000
+      port: ${API_PORT}
+      targetPort: ${API_PORT}

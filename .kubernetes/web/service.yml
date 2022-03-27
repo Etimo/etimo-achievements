@@ -8,5 +8,5 @@ spec:
     app: web
   ports:
     - protocol: TCP
-      port: 3001
-      targetPort: 3001
+      port: ${WEB_PORT}
+      targetPort: ${WEB_PORT}
