@@ -21,4 +21,4 @@ spec:
             - name: API_URL
               value: '${API_URL}'
             - name: PORT
-              value: ${WEB_PORT}
+              value: '${WEB_PORT}'
