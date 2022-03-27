@@ -13,6 +13,7 @@ defaults:
 env:
   API_PORT: 3000
   API_URL: https://achievements-staging.etimo-test.live/api
+  API_ROOT: /api/
   DB_PORT: 1433
   DB_SSL: true
   FRONTEND_URL: https://achievements-staging.etimo-test.live

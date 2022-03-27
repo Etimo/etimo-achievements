@@ -27,6 +27,8 @@ spec:
           env:
             - name: API_KEY
               value: '${API_KEY}'
+            - name: API_ROOT
+              value: '${API_ROOT}'
             - name: COOKIE_SECRET
               value: '${COOKIE_SECRET}'
             - name: DB_HOSTNAME
