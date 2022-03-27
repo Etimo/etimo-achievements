@@ -59,5 +59,6 @@ module.exports = {
   local: fixedLocalhost,
   development: useEnv,
   test: testEnv,
+  staging: production,
   production,
 };

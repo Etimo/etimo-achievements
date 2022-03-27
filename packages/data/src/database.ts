@@ -1,7 +1,6 @@
 import { getEnvironment, isDevelopment, isLocal, isTest, Logger } from '@etimo-achievements/common';
 import Knex from 'knex';
 import { Model } from 'objection';
-const knexfile = require('./config/knexfile');
 
 export class Database {
   private knex!: Knex;
@@ -41,6 +40,7 @@ export class Database {
   private init(): void {
     Logger.log('Initializing database');
 
+    const knexfile = require('./config/knexfile');
     const env = getEnvironment();
     const settings = knexfile[env];
     this.knex = Knex(settings);
