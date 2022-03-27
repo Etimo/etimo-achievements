@@ -17,6 +17,8 @@ spec:
       containers:
         - name: achievements-api
           image: niclaslindstedt/etimo-achievements-api:${IMAGE_TAG}
+          ports:
+            - containerPort: ${API_PORT}
           env:
             - name: API_KEY
               value: '${API_KEY}'
