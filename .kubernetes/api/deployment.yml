@@ -17,3 +17,36 @@ spec:
       containers:
         - name: achievements-api
           image: niclaslindstedt/etimo-achievements-api:${IMAGE_TAG}
+          env:
+            - name: API_KEY
+              value: '${API_KEY}'
+            - name: COOKIE_SECRET
+              value: '${COOKIE_SECRET}'
+            - name: DB_HOSTNAME
+              value: '${DB_HOSTNAME}'
+            - name: DB_NAME
+              value: '${DB_NAME}'
+            - name: DB_PASSWORD
+              value: '${DB_PASSWORD}'
+            - name: DB_PORT
+              value: ${DB_PORT}
+            - name: DB_SSL
+              value: '${DB_SSL}'
+            - name: DB_USERNAME
+              value: '${DB_USERNAME}'
+            - name: FRONTEND_URL
+              value: '${FRONTEND_URL}'
+            - name: GOOGLE_CLIENT_ID
+              value: '${GOOGLE_CLIENT_ID}'
+            - name: GOOGLE_CLIENT_SECRET
+              value: '${GOOGLE_CLIENT_SECRET}'
+            - name: GOOGLE_REDIRECT_URI
+              value: '${GOOGLE_REDIRECT_URI}'
+            - name: JWT_SECRET
+              value: '${JWT_SECRET}'
+            - name: NODE_ENV
+              value: '${NODE_ENV}'
+            - name: PORT
+              value: '${API_PORT}'
+            - name: SLACK_TOKEN
+              value: '${SLACK_TOKEN}'

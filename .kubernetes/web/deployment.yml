@@ -17,3 +17,8 @@ spec:
       containers:
         - name: achievements-web
           image: niclaslindstedt/etimo-achievements-web:${IMAGE_TAG}
+          env:
+            - name: API_URL
+              value: '${API_URL}'
+            - name: PORT
+              value: ${WEB_PORT}
