@@ -8,5 +8,5 @@ spec:
     app: api
   ports:
     - protocol: TCP
-      port: ${API_PORT}
+      port: 80
       targetPort: ${API_PORT}

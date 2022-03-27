@@ -14,6 +14,9 @@ inputs:
   cluster:
     description: The cluster that is being deployed to (staging | production)
     default: staging
+  ingress-url:
+    description: The base url of the Kubernetes ingress
+    required: true
   tag:
     description: The image tag to deploy (all images need to have the same tag)
     default: ${{ github.sha }}
@@ -26,7 +29,7 @@ runs:
       env:
         IMAGE_TAG: ${{ inputs.tag }}
         KUBERNETES_NAMESPACE: ${{ inputs.namespace }}
-        KUBERNETES_CLUSTER: ${{ inputs.cluster }}
+        INGRESS_URL: ${{ inputs.ingress-url }}
       run: |
         shopt -s globstar
         :>__deploy_template

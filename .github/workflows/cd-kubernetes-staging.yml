@@ -12,11 +12,12 @@ defaults:
 
 env:
   API_PORT: 3000
-  API_URL: https://achievements-staging.etimo-test.live/api
+  API_URL: ${{ env.INGRESS_URL }}/api
   DB_PORT: 1433
   DB_SSL: true
-  FRONTEND_URL: https://achievements-staging.etimo-test.live
-  GOOGLE_REDIRECT_URI: https://achievements-staging.etimo-test.live/login/callback
+  FRONTEND_URL: ${{ env.INGRESS_URL }}
+  GOOGLE_REDIRECT_URI: ${{ env.INGRESS_URL }}/login/callback
+  INGRESS_URL: https://achievements-staging.etimo-test.live
   NODE_ENV: staging
   WEB_PORT: 3001
   # Stored as environment secrets
@@ -44,7 +45,6 @@ jobs:
     environment: staging
     env:
       KUBERNETES_NAMESPACE: achievements
-      KUBERNETES_CLUSTER: staging
 
     steps:
       - name: Checkout code
@@ -97,5 +97,5 @@ jobs:
         with:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
-          cluster: ${{ env.KUBERNETES_CLUSTER }}
+          ingress-url: ${{ env.INGRESS_URL }}
           tag: ${{ github.sha }}

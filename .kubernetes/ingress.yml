@@ -7,7 +7,7 @@ metadata:
     cert-manager.io/cluster-issuer: 'le-wildcard-issuer'
 spec:
   rules:
-    - host: '${KUBERNETES_NAMESPACE}-${KUBERNETES_CLUSTER}.etimo-test.live'
+    - host: '${INGRESS_URL}'
       http:
         paths:
           - pathType: Prefix
@@ -16,11 +16,11 @@ spec:
               service:
                 name: web-service
                 port:
-                  number: ${WEB_PORT}
+                  number: 80
           - pathType: Prefix
             path: '/api/'
             backend:
               service:
                 name: api-service
                 port:
-                  number: ${API_PORT}
+                  number: 80
