@@ -99,4 +99,3 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ingress-url: ${{ env.INGRESS_URL }}
           tag: ${{ github.sha }}
-          debug: true
