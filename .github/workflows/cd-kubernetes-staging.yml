@@ -17,7 +17,7 @@ env:
   DB_SSL: true
   FRONTEND_URL: https://achievements-staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements-staging.etimo-test.live/login/callback
-  INGRESS_URL: https://achievements-staging.etimo-test.live
+  INGRESS_URL: achievements-staging.etimo-test.live
   NODE_ENV: staging
   WEB_PORT: 3001
   # Stored as environment secrets
@@ -99,3 +99,4 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ingress-url: ${{ env.INGRESS_URL }}
           tag: ${{ github.sha }}
+          debug: true

@@ -20,6 +20,9 @@ inputs:
   tag:
     description: The image tag to deploy (all images need to have the same tag)
     default: ${{ github.sha }}
+  debug:
+    description: Output the resulting deployment yaml file
+    default: false
 
 runs:
   using: composite
@@ -36,7 +39,7 @@ runs:
         for f in ${{ inputs.object-path }}/**/*.yml; do cat $f >> __deploy_template; echo --- >> __deploy_template; done
         replace_vars="$(env | cut -f1 -d= | xargs -I {} echo \${} | xargs)"
         envsubst "$replace_vars" < __deploy_template > __deployment.yaml
-        cat __deployment.yaml
+        if [ "${{ inputs.debug }}" = "true" ]; then cat __deployment.yaml; fi
 
     - name: Deploy to Kubernetes
       shell: bash
