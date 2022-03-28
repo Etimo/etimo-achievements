@@ -53,9 +53,10 @@ runs:
         kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
           apply -f __deployment.yaml
         if [ "${{ inputs.wait }}" != "false" ]; then
+          sleep 10
           IFS=', ' read -r -a deployments <<< "${{ inputs.wait }}"
           for deployment in "${deployments[@]}"; do
             kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
-              wait --for=condition=available --timeout=600s "deployment/$deployment"
+              rollout status -w "deployment/$deployment"
           done
         fi
