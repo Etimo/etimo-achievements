@@ -34,5 +34,5 @@ spec:
                 name: provisioned-secrets
             - configMapRef:
                 name: provisioned-config
-          restartPolicy: Never
+      restartPolicy: Never
   backoffLimit: 1
