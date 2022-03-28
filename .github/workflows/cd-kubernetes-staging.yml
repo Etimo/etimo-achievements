@@ -129,5 +129,5 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ingress-url: ${{ env.INGRESS_URL }}
           ignore-path: .kubernetes/.init
-          wait: true
+          wait: api-deployment,web-deployment
           debug: true

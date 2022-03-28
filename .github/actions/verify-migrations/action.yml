@@ -31,21 +31,17 @@ runs:
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         echo -e "${{ inputs.migration-object }}" > migration_object
 
-        set -x
-
         echo "Waiting for job (timeout: ${{ inputs.timeout }})..."
 
         timeout=${{ inputs.timeout }}
         while [ $timeout -gt 0 ]; do
           status="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json | jq -r '.status.conditions[] | .type')"
 
-          echo "$status"
+          echo "Status is $status"
 
           if [ "$status" = "Complete" ]; then
-            echo "Job completed"
             exit 0
           elif [ "$status" = "Failed" ]; then
-            echo "Job failed"
             exit 1
           fi
 

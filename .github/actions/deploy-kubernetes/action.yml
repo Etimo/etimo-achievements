@@ -20,7 +20,7 @@ inputs:
     description: The base url of the Kubernetes ingress
     required: true
   wait:
-    description: Wait for deployment(s) to finish before returning
+    description: Wait for deployment(s) to finish before returning (comma-separated list)
     default: false
   debug:
     description: Output the resulting deployment yaml file
@@ -74,7 +74,10 @@ runs:
         kubectl --kubeconfig=kubeconfig -n $KUBERNETES_NAMESPACE \
           apply -f __deployment.yaml
 
-        if [ "${{ inputs.wait }}" = "true" ]; then
-          kubectl --kubeconfig=kubeconfig -n $KUBERNETES_NAMESPACE \
-            rollout status -w -f __deployment.yaml
+        if [ "${{ inputs.wait }}" != "false" ]; then
+          IFS=',' read -r -a deployments <<< "${{ inputs.wait }}"
+          for deployment in "${deployments[@]}"; do
+            kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
+              rollout status -w "deployment/$deployment"
+          done
         fi
