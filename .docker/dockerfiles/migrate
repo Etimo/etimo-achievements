@@ -10,6 +10,7 @@ WORKDIR /app
 COPY --chown=1000:1000 ./.docker/resources/migrate-package.json ./package.json
 RUN yarn
 COPY --chown=1000:1000 ./packages/data/src/config ./src/config
+COPY --chown=1000:1000 ./packages/data/src/utils ./src/utils
 COPY --chown=1000:1000 ./packages/data/seeds ./seeds
 COPY --chown=1000:1000 ./packages/data/migrations ./migrations
 ENTRYPOINT ["npm", "run", "migrate-and-seed"]
