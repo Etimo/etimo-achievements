@@ -4,6 +4,8 @@ metadata:
   name: api-deployment
   labels:
     app: api
+  annotations:
+    kubernetes.io/change-cause: 'release ${RELEASE}'
 spec:
   replicas: 1
   selector:

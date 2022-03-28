@@ -47,6 +47,7 @@ jobs:
     env:
       DEFAULT_BRANCH: kubernetes #todo: master
       KUBERNETES_NAMESPACE: achievements
+      RELEASE: ${{ github.sha }}
 
     steps:
       - name: Determine branch
