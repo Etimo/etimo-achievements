@@ -36,5 +36,7 @@ spec:
           env:
             - name: DEBUG
               value: '${DEBUG}'
+            - name: NODE_ENV
+              value: '${NODE_ENV}'
       restartPolicy: Never
   backoffLimit: 1
