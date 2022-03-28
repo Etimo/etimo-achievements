@@ -107,6 +107,7 @@ jobs:
           tag: latest
 
       - name: Deploy initialization objects
+        id: deploy-init
         uses: ./.github/actions/deploy-kubernetes
         with:
           kubeconfig: ${{ env.KUBECONFIG }}
@@ -117,7 +118,7 @@ jobs:
       - name: Migrate database
         uses: ./.github/actions/migrate-database
         with:
-          migration-object: .kubernetes/.init/migration-job.yml
+          migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
 

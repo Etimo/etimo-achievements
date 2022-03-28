@@ -26,6 +26,11 @@ inputs:
     description: Output the resulting deployment yaml file
     default: false
 
+outputs:
+  deployment-yaml:
+    description: 'The deployment yaml file'
+    value: ${{ steps.generate-spec.outputs.random-id }}
+
 runs:
   using: composite
   steps:
@@ -39,6 +44,7 @@ runs:
         echo "INGRESS_URL=${{ inputs.ingress-url }}" >> $GITHUB_ENV
 
     - name: Generate Kubernetes deployment spec
+      id: generate-spec
       shell: bash
       run: |
         shopt -s globstar
@@ -52,6 +58,8 @@ runs:
         replace_vars="$(env | cut -f1 -d= | xargs -I {} echo \${} | xargs)"
         envsubst "$replace_vars" < __deploy_template > __deployment.yaml
         if [ "${{ inputs.debug }}" = "true" ]; then cat __deployment.yaml; fi
+        output="$(awk '{printf "%s\\n", $0}' __deployment.yaml)"
+        echo "::set-output name=deployment-yaml::$output"
 
     - name: Deploy to Kubernetes
       shell: bash

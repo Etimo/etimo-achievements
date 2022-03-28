@@ -3,7 +3,7 @@ description: Migrates the database
 
 inputs:
   migration-object:
-    description: The path to the migration Kubernetes object
+    description: The Kubernetes object containing the migration job
     required: true
   kubeconfig:
     description: The kubeconfig file contents, with newlines replaced with '\n' (use a secret)
