@@ -73,36 +73,11 @@ jobs:
       - name: Setup cache
         uses: ./.github/actions/setup-cache
 
-      - name: Build & push base image
-        uses: ./.github/actions/docker-build-push
-        with:
-          registry: ghcr.io/etimo
-          dockerfile: base
-          image-name: etimo-achievements/base
-          target: base
-          tag: latest
-
       - name: Build & push migrate image
         uses: ./.github/actions/docker-build-push
         with:
           dockerfile: migrate
           image-name: niclaslindstedt/etimo-achievements-migrate
-          target: production
-          tag: latest
-
-      - name: Build & push api image
-        uses: ./.github/actions/docker-build-push
-        with:
-          dockerfile: api
-          image-name: niclaslindstedt/etimo-achievements-api
-          target: production
-          tag: latest
-
-      - name: Build & push web image
-        uses: ./.github/actions/docker-build-push
-        with:
-          dockerfile: web
-          image-name: niclaslindstedt/etimo-achievements-web
           target: production
           tag: latest
 
@@ -121,6 +96,31 @@ jobs:
           migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
+
+      - name: Build & push base image
+        uses: ./.github/actions/docker-build-push
+        with:
+          registry: ghcr.io/etimo
+          dockerfile: base
+          image-name: etimo-achievements/base
+          target: base
+          tag: latest
+
+      - name: Build & push api image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: api
+          image-name: niclaslindstedt/etimo-achievements-api
+          target: production
+          tag: latest
+
+      - name: Build & push web image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: web
+          image-name: niclaslindstedt/etimo-achievements-web
+          target: production
+          tag: latest
 
       - name: Deploy application
         uses: ./.github/actions/deploy-kubernetes
