@@ -10,7 +10,6 @@ inputs:
     default: .kubernetes
   ignore-path:
     description: Pattern of what Kubernetes objects to ignore
-    default: .init
   namespace:
     description: The namespace in the Kubernetes cluster
     required: true
@@ -45,7 +44,7 @@ runs:
         shopt -s globstar
         :>__deploy_template
         for f in ${{ inputs.object-path }}/**/*.yml; do
-          if [[ $f == *"${{ inputs.ignore-path }}"* ]]; then
+          if [[ -n "${{ inputs.ignore-path }}" && $f == *"${{ inputs.ignore-path }}"* ]]; then
             continue
           fi
           cat $f >> __deploy_template; echo --- >> __deploy_template
