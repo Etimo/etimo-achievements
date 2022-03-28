@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: 'nginx'
     cert-manager.io/cluster-issuer: 'le-staging-wildcard-issuer'
     nginx.ingress.kubernetes.io/auth-url: 'https://auth.staging.etimo-test.live/oauth2/auth'
-    nginx.ingress.kubernetes.io/auth-signin: 'https://auth.staging.etimo-test.live/oauth2/start?rd=${PGADMIN_URL}$request_uri'
+    nginx.ingress.kubernetes.io/auth-signin: 'https://auth.staging.etimo-test.live/oauth2/start?rd=https%3A%2F%2F${PGADMIN_URL}$request_uri'
 spec:
   tls:
     - hosts:
