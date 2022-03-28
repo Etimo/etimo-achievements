@@ -1,11 +1,10 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: init-job-${DATE}-${TAG}
+  name: migrate-job-${DATE}-${TAG}
   labels:
-    app: api
-    app.kubernetes.io/name: achievements-init-${DATE}-${TAG}
-    app.kubernetes.io/instance: achievements-init-${DATE}-${TAG}
+    app.kubernetes.io/name: achievements-migrate-${DATE}-${TAG}
+    app.kubernetes.io/instance: achievements-migrate-${DATE}-${TAG}
     app.kubernetes.io/version: ${TAG}
     app.kubernetes.io/component: init
     app.kubernetes.io/part-of: achievements
@@ -20,7 +19,7 @@ spec:
         app.kubernetes.io/part-of: achievements
     spec:
       containers:
-        - name: init-database
+        - name: achievements-migrate
           image: niclaslindstedt/etimo-achievements-migrate:${GITHUB_SHA}
           resources:
             requests:

@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: web-service
   labels:
-    app: api
+    app: web
     app.kubernetes.io/name: achievements-web
     app.kubernetes.io/instance: achievements-web-${DATE}-${TAG}
     app.kubernetes.io/version: ${TAG}

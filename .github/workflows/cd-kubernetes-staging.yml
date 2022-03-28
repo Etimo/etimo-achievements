@@ -117,10 +117,9 @@ jobs:
       - name: Migrate database
         uses: ./.github/actions/migrate-database
         with:
-          job-name: init-job
+          migration-object: .kubernetes/.init/migration-job.yml
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
-          seed: true
 
       - name: Deploy application
         uses: ./.github/actions/deploy-kubernetes
