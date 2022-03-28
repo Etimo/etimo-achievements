@@ -81,10 +81,10 @@ jobs:
         if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/migrate-database
         with:
-          database: ${{ secrets.DB_NAME }}
-          hostname: ${{ secrets.DB_HOSTNAME }}
-          username: ${{ secrets.DB_USERNAME }}
-          password: ${{ secrets.DB_PASSWORD }}
+          database: ${{ secrets.DB_MAIN_NAME }}
+          hostname: ${{ secrets.DB_MAIN_PRIVATE_HOST }}
+          username: ${{ secrets.DB_MAIN_USER }}
+          password: ${{ secrets.DB_MAIN_PASSWORD }}
 
       - name: Verify release
         run: node ./scripts/verify-release.js production ${{ steps.commit.outputs.sha }}

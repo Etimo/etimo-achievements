@@ -14,8 +14,6 @@ env:
   API_PORT: 3000
   API_URL: https://achievements.staging.etimo-test.live/api
   API_ROOT: /api/
-  DB_PORT: 1433
-  DB_SSL: true
   FRONTEND_URL: https://achievements.staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements.staging.etimo-test.live
@@ -24,10 +22,6 @@ env:
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
-  DB_HOSTNAME: ${{ secrets.DB_HOSTNAME }}
-  DB_NAME: ${{ secrets.DB_NAME }}
-  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-  DB_USERNAME: ${{ secrets.DB_USERNAME }}
   GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
@@ -111,12 +105,4 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ingress-url: ${{ env.INGRESS_URL }}
           tag: ${{ github.sha }}
-          wait: api-deployment,web-deployment
-
-      - name: Migrate database
-        uses: ./.github/actions/migrate-database
-        with:
-          database: ${{ secrets.DB_NAME }}
-          hostname: ${{ secrets.DB_HOSTNAME }}
-          username: ${{ secrets.DB_USERNAME }}
-          password: ${{ secrets.DB_PASSWORD }}
+          wait: api-deployment,web-deployment,db-migration-deployment

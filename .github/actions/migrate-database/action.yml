@@ -42,12 +42,11 @@ runs:
       working-directory: packages/data
       shell: bash
       env:
-        DB_NAME: ${{ inputs.database }}
-        DB_HOSTNAME: ${{ inputs.hostname }}
-        DB_PORT: ${{ inputs.port }}
-        DB_USERNAME: ${{ inputs.username }}
-        DB_PASSWORD: ${{ inputs.password }}
-        DB_SSL: ${{ inputs.ssl }}
+        DB_MAIN_NAME: ${{ inputs.database }}
+        DB_MAIN_PRIVATE_HOST: ${{ inputs.hostname }}
+        DB_MAIN_PORT: ${{ inputs.port }}
+        DB_MAIN_USER: ${{ inputs.username }}
+        DB_MAIN_PASSWORD: ${{ inputs.password }}
       run: |
         yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} migrate:latest || exit 1
         [ "${{ inputs.seed }}" = "true" ] && {
