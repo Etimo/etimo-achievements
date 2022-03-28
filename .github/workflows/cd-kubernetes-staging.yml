@@ -70,6 +70,7 @@ jobs:
       - name: Build & push base image
         uses: ./.github/actions/docker-build-push
         with:
+          registry: ghcr.io/etimo
           dockerfile: base
           image-name: etimo-achievements/base
           target: base
@@ -78,7 +79,6 @@ jobs:
       - name: Build & push api image
         uses: ./.github/actions/docker-build-push
         with:
-          registry: docker.io
           dockerfile: api
           image-name: niclaslindstedt/etimo-achievements-api
           target: production
@@ -87,7 +87,6 @@ jobs:
       - name: Build & push web image
         uses: ./.github/actions/docker-build-push
         with:
-          registry: docker.io
           dockerfile: web
           image-name: niclaslindstedt/etimo-achievements-web
           target: production
@@ -101,3 +100,11 @@ jobs:
           ingress-url: ${{ env.INGRESS_URL }}
           tag: ${{ github.sha }}
           wait: api-deployment,web-deployment
+
+      - name: Migrate database
+        uses: ./.github/actions/migrate-database
+        with:
+          database: ${{ secrets.DB_NAME }}
+          hostname: ${{ secrets.DB_HOSTNAME }}
+          username: ${{ secrets.DB_USERNAME }}
+          password: ${{ secrets.DB_PASSWORD }}

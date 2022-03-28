@@ -24,7 +24,7 @@ inputs:
     default: production
   registry:
     description: The container registry to push image to
-    default: ghcr.io/etimo
+    default: docker.io
 
 runs:
   using: composite
