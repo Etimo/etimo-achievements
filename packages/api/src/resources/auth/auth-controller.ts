@@ -277,6 +277,6 @@ export class AuthController {
 
   private getCookieDomain() {
     const url = new URL(getEnvVariable(Env.FRONTEND_URL));
-    return url.protocol + '//' + url.host;
+    return url.host;
   }
 }
