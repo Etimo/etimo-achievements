@@ -29,14 +29,14 @@ runs:
       shell: bash
       run: |
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
-        echo -e "${{ inputs.migration-object }}" > migration-object
+        echo -e "${{ inputs.migration-object }}" > migration_object
 
         kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-          wait -f migration-object --for=condition=complete --timeout=${{ inputs.timeout }}s &
+          wait --for=condition=complete -f migration_object &
         completion_pid=$!
 
         kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-          wait -f migration-object --for=condition=complete --timeout=${{ inputs.timeout }}s &
+          wait --for=condition=failed -f migration_object &
         failure_pid=$!
 
         wait -n $completion_pid $failure_pid
