@@ -13,7 +13,7 @@ inputs:
     required: true
   timeout:
     description: The timeout for the job
-    default: 600
+    default: 60
 
 runs:
   using: composite
@@ -31,11 +31,11 @@ runs:
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
 
         kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-          wait -f "${{ inputs.migration-object }}" --for=condition=complete --timeout=${{ inputs.timeout }} &
+          wait -f "${{ inputs.migration-object }}" --for=condition=complete --timeout=${{ inputs.timeout }}s &
         completion_pid=$!
 
         kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-          wait -f "${{ inputs.migration-object }}" --for=condition=complete --timeout=${{ inputs.timeout }} &
+          wait -f "${{ inputs.migration-object }}" --for=condition=complete --timeout=${{ inputs.timeout }}s &
         failure_pid=$!
 
         wait -n $completion_pid $failure_pid
