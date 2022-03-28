@@ -35,13 +35,14 @@ runs:
         while [ $timeout -gt 0 ]; do
           echo "Waiting for job $job_name (timeout: $timeout)..."
 
-          status=$(kubectl --kubeconfig kubeconfig --namespace ${{ inputs.namespace }} \
-            get -f migration_object -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
+          status=$(kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE get -f migration_object -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
 
           if [ "$status" = '"Complete"' ]; then
             echo "Job completed!"
             exit 0
-          elif [ "$status" = '"Failed"' ]; then
+          fi
+
+          if [ "$status" = '"Failed"' ]; then
             echo "Job failed"
             exit 1
           fi
