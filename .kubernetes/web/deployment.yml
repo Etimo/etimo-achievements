@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-deployment
+  name: web-deployment-${DATE}-${TAG}
   labels:
     app: api
     app.kubernetes.io/name: achievements-web-${DATE}-${TAG}
