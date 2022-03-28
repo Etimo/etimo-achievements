@@ -6,6 +6,9 @@ metadata:
     kubernetes.io/ingress.class: 'nginx'
     cert-manager.io/cluster-issuer: 'le-staging-wildcard-issuer'
 spec:
+  tls:
+    - hosts:
+        - '${PGADMIN_URL}'
   rules:
     - host: '${INGRESS_URL}'
       http:
