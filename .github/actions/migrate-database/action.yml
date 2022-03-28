@@ -21,18 +21,25 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Prepare environment
+      shell: bash
+      run: |
+        echo "TAG=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+        echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
+
     - name: Run migrate database job
       shell: bash
       run: |
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
 
-        job_name=${{ inputs.job-name }}
+        job_name="${{ inputs.job-name }}-${DATE}-{$TAG}"
         timeout=${{ inputs.timeout }}
         while [ $timeout -gt 0 ]; do
           echo "Waiting for job $job_name ($timeout)..."
-          kubectl --kubeconfig kubeconfig --namespace ${{ inputs.namespace }} \
+          kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
             get job/$job_name
-          STATUS=$(kubectl --kubeconfig kubeconfig --namespace ${{ inputs.namespace }} \
+          STATUS=$(kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
             get job/$job_name -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
 
           if [ "$STATUS" == '"Complete"' ]; then
