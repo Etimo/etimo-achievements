@@ -24,3 +24,10 @@ spec:
                 name: api-service
                 port:
                   number: 80
+          - pathType: Prefix
+            path: '/'
+            backend:
+              service:
+                name: pgadmin-service
+                port:
+                  number: 8011
