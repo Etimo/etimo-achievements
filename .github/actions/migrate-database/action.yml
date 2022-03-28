@@ -2,27 +2,18 @@ name: Migrate database
 description: Migrates the database
 
 inputs:
-  database:
-    description: The name of the database
+  job-name:
+    description: The name of the Kubernetes job that migrates the database
     required: true
-  hostname:
-    description: The hostname of the database
+  kubeconfig:
+    description: The kubeconfig file contents, with newlines replaced with '\n' (use a secret)
     required: true
-  port:
-    description: The port of the database
-    default: 5432
-  username:
-    description: The username with access to the database
+  namespace:
+    description: The namespace in the Kubernetes cluster
     required: true
-  password:
-    description: The user's password
-    required: true
-  ssl:
-    description: If the database uses SSL
-    default: true
-  environment:
-    description: The knex environment to use
-    default: production
+  timeout:
+    description: The timeout for the job
+    default: 600
   seed:
     description: If the database should be seeded
     default: false
@@ -30,26 +21,36 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Install dependencies
+    - name: Run migrate database job
       shell: bash
-      run: yarn
-
-    - name: Build packages
-      shell: bash
-      run: npm run compile
-
-    - name: Migrate & seed database
-      working-directory: packages/data
-      shell: bash
-      env:
-        DB_MAIN_NAME: ${{ inputs.database }}
-        DB_MAIN_PRIVATE_HOST: ${{ inputs.hostname }}
-        DB_MAIN_PORT: ${{ inputs.port }}
-        DB_MAIN_USER: ${{ inputs.username }}
-        DB_MAIN_PASSWORD: ${{ inputs.password }}
       run: |
-        yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} migrate:latest || exit 1
-        [ "${{ inputs.seed }}" = "true" ] && {
-          yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} seed:run || exit 1
-        }
-        exit 0
+        echo -e "${{ inputs.kubeconfig }}" > kubeconfig
+
+        JOB_NAME=${{ inputs.job-name }}
+        TIMEOUT=${{ inputs.timeout }}
+        while [ $TIMEOUT -gt 0 ]; do
+          echo "Waiting for job $JOB_NAME ($TIMEOUT)..."
+          STATUS=$(kubectl --kubeconfig kubeconfig --namespace ${{ inputs.namespace }} \
+            get job/$JOB_NAME -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
+
+          if [ "$STATUS" == '"Complete"' ]; then
+            job_result=0
+            break
+          elif [ "$STATUS" == '"Failed"' ]; then
+            job_result=1
+            break
+          fi
+
+          sleep 1
+          TIMEOUT=$((TIMEOUT-1))
+        done
+
+        if [ -z "$job_result" ]; then
+          echo "Job $JOB_NAME timed out"
+          exit 1
+        elif [ "$job_result" -eq "1" ]; then
+          echo "Job $JOB_NAME failed!"
+          exit 1
+        fi
+
+        echo "Job succeeded"

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: init-job
+  labels:
+    app: api
+    app.kubernetes.io/name: achievements-init
+    app.kubernetes.io/instance: achievements-init-${DATE}-${TAG}
+    app.kubernetes.io/version: ${TAG}
+    app.kubernetes.io/component: init
+    app.kubernetes.io/part-of: achievements
+  annotations:
+    kubernetes.io/change-cause: 'release ${RELEASE}'
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        hash: '${TAG}'
+        app.kubernetes.io/part-of: achievements
+    spec:
+      containers:
+        - name: init-database
+          image: niclaslindstedt/etimo-achievements-migrate:${GITHUB_SHA}
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '128Mi'
+            limits:
+              cpu: '100m'
+              memory: '256Mi'
+          envFrom:
+            - secretRef:
+                name: provisioned-secrets
+            - configMapRef:
+                name: provisioned-config
+          restartPolicy: Never
+  backoffLimit: 1

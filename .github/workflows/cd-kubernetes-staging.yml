@@ -106,10 +106,29 @@ jobs:
           target: production
           tag: latest
 
+      - name: Deploy init job to Kubernetes
+        uses: ./.github/actions/deploy-kubernetes
+        with:
+          kubeconfig: ${{ env.KUBECONFIG }}
+          namespace: ${{ env.KUBERNETES_NAMESPACE }}
+          ingress-url: ${{ env.INGRESS_URL }}
+          object-path: .kubernetes/.init
+          debug: true
+
+      - name: Migrate database
+        uses: ./.github/actions/migrate-database
+        with:
+          job-name: init-job
+          kubeconfig: ${{ env.KUBECONFIG }}
+          namespace: ${{ env.KUBERNETES_NAMESPACE }}
+          seed: true
+
       - name: Deploy to Kubernetes
         uses: ./.github/actions/deploy-kubernetes
         with:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ingress-url: ${{ env.INGRESS_URL }}
-          wait: api-deployment,web-deployment,db-migration-deployment
+          ignore-path: .kubernetes/.init
+          wait: api-deployment,web-deployment
+          debug: true

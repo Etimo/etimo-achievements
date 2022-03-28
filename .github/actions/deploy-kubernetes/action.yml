@@ -8,6 +8,9 @@ inputs:
   object-path:
     description: The path to the Kubernetes objects (yaml files)
     default: .kubernetes
+  ignore-path:
+    description: Pattern of what Kubernetes objects to ignore
+    default: .init
   namespace:
     description: The namespace in the Kubernetes cluster
     required: true
@@ -41,7 +44,12 @@ runs:
       run: |
         shopt -s globstar
         :>__deploy_template
-        for f in ${{ inputs.object-path }}/**/*.yml; do cat $f >> __deploy_template; echo --- >> __deploy_template; done
+        for f in ${{ inputs.object-path }}/**/*.yml; do
+          if [[ $f == *"${{ inputs.ignore-path }}"* ]]; then
+            continue
+          fi
+          cat $f >> __deploy_template; echo --- >> __deploy_template
+        done
         replace_vars="$(env | cut -f1 -d= | xargs -I {} echo \${} | xargs)"
         envsubst "$replace_vars" < __deploy_template > __deployment.yaml
         if [ "${{ inputs.debug }}" = "true" ]; then cat __deployment.yaml; fi
