@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: achievements-api
-          image: niclaslindstedt/etimo-achievements-api:${TAG}
+          image: niclaslindstedt/etimo-achievements-api:${GITHUB_SHA}
           resources:
             requests:
               cpu: '100m'
@@ -60,8 +60,8 @@ spec:
             - name: SLACK_TOKEN
               value: '${SLACK_TOKEN}'
       initContainers:
-        - name: achievements-migrate
-          image: niclaslindstedt/etimo-achievements-migrate:${TAG}
+        - name: init-database
+          image: niclaslindstedt/etimo-achievements-migrate:${GITHUB_SHA}
           resources:
             requests:
               cpu: '100m'
