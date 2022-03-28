@@ -37,10 +37,8 @@ runs:
         timeout=${{ inputs.timeout }}
         while [ $timeout -gt 0 ]; do
           echo "Waiting for job $job_name ($timeout)..."
-          kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-            get job/$job_name
           STATUS=$(kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-            get job/$job_name -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
+            get jobs/$job_name -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
 
           if [ "$STATUS" == '"Complete"' ]; then
             job_result=0
