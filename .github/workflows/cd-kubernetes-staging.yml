@@ -113,7 +113,6 @@ jobs:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           object-path: .kubernetes/.init
-          wait: true
           debug: true
 
       - name: Migrate database
