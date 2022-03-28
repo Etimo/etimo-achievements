@@ -59,18 +59,3 @@ spec:
               value: '${API_PORT}'
             - name: SLACK_TOKEN
               value: '${SLACK_TOKEN}'
-      initContainers:
-        - name: init-database
-          image: niclaslindstedt/etimo-achievements-migrate:${GITHUB_SHA}
-          resources:
-            requests:
-              cpu: '50m'
-              memory: '64Mi'
-            limits:
-              cpu: '50m'
-              memory: '64Mi'
-          envFrom:
-            - secretRef:
-                name: provisioned-secrets
-            - configMapRef:
-                name: provisioned-config
