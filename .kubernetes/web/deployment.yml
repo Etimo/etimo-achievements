@@ -4,7 +4,7 @@ metadata:
   name: web-deployment
   labels:
     app: api
-    app.kubernetes.io/name: achievements-web
+    app.kubernetes.io/name: achievements-web-${DATE}-${TAG}
     app.kubernetes.io/instance: achievements-web-${DATE}-${TAG}
     app.kubernetes.io/version: ${TAG}
     app.kubernetes.io/component: frontend
