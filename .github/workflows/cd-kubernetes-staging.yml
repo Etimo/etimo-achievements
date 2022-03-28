@@ -19,6 +19,7 @@ env:
   GOOGLE_REDIRECT_URI: https://achievements.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements.staging.etimo-test.live
   NODE_ENV: staging
+  PGADMIN_URL: achievements-pgadmin.staging.etimo-test.live
   WEB_PORT: 3001
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
