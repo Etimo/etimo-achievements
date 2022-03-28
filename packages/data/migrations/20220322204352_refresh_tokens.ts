@@ -1,5 +1,5 @@
 import * as Knex from 'knex';
-import { createOnUpdateTrigger } from '@etimo-achievements/data/src/utils/knex-helpers';
+import { createOnUpdateTrigger } from '../src/utils/knex-helpers';
 
 export async function up(knex: Knex): Promise<void> {
   console.log('↑ 20220322204352_refresh_tokens');

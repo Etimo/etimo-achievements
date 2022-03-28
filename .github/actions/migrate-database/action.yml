@@ -13,7 +13,7 @@ inputs:
     required: true
   timeout:
     description: The timeout for the job
-    default: 60
+    default: 300
 
 runs:
   using: composite
