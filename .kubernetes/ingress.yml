@@ -7,9 +7,6 @@ metadata:
     nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
     cert-manager.io/cluster-issuer: 'le-staging-wildcard-issuer'
 spec:
-  tls:
-    - hosts:
-        - '${PGADMIN_URL}'
   rules:
     - host: '${INGRESS_URL}'
       http:
