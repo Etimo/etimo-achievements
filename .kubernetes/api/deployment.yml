@@ -59,3 +59,18 @@ spec:
               value: '${API_PORT}'
             - name: SLACK_TOKEN
               value: '${SLACK_TOKEN}'
+      initContainers:
+        - name: achievements-migrate
+          image: niclaslindstedt/etimo-achievements-migrate:${TAG}
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '128Mi'
+            limits:
+              cpu: '100m'
+              memory: '256Mi'
+          envFrom:
+            - secretRef:
+                name: provisioned-secrets
+            - configMapRef:
+                name: provisioned-config
