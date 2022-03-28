@@ -31,13 +31,21 @@ runs:
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         echo -e "${{ inputs.migration-object }}" > migration_object
 
-        kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-          wait --for=condition=complete -f migration_object &
-        completion_pid=$!
+        timeout=${{ inputs.timeout }}
+        while [ $timeout -gt 0 ]; do
+          echo "Waiting for job $job_name (timeout: $timeout)..."
+          STATUS=$(kubectl --kubeconfig kubeconfig --namespace ${{ inputs.namespace }} \
+            get -f migration_object -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
+          if [ "$STATUS" == '"Complete"' ]; then
+            echo "Job completed!"
+            exit 0
+          elif [ "$STATUS" == '"Failed"' ]; then
+            echo "Job failed"
+            exit 1
+          fi
+          sleep 1
+          timeout=$(( timeout - 1 ))
+        done
 
-        kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE \
-          wait --for=condition=failed -f migration_object &
-        failure_pid=$!
-
-        wait -n $completion_pid $failure_pid
-        exit $?
+        echo "Timeout reached"
+        exit 2
