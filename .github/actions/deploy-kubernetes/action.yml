@@ -20,6 +20,9 @@ inputs:
   tag:
     description: The image tag to deploy (all images need to have the same tag)
     default: ${{ github.sha }}
+  wait:
+    description: Wait for deployment(s) to finish before returning (comma-separated list)
+    default: false
   debug:
     description: Output the resulting deployment yaml file
     default: false
@@ -49,3 +52,10 @@ runs:
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
           apply -f __deployment.yaml
+        if [ "${{ inputs.wait }}" != "false" ]; then
+          IFS=', ' read -r -a deployments <<< "${{ inputs.wait }}"
+          for deployment in "${deployments[@]}"; do
+            kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
+              wait --for=condition=available --timeout=600s "deployment/$deployment"
+          done
+        fi
