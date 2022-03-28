@@ -10,5 +10,5 @@ spec:
     app: pgadmin
   ports:
     - protocol: TCP
-      port: 8011
+      port: 80
       targetPort: 80
