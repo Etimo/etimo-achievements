@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin-deployment
+  labels:
+    app: pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+        - name: achievements-pgadmin
+          image: dpage/pgadmin4:latest
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '64Mi'
+            limits:
+              cpu: '100m'
+              memory: '128Mi'
+          envFrom:
+            - secretRef:
+                name: provisioned-secrets
+            - configMapRef:
+                name: provisioned-config
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: '${PGADMIN_DEFAULT_EMAIL}'
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: '${PGADMIN_DEFAULT_PASSWORD}'

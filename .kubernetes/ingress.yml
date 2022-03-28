@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/component: ingress
   annotations:
     kubernetes.io/ingress.class: 'nginx'
-    cert-manager.io/cluster-issuer: 'le-wildcard-issuer'
+    cert-manager.io/cluster-issuer: 'le-staging-wildcard-issuer'
 spec:
   rules:
     - host: '${INGRESS_URL}'
@@ -27,5 +27,12 @@ spec:
             backend:
               service:
                 name: api-service
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: '/pgadmin/'
+            backend:
+              service:
+                name: pgadmin-service
                 port:
                   number: 80
