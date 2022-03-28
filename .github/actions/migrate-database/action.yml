@@ -37,15 +37,15 @@ runs:
         while [ $timeout -gt 0 ]; do
           output="$(kubectl --kubeconfig kubeconfig --namespace $KUBERNETES_NAMESPACE get -f migration_object -o json)"
 
-          if [ -n "$output" ]; then
-            status=$(echo $status | jq -r '.status.conditions[].type')
-            if [ "$status" = "Complete" ]; then
-              echo "Job completed"
-              exit 0
-            elif [ "$status" = "Failed" ]; then
-              echo "Job failed"
-              exit 1
-            fi
+          status=$(echo $status | jq -r '.status.conditions[].type')
+          echo "$status"
+
+          if [ "$status" = "Complete" ]; then
+            echo "Job completed"
+            exit 0
+          elif [ "$status" = "Failed" ]; then
+            echo "Job failed"
+            exit 1
           fi
 
           sleep 1
