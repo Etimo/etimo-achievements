@@ -71,10 +71,10 @@ runs:
       shell: bash
       run: |
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
-        kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
+        kubectl --kubeconfig=kubeconfig -n $KUBERNETES_NAMESPACE \
           apply -f __deployment.yaml
 
         if [ "${{ inputs.wait }}" = "true" ]; then
-          kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
+          kubectl --kubeconfig=kubeconfig -n $KUBERNETES_NAMESPACE \
             rollout status -w -f __deployment.yaml
         fi
