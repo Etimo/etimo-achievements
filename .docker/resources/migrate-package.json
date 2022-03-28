@@ -5,7 +5,6 @@
   "author": "Etimo AB",
   "license": "MIT",
   "scripts": {
-    "migrate-and-seed": "npm run migrate && npm run seed",
     "migrate": "npx knex --knexfile src/config/knexfile.ts migrate:latest",
     "seed": "npx knex --knexfile src/config/knexfile.ts seed:run"
   },
