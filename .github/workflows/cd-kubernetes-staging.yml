@@ -82,6 +82,14 @@ jobs:
           target: base
           tag: latest
 
+      - name: Build & push migrate image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: migrate
+          image-name: niclaslindstedt/etimo-achievements-migrate
+          target: production
+          tag: latest
+
       - name: Build & push api image
         uses: ./.github/actions/docker-build-push
         with:
@@ -104,5 +112,4 @@ jobs:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ingress-url: ${{ env.INGRESS_URL }}
-          tag: ${{ github.sha }}
           wait: api-deployment,web-deployment,db-migration-deployment

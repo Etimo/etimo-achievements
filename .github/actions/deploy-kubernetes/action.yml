@@ -17,9 +17,6 @@ inputs:
   ingress-url:
     description: The base url of the Kubernetes ingress
     required: true
-  tag:
-    description: The image tag to deploy (all images need to have the same tag)
-    default: ${{ github.sha }}
   wait:
     description: Wait for deployment(s) to finish before returning (comma-separated list)
     default: false
@@ -30,12 +27,17 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Prepare environment
+      shell: bash
+      run: |
+        echo "TAG=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+        echo "VERSION=$(git rev-list HEAD --count)" >> $GITHUB_ENV
+        echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
+        echo "INGRESS_URL=${{ inputs.ingress-url }}" >> $GITHUB_ENV
+
     - name: Generate Kubernetes deployment spec
       shell: bash
-      env:
-        IMAGE_TAG: ${{ inputs.tag }}
-        KUBERNETES_NAMESPACE: ${{ inputs.namespace }}
-        INGRESS_URL: ${{ inputs.ingress-url }}
       run: |
         shopt -s globstar
         :>__deploy_template
@@ -46,8 +48,6 @@ runs:
 
     - name: Deploy to Kubernetes
       shell: bash
-      env:
-        KUBERNETES_NAMESPACE: ${{ inputs.namespace }}
       run: |
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \

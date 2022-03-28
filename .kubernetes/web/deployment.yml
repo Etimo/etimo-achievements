@@ -3,7 +3,12 @@ kind: Deployment
 metadata:
   name: web-deployment
   labels:
-    app: web
+    app: api
+    app.kubernetes.io/name: achievements-web
+    app.kubernetes.io/instance: achievements-web-${DATE}-${TAG}
+    app.kubernetes.io/version: ${TAG}
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: achievements
   annotations:
     kubernetes.io/change-cause: 'release ${RELEASE}'
 spec:
@@ -18,7 +23,7 @@ spec:
     spec:
       containers:
         - name: achievements-web
-          image: niclaslindstedt/etimo-achievements-web:${IMAGE_TAG}
+          image: niclaslindstedt/etimo-achievements-web:${TAG}
           resources:
             requests:
               cpu: '100m'

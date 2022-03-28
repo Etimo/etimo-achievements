@@ -1,9 +1,8 @@
-import { Logger } from '@etimo-achievements/common';
 import Knex from 'knex';
 
 export async function up(knex: Knex) {
-  Logger.log('↑ 20210000000005_updated_at_procedure');
-  const on_update_timestamp = `
+  console.log('↑ 20210000000005_updated_at_procedure');
+  const onUpdateTimestamp = `
     CREATE OR REPLACE FUNCTION on_update_timestamp()
     RETURNS trigger AS $$
     BEGIN
@@ -11,10 +10,10 @@ export async function up(knex: Knex) {
         RETURN NEW;
     END;
     $$ language 'plpgsql';`;
-  await knex.raw(on_update_timestamp);
+  await knex.raw(onUpdateTimestamp);
 }
 
 export async function down(knex: Knex) {
-  Logger.log('↓ 20210000000005_updated_at_procedure');
+  console.log('↓ 20210000000005_updated_at_procedure');
   await knex.raw('DROP FUNCTION on_update_timestamp');
 }

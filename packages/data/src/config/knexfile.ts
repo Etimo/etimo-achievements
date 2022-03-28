@@ -7,6 +7,10 @@ const connection = {
   ssl: process.env.NODE_ENV !== 'development' ? { rejectUnauthorized: false } : false,
 };
 
+if (process.env.DEBUG === 'true') {
+  console.log(connection);
+}
+
 const fixedLocalhost = {
   client: 'postgresql',
   connection: {

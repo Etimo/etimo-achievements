@@ -1,9 +1,8 @@
-import { Logger } from '@etimo-achievements/common';
 import * as Knex from 'knex';
-import { createOnUpdateTrigger } from '../src/utils/knex-helpers';
+import { createOnUpdateTrigger } from '@etimo-achievements/data/src/utils/knex-helpers';
 
 export async function up(knex: Knex): Promise<void> {
-  Logger.log('↑ 20220317202328_access_tokens');
+  console.log('↑ 20220317202328_access_tokens');
   await knex.schema
     .createTable('access_tokens', function (table) {
       table.uuid('id').primary();
@@ -17,6 +16,6 @@ export async function up(knex: Knex): Promise<void> {
 }
 
 export async function down(knex: Knex): Promise<void> {
-  Logger.log('↓ 20220317202328_access_tokens');
+  console.log('↓ 20220317202328_access_tokens');
   await knex.schema.dropTable('access_tokens');
 }
