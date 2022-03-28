@@ -82,13 +82,13 @@ jobs:
           target: production
           tag: latest
 
-      - name: Deploy initialization objects
+      - name: Deploy database migration job
         id: deploy-init
         uses: ./.github/actions/deploy-kubernetes
         with:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
-          object-path: .kubernetes/.init
+          object-path: .kubernetes/.init/migrate
 
       - name: Build & push base image
         uses: ./.github/actions/docker-build-push
@@ -130,4 +130,3 @@ jobs:
           ingress-url: ${{ env.INGRESS_URL }}
           ignore-path: .kubernetes/.init
           wait: api-deployment,web-deployment
-          debug: true
