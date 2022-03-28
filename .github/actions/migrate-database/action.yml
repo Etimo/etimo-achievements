@@ -34,15 +34,18 @@ runs:
         timeout=${{ inputs.timeout }}
         while [ $timeout -gt 0 ]; do
           echo "Waiting for job $job_name (timeout: $timeout)..."
-          STATUS=$(kubectl --kubeconfig kubeconfig --namespace ${{ inputs.namespace }} \
+
+          status=$(kubectl --kubeconfig kubeconfig --namespace ${{ inputs.namespace }} \
             get -f migration_object -o json 2>/dev/null | jq '.status.conditions[] | .type' 2>/dev/null)
-          if [ "$STATUS" == '"Complete"' ]; then
+
+          if [ "$status" = '"Complete"' ]; then
             echo "Job completed!"
             exit 0
-          elif [ "$STATUS" == '"Failed"' ]; then
+          elif [ "$status" = '"Failed"' ]; then
             echo "Job failed"
             exit 1
           fi
+
           sleep 1
           timeout=$(( timeout - 1 ))
         done
