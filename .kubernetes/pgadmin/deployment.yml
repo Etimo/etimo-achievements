@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: achievements-pgadmin
-          image: dpage/pgadmin4:latest
+          image: dpage/pgadmin4:6.7
           resources:
             requests:
               cpu: '100m'
