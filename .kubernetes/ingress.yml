@@ -2,11 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: achievements-ingress
-  labels:
-    app: api
-    app.kubernetes.io/part-of: achievements
-    app.kubernetes.io/version: ${TAG}
-    app.kubernetes.io/component: ingress
   annotations:
     kubernetes.io/ingress.class: 'nginx'
     cert-manager.io/cluster-issuer: 'le-staging-wildcard-issuer'
