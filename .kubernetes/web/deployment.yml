@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-deployment-${DATE}-${TAG}
+  name: web-deployment
   labels:
     app: api
-    app.kubernetes.io/name: achievements-web-${DATE}-${TAG}
+    app.kubernetes.io/name: achievements-web
     app.kubernetes.io/instance: achievements-web-${DATE}-${TAG}
     app.kubernetes.io/version: ${TAG}
     app.kubernetes.io/component: frontend
