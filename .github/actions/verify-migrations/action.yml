@@ -25,7 +25,7 @@ runs:
         echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
         echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
 
-    - name: Run migrate database job
+    - name: Verify migrations
       shell: bash
       run: |
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
@@ -37,9 +37,8 @@ runs:
 
         timeout=${{ inputs.timeout }}
         while [ $timeout -gt 0 ]; do
-          output="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json)"
+          status="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json | jq -r '.status.conditions[] | .type)"
 
-          status=$(echo $status | jq -r '.status.conditions[] | .type')
           echo "$status"
 
           if [ "$status" = "Complete" ]; then

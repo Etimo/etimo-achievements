@@ -115,8 +115,8 @@ jobs:
           target: production
           tag: latest
 
-      - name: Migrate database
-        uses: ./.github/actions/migrate-database
+      - name: Verify database migrations
+        uses: ./.github/actions/verify-migrations
         with:
           migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
           kubeconfig: ${{ env.KUBECONFIG }}
