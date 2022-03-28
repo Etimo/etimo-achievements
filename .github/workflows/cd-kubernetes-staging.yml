@@ -89,14 +89,6 @@ jobs:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           object-path: .kubernetes/.init
-          debug: true
-
-      - name: Migrate database
-        uses: ./.github/actions/migrate-database
-        with:
-          migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
-          kubeconfig: ${{ env.KUBECONFIG }}
-          namespace: ${{ env.KUBERNETES_NAMESPACE }}
 
       - name: Build & push base image
         uses: ./.github/actions/docker-build-push
@@ -122,6 +114,13 @@ jobs:
           image-name: niclaslindstedt/etimo-achievements-web
           target: production
           tag: latest
+
+      - name: Migrate database
+        uses: ./.github/actions/migrate-database
+        with:
+          migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
+          kubeconfig: ${{ env.KUBECONFIG }}
+          namespace: ${{ env.KUBERNETES_NAMESPACE }}
 
       - name: Deploy application
         uses: ./.github/actions/deploy-kubernetes
