@@ -14,7 +14,7 @@ export default function getUrl(environment, app) {
 function getApiUrl(environment) {
   switch (environment) {
     case 'staging':
-      return 'https://etimo-achievements-staging.herokuapp.com';
+      return 'https://achievements.staging.etimo-test.live';
     case 'prod':
       return 'https://etimo-achievements.herokuapp.com';
     case 'local':

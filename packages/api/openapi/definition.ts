@@ -24,7 +24,7 @@ export const definition = {
       description: 'Etimo server',
     },
     {
-      url: 'https://etimo-achievements-staging.herokuapp.com',
+      url: 'https://achievements.staging.etimo-test.live/api',
       description: 'Staging server',
     },
     {
