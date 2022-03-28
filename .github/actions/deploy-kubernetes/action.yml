@@ -53,8 +53,7 @@ runs:
         kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
           apply -f __deployment.yaml
         if [ "${{ inputs.wait }}" != "false" ]; then
-          sleep 10
-          IFS=', ' read -r -a deployments <<< "${{ inputs.wait }}"
+          IFS=',' read -r -a deployments <<< "${{ inputs.wait }}"
           for deployment in "${deployments[@]}"; do
             kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
               rollout status -w "deployment/$deployment"
