@@ -29,7 +29,7 @@ inputs:
 outputs:
   deployment-yaml:
     description: 'The deployment yaml file'
-    value: ${{ steps.generate-spec.outputs.random-id }}
+    value: ${{ steps.generate-spec.outputs.deployment-yaml }}
 
 runs:
   using: composite
@@ -48,6 +48,7 @@ runs:
       shell: bash
       run: |
         shopt -s globstar
+
         :>__deploy_template
         for f in ${{ inputs.object-path }}/**/*.yml; do
           if [[ -n "${{ inputs.ignore-path }}" && $f == *"${{ inputs.ignore-path }}"* ]]; then
@@ -55,9 +56,14 @@ runs:
           fi
           cat $f >> __deploy_template; echo --- >> __deploy_template
         done
+
         replace_vars="$(env | cut -f1 -d= | xargs -I {} echo \${} | xargs)"
         envsubst "$replace_vars" < __deploy_template > __deployment.yaml
-        if [ "${{ inputs.debug }}" = "true" ]; then cat __deployment.yaml; fi
+
+        if [ "${{ inputs.debug }}" = "true" ]; then
+          cat __deployment.yaml
+        fi
+
         output="$(awk '{printf "%s\\n", $0}' __deployment.yaml)"
         echo "::set-output name=deployment-yaml::$output"
 
@@ -67,6 +73,7 @@ runs:
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
           apply -f __deployment.yaml
+
         if [ "${{ inputs.wait }}" = "true" ]; then
           kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
             rollout status -w -f __deployment.yaml
