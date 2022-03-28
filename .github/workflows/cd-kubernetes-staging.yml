@@ -14,6 +14,7 @@ env:
   API_PORT: 3000
   API_URL: https://achievements.staging.etimo-test.live/api
   API_ROOT: /api/
+  DEBUG: true
   FRONTEND_URL: https://achievements.staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements.staging.etimo-test.live
