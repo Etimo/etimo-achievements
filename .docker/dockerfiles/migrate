@@ -1,10 +1,5 @@
 FROM node:14-alpine AS production
-ENV DB_MAIN_PRIVATE_HOST=127.0.0.1 \
-  DB_MAIN_PORT=5432 \
-  DB_MAIN_USER=root \
-  DB_MAIN_PASSWORD=root \
-  DB_MAIN_NAME=achievements \
-  DEBUG=false \
+ENV DEBUG=false \
   NODE_ENV=development
 WORKDIR /app
 COPY --chown=1000:1000 ./.docker/resources/migrate-package.json ./package.json

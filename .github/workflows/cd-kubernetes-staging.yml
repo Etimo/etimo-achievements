@@ -57,7 +57,7 @@ jobs:
     environment: staging
     env:
       DEFAULT_BRANCH: kubernetes #todo: master
-      KUBERNETES_NAMESPACE: achievements
+      KUBERNETES_NAMESPACE: achievements-test
       RELEASE: ${{ github.sha }}
 
     steps:

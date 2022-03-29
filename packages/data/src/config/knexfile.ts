@@ -1,9 +1,21 @@
+const getDbVariable = (name: string): string | undefined => {
+  if (process.env.NODE_ENV === 'production') {
+    return process.env['DB_ACHIEVEMENTS_LIVE_MAIN_' + name];
+  }
+
+  if (process.env.NODE_ENV === 'staging') {
+    return process.env['DB_ACHIEVEMENTS_TEST_MAIN_' + name];
+  }
+
+  return process.env['DB_' + name];
+};
+
 const connection = {
-  host: process.env.DB_MAIN_PRIVATE_HOST ?? '127.0.0.1',
-  port: process.env.DB_MAIN_PORT ?? 5432,
-  user: process.env.DB_MAIN_USER ?? 'root',
-  password: process.env.DB_MAIN_PASSWORD ?? 'root',
-  database: process.env.DB_MAIN_NAME ?? 'achievements_ci',
+  host: getDbVariable('PRIVATE_HOST') ?? '127.0.0.1',
+  port: getDbVariable('PORT') ?? 5432,
+  user: getDbVariable('USER') ?? 'root',
+  password: getDbVariable('PASSWORD') ?? 'root',
+  database: getDbVariable('NAME') ?? 'achievements_ci',
   ssl: process.env.NODE_ENV !== 'development' ? { rejectUnauthorized: false } : false,
 };
 
@@ -18,7 +30,7 @@ const fixedLocalhost = {
     port: 5432,
     user: 'root',
     password: 'root',
-    database: process.env.DB_MAIN_NAME ?? 'achievements',
+    database: getDbVariable('NAME') ?? 'achievements',
     ssl: false,
   },
   migrations: {
