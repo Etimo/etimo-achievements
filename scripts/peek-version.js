@@ -7,4 +7,4 @@ const apiUrl = getUrl(env, 'api');
 const webUrl = getUrl(env, 'web');
 
 getVersionInfo(apiUrl).then((data) => console.log(`api-${env}: ${data[0].substring(0, 7)} compiled at ${data[1]}`));
-getVersionInfo(webUrl).then((data) => console.log(`api-${env}: ${data[0].substring(0, 7)} compiled at ${data[1]}`));
+getVersionInfo(webUrl).then((data) => console.log(`web-${env}: ${data[0].substring(0, 7)} compiled at ${data[1]}`));
