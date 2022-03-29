@@ -831,6 +831,34 @@
         ]
       }
     },
+    "/probes/readiness": {
+      "get": {
+        "summary": "Readiness probe",
+        "operationId": "getReadiness",
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Probes"
+        ]
+      }
+    },
+    "/probes/liveness": {
+      "get": {
+        "summary": "Liveness probe",
+        "operationId": "getLiveness",
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Probes"
+        ]
+      }
+    },
     "/slack/list-achievements": {
       "post": {
         "summary": "Display achievement list modal in Slack",

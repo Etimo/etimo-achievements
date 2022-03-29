@@ -21,6 +21,7 @@ import {
   UserController,
   VersionController,
 } from './resources';
+import { ProbeController } from './resources/probes';
 
 export default class AchievementsServer {
   private port: number;
@@ -121,21 +122,11 @@ export default class AchievementsServer {
 
     this.express.use(this.root, new AchievementController().routes);
     this.express.use(this.root, new AuthController().routes);
+    this.express.use(this.root, new AwardController().routes);
+    this.express.use(this.root, new ProbeController().routes);
     this.express.use(this.root, new SlackController().routes);
     this.express.use(this.root, new UserController().routes);
-    this.express.use(this.root, new AwardController().routes);
     this.express.use(this.root, new VersionController().routes);
-
-    this.express.use('/probes/readiness', (_req, res) => {
-      if (this.ready) {
-        return res.send('OK');
-      }
-      return res.status(503).send('Not ready');
-    });
-
-    this.express.use('/probes/liveness', (_req, res) => {
-      return res.send('OK');
-    });
   }
 
   private setupErrorHandler() {
