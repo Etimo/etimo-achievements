@@ -66,18 +66,18 @@ jobs:
       image: node:14
     env:
       NODE_ENV: development
-      DB_HOST: postgres
-      DB_NAME: root
-      DB_USER: root
-      DB_PASSWORD: postgres
+      DB_MAIN_PRIVATE_HOST: postgres
+      DB_MAIN_NAME: root
+      DB_MAIN_USER: root
+      DB_MAIN_PASSWORD: postgres
 
     services:
       postgres:
         image: postgres
         env:
-          POSTGRES_DB: ${{ env.DB_NAME }}
-          POSTGRES_USER: ${{ env.DB_USER }}
-          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
+          POSTGRES_DB: ${{ env.DB_MAIN_NAME }}
+          POSTGRES_USER: ${{ env.DB_MAIN_USER }}
+          POSTGRES_PASSWORD: ${{ env.DB_MAIN_PASSWORD }}
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -93,11 +93,11 @@ jobs:
       - name: Migrate & seed database
         uses: ./.github/actions/migrate-database
         with:
-          hostname: ${{ env.DB_HOST }}
+          hostname: ${{ env.DB_MAIN_PRIVATE_HOST }}
           port: ${{ job.services.postgres.ports[5432] }}
-          database: ${{ env.DB_NAME }}
-          username: ${{ env.DB_USER }}
-          password: ${{ env.DB_PASSWORD }}
+          database: ${{ env.DB_MAIN_NAME }}
+          username: ${{ env.DB_MAIN_USER }}
+          password: ${{ env.DB_MAIN_PASSWORD }}
           environment: ${{ env.NODE_ENV }}
 
       - name: Install dependencies
