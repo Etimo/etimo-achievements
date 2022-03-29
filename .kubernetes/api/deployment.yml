@@ -63,19 +63,17 @@ spec:
             - containerPort: ${API_PORT}
               protocol: TCP
           readinessProbe:
-            exec:
-              httpGet:
-                path: '/probes/readiness'
-                port: ${API_PORT}
+            httpGet:
+              path: '/probes/readiness'
+              port: ${API_PORT}
             timeoutSeconds: 2
             failureThreshold: 3
             initialDelaySeconds: 5
             periodSeconds: 10
           livenessProbe:
-            exec:
-              httpGet:
-                path: '/probes/liveness'
-                port: ${API_PORT}
+            httpGet:
+              path: '/probes/liveness'
+              port: ${API_PORT}
             timeoutSeconds: 30
             failureThreshold: 2
             initialDelaySeconds: 15

@@ -30,9 +30,8 @@ spec:
             - name: PGADMIN_DEFAULT_PASSWORD
               value: '${PGADMIN_DEFAULT_PASSWORD}'
           startupProbe:
-            exec:
-              httpGet:
-                path: '/'
-                port: 80
+            httpGet:
+              path: '/'
+              port: 80
             failureThreshold: 30
             periodSeconds: 10
