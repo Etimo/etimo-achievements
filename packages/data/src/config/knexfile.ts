@@ -1,13 +1,17 @@
 const getDbVariable = (name: string): string | undefined => {
+  name = name.toUpperCase();
+  let varName = 'DB_' + name;
   if (process.env.NODE_ENV === 'production') {
-    return process.env['DB_ACHIEVEMENTS_LIVE_MAIN_' + name];
+    varName = 'DB_ACHIEVEMENTS_LIVE_MAIN_' + name;
+  } else if (process.env.NODE_ENV === 'staging') {
+    varName = 'DB_ACHIEVEMENTS_TEST_MAIN_' + name;
   }
 
-  if (process.env.NODE_ENV === 'staging') {
-    return process.env['DB_ACHIEVEMENTS_TEST_MAIN_' + name];
+  if (process.env.DEBUG === 'true') {
+    console.log('Using environment variable: ' + varName);
   }
 
-  return process.env['DB_' + name];
+  return process.env[varName];
 };
 
 const connection = {
