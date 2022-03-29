@@ -1,5 +1,5 @@
-name: Docker Build
-description: Build and push an app
+name: Deploy Kubernetes
+description: Generate deployment and deploy to Kubernetes
 
 inputs:
   kubeconfig:

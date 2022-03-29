@@ -1,5 +1,5 @@
-name: Migrate database
-description: Migrates the database
+name: Verify migrations
+description: Verifies that database migrations were successful
 
 inputs:
   migration-object:

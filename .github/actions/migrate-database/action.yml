@@ -1,0 +1,57 @@
+name: Migrate database
+description: Migrates the database
+
+inputs:
+  database:
+    description: The name of the database
+    required: true
+  hostname:
+    description: The hostname of the database
+    required: true
+  port:
+    description: The port of the database
+    default: 5432
+  username:
+    description: The username with access to the database
+    required: true
+  password:
+    description: The user's password
+    required: true
+  ssl:
+    description: If the database uses SSL
+    default: true
+  environment:
+    description: The knex environment to use
+    default: production
+  seed:
+    description: If the database should be seeded
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - name: Install dependencies
+      shell: bash
+      run: |
+        apt-get update && apt-get install jq -y
+        yarn install --immutable
+    - name: Build packages
+      shell: bash
+      run: npm run compile-test
+
+    - name: Migrate & seed database
+      working-directory: packages/data
+      shell: bash
+      env:
+        DB_NAME: ${{ inputs.database }}
+        DB_HOSTNAME: ${{ inputs.hostname }}
+        DB_PORT: ${{ inputs.port }}
+        DB_USERNAME: ${{ inputs.username }}
+        DB_PASSWORD: ${{ inputs.password }}
+        DB_SSL: ${{ inputs.ssl }}
+      run: |
+        yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} migrate:latest || exit 1
+        [ "${{ inputs.seed }}" = "true" ] && {
+          yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} seed:run || exit 1
+        }
+        exit 0
