@@ -53,6 +53,7 @@ jobs:
   deploy:
     name: 'Deploy to Staging K8S'
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     environment: staging
     env:
       DEFAULT_BRANCH: kubernetes #todo: master
@@ -144,3 +145,4 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ignore-path: .kubernetes/.init
           wait: api-deployment,web-deployment
+          timeout-minutes: 5
