@@ -47,7 +47,8 @@ runs:
 
         consume_file() {
           if [[ -n "${{ inputs.ignore-path }}" && "$1" == *"${{ inputs.ignore-path }}"* ]]; then
-            continue
+            echo "Ignoring file: $1"
+            return
           fi
           cat $1 >> __deploy_template; echo --- >> __deploy_template
         }
