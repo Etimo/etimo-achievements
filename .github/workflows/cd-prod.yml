@@ -3,6 +3,14 @@ name: Deploy to Production
 concurrency: production_kubernetes
 
 on:
+  push:
+    branches: [kubernetes] #todo: master
+    paths:
+      - '.docker/**'
+      - '.kubernetes/**'
+      - '.github/**'
+      - 'packages/**'
+      - '!packages/**/*.md'
   workflow_dispatch:
     inputs:
       branch:
