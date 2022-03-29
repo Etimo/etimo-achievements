@@ -35,8 +35,10 @@ runs:
 
         timeout=${{ inputs.timeout }}
         while [ $timeout -gt 0 ]; do
-          status="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json | jq -r '.status.conditions[] | .type')"
+          json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json)"
+          echo "Json is $json"
 
+          status="$(echo "$json" | jq -r '.status.conditions[] | .type')"
           echo "Status is $status"
 
           if [ "$status" = "Complete" ]; then

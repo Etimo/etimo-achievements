@@ -52,7 +52,6 @@ runs:
         :>__deploy_template
 
         consume_file() {
-          if [ ! -f "$1" ]; then return; fi
           if [[ -n "${{ inputs.ignore-path }}" && "$1" == *"${{ inputs.ignore-path }}"* ]]; then
             continue
           fi
@@ -60,15 +59,12 @@ runs:
         }
 
         # services
-        for f in ${{ inputs.object-path }}/**/*service.y*ml; do
+        for f in $(find "${{ inputs.object-path }}" -iname "*service.y*ml"); do
           consume_file "$f"
         done
 
         # remaining files
-        for f in ${{ inputs.object-path }}/**/*.y*ml; do
-          if [[ "$f" == *service.y*ml ]]; then
-            continue
-          fi
+        for f in $(find "${{ inputs.object-path }}" -iname "*.y*ml" -not -path "*service.y*ml"); do
           consume_file "$f"
         done
 

@@ -131,3 +131,4 @@ jobs:
           ingress-url: ${{ env.INGRESS_URL }}
           ignore-path: .kubernetes/.init
           wait: api-deployment,web-deployment
+          debug: true
