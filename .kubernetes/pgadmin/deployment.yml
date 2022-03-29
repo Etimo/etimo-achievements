@@ -22,17 +22,17 @@ spec:
               cpu: '100m'
               memory: '64Mi'
             limits:
-              cpu: '100m'
-              memory: '128Mi'
+              cpu: '200m'
+              memory: '256Mi'
           env:
             - name: PGADMIN_DEFAULT_EMAIL
               value: '${PGADMIN_DEFAULT_EMAIL}'
             - name: PGADMIN_DEFAULT_PASSWORD
               value: '${PGADMIN_DEFAULT_PASSWORD}'
-          readinessProbe:
+          startupProbe:
             exec:
               httpGet:
                 path: '/'
                 port: 80
-            initialDelaySeconds: 5
-            periodSeconds: 5
+            failureThreshold: 30
+            periodSeconds: 10

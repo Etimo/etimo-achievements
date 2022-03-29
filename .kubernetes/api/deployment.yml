@@ -59,3 +59,24 @@ spec:
               value: '${API_PORT}'
             - name: SLACK_TOKEN
               value: '${SLACK_TOKEN}'
+          ports:
+            - containerPort: ${API_PORT}
+              protocol: TCP
+          readinessProbe:
+            exec:
+              httpGet:
+                path: '/probes/readiness'
+                port: ${API_PORT}
+            timeoutSeconds: 2
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              httpGet:
+                path: '/probes/liveness'
+                port: ${API_PORT}
+            timeoutSeconds: 30
+            failureThreshold: 2
+            initialDelaySeconds: 15
+            periodSeconds: 20

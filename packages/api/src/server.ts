@@ -1,4 +1,5 @@
 import { getEnvVariable, isDevelopment, Logger } from '@etimo-achievements/common';
+import { Database } from '@etimo-achievements/data';
 import {
   contextMiddleware,
   errorMiddleware,
@@ -10,6 +11,7 @@ import { Env } from '@etimo-achievements/types';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, static as serveStatic } from 'express';
+import { Server } from 'http';
 import swaggerUi from 'swagger-ui-express';
 import {
   AchievementController,
@@ -20,10 +22,12 @@ import {
   VersionController,
 } from './resources';
 
-export default class Server {
+export default class AchievementsServer {
   private port: number;
   private root: string;
   private express: Application;
+  private server?: Server;
+  private ready?: boolean;
 
   constructor(port?: number) {
     this.port = port ?? 3000;
@@ -34,15 +38,30 @@ export default class Server {
   public start() {
     this.setup();
 
-    this.express.listen(this.port);
+    this.server = this.express.listen(this.port);
+    this.setupSigtermHandler();
 
     Logger.log(`Server running at port ${this.port} serving at path ${this.root}`);
+
+    this.ready = true;
   }
 
   public setup() {
     this.setupMiddleware();
     this.setupRoutes();
     this.setupErrorHandler();
+  }
+
+  private setupSigtermHandler() {
+    Logger.log('Setting up sigterm handler');
+
+    process.on('SIGTERM', () => {
+      Logger.log('SIGTERM signal received');
+      this.server?.close(() => {
+        Database.disconnect();
+        Logger.log('HTTP server closed');
+      });
+    });
   }
 
   public get instance() {
@@ -106,6 +125,17 @@ export default class Server {
     this.express.use(this.root, new UserController().routes);
     this.express.use(this.root, new AwardController().routes);
     this.express.use(this.root, new VersionController().routes);
+
+    this.express.use('/probes/readiness', (_req, res) => {
+      if (this.ready) {
+        return res.send('OK');
+      }
+      return res.status(503).send('Not ready');
+    });
+
+    this.express.use('/probes/liveness', (_req, res) => {
+      return res.send('OK');
+    });
   }
 
   private setupErrorHandler() {

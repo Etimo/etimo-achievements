@@ -36,3 +36,15 @@ spec:
               value: '${API_URL}'
             - name: PORT
               value: '${WEB_PORT}'
+          ports:
+            - containerPort: ${WEB_PORT}
+              protocol: TCP
+          livenessProbe:
+            exec:
+              httpGet:
+                path: '/'
+                port: ${WEB_PORT}
+            timeoutSeconds: 3
+            failureThreshold: 2
+            initialDelaySeconds: 5
+            periodSeconds: 20

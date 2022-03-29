@@ -12,6 +12,7 @@ export class Database {
 
   public static disconnect(): void {
     this.getInstance().close();
+    Logger.log('Database connection closed');
   }
 
   public static get knex(): Knex {
