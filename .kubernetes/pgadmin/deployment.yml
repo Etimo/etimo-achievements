@@ -32,7 +32,7 @@ spec:
           readinessProbe:
             exec:
               httpGet:
-                path: /
+                path: '/'
                 port: 80
             initialDelaySeconds: 5
             periodSeconds: 5
