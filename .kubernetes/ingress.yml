@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.class: 'nginx'
     cert-manager.io/cluster-issuer: 'le-staging-wildcard-issuer'
     nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: '/'
 spec:
   rules:
     - host: '${INGRESS_URL}'
