@@ -4,8 +4,8 @@ metadata:
   name: achievements-ingress
   annotations:
     kubernetes.io/ingress.class: 'nginx'
+    cert-manager.io/cluster-issuer: 'le-staging-wildcard-issuer'
     nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
-    cert-manager.io/cluster-issuer: 'le-wildcard-issuer'
 spec:
   rules:
     - host: '${INGRESS_URL}'
