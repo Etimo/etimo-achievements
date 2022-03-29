@@ -15,11 +15,11 @@ These are the technologies used in this project:
 | Technology                                            | Description                                                 |
 | ----------------------------------------------------- | ----------------------------------------------------------- |
 | [Docker](https://www.docker.com/)                     | Containers are used in local development and in production. |
+| [Kubernetes](https://www.kubernetes.io/)              | Container orchestration.                                    |
 | [ESLint](https://eslint.org/)                         | Code linting.                                               |
 | [Express](https://expressjs.com/)                     | Express is used for the API.                                |
 | [GNU Bash](https://www.gnu.org/software/bash/)        | CI/CD scripts.                                              |
 | [GitHub Actions](https://github.com/features/actions) | Continuous integration/deployment.                          |
-| [Heroku](https://www.heroku.com/)                     | Cloud platform for deployment.                              |
 | [Husky](https://typicode.github.io/husky/)            | Git hooks.                                                  |
 | [Jest](https://jestjs.io/)                            | Unit testing.                                               |
 | [Knex](https://knexjs.org)                            | DB access, migrations and seed files.                       |
