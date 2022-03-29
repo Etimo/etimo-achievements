@@ -15,7 +15,6 @@ These are the technologies used in this project:
 | Technology                                            | Description                                                 |
 | ----------------------------------------------------- | ----------------------------------------------------------- |
 | [Docker](https://www.docker.com/)                     | Containers are used in local development and in production. |
-| [Kubernetes](https://www.kubernetes.io/)              | Container orchestration.                                    |
 | [ESLint](https://eslint.org/)                         | Code linting.                                               |
 | [Express](https://expressjs.com/)                     | Express is used for the API.                                |
 | [GNU Bash](https://www.gnu.org/software/bash/)        | CI/CD scripts.                                              |
@@ -23,8 +22,9 @@ These are the technologies used in this project:
 | [Husky](https://typicode.github.io/husky/)            | Git hooks.                                                  |
 | [Jest](https://jestjs.io/)                            | Unit testing.                                               |
 | [Knex](https://knexjs.org)                            | DB access, migrations and seed files.                       |
-| [Nodemon](https://nodemon.io/)                        | Change monitoring during development.                       |
+| [Kubernetes](https://www.kubernetes.io/)              | Container orchestration.                                    |
 | [Node.js](https://nodejs.org/en/)                     | Server-side JavaScript for the backend.                     |
+| [Nodemon](https://nodemon.io/)                        | Change monitoring during development.                       |
 | [Objection.js](https://vincit.github.io/objection.js) | ORM for Knex.                                               |
 | [Postgres](https://www.postgresql.org/)               | SQL database.                                               |
 | [Prettier](https://prettier.io)                       | Code formatting.                                            |
