@@ -31,6 +31,10 @@ runs:
     - name: Verify migrations
       shell: bash
       run: |
+        if [ "$DEBUG" = "true" ]; then
+          set -x
+        fi
+
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         echo -e "${{ inputs.migration-object }}" > migration_object
 
