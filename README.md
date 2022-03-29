@@ -1,5 +1,8 @@
 # etimo-achievements
 
+[![Deploy to Staging](https://github.com/Etimo/etimo-achievements/actions/workflows/cd-staging.yml/badge.svg)](https://github.com/Etimo/etimo-achievements/actions/workflows/cd-staging.yml)
+[![Deploy to Production](https://github.com/Etimo/etimo-achievements/actions/workflows/cd-prod.yml/badge.svg)](https://github.com/Etimo/etimo-achievements/actions/workflows/cd-prod.yml)
+
 Etimo Achievements is a simple, open-source, web-based platform for managing and sharing achievements.
 
 It is used by [Etimo](https://www.etimo.se) to create, track and hand out achievements on Slack.
