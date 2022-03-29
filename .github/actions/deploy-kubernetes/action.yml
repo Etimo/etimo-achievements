@@ -50,11 +50,25 @@ runs:
         shopt -s globstar
 
         :>__deploy_template
-        for f in ${{ inputs.object-path }}/**/*.yml; do
-          if [[ -n "${{ inputs.ignore-path }}" && $f == *"${{ inputs.ignore-path }}"* ]]; then
+
+        consume_file() {
+          if [[ -n "${{ inputs.ignore-path }}" && "$1" == *"${{ inputs.ignore-path }}"* ]]; then
             continue
           fi
-          cat $f >> __deploy_template; echo --- >> __deploy_template
+          cat $1 >> __deploy_template; echo --- >> __deploy_template
+        }
+
+        # services
+        for f in ${{ inputs.object-path }}/**/*service.y*ml; do
+          consume_file "$f"
+        done
+
+        # remaining files
+        for f in ${{ inputs.object-path }}/**/*.y*ml; do
+          if [[ "$f" == *service.y*ml ]]; then
+            continue
+          fi
+          consume_file "$f"
         done
 
         replace_vars="$(env | cut -f1 -d= | xargs -I {} echo \${} | xargs)"

@@ -24,11 +24,6 @@ spec:
             limits:
               cpu: '100m'
               memory: '128Mi'
-          envFrom:
-            - secretRef:
-                name: provisioned-secrets
-            - configMapRef:
-                name: provisioned-config
           env:
             - name: PGADMIN_DEFAULT_EMAIL
               value: '${PGADMIN_DEFAULT_EMAIL}'
