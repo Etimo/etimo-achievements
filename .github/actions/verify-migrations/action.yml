@@ -44,7 +44,7 @@ runs:
             echo "Json is $json"
           fi
 
-          status="$(echo "$json" | jq -r '.status.conditions[] | .type')"
+          status="$(echo "$json" | jq -r '.status.conditions[] | .type' 2>/dev/null)"
 
           if [ "$DEBUG" = "true" ]; then
             echo "Status is $status"
