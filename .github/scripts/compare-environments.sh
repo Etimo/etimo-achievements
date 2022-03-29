@@ -4,7 +4,7 @@
 echo "::set-output name=differs::true"
 
 staging_url="${1:-https://achievements-test.staging.etimo-test.live}/version"
-production_url="${2-https://etimo-achievements.herokuapp.com}/version"
+production_url="${2-https://achievements-live.staging.etimo-test.live}/version"
 
 echo "Fetching staging version information from $staging_url"
 staging_contents="$(curl --fail -s "$staging_url")"

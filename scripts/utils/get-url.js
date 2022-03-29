@@ -16,7 +16,7 @@ function getApiUrl(environment) {
     case 'staging':
       return 'https://achievements-test.staging.etimo-test.live';
     case 'prod':
-      return 'https://etimo-achievements.herokuapp.com';
+      return 'https://achievements-live.staging.etimo-test.live';
     case 'local':
       return 'http://localhost:3000';
     default:
