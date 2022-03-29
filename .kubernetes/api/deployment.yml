@@ -64,7 +64,7 @@ spec:
               protocol: TCP
           readinessProbe:
             httpGet:
-              path: '/probes/readiness'
+              path: '/api/probes/readiness'
               port: ${API_PORT}
             timeoutSeconds: 2
             failureThreshold: 3
@@ -72,7 +72,7 @@ spec:
             periodSeconds: 10
           livenessProbe:
             httpGet:
-              path: '/probes/liveness'
+              path: '/api/probes/liveness'
               port: ${API_PORT}
             timeoutSeconds: 30
             failureThreshold: 2
