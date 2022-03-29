@@ -22,9 +22,6 @@ inputs:
   debug:
     description: Output the resulting deployment yaml file
     default: false
-  timeout-minutes:
-    description: Timeout in minutes
-    default: 15
 
 outputs:
   deployment-yaml:
@@ -78,7 +75,6 @@ runs:
 
     - name: Deploy to Kubernetes
       shell: bash
-      timeout-minutes: ${{ inputs.timeout-minutes }}
       run: |
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         kubectl --kubeconfig=kubeconfig -n $KUBERNETES_NAMESPACE \
