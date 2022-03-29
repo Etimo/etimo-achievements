@@ -36,7 +36,7 @@ function createDatabase(dbName) {
 async function migrateDatabase(dbName) {
   console.log('Migrating database');
   const cwd = getPackageDirectory('data');
-  process.env.DB_NAME = dbName;
+  process.env.DB_MAIN_NAME = dbName;
   const success = await runCommand('npm', ['run', 'knex:test', 'migrate:latest'], cwd);
   if (!success) {
     error('Migration of database failed');
@@ -46,7 +46,7 @@ async function migrateDatabase(dbName) {
 async function seedDatabase(dbName) {
   console.log('Seeding database');
   const cwd = getPackageDirectory('data');
-  process.env.DB_NAME = dbName;
+  process.env.DB_MAIN_NAME = dbName;
   const success = await runCommand('npm', ['run', 'knex:test', 'seed:run'], cwd);
   if (!success) {
     error('Seeding of database failed');

@@ -1,25 +1,9 @@
-const getDbVariable = (name: string): string | undefined => {
-  name = name.toUpperCase();
-  let varName = 'DB_' + name;
-  if (process.env.NODE_ENV === 'production') {
-    varName = 'DB_ACHIEVEMENTS_LIVE_MAIN_' + name;
-  } else if (process.env.NODE_ENV === 'staging') {
-    varName = 'DB_ACHIEVEMENTS_TEST_MAIN_' + name;
-  }
-
-  if (process.env.DEBUG === 'true') {
-    console.log('Using environment variable: ' + varName);
-  }
-
-  return process.env[varName];
-};
-
 const connection = {
-  host: getDbVariable('PRIVATE_HOST') ?? '127.0.0.1',
-  port: getDbVariable('PORT') ?? 5432,
-  user: getDbVariable('USER') ?? 'root',
-  password: getDbVariable('PASSWORD') ?? 'root',
-  database: getDbVariable('NAME') ?? 'achievements_ci',
+  host: process.env.DB_MAIN_PRIVATE_HOST ?? '127.0.0.1',
+  port: process.env.DB_MAIN_PORT ?? 5432,
+  user: process.env.DB_MAIN_USER ?? 'root',
+  password: process.env.DB_MAIN_PASSWORD ?? 'root',
+  database: process.env.DB_MAIN_NAME ?? 'achievements_ci',
   ssl: process.env.NODE_ENV !== 'development' ? { rejectUnauthorized: false } : false,
 };
 
@@ -34,7 +18,7 @@ const fixedLocalhost = {
     port: 5432,
     user: 'root',
     password: 'root',
-    database: getDbVariable('NAME') ?? 'achievements',
+    database: process.env.DB_MAIN_NAME ?? 'achievements',
     ssl: false,
   },
   migrations: {

@@ -4,7 +4,7 @@ export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
   await knex('achievements').del();
 
-  console.log(process.env.DB_NAME);
+  console.log(process.env.DB_MAIN_NAME);
   const achievements = [
     {
       id: 'b95f4933-fd18-4918-ba8d-dbef8d4895fa',

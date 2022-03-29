@@ -10,7 +10,7 @@ services:
     container_name: achievements-api
     env_file: ../../packages/api/.env
     environment:
-      - DB_PRIVATE_HOST=postgres
+      - DB_MAIN_PRIVATE_HOST=postgres
     ports:
       - 3000:3000
     user: 1000:1000
