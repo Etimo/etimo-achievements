@@ -32,6 +32,7 @@ jobs:
       - name: Build base image
         uses: ./.github/actions/docker-build-push
         with:
+          registry: ghcr.io/etimo
           dockerfile: base
           image-name: etimo-achievements/base
           target: base
@@ -49,6 +50,13 @@ jobs:
         with:
           dockerfile: web
           image-name: etimo-achievements/web-ci
+          push: false
+
+      - name: Build migrate image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: migrate
+          image-name: etimo-achievements/migrate-ci
           push: false
 
   test:
