@@ -1,4 +1,4 @@
-name: Deploy to Staging K8S
+name: Deploy to Staging
 
 concurrency: staging_kubernetes
 

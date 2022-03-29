@@ -1,6 +1,6 @@
-name: Deploy to Staging K8S
+name: Deploy to Production
 
-concurrency: staging_kubernetes
+concurrency: production_kubernetes
 
 on:
   push:
@@ -58,7 +58,7 @@ jobs:
     environment: production
     env:
       DEFAULT_BRANCH: kubernetes #todo: master
-      KUBERNETES_NAMESPACE: achievements-test
+      KUBERNETES_NAMESPACE: achievements-live
       RELEASE: ${{ github.sha }}
 
     steps:
