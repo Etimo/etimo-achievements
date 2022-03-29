@@ -33,3 +33,17 @@ services:
     volumes:
       - ../../packages:/app/packages
       - ../../scripts:/app/scripts
+
+  migrate:
+    build:
+      dockerfile: .docker/dockerfiles/migrate
+      context: ../..
+    container_name: achievements-migrate
+    env_file: ../../packages/api/.env
+    environment:
+      - DB_MAIN_PRIVATE_HOST=postgres
+    user: 1000:1000
+    volumes:
+      - ../../packages/data/src/config:/app/src/config
+      - ../../packages/data/migrations:/app/migrations
+      - ../../packages/data/seeds:/app/seeds

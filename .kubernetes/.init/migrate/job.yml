@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: migrate-job-${DATE}-${TAG}
+  labels:
+    app.kubernetes.io/name: achievements-migrate-${DATE}-${TAG}
+    app.kubernetes.io/instance: achievements-migrate-${DATE}-${TAG}
+    app.kubernetes.io/version: ${TAG}
+    app.kubernetes.io/component: init
+    app.kubernetes.io/part-of: achievements
+  annotations:
+    kubernetes.io/change-cause: 'release ${RELEASE}'
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    metadata:
+      labels:
+        hash: '${TAG}'
+        app.kubernetes.io/part-of: achievements
+    spec:
+      containers:
+        - name: achievements-migrate
+          image: niclaslindstedt/etimo-achievements-migrate:${GITHUB_SHA}
+          resources:
+            requests:
+              cpu: '50m'
+              memory: '64Mi'
+            limits:
+              cpu: '100m'
+              memory: '256Mi'
+          envFrom:
+            - secretRef:
+                name: provisioned-secrets
+            - configMapRef:
+                name: provisioned-config
+          env:
+            - name: DEBUG
+              value: '${DEBUG}'
+            - name: NODE_ENV
+              value: '${NODE_ENV}'
+      restartPolicy: Never
+  backoffLimit: 1

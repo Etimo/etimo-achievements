@@ -1,0 +1,21 @@
+{
+  "name": "migrate",
+  "version": "1.0.0",
+  "description": "Migrate & seed database",
+  "author": "Etimo AB",
+  "license": "MIT",
+  "scripts": {
+    "migrate-and-seed": "npm run migrate && npm run seed",
+    "migrate": "npx knex --knexfile src/config/knexfile.ts migrate:latest",
+    "seed": "npx knex --knexfile src/config/knexfile.ts seed:run"
+  },
+  "dependencies": {
+    "knex": "~0.21.21",
+    "pg": "^8.7.1"
+  },
+  "devDependencies": {
+    "@types/node": "^16.11.0",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}

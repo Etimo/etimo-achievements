@@ -19,12 +19,12 @@ These are the technologies used in this project:
 | [Express](https://expressjs.com/)                     | Express is used for the API.                                |
 | [GNU Bash](https://www.gnu.org/software/bash/)        | CI/CD scripts.                                              |
 | [GitHub Actions](https://github.com/features/actions) | Continuous integration/deployment.                          |
-| [Heroku](https://www.heroku.com/)                     | Cloud platform for deployment.                              |
 | [Husky](https://typicode.github.io/husky/)            | Git hooks.                                                  |
 | [Jest](https://jestjs.io/)                            | Unit testing.                                               |
 | [Knex](https://knexjs.org)                            | DB access, migrations and seed files.                       |
-| [Nodemon](https://nodemon.io/)                        | Change monitoring during development.                       |
+| [Kubernetes](https://www.kubernetes.io/)              | Container orchestration.                                    |
 | [Node.js](https://nodejs.org/en/)                     | Server-side JavaScript for the backend.                     |
+| [Nodemon](https://nodemon.io/)                        | Change monitoring during development.                       |
 | [Objection.js](https://vincit.github.io/objection.js) | ORM for Knex.                                               |
 | [Postgres](https://www.postgresql.org/)               | SQL database.                                               |
 | [Prettier](https://prettier.io)                       | Code formatting.                                            |

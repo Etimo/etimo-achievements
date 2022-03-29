@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+  labels:
+    app: api
+    app.kubernetes.io/name: achievements-api
+    app.kubernetes.io/instance: achievements-api-${DATE}-${TAG}
+    app.kubernetes.io/version: ${TAG}
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: achievements
+  annotations:
+    kubernetes.io/change-cause: 'release ${RELEASE}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: achievements-api
+          image: niclaslindstedt/etimo-achievements-api:${GITHUB_SHA}
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '64Mi'
+            limits:
+              cpu: '200m'
+              memory: '128Mi'
+          envFrom:
+            - secretRef:
+                name: provisioned-secrets
+            - configMapRef:
+                name: provisioned-config
+          env:
+            - name: API_KEY
+              value: '${API_KEY}'
+            - name: API_ROOT
+              value: '${API_ROOT}'
+            - name: COOKIE_SECRET
+              value: '${COOKIE_SECRET}'
+            - name: FRONTEND_URL
+              value: '${FRONTEND_URL}'
+            - name: GOOGLE_CLIENT_ID
+              value: '${GOOGLE_CLIENT_ID}'
+            - name: GOOGLE_CLIENT_SECRET
+              value: '${GOOGLE_CLIENT_SECRET}'
+            - name: GOOGLE_REDIRECT_URI
+              value: '${GOOGLE_REDIRECT_URI}'
+            - name: JWT_SECRET
+              value: '${JWT_SECRET}'
+            - name: NODE_ENV
+              value: '${NODE_ENV}'
+            - name: PORT
+              value: '${API_PORT}'
+            - name: SLACK_TOKEN
+              value: '${SLACK_TOKEN}'
+          ports:
+            - containerPort: ${API_PORT}
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: '/api/probes/readiness'
+              port: ${API_PORT}
+            timeoutSeconds: 2
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: '/api/probes/liveness'
+              port: ${API_PORT}
+            timeoutSeconds: 30
+            failureThreshold: 2
+            initialDelaySeconds: 15
+            periodSeconds: 20

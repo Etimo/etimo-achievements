@@ -22,11 +22,11 @@
       "description": "Etimo server"
     },
     {
-      "url": "https://etimo-achievements-staging.herokuapp.com",
+      "url": "https://achievements-test.staging.etimo-test.live/api",
       "description": "Staging server"
     },
     {
-      "url": "https://etimo-achievements.herokuapp.com",
+      "url": "https://achievements-live.staging.etimo-test.live",
       "description": "Production server"
     }
   ],
@@ -828,6 +828,34 @@
         },
         "tags": [
           "Awards"
+        ]
+      }
+    },
+    "/probes/readiness": {
+      "get": {
+        "summary": "Readiness probe",
+        "operationId": "getReadiness",
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Probes"
+        ]
+      }
+    },
+    "/probes/liveness": {
+      "get": {
+        "summary": "Liveness probe",
+        "operationId": "getLiveness",
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Probes"
         ]
       }
     },

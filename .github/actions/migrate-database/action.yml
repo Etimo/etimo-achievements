@@ -17,9 +17,6 @@ inputs:
   password:
     description: The user's password
     required: true
-  ssl:
-    description: If the database uses SSL
-    default: true
   environment:
     description: The knex environment to use
     default: production
@@ -32,9 +29,7 @@ runs:
   steps:
     - name: Install dependencies
       shell: bash
-      run: |
-        apt-get update && apt-get install jq -y
-        yarn install --immutable
+      run: yarn install
 
     - name: Build packages
       shell: bash
@@ -44,12 +39,11 @@ runs:
       working-directory: packages/data
       shell: bash
       env:
-        DB_NAME: ${{ inputs.database }}
-        DB_HOSTNAME: ${{ inputs.hostname }}
+        DB_MAIN_NAME: ${{ inputs.database }}
+        DB_MAIN_PRIVATE_HOST: ${{ inputs.hostname }}
         DB_PORT: ${{ inputs.port }}
-        DB_USERNAME: ${{ inputs.username }}
-        DB_PASSWORD: ${{ inputs.password }}
-        DB_SSL: ${{ inputs.ssl }}
+        DB_MAIN_USER: ${{ inputs.username }}
+        DB_MAIN_PASSWORD: ${{ inputs.password }}
       run: |
         yarn dlx knex --knexfile src/config/knexfile.ts --env ${{ inputs.environment }} migrate:latest || exit 1
         [ "${{ inputs.seed }}" = "true" ] && {

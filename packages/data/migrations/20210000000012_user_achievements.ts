@@ -1,9 +1,8 @@
-import { Logger } from '@etimo-achievements/common';
 import * as Knex from 'knex';
 import { createOnUpdateTrigger } from '../src/utils/knex-helpers';
 
 export async function up(knex: Knex) {
-  Logger.log('↑ 20210000000012_user_achievements');
+  console.log('↑ 20210000000012_user_achievements');
   await knex.schema
     .createTable('user_achievements', (table: Knex.TableBuilder) => {
       table.uuid('id').primary();
@@ -15,6 +14,6 @@ export async function up(knex: Knex) {
 }
 
 export async function down(knex: Knex) {
-  Logger.log('↓ 20210000000012_user_achievements');
+  console.log('↓ 20210000000012_user_achievements');
   await knex.schema.dropTable('user_achievements');
 }

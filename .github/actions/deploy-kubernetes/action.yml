@@ -1,0 +1,89 @@
+name: Deploy Kubernetes
+description: Generate deployment and deploy to Kubernetes
+
+inputs:
+  kubeconfig:
+    description: The kubeconfig file contents, with newlines replaced with '\n' (use a secret)
+    required: true
+  object-path:
+    description: The path to the Kubernetes objects (yaml files)
+    default: .kubernetes
+  ignore-path:
+    description: Pattern of what Kubernetes objects to ignore
+  namespace:
+    description: The namespace in the Kubernetes cluster
+    required: true
+  cluster:
+    description: The cluster that is being deployed to (staging | production)
+    default: staging
+  wait:
+    description: Wait for deployment(s) to finish before returning (comma-separated list)
+    default: false
+  debug:
+    description: Output the resulting deployment yaml file
+    default: false
+
+outputs:
+  deployment-yaml:
+    description: 'The deployment yaml file'
+    value: ${{ steps.generate-spec.outputs.deployment-yaml }}
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare environment
+      shell: bash
+      run: |
+        echo "TAG=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+        echo "VERSION=$(git rev-list HEAD --count)" >> $GITHUB_ENV
+        echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
+
+    - name: Generate Kubernetes deployment spec
+      id: generate-spec
+      shell: bash
+      run: |
+        :>__deploy_template
+
+        consume_file() {
+          if [[ -n "${{ inputs.ignore-path }}" && "$1" == *"${{ inputs.ignore-path }}"* ]]; then
+            echo "Ignoring file: $1"
+            return
+          fi
+          cat $1 >> __deploy_template; echo --- >> __deploy_template
+        }
+
+        # services
+        for f in $(find "${{ inputs.object-path }}" -iname "*service.y*ml"); do
+          consume_file "$f"
+        done
+
+        # remaining files
+        for f in $(find "${{ inputs.object-path }}" -iname "*.y*ml" -not -path "*service.y*ml"); do
+          consume_file "$f"
+        done
+
+        replace_vars="$(env | cut -f1 -d= | xargs -I {} echo \${} | xargs)"
+        envsubst "$replace_vars" < __deploy_template > __deployment.yaml
+
+        if [ "${{ inputs.debug }}" = "true" ]; then
+          cat __deployment.yaml
+        fi
+
+        output="$(awk '{printf "%s\\n", $0}' __deployment.yaml)"
+        echo "::set-output name=deployment-yaml::$output"
+
+    - name: Deploy to Kubernetes
+      shell: bash
+      run: |
+        echo -e "${{ inputs.kubeconfig }}" > kubeconfig
+        kubectl --kubeconfig=kubeconfig -n $KUBERNETES_NAMESPACE \
+          apply -f __deployment.yaml
+
+        if [ "${{ inputs.wait }}" != "false" ]; then
+          IFS=',' read -r -a deployments <<< "${{ inputs.wait }}"
+          for deployment in "${deployments[@]}"; do
+            kubectl --kubeconfig=kubeconfig --namespace $KUBERNETES_NAMESPACE \
+              rollout status -w "deployment/$deployment"
+          done
+        fi

@@ -1,0 +1,68 @@
+name: Verify migrations
+description: Verifies that database migrations were successful
+
+inputs:
+  migration-object:
+    description: The Kubernetes object containing the migration job
+    required: true
+  kubeconfig:
+    description: The kubeconfig file contents, with newlines replaced with '\n' (use a secret)
+    required: true
+  namespace:
+    description: The namespace in the Kubernetes cluster
+    required: true
+  timeout:
+    description: The timeout for the job
+    default: 300
+  debug:
+    description: Output debug information
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - name: Prepare environment
+      shell: bash
+      run: |
+        echo "TAG=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+        echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
+
+    - name: Verify migrations
+      shell: bash
+      run: |
+        if [ "$DEBUG" = "true" ]; then
+          set -x
+        fi
+
+        echo -e "${{ inputs.kubeconfig }}" > kubeconfig
+        echo -e "${{ inputs.migration-object }}" > migration_object
+
+        echo "Waiting for job (timeout: ${{ inputs.timeout }})..."
+
+        timeout=${{ inputs.timeout }}
+        while [ $timeout -gt 0 ]; do
+          json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json)"
+
+          if [ "$DEBUG" = "true" ]; then
+            echo "Json is $json"
+          fi
+
+          status="$(echo "$json" | jq -r '.status.conditions[] | .type' 2>/dev/null)"
+
+          if [ "$DEBUG" = "true" ]; then
+            echo "Status is $status"
+          fi
+
+          if [ "$status" = "Complete" ]; then
+            exit 0
+          elif [ "$status" = "Failed" ]; then
+            exit 1
+          fi
+
+          sleep 1
+          timeout=$(( timeout - 1 ))
+        done
+
+        echo "Timeout reached"
+        exit 2

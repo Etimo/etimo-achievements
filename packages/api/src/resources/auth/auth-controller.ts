@@ -252,7 +252,7 @@ export class AuthController {
   };
 
   private setCookies(res: Response, dto: AccessTokenDto, loginResponse: LoginResponse) {
-    const domain = this.getCookieDomain();
+    const domain = new URL(getEnvVariable(Env.FRONTEND_URL)).host;
 
     Logger.log(`Creating cookie ${CookieName.Jwt} @ ${domain} with expiration date ${loginResponse.expiresAt}`);
     res.cookie(CookieName.Jwt, encrypt(dto.access_token), {
@@ -260,6 +260,7 @@ export class AuthController {
       signed: true,
       httpOnly: true,
       secure: true,
+      sameSite: 'strict',
       expires: loginResponse.expiresAt,
     });
 
@@ -271,12 +272,8 @@ export class AuthController {
       signed: true,
       httpOnly: true,
       secure: true,
+      sameSite: 'strict',
       expires: loginResponse.refreshTokenExpiresAt,
     });
-  }
-
-  private getCookieDomain() {
-    const url = new URL(getEnvVariable(Env.FRONTEND_URL));
-    return url.protocol + '//' + url.host;
   }
 }

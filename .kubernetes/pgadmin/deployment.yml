@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgadmin-deployment
+  labels:
+    app: pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+    spec:
+      containers:
+        - name: achievements-pgadmin
+          image: dpage/pgadmin4:6.7
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '64Mi'
+            limits:
+              cpu: '200m'
+              memory: '256Mi'
+          env:
+            - name: PGADMIN_DEFAULT_EMAIL
+              value: '${PGADMIN_DEFAULT_EMAIL}'
+            - name: PGADMIN_DEFAULT_PASSWORD
+              value: '${PGADMIN_DEFAULT_PASSWORD}'
+          startupProbe:
+            httpGet:
+              path: '/'
+              port: 80
+            failureThreshold: 30
+            periodSeconds: 10

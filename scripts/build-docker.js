@@ -7,6 +7,7 @@ const noCache = process.argv.some((a) => a === '--no-cache');
 const noBase = process.argv.some((a) => a === '--no-base');
 const noPackages = process.argv.some((a) => a === '--no-packages');
 const onlyBase = process.argv.some((a) => a === '--only-base');
+const buildMigrate = process.argv.some((a) => a === '--migrate');
 const buildNodemon = process.argv.some((a) => a === '--nodemon');
 
 const dockerFileDir = getDockerFileDirectory();
@@ -19,6 +20,11 @@ async function buildDocker(packages) {
     console.log('Building base image');
     await buildDockerFile('base');
     if (onlyBase) return;
+  }
+
+  if (buildMigrate) {
+    console.log('Building migrate image');
+    return await buildDockerFile('migrate');
   }
 
   if (buildNodemon) {

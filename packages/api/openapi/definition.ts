@@ -24,11 +24,11 @@ export const definition = {
       description: 'Etimo server',
     },
     {
-      url: 'https://etimo-achievements-staging.herokuapp.com',
+      url: 'https://achievements-test.staging.etimo-test.live/api',
       description: 'Staging server',
     },
     {
-      url: 'https://etimo-achievements.herokuapp.com',
+      url: 'https://achievements-live.staging.etimo-test.live',
       description: 'Production server',
     },
   ],
