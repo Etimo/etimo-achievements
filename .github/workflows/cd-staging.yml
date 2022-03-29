@@ -1,10 +1,10 @@
 name: Deploy to Staging
 
-concurrency: staging_kubernetes
+concurrency: staging
 
 on:
   push:
-    branches: [kubernetes] #todo: master
+    branches: [master]
     paths:
       - '.docker/**'
       - '.kubernetes/**'
@@ -16,7 +16,7 @@ on:
       branch:
         description: 'Branch to deploy'
         required: true
-        default: 'kubernetes' #todo: master
+        default: 'master'
 
 defaults:
   run:
@@ -57,7 +57,7 @@ jobs:
     timeout-minutes: 15
     environment: staging
     env:
-      DEFAULT_BRANCH: kubernetes #todo: master
+      DEFAULT_BRANCH: master
       KUBERNETES_NAMESPACE: achievements-test
       RELEASE: ${{ github.sha }}
 
