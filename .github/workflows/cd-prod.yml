@@ -38,7 +38,7 @@ env:
   # Pretty much static variables
   API_PORT: 3000
   API_ROOT: /api/
-  DEBUG: true
+  DEBUG: false
   WEB_PORT: 3001
 
 jobs:
@@ -88,7 +88,6 @@ jobs:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           object-path: .kubernetes/.init/migrate
-          debug: true
 
       - name: Build & push base image
         uses: ./.github/actions/docker-build-push
