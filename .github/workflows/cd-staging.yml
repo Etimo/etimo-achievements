@@ -23,16 +23,12 @@ defaults:
     shell: bash
 
 env:
-  API_PORT: 3000
-  API_ROOT: /api/
   API_URL: https://achievements-test.staging.etimo-test.live/api
-  DEBUG: true
   FRONTEND_URL: https://achievements-test.staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements-test.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements-test.staging.etimo-test.live
   NODE_ENV: staging
   PGADMIN_URL: achievements-test-pgadmin.staging.etimo-test.live
-  WEB_PORT: 3001
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
@@ -48,10 +44,15 @@ env:
   SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
   # Stored as organisation secrets
   GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
+  # Pretty much static variables
+  API_PORT: 3000
+  API_ROOT: /api/
+  DEBUG: true
+  WEB_PORT: 3001
 
 jobs:
   deploy:
-    name: 'Deploy to Staging K8S'
+    name: 'Deploy to Staging'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     environment: staging
