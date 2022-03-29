@@ -52,6 +52,7 @@ runs:
         :>__deploy_template
 
         consume_file() {
+          if [ ! -f "$1" ]; then return; fi
           if [[ -n "${{ inputs.ignore-path }}" && "$1" == *"${{ inputs.ignore-path }}"* ]]; then
             continue
           fi
