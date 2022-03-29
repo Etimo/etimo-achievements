@@ -16,9 +16,6 @@ inputs:
   cluster:
     description: The cluster that is being deployed to (staging | production)
     default: staging
-  ingress-url:
-    description: The base url of the Kubernetes ingress
-    required: true
   wait:
     description: Wait for deployment(s) to finish before returning (comma-separated list)
     default: false
@@ -41,7 +38,6 @@ runs:
         echo "VERSION=$(git rev-list HEAD --count)" >> $GITHUB_ENV
         echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
         echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
-        echo "INGRESS_URL=${{ inputs.ingress-url }}" >> $GITHUB_ENV
 
     - name: Generate Kubernetes deployment spec
       id: generate-spec

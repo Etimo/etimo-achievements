@@ -14,6 +14,9 @@ inputs:
   timeout:
     description: The timeout for the job
     default: 300
+  debug:
+    description: Output debug information
+    default: false
 
 runs:
   using: composite
@@ -36,10 +39,16 @@ runs:
         timeout=${{ inputs.timeout }}
         while [ $timeout -gt 0 ]; do
           json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json)"
-          echo "Json is $json"
+
+          if [ "$DEBUG" = "true" ]; then
+            echo "Json is $json"
+          fi
 
           status="$(echo "$json" | jq -r '.status.conditions[] | .type')"
-          echo "Status is $status"
+
+          if [ "$DEBUG" = "true" ]; then
+            echo "Status is $status"
+          fi
 
           if [ "$status" = "Complete" ]; then
             exit 0

@@ -122,13 +122,13 @@ jobs:
           migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
+          debug: true
 
       - name: Deploy application
         uses: ./.github/actions/deploy-kubernetes
         with:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
-          ingress-url: ${{ env.INGRESS_URL }}
           ignore-path: .kubernetes/.init
           wait: api-deployment,web-deployment
           debug: true
