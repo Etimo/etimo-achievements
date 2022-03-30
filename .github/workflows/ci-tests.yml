@@ -1,6 +1,4 @@
 name: CI
-description: Continuous integration
-author: Etimo AB
 
 concurrency: staging
 

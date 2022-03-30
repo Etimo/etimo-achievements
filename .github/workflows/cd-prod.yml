@@ -1,6 +1,4 @@
 name: Production
-description: Deploy application to production environment
-author: Etimo AB
 
 concurrency: production
 
