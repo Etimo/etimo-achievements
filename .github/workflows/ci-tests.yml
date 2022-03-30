@@ -1,7 +1,5 @@
 name: CI
 
-concurrency: staging
-
 on:
   push:
     branches: [master]
