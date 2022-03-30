@@ -5,6 +5,7 @@ import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
+import loggedIn from '../utils/logged-in';
 
 const SideMenu = (): JSX.Element => {
   return (
@@ -34,10 +35,17 @@ const SideMenu = (): JSX.Element => {
         </MenuItem>
       </Menu>
       <Menu iconShape="square">
-        <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
-          Sign in with Google
-          <Link to="/login" />
-        </MenuItem>
+        {loggedIn() ? (
+          <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
+            Log out
+            <Link to="/login" />
+          </MenuItem>
+        ) : (
+          <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
+            Sign in with Google
+            <Link to="/login" />
+          </MenuItem>
+        )}
       </Menu>
     </ProSidebar>
   );

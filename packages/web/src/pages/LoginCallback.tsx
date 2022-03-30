@@ -13,8 +13,9 @@ const LoginCallback = (): JSX.Element => {
 
     if (code) {
       fetch('/auth/callback/google?code=' + code).then((res) => {
-        res.json().then((data) => {
+        res.json().then((_data) => {
           if (res.status === 200) {
+            localStorage.setItem('loggedIn', 'true');
             navigate('/profile');
           }
         });
