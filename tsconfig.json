@@ -3,6 +3,7 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
+    "target": "ES2021",
     "sourceMap": true
   },
   "extends": "@tsconfig/node14/tsconfig.json",
