@@ -1,8 +1,18 @@
-name: Run tests
+name: CI
+description: Continuous integration
+author: Etimo AB
 
-concurrency: staging_environment
+concurrency: staging
 
 on:
+  push:
+    branches: [master]
+    paths:
+      - '.docker/**'
+      - '.kubernetes/**'
+      - '.github/**'
+      - 'packages/**'
+      - '!packages/**/*.md'
   pull_request:
     branches: [master]
 

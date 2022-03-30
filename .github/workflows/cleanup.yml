@@ -1,4 +1,6 @@
-name: Clean workflow logs
+name: Cleanup
+description: Cleanup old workflow runs
+author: https://github.com/igorjs
 
 on:
   workflow_dispatch:
