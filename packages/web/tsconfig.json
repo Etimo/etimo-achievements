@@ -6,10 +6,6 @@
     "rootDir": "src",
     "jsx": "react"
   },
-  "references": [
-    {
-      "path": "../common"
-    }
-  ],
+  "references": [],
   "include": ["./src", "./assets"]
 }
