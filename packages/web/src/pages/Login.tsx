@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const LoginCallback = (): JSX.Element => {
+const Login = (): JSX.Element => {
   useEffect(() => {
     window.location.href = process.env.API_URL + '/auth/login/google';
   });
@@ -8,4 +8,4 @@ const LoginCallback = (): JSX.Element => {
   return <></>;
 };
 
-export default LoginCallback;
+export default Login;
