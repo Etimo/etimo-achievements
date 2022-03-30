@@ -1,6 +1,4 @@
 name: Staging
-description: Deploy application to staging environment
-author: Etimo AB
 
 concurrency: staging
 
