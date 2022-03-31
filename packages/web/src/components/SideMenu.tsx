@@ -5,9 +5,12 @@ import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
-import loggedIn from '../utils/logged-in';
+import { useAppSelector } from '../app/hooks';
+import { RootState } from '../app/rootReducer';
 
 const SideMenu = (): JSX.Element => {
+  const isAuthed = useAppSelector((state: RootState) => state.auth.isAuth);
+
   return (
     <ProSidebar>
       <Menu iconShape="round">
@@ -35,7 +38,7 @@ const SideMenu = (): JSX.Element => {
         </MenuItem>
       </Menu>
       <Menu iconShape="square">
-        {loggedIn() ? (
+        {isAuthed ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
             <Link to="/logout" />

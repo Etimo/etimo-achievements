@@ -26,7 +26,7 @@
       "description": "Staging server"
     },
     {
-      "url": "https://achievements-live.staging.etimo-test.live",
+      "url": "https://achievements-live.staging.etimo-test.live/api",
       "description": "Production server"
     }
   ],

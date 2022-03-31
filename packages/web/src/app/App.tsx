@@ -1,11 +1,11 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import SideMenu from './components/SideMenu';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import LoginCallback from './pages/LoginCallback';
-import Logout from './pages/Logout';
-import Profile from './pages/Profile';
+import SideMenu from '../components/SideMenu';
+import Login from '../features/auth/Login';
+import LoginCallback from '../features/auth/LoginCallback';
+import Logout from '../features/auth/Logout';
+import Home from '../pages/Home';
+import Profile from '../pages/Profile';
 
 const App = (): JSX.Element => {
   return (

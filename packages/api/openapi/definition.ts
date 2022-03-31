@@ -1,5 +1,3 @@
-const baseUrl = process.env.API_BASEURL;
-
 export const definition = {
   openapi: '3.0.0',
   info: {
@@ -28,7 +26,7 @@ export const definition = {
       description: 'Staging server',
     },
     {
-      url: 'https://achievements-live.staging.etimo-test.live',
+      url: 'https://achievements-live.staging.etimo-test.live/api',
       description: 'Production server',
     },
   ],
