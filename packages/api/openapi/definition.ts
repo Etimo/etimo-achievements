@@ -34,10 +34,15 @@ export const definition = {
   ],
   components: {
     securitySchemes: {
-      cookieAuth: {
+      jwtCookie: {
         type: 'apiKey',
         in: 'cookie',
         name: 'ea-jwt',
+      },
+      refreshTokenCookie: {
+        type: 'apiKey',
+        in: 'cookie',
+        name: 'ea-rt',
       },
       ApiKeyParameter: {
         type: 'apiKey',

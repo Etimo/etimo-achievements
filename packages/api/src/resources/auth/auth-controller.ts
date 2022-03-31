@@ -1,6 +1,6 @@
 import { getEnvVariable, Logger, UnauthorizedError } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
-import { CookieName, encrypt, OAuthServiceFactory } from '@etimo-achievements/security';
+import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
 import { Env } from '@etimo-achievements/types';
 import { Request, Response, Router } from 'express';
@@ -43,7 +43,7 @@ export class AuthController {
      *     summary: Renew access token
      *     operationId: authRefresh
      *     security:
-     *       - cookieAuth: []
+     *       - refreshTokenCookie: []
      *     responses:
      *       200:
      *         description: Authentication success.
@@ -58,7 +58,7 @@ export class AuthController {
      *     tags:
      *       - Auth
      */
-    router.get('/auth/refresh', protectedEndpoint(this.refresh));
+    router.get('/auth/refresh', endpoint(this.refresh));
 
     /**
      * @openapi
@@ -67,7 +67,7 @@ export class AuthController {
      *     summary: Logout
      *     operationId: authLogout
      *     security:
-     *       - cookieAuth: []
+     *       - jwtCookie: []
      *     responses:
      *       200:
      *         description: Logout success.
@@ -121,7 +121,7 @@ export class AuthController {
      *     summary: Get userinfo from token
      *     operationId: authUserInfo
      *     security:
-     *       - cookieAuth: []
+     *       - jwtCookie: []
      *     responses:
      *       200:
      *         description: The request was successful.
@@ -139,7 +139,7 @@ export class AuthController {
      *     summary: Validate JWT token
      *     operationId: authValidate
      *     security:
-     *       - cookieAuth: []
+     *       - jwtCookie: []
      *     responses:
      *       200: *okResponse
      *       401: *unauthorizedResponse
@@ -155,7 +155,7 @@ export class AuthController {
      *     summary: Token introspection
      *     operationId: authIntrospect
      *     security:
-     *       - cookieAuth: []
+     *       - jwtCookie: []
      *     responses:
      *       200:
      *         description: The request was successful.
@@ -266,7 +266,7 @@ export class AuthController {
       });
     };
 
-    setCookie(CookieName.Jwt, loginResponse.expiresAt, encrypt(dto.access_token));
-    setCookie(CookieName.RefreshToken, loginResponse.refreshTokenExpiresAt, encrypt(dto.refresh_token));
+    setCookie(CookieName.Jwt, loginResponse.expiresAt, dto.access_token);
+    setCookie(CookieName.RefreshToken, loginResponse.refreshTokenExpiresAt, dto.refresh_token);
   }
 }
