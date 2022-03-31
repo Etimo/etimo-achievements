@@ -3,7 +3,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 module.exports = {
-  entry: path.resolve(__dirname, './src/index.tsx'),
+  entry: path.resolve(__dirname, './src/app/index.tsx'),
   target: 'web',
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -31,7 +31,7 @@ module.exports = {
       patterns: [{ from: './assets', to: './assets' }],
     }),
     new HtmlPlugin({
-      template: path.join(__dirname, 'src', 'index.html'),
+      template: path.join(__dirname, 'src', 'app', 'index.html'),
       assetPath: '/assets',
     }),
   ],

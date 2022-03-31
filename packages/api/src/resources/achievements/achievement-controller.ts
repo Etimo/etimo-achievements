@@ -28,7 +28,7 @@ export class AchievementController {
      *     summary: Get a list of achievements
      *     operationId: getAchievements
      *     security:
-     *       - cookieAuth: []
+     *       - jwtCookie: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -49,7 +49,7 @@ export class AchievementController {
      *     summary: Get a single achievement
      *     operationId: getAchievement
      *     security:
-     *       - cookieAuth: []
+     *       - jwtCookie: []
      *     parameters:
      *       - *achievementIdParam
      *     responses:
@@ -74,7 +74,7 @@ export class AchievementController {
      *     summary: Create an achievement
      *     operationId: createAchievement
      *     security:
-     *       - cookieAuth: []
+     *       - jwtCookie: []
      *     requestBody:
      *       required: true
      *       content: *achievementContent

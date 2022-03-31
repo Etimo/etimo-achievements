@@ -1,10 +1,11 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import SideMenu from './components/SideMenu';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import LoginCallback from './pages/LoginCallback';
-import Profile from './pages/Profile';
+import SideMenu from '../components/SideMenu';
+import Login from '../features/auth/Login';
+import LoginCallback from '../features/auth/LoginCallback';
+import Logout from '../features/auth/Logout';
+import Home from '../pages/Home';
+import Profile from '../pages/Profile';
 
 const App = (): JSX.Element => {
   return (
@@ -19,6 +20,7 @@ const App = (): JSX.Element => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/login/callback" element={<LoginCallback />} />
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </div>
       </div>

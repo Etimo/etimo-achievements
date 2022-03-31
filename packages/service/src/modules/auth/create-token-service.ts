@@ -1,6 +1,6 @@
-import { Logger, toBase64, uuid } from '@etimo-achievements/common';
+import { Logger, uuid } from '@etimo-achievements/common';
 import { AccessTokenRepository, RefreshTokenRepository } from '@etimo-achievements/data';
-import { encrypt, JwtService, randomPassword } from '@etimo-achievements/security';
+import { encrypt, JwtService, randomPassword, RefreshTokenService } from '@etimo-achievements/security';
 import {
   IAccessToken,
   INewAccessToken,
@@ -29,11 +29,10 @@ export class CreateTokenService {
 
     // Store token in database
     const createdToken = await this.createAccessToken(token);
-    const signedToken = JwtService.sign(token);
+    const signedToken = JwtService.lock(token);
     const refreshTokenKey = randomPassword(64);
     const createdRefreshToken = await this.createRefreshToken(createdToken, refreshTokenKey);
-    const refreshToken = toBase64(createdRefreshToken.id + '.' + refreshTokenKey);
-
+    const refreshToken = RefreshTokenService.lock({ id: createdRefreshToken.id, key: refreshTokenKey });
     const expiresIn = Math.round((createdToken.expiresAt.getTime() - new Date().getTime()) / 1000);
 
     return {

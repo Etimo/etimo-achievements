@@ -1,12 +1,16 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { faAward, faRankingStar, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faAward, faRankingStar, faSignOut, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
+import { RootState } from '../app/reducers';
+import { useAppSelector } from '../app/store';
 
 const SideMenu = (): JSX.Element => {
+  const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
+
   return (
     <ProSidebar>
       <Menu iconShape="round">
@@ -34,10 +38,17 @@ const SideMenu = (): JSX.Element => {
         </MenuItem>
       </Menu>
       <Menu iconShape="square">
-        <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
-          Sign in with Google
-          <Link to="/login" />
-        </MenuItem>
+        {isAuthenticated ? (
+          <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
+            Log out
+            <Link to="/logout" />
+          </MenuItem>
+        ) : (
+          <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
+            Sign in with Google
+            <Link to="/login" />
+          </MenuItem>
+        )}
       </Menu>
     </ProSidebar>
   );

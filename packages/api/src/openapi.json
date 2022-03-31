@@ -26,16 +26,21 @@
       "description": "Staging server"
     },
     {
-      "url": "https://achievements-live.staging.etimo-test.live",
+      "url": "https://achievements-live.staging.etimo-test.live/api",
       "description": "Production server"
     }
   ],
   "components": {
     "securitySchemes": {
-      "cookieAuth": {
+      "jwtCookie": {
         "type": "apiKey",
         "in": "cookie",
         "name": "ea-jwt"
+      },
+      "refreshTokenCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "ea-rt"
       },
       "ApiKeyParameter": {
         "type": "apiKey",
@@ -286,7 +291,7 @@
         "operationId": "authLogout",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "responses": {
@@ -313,7 +318,7 @@
         "operationId": "getAchievements",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "parameters": [
@@ -364,7 +369,7 @@
         "operationId": "createAchievement",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "requestBody": {
@@ -421,7 +426,7 @@
         "operationId": "getAchievement",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "parameters": [
@@ -502,7 +507,7 @@
         "operationId": "authRefresh",
         "security": [
           {
-            "cookieAuth": []
+            "refreshTokenCookie": []
           }
         ],
         "responses": {
@@ -600,7 +605,7 @@
         "operationId": "authUserInfo",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "responses": {
@@ -629,7 +634,7 @@
         "operationId": "authValidate",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "responses": {
@@ -651,7 +656,7 @@
         "operationId": "authIntrospect",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "responses": {
@@ -680,7 +685,7 @@
         "operationId": "getAwards",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "parameters": [
@@ -731,7 +736,7 @@
         "operationId": "createAward",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "requestBody": {
@@ -791,7 +796,7 @@
         "operationId": "getAward",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "parameters": [
@@ -1006,7 +1011,7 @@
         "operationId": "getUsers",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "parameters": [
@@ -1054,7 +1059,7 @@
         "operationId": "createUser",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "requestBody": {
@@ -1111,7 +1116,7 @@
         "operationId": "getUser",
         "security": [
           {
-            "cookieAuth": []
+            "jwtCookie": []
           }
         ],
         "parameters": [

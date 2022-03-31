@@ -1,6 +1,7 @@
 import { getEnvVariable, uuid } from '@etimo-achievements/common';
 import { Env, IUser, JWT } from '@etimo-achievements/types';
 import jwt from 'jsonwebtoken';
+import { decrypt, encrypt } from '..';
 
 export class JwtService {
   public static create(user: IUser, scopes: string[]): JWT {
@@ -17,6 +18,14 @@ export class JwtService {
     };
 
     return token;
+  }
+
+  public static lock(payload: any): string {
+    return encrypt(this.sign(payload));
+  }
+
+  public static unlock(token: string): JWT {
+    return this.verify(decrypt(token));
   }
 
   public static sign(payload: any): string {
