@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
 import fetch from '../../common/utils/fetch';
-import { setAuthSuccess } from './authSlice';
+import { login } from './authSlice';
 
 const LoginCallback = (): JSX.Element => {
   const query = useQuery();
@@ -17,7 +17,7 @@ const LoginCallback = (): JSX.Element => {
       fetch('/auth/callback/google?code=' + code).then((res) => {
         res.json().then((_data) => {
           if (res.status === 200) {
-            dispatch(setAuthSuccess);
+            dispatch(login());
             navigate('/profile');
           }
         });

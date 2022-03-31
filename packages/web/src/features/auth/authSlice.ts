@@ -1,37 +1,25 @@
-import { IUser } from '@etimo-achievements/types';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../../app/rootReducer';
-import { AuthError, AuthState } from './types';
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '../../app/reducers';
+import { AuthState } from './types';
 
-export const initialState: AuthState = {
-  isAuth: false,
-  isLoading: false,
-  error: { message: 'An error occurred' },
+const initialState: AuthState = {
+  isAuthenticated: false,
 };
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setLoading: (state: AuthState, { payload }: PayloadAction<boolean>) => {
-      state.isLoading = payload;
+    login: (state: AuthState) => {
+      state.isAuthenticated = true;
     },
-    setAuthSuccess: (state: AuthState, { payload }: PayloadAction<IUser>) => {
-      state.currentUser = payload;
-      state.isAuth = true;
-    },
-    setLogOut: (state: AuthState) => {
-      state.isAuth = false;
-      state.currentUser = undefined;
-    },
-    setAuthFailed: (state: AuthState, { payload }: PayloadAction<AuthError>) => {
-      state.error = payload;
-      state.isAuth = false;
+    logout: (state: AuthState) => {
+      state.isAuthenticated = false;
     },
   },
 });
 
-export const { setAuthSuccess, setLogOut, setLoading, setAuthFailed } = authSlice.actions;
+export const { login, logout } = authSlice.actions;
 
 export const authSelector = (state: RootState) => state.auth;
 

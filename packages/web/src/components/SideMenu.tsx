@@ -5,11 +5,11 @@ import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
-import { useAppSelector } from '../app/hooks';
-import { RootState } from '../app/rootReducer';
+import { RootState } from '../app/reducers';
+import { useAppSelector } from '../app/store';
 
 const SideMenu = (): JSX.Element => {
-  const isAuthed = useAppSelector((state: RootState) => state.auth.isAuth);
+  const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
 
   return (
     <ProSidebar>
@@ -38,7 +38,7 @@ const SideMenu = (): JSX.Element => {
         </MenuItem>
       </Menu>
       <Menu iconShape="square">
-        {isAuthed ? (
+        {isAuthenticated ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
             <Link to="/logout" />
