@@ -44,7 +44,7 @@ runs:
         for i in $(seq 0 $timeout); do
           echo "Trying... (attempt $i)"
 
-          json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json)"
+          json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json 2>/dev/null)"
 
           if [ "$DEBUG" = "true" ]; then
             echo "Json is $json"
