@@ -56,6 +56,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Verify staging version
+        shell: bash
+        env:
+          URL: https://achievements-test.staging.etimo-test.live/version
+        run: |
+          current_commit=${{ github.sha }}
+          remote_commit=$(curl --fail -s $URL | jq -r '.commit')
+          if [ "$remote_commit" != "$current_commit" ]; then
+            echo "Commit mismatch: $remote_commit != $current_commit"
+            echo "YOU NEED TO RELEASE TO STAGING BEFORE RELEASING TO PRODUCTION!"
+            exit 1
+          fi
+
       - name: Deploy database migration job
         id: deploy-init
         uses: ./.github/actions/deploy-kubernetes
@@ -71,7 +84,14 @@ jobs:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
 
+      - name: Tag release
+        id: tag
+        shell: bash
+        # outputs "tagged" == "true" if the tag was created
+        run: ./.github/scripts/tag-release.sh ${{ steps.commit.outputs.sha }}
+
       - name: Deploy application
+        if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/deploy-kubernetes
         with:
           kubeconfig: ${{ env.KUBECONFIG }}
