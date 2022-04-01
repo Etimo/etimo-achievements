@@ -65,6 +65,7 @@ jobs:
           remote_commit=$(curl --fail -s $URL | jq -r '.commit')
           if [ "$remote_commit" != "$current_commit" ]; then
             echo "Commit mismatch: $remote_commit != $current_commit"
+            echo "YOU NEED TO RELEASE TO STAGING BEFORE RELEASING TO PRODUCTION!"
             exit 1
           fi
 
