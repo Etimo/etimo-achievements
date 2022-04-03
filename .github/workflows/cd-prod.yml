@@ -102,5 +102,5 @@ jobs:
       - name: Verify application version
         uses: ./.github/actions/verify-version
         with:
-          require-commit: ${{ steps.version.outputs.remote_commit }}
+          require-commit: ${{ steps.version.outputs.remote-commit }}
           urls: ${{ env.FRONTEND_URL }} ${{ env.API_URL }}
