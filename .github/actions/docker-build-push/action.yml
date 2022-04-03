@@ -41,7 +41,7 @@ runs:
         file: .docker/dockerfiles/${{ inputs.dockerfile }}
         target: ${{ inputs.target }}
         push: ${{ inputs.push }}
-        build-args: COMMIT_SHA="${{ github.sha }}",GIT_BRANCH="${{ steps.branch.outputs.branch-name }}"
+        build-args: COMMIT_SHA="${{ github.sha }}" GIT_BRANCH="${{ steps.branch.outputs.branch-name }}"
         tags: |
           ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ github.sha }}
           ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ inputs.tag }}
