@@ -110,6 +110,7 @@ jobs:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           object-path: .kubernetes/.init/migrate
+          debug: true
 
       - name: Build & push base image
         uses: ./.github/actions/docker-build-push
