@@ -1,4 +1,5 @@
 {
+  "branch": "$GIT_BRANCH",
   "commit": "$COMMIT_SHA",
   "date": "$COMPILE_DATE"
 }
