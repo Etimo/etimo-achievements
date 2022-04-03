@@ -11,9 +11,12 @@ inputs:
   namespace:
     description: The namespace in the Kubernetes cluster
     required: true
-  timeout:
-    description: The timeout for the job
-    default: 300
+  interval-seconds:
+    description: How many seconds to wait between each attempt
+    default: 5
+  attempts:
+    description: How many attempts to try before giving up
+    default: 60
   debug:
     description: Output debug information
     default: false
@@ -32,7 +35,9 @@ runs:
     - name: Verify migrations
       shell: bash
       run: |
-        DEBUG="${{ inputs.DEBUG }}"
+        DEBUG="${{ inputs.debug }}"
+        attempts=${{ inputs.attempts }}
+        interval=${{ inputs.interval-seconds }}
 
         if [ "$DEBUG" = "true" ]; then
           set -x
@@ -41,13 +46,12 @@ runs:
         echo -e "${{ inputs.kubeconfig }}" > kubeconfig
         echo -e "${{ inputs.migration-object }}" > migration_object
 
-        echo "Waiting for job (timeout: ${{ inputs.timeout }})..."
+        echo "Waiting for job (timeout: $(( attempts * interval )) seconds)..."
 
-        timeout=${{ inputs.timeout }}
-        for i in $(seq 1 $timeout); do
+        for i in $(seq 1 $attempts); do
 
           if [ "$DEBUG" = "true" ]; then
-            echo "Getting deployment info (attempt $i/$timeout)..."
+            echo "Getting deployment info (attempt ${i}/${attempts})..."
           fi
 
           json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json 2>/dev/null || echo "{}")"
@@ -68,8 +72,8 @@ runs:
             exit 1
           fi
 
-          sleep 1
+          sleep $interval
         done
 
-        echo "Timeout reached"
+        echo "Max attempts ($attempts) reached"
         exit 2

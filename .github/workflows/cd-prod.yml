@@ -82,6 +82,7 @@ jobs:
           migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
+          debug: true
 
       - name: Tag release
         id: tag
