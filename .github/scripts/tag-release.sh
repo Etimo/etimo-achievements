@@ -25,11 +25,12 @@ echo "Next version: $next_version"
 # commit, it's OK to tag the tag commit with the next version.
 if [ "$tag_commit" != "$latest_version_commit" ]; then
 
-  git tag $next_version "$tag_commit" &>/dev/null || exit 1
-  git push origin $next_version &>/dev/null || exit 1
+  git tag $next_version "$tag_commit" || exit 1
+  git push origin $next_version || exit 1
   echo "Successfully pushed $next_version tag (-> $tag_commit)"
 
   echo "::set-output name=tagged::true"
+  echo "::set-output name=tag::$next_version"
 fi
 
 exit 0
