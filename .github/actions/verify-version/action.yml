@@ -44,7 +44,7 @@ runs:
 
           found=1
           for url in "${urls[@]}"; do
-            remote_commit=$(curl --fail -s "$url" | jq -r '.commit' 2>/dev/null)
+            remote_commit=$(curl --fail -s "${url}/version" | jq -r '.commit' 2>/dev/null)
 
             if [ "$remote_commit" != "$expected_commit" ]; then
               echo "$url: $remote_commit != $expected_commit"
