@@ -21,11 +21,18 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Prepare environment
+      shell: bash
+      run: |
+        echo "COMMIT_SHA=$(git rev-parse HEAD)"
+        echo "TAG=$(echo $COMMIT_SHA | head -c7)" >> $GITHUB_ENV
+        echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
+        echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
+
     - name: Verify migrations
       shell: bash
       run: |
-        echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
-        echo "DEBUG=${{ inputs.DEBUG }}" >> $GITHUB_ENV
+        DEBUG="${{ inputs.DEBUG }}"
 
         if [ "$DEBUG" = "true" ]; then
           set -x
