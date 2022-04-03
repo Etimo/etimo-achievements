@@ -27,6 +27,7 @@ runs:
     - name: Verify version
       shell: bash
       run: |
+        DEBUG="${{ inputs.debug }}"
         expected_commit="${{ inputs.require-commit }}"
 
         # Default to current commit
@@ -37,11 +38,13 @@ runs:
         read -r -a urls <<< "${{ inputs.urls }}"
         attempts=${{ inputs.attempts }}
         for i in $(seq 1 $attempts); do
-          echo "Trying (${i}/${attempts})..."
+          if [ "$DEBUG" = "true" ]; then
+            echo "Trying (${i}/${attempts})..."
+          fi
 
           found=1
           for url in "${urls[@]}"; do
-            remote_commit=$(curl --fail -s "$url" | jq -r '.commit')
+            remote_commit=$(curl --fail -s "$url" | jq -r '.commit' 2>/dev/null)
 
             if [ "$remote_commit" != "$expected_commit" ]; then
               echo "$url: $remote_commit != $expected_commit"
