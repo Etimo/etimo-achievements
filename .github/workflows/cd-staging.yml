@@ -156,10 +156,18 @@ jobs:
         with:
           urls: ${{ env.FRONTEND_URL }} ${{ env.API_URL }}
 
-      - name: Promote Docker image
+      - name: Promote api image
         uses: ./.github/actions/docker-promote
         with:
-          from-image-name: niclaslindstedt/etimo-achievements
+          from-image-name: niclaslindstedt/etimo-achievements-api
           from-tag: ${{ steps.info.outputs.current-commit }}
-          to-image-name: niclaslindstedt/etimo-achievements
+          to-image-name: niclaslindstedt/etimo-achievements-api
+          to-tag: staging
+
+      - name: Promote web image
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: niclaslindstedt/etimo-achievements-web
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: niclaslindstedt/etimo-achievements-web
           to-tag: staging
