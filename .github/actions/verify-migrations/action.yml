@@ -45,7 +45,10 @@ runs:
 
         timeout=${{ inputs.timeout }}
         for i in $(seq 1 $timeout); do
-          echo "Getting deployment info (attempt $i)..."
+
+          if [ "$DEBUG" = "true" ]; then
+            echo "Getting deployment info (attempt $i/$timeout)..."
+          fi
 
           json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json 2>/dev/null || echo "{}")"
 

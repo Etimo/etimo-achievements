@@ -87,7 +87,7 @@ jobs:
         id: tag
         shell: bash
         # outputs "tagged" == "true" if the tag was created
-        run: ./.github/scripts/tag-release.sh ${{ steps.commit.outputs.sha }}
+        run: ./.github/scripts/tag-release.sh ${{ steps.version.outputs.remote-commit }}
 
       - name: Deploy application
         if: steps.tag.outputs.tagged == 'true'
