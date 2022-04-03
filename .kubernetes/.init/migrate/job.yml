@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: achievements-migrate
-          image: niclaslindstedt/etimo-achievements-migrate:${GITHUB_SHA}
+          image: niclaslindstedt/etimo-achievements-migrate:${COMMIT_SHA}
           resources:
             requests:
               cpu: '50m'

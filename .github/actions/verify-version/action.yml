@@ -1,0 +1,61 @@
+name: Verify version
+description: Verifies that the deployed application has the correct version
+
+inputs:
+  require-commit:
+    description: The commit sha that is expected to be deployed
+    default: ${{ github.sha }}
+  interval-seconds:
+    description: How many seconds to wait between each attempt
+    default: 2
+  attempts:
+    description: How many attempts to get the version before giving up
+    default: 30
+  urls:
+    description: Space-separated list of urls to check
+    required: true
+  error-message:
+    description: A custom error message upon failure
+    default: Could not deploy the correct application version
+  debug:
+    description: Output debug information
+    default: false
+
+runs:
+  using: composite
+  steps:
+    - name: Verify version
+      shell: bash
+      run: |
+        expected_commit=${{ inputs.require-commit }}
+
+        // Default to current commit
+        if [ -n "$expected_commit" ] && expected_commit=${{ github.sha }}
+
+        read -r -a urls <<< "${{ inputs.urls }}"
+        attempts=${{ inputs.attempts }}
+        for i in $(seq 1 $attempts); do
+          echo "Getting version information (attempt $i)..."
+
+          found=1
+          for url in "${urls[@]}"; do
+            remote_commit=$(curl --fail -s $URL | jq -r '.commit')
+
+            if [ "$remote_commit" != "$expected_commit" ]; then
+              echo "$url: $remote_commit != $expected_commit"
+              found=0
+              continue
+            fi
+
+            echo "$url: Version OK!"
+          done
+
+          if (( found )); then
+            echo "Remote version was OK! ($expected_commit)"
+          else
+            echo "Remote version was NOT OK! ($remote_commit)"
+            exit 1
+          fi
+
+          sleep ${{ inputs.interval-seconds }}
+        done
