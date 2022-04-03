@@ -27,10 +27,10 @@ runs:
     - name: Verify version
       shell: bash
       run: |
-        expected_commit=${{ inputs.require-commit }}
+        expected_commit="${{ inputs.require-commit }}"
 
-        // Default to current commit
-        if [ -n "$expected_commit" ] && expected_commit=${{ github.sha }}
+        # Default to current commit
+        if [ -z "$expected_commit" ] && expected_commit=${{ github.sha }}
 
         read -r -a urls <<< "${{ inputs.urls }}"
         attempts=${{ inputs.attempts }}
