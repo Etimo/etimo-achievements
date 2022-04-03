@@ -57,6 +57,7 @@ runs:
 
           if (( found )); then
             echo "Remote version was OK! ($expected_commit)"
+            exit 0
           else
             echo "Remote version was NOT OK! ($remote_commit)"
             exit 1
