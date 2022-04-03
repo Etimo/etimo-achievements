@@ -37,7 +37,7 @@ runs:
         read -r -a urls <<< "${{ inputs.urls }}"
         attempts=${{ inputs.attempts }}
         for i in $(seq 1 $attempts); do
-          echo "Getting version information (attempt $i)..."
+          echo "Trying (${i}/${attempts})..."
 
           found=1
           for url in "${urls[@]}"; do
