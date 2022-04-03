@@ -34,7 +34,9 @@ runs:
     - name: Prepare environment
       shell: bash
       run: |
-        echo "TAG=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+        echo "GIT_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+        echo "COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "TAG=$(git rev-parse HEAD | head -c7)" >> $GITHUB_ENV
         echo "VERSION=$(git rev-list HEAD --count)" >> $GITHUB_ENV
         echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
         echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV

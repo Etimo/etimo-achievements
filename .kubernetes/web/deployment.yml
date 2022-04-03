@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: achievements-web
-          image: niclaslindstedt/etimo-achievements-web:${GITHUB_SHA}
+          image: niclaslindstedt/etimo-achievements-web:${COMMIT_SHA}
           resources:
             requests:
               cpu: '50m'

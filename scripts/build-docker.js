@@ -59,7 +59,7 @@ async function buildDocker(packages) {
 async function buildDockerFile(dockerFile) {
   const currentCommit = getCurrentCommit();
   const tags = [`etimo-achievements/${dockerFile}`, `ghcr.io/etimo/etimo-achievements/${dockerFile}`];
-  const buildArgs = [`COMMIT_SHA=${currentCommit}`];
+  const buildArgs = [`COMMIT_SHA=${currentCommit}`, 'GIT_BRANCH=<branch name>'];
   await buildApp(dockerFile, tags, buildArgs);
 }
 

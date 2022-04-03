@@ -146,3 +146,8 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ignore-path: .kubernetes/.init
           wait: api-deployment,web-deployment
+
+      - name: Verify application version
+        uses: ./.github/actions/verify-version
+        with:
+          urls: ${{ env.FRONTEND_URL }} ${{ env.API_URL }}

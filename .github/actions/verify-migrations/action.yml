@@ -24,13 +24,16 @@ runs:
     - name: Prepare environment
       shell: bash
       run: |
-        echo "TAG=$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+        echo "COMMIT_SHA=$(git rev-parse HEAD)" >> $GITHUB_ENV
+        echo "TAG=$(git rev-parse HEAD | head -c7)" >> $GITHUB_ENV
         echo "DATE=$(date '+%Y%m%d%H%M%S')" >> $GITHUB_ENV
         echo "KUBERNETES_NAMESPACE=${{ inputs.namespace }}" >> $GITHUB_ENV
 
     - name: Verify migrations
       shell: bash
       run: |
+        DEBUG="${{ inputs.DEBUG }}"
+
         if [ "$DEBUG" = "true" ]; then
           set -x
         fi
@@ -41,8 +44,8 @@ runs:
         echo "Waiting for job (timeout: ${{ inputs.timeout }})..."
 
         timeout=${{ inputs.timeout }}
-        for i in $(seq 0 $timeout); do
-          echo "Trying... (attempt $i)"
+        for i in $(seq 1 $timeout); do
+          echo "Getting deployment info (attempt $i)..."
 
           json="$(kubectl --kubeconfig kubeconfig -n $KUBERNETES_NAMESPACE get -f migration_object -o json 2>/dev/null || echo "{}")"
 

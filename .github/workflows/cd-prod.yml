@@ -53,22 +53,19 @@ jobs:
       RELEASE: ${{ github.sha }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Verify staging version
+      - name: Get staging version
+        id: version
         shell: bash
         env:
           URL: https://achievements-test.staging.etimo-test.live/version
         run: |
-          current_commit=${{ github.sha }}
           remote_commit=$(curl --fail -s $URL | jq -r '.commit')
-          if [ "$remote_commit" != "$current_commit" ]; then
-            echo "Commit mismatch: $remote_commit != $current_commit"
-            echo "YOU NEED TO RELEASE TO STAGING BEFORE RELEASING TO PRODUCTION!"
-            exit 1
-          fi
-          echo "Staging version is OK"
+          echo "Found remote commit $remote_commit"
+          echo "::set-output name=remote-commit::$remote_commit"
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        ref: ${{ steps.version.outputs.remote-commit }}
 
       - name: Deploy database migration job
         id: deploy-init
@@ -84,7 +81,6 @@ jobs:
           migration-object: ${{ steps.deploy-init.outputs.deployment-yaml }}
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
-          debug: true
 
       - name: Tag release
         id: tag
@@ -100,3 +96,9 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ignore-path: .kubernetes/.init
           wait: api-deployment,web-deployment
+
+      - name: Verify application version
+        uses: ./.github/actions/verify-version
+        with:
+          require-commit: ${{ steps.version.outputs.remote_commit }}
+          urls: ${{ env.FRONTEND_URL }} ${{ env.API_URL }}
