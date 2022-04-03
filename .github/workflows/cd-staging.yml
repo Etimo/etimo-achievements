@@ -159,7 +159,7 @@ jobs:
       - name: Promote Docker image
         uses: ./.github/actions/docker-promote
         with:
-          from-image-name: etimo-achievements-staging/web
+          from-image-name: niclaslindstedt/etimo-achievements
           from-tag: ${{ steps.info.outputs.current-commit }}
-          to-image-name: etimo-achievements/web
+          to-image-name: niclaslindstedt/etimo-achievements
           to-tag: staging
