@@ -4,7 +4,7 @@ description: Build and push an app
 inputs:
   registry:
     description: The container registry to push image to
-    default: ghcr.io/etimo
+    default: docker.io
   from-image-name:
     description: Source image name
     required: true

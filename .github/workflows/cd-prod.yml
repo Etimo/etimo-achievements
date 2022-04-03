@@ -68,6 +68,11 @@ jobs:
         with:
           ref: ${{ steps.version.outputs.remote-commit }}
 
+      - name: Get information
+        id: info
+        run: |
+          echo "::set-output name=current-commit::$(git rev-parse HEAD)"
+
       - name: Deploy database migration job
         id: deploy-init
         uses: ./.github/actions/deploy-kubernetes
@@ -104,3 +109,11 @@ jobs:
         with:
           require-commit: ${{ steps.version.outputs.remote-commit }}
           urls: ${{ env.FRONTEND_URL }} ${{ env.API_URL }}
+
+      - name: Promote Docker image
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: etimo-achievements-staging/web
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: etimo-achievements/web
+          to-tag: prod

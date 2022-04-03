@@ -4,7 +4,7 @@ description: Verifies that the deployed application has the correct version
 inputs:
   require-commit:
     description: The commit sha that is expected to be deployed
-    default: ${{ github.sha }}
+    required: true
   interval-seconds:
     description: How many seconds to wait between each attempt
     default: 2
