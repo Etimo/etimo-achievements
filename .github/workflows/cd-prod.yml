@@ -124,3 +124,21 @@ jobs:
           from-tag: ${{ steps.info.outputs.current-commit }}
           to-image-name: niclaslindstedt/etimo-achievements-web
           to-tag: prod
+
+      - name: Tag api image with version
+        if: steps.tag.outputs.tagged == 'true'
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: niclaslindstedt/etimo-achievements-api
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: niclaslindstedt/etimo-achievements-api
+          to-tag: ${{ steps.tag.outputs.tag }}
+
+      - name: Tag web image with version
+        if: steps.tag.outputs.tagged == 'true'
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: niclaslindstedt/etimo-achievements-web
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: niclaslindstedt/etimo-achievements-web
+          to-tag: ${{ steps.tag.outputs.tag }}

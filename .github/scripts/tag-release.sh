@@ -30,6 +30,7 @@ if [ "$tag_commit" != "$latest_version_commit" ]; then
   echo "Successfully pushed $next_version tag (-> $tag_commit)"
 
   echo "::set-output name=tagged::true"
+  echo "::set-output name=tag::$next_version"
 fi
 
 exit 0
