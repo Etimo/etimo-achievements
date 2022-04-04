@@ -1,3 +1,4 @@
+import { Logger } from '@etimo-achievements/common';
 import { AuthApi } from '../../api/auth-api';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { authSelector, setLoggedIn, setLoggedOut, setLoggingIn, setTokenInfo, setUserInfo } from './auth-slice';
@@ -11,8 +12,7 @@ export class AuthService {
     this.dispatch(setLoggingIn());
     await this.getToken(code);
     await this.validateToken();
-    this.getUserInfo();
-    this.getTokenInfo();
+    this.getInfo();
   }
 
   public async refresh() {
@@ -21,14 +21,23 @@ export class AuthService {
       return;
     }
 
+    const setRefreshTimer = (inSeconds: number) => {
+      Logger.log('Setting refresh token timer for ' + inSeconds + ' seconds');
+      setTimeout(() => this.refresh(), inSeconds * 1000);
+    };
+
     const validateRes = await this.authApi.validate().wait();
     if (validateRes.success) {
-      return this.dispatch(setLoggedIn());
+      const data = await validateRes.data();
+      setRefreshTimer(data.expires_in);
+      return this.dispatch(setLoggedIn(data.expires_in));
     }
 
     const refreshRes = await this.authApi.refresh().wait();
     if (refreshRes.success) {
-      return this.dispatch(setLoggedIn());
+      const data = await refreshRes.data();
+      setRefreshTimer(data.expires_in);
+      return this.dispatch(setLoggedIn(data.expires_in));
     }
 
     this.dispatch(setLoggedOut());
@@ -39,6 +48,11 @@ export class AuthService {
     this.dispatch(setLoggedOut());
   }
 
+  public getInfo() {
+    this.getUserInfo();
+    this.getTokenInfo();
+  }
+
   private async getToken(code: string) {
     await this.authApi.callback('google', code).wait();
   }
@@ -46,7 +60,8 @@ export class AuthService {
   private async validateToken() {
     const response = await this.authApi.validate().wait();
     if (response.success) {
-      return this.dispatch(setLoggedIn());
+      const data = await response.data();
+      return this.dispatch(setLoggedIn(data.expires_in));
     }
 
     await this.logout();

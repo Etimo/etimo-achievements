@@ -141,6 +141,17 @@
           }
         }
       },
+      "TokenValidation": {
+        "title": "TokenValidation",
+        "type": "object",
+        "properties": {
+          "expires_in": {
+            "type": "integer",
+            "description": "In how many seconds the token will expire.",
+            "example": 3600
+          }
+        }
+      },
       "UserInfo": {
         "title": "UserInfo",
         "type": "object",

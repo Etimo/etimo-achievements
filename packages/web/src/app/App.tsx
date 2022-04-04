@@ -2,7 +2,9 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import SideMenu from '../components/SideMenu';
 import { AuthService } from '../features/auth/auth-service';
+import { authSelector } from '../features/auth/auth-slice';
 import Router, { Routes } from './Router';
+import { useAppSelector } from './store';
 
 const App = (): JSX.Element => {
   const location = useLocation();
@@ -11,7 +13,9 @@ const App = (): JSX.Element => {
   useEffect(() => {
     // If the user is not currently logging in, refresh the token.
     if (location.pathname !== Routes.LoginCallback) {
-      authService.refresh();
+      authService.refresh().then(() => {
+        authService.getInfo();
+      });
     }
   }, []);
 
