@@ -1,0 +1,4 @@
+# This folder contains dtos that are copied
+# from the api project, and can hence be ignored
+# from diffing.
+* linguist-generated
