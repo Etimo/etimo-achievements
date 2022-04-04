@@ -131,6 +131,9 @@ jobs:
       - name: Generate OpenAPI spec
         run: npm run generate-openapi
 
+      - name: Copy DTOs from API project
+        run: npm run generate-dtos
+
       - name: Generate jest configs
         run: npm run generate-jest
 
@@ -142,8 +145,11 @@ jobs:
         id: changed-files
         with:
           files: |
+            **/*-dto.ts
             openapi.json
             package.json
+            tsconfig.json
+            yarn.lock
 
       - name: Files changed
         if: steps.changed-files.outputs.files_changed == 'true'
