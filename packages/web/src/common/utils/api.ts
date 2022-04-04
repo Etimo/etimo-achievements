@@ -68,14 +68,21 @@ class Api {
           let error: string | undefined;
           let bodyPromise: Promise<T> | undefined;
           let success: boolean = false;
+          const headers = res.headers;
+          const contentType = headers.get('content-type');
+          const isJson = contentType && contentType.includes('application/json');
           if (statusCode >= 200 && statusCode < 300) {
             success = true;
-            bodyPromise = new Promise((resolve, reject) =>
-              res
-                .json()
-                .then((data) => resolve(data as T))
-                .catch(reject)
-            );
+            bodyPromise = new Promise((resolve, reject) => {
+              if (isJson) {
+                return res
+                  .json()
+                  .then((data) => resolve(data ? (data as T) : ({} as T)))
+                  .catch(reject);
+              }
+
+              return {} as T;
+            });
           } else {
             error = message;
           }

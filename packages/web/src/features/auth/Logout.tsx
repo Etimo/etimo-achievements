@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../app/store';
-import { setLoggedOut } from './auth-slice';
+import { AuthService } from './auth-service';
 
 const Logout = (): JSX.Element => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const authService = new AuthService();
 
   useEffect(() => {
-    dispatch(setLoggedOut());
+    authService.logout();
     navigate('/');
   });
 

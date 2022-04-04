@@ -6,17 +6,24 @@ import { AuthState } from './types';
 
 const initialState: AuthState = {
   isAuthenticated: false,
+  isAuthenticating: false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setLoggingIn: (state: AuthState) => {
+      state.isAuthenticated = false;
+      state.isAuthenticating = true;
+    },
     setLoggedIn: (state: AuthState) => {
       state.isAuthenticated = true;
+      state.isAuthenticating = false;
     },
     setLoggedOut: (state: AuthState) => {
       state.isAuthenticated = false;
+      state.isAuthenticating = false;
     },
     setUserInfo: (state: AuthState, action: { payload: UserInfoDto }) => {
       state.userInfo = action.payload;
@@ -34,7 +41,7 @@ export const selectExpiresAt = (state: RootState) => {
   }
 };
 
-export const { setLoggedIn, setLoggedOut, setUserInfo, setTokenInfo } = authSlice.actions;
+export const { setLoggingIn, setLoggedIn, setLoggedOut, setUserInfo, setTokenInfo } = authSlice.actions;
 
 export const authSelector = (state: RootState) => state.auth;
 

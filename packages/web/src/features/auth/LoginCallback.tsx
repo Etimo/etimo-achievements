@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Routes } from '../../app/Router';
 import useQuery from '../../common/hooks/use-query';
-import { LoginService } from './login-service';
+import { AuthService } from './auth-service';
 
 const LoginCallback = (): JSX.Element => {
-  const query = useQuery();
   const navigate = useNavigate();
-  const loginService = new LoginService();
-  const code = query.get('code');
+  const code = useQuery().get('code');
+  const authService = new AuthService();
 
   useEffect(() => {
     if (code) {
-      loginService.loginWithCode(code).then(() => {
-        navigate('/profile');
+      authService.login(code).then(() => {
+        navigate(Routes.Profile);
       });
     }
-  });
+  }, []);
 
   return <></>;
 };
