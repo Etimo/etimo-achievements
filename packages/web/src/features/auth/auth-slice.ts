@@ -12,10 +12,10 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state: AuthState) => {
+    setLoggedIn: (state: AuthState) => {
       state.isAuthenticated = true;
     },
-    logout: (state: AuthState) => {
+    setLoggedOut: (state: AuthState) => {
       state.isAuthenticated = false;
     },
     setUserInfo: (state: AuthState, action: { payload: UserInfoDto }) => {
@@ -23,12 +23,18 @@ const authSlice = createSlice({
     },
     setTokenInfo: (state: AuthState, action: { payload: TokenInfoDto }) => {
       state.tokenInfo = action.payload;
-      state.expiresAt = new Date(action.payload.exp * 1000);
     },
   },
 });
 
-export const { login, logout, setUserInfo, setTokenInfo } = authSlice.actions;
+export const selectExpiresAt = (state: RootState) => {
+  const auth = authSelector(state);
+  if (auth.tokenInfo) {
+    return new Date(auth.tokenInfo.exp * 1000);
+  }
+};
+
+export const { setLoggedIn, setLoggedOut, setUserInfo, setTokenInfo } = authSlice.actions;
 
 export const authSelector = (state: RootState) => state.auth;
 

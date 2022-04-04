@@ -1800,6 +1800,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@etimo-achievements/web@workspace:packages/web"
   dependencies:
+    "@etimo-achievements/common": ^1.0.0
     "@etimo-achievements/types": ^1.0.0
     "@fortawesome/fontawesome-svg-core": ^6.1.1
     "@fortawesome/free-brands-svg-icons": ^6.1.1

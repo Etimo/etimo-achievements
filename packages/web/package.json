@@ -20,6 +20,7 @@
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'"
   },
   "dependencies": {
+    "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
