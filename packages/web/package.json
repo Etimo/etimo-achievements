@@ -13,13 +13,14 @@
     "compile": "npx webpack-cli build --config ./webpack.dev.js",
     "compile-prod": "npx webpack-cli build --config ./webpack.prod.js",
     "compile-test": "tsc --build",
+    "copy-dtos": "npx copyfiles -f ../api/src/resources/**/*-dto.ts ./src/common/dtos",
     "dev": "npm run start",
-    "openapi": "ts-node generate-openapi.ts",
     "start": "npx webpack-cli serve --config ./webpack.dev.js",
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'"
   },
   "dependencies": {
+    "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
@@ -41,6 +42,7 @@
     "@types/redux-logger": "^3.0.9",
     "autoprefixer": "^10.4.4",
     "copy-webpack-plugin": "^10.2.4",
+    "copyfiles": "^2.4.1",
     "css-loader": "^6.7.1",
     "html-webpack-plugin": "^5.5.0",
     "postcss": "^8.4.12",

@@ -1,13 +1,20 @@
-import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router';
 import SideMenu from '../components/SideMenu';
-import Login from '../features/auth/Login';
-import LoginCallback from '../features/auth/LoginCallback';
-import Logout from '../features/auth/Logout';
-import Home from '../pages/Home';
-import Profile from '../pages/Profile';
+import { AuthService } from '../features/auth/auth-service';
+import Router, { Routes } from './Router';
 
 const App = (): JSX.Element => {
+  const location = useLocation();
+  const authService = new AuthService();
+
+  useEffect(() => {
+    // If the user is not currently logging in, refresh the token.
+    if (location.pathname !== Routes.LoginCallback) {
+      authService.refresh();
+    }
+  }, []);
+
   return (
     <React.StrictMode>
       <div className="flex">
@@ -15,13 +22,7 @@ const App = (): JSX.Element => {
           <SideMenu />
         </div>
         <div className="flex-auto p-4 mx-auto">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/login/callback" element={<LoginCallback />} />
-            <Route path="/logout" element={<Logout />} />
-          </Routes>
+          <Router />
         </div>
       </div>
     </React.StrictMode>

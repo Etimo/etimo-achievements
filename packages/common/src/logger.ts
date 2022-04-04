@@ -1,3 +1,5 @@
+import { isProduction, isStaging } from '.';
+
 type LoggerOptions = {
   extras?: any[];
   color?: LoggingColor;
@@ -94,8 +96,9 @@ function colorCode(color: LoggingColor): string {
 }
 
 function timestamp(enabled?: boolean) {
-  if (enabled === undefined || enabled) {
-    return `[${new Date().toTimeString().split(' ')[0]}] `;
+  if ((isProduction() || isStaging()) && !enabled) {
+    return '';
   }
-  return '';
+
+  return `[${new Date().toTimeString().split(' ')[0]}] `;
 }

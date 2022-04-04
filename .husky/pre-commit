@@ -22,6 +22,9 @@ npm run generate-jest
 title "OpenAPI"
 npm run generate-openapi
 
+title "API DTOs"
+npm run generate-dtos
+
 title "Tests"
 npm run test
 

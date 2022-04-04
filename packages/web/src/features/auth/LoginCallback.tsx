@@ -1,29 +1,21 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../app/store';
+import { Routes } from '../../app/Router';
 import useQuery from '../../common/hooks/use-query';
-import fetch from '../../common/utils/fetch';
-import { login } from './authSlice';
+import { AuthService } from './auth-service';
 
 const LoginCallback = (): JSX.Element => {
-  const query = useQuery();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const code = useQuery().get('code');
+  const authService = new AuthService();
 
   useEffect(() => {
-    const code = query.get('code');
-
     if (code) {
-      fetch('/auth/callback/google?code=' + code).then((res) => {
-        res.json().then((_data) => {
-          if (res.status === 200) {
-            dispatch(login());
-            navigate('/profile');
-          }
-        });
+      authService.login(code).then(() => {
+        navigate(Routes.Profile);
       });
     }
-  });
+  }, []);
 
   return <></>;
 };

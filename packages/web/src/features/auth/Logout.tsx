@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../app/store';
-import { logout } from './authSlice';
+import { AuthService } from './auth-service';
 
 const Logout = (): JSX.Element => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const authService = new AuthService();
 
   useEffect(() => {
-    localStorage.setItem('loggedIn', 'false');
-    dispatch(logout());
+    authService.logout();
     navigate('/');
   });
 
