@@ -1,5 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/reducers';
+import { TokenInfoDto } from '../../common/dtos/token-info-dto';
+import { UserInfoDto } from '../../common/dtos/user-info-dto';
 import { AuthState } from './types';
 
 const initialState: AuthState = {
@@ -16,10 +18,17 @@ const authSlice = createSlice({
     logout: (state: AuthState) => {
       state.isAuthenticated = false;
     },
+    setUserInfo: (state: AuthState, action: { payload: UserInfoDto }) => {
+      state.userInfo = action.payload;
+    },
+    setTokenInfo: (state: AuthState, action: { payload: TokenInfoDto }) => {
+      state.tokenInfo = action.payload;
+      state.expiresAt = new Date(action.payload.exp * 1000);
+    },
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, setUserInfo, setTokenInfo } = authSlice.actions;
 
 export const authSelector = (state: RootState) => state.auth;
 
