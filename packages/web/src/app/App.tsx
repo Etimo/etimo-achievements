@@ -12,7 +12,9 @@ const App = (): JSX.Element => {
     // If the user is not currently logging in, refresh the token.
     if (location.pathname !== Routes.LoginCallback) {
       authService.refresh().then((success) => {
-        if (success) authService.getInfo();
+        if (success) {
+          authService.getInfo();
+        }
       });
     }
   }, []);
