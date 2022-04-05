@@ -9,7 +9,9 @@ import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 
 export enum Routes {
-  Achievements = '/achievements',
+  AchievementsList = '/achievements',
+  AchievementsCreate = '/achievements/create',
+  AchievementsEdit = '/achievements/edit',
   Home = '/',
   Login = '/login',
   LoginCallback = '/login/callback',
@@ -26,7 +28,7 @@ const Router = (): JSX.Element => {
       <Route path={Routes.Logout} element={<Logout />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path={Routes.Achievements} element={<Achievements />} />
+        <Route path={Routes.AchievementsList} element={<Achievements />} />
         <Route path={Routes.Profile} element={<Profile />} />
       </Route>
     </ReactRoutes>
