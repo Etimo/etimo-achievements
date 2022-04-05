@@ -66,8 +66,6 @@ export class AuthController {
      *   get:
      *     summary: Logout
      *     operationId: authLogout
-     *     security:
-     *       - jwtCookie: []
      *     responses:
      *       200:
      *         description: Logout success.
@@ -79,7 +77,7 @@ export class AuthController {
      *     tags:
      *       - Auth
      */
-    router.get('/auth/logout', protectedEndpoint(this.logout));
+    router.get('/auth/logout', endpoint(this.logout));
 
     /**
      * @openapi

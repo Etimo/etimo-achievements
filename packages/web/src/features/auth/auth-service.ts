@@ -2,17 +2,47 @@ import { Logger } from '@etimo-achievements/common';
 import { AuthApi } from '../../api/auth-api';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { authSelector, setLoggedIn, setLoggedOut, setLoggingIn, setTokenInfo, setUserInfo } from './auth-slice';
+import { AuthStorageKeys } from './types';
 
 export class AuthService {
   private authApi = new AuthApi();
   private dispatch = useAppDispatch();
   private auth = useAppSelector(authSelector);
 
+  public async initialize() {
+    if (this.isAuthenticated || (await this.refresh())) {
+      this.setRefreshTimer();
+      this.getInfo();
+    }
+  }
+
   public async login(code: string) {
     this.dispatch(setLoggingIn());
     await this.getToken(code);
     await this.validateToken();
     this.getInfo();
+  }
+
+  public get isAuthenticated() {
+    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+    if (expiresAt) {
+      this.dispatch(setLoggedIn(+expiresAt));
+      return +expiresAt > Date.now();
+    }
+
+    return false;
+  }
+
+  public setRefreshTimer() {
+    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+    const expiresIn = expiresAt ? +expiresAt - Date.now() : 0;
+
+    if (expiresIn > 0) {
+      Logger.log('Setting refresh token timer for ' + expiresIn / 1000 + ' seconds');
+      setTimeout(() => this.refresh(), expiresIn);
+    } else {
+      this.refresh();
+    }
   }
 
   public async refresh() {
@@ -33,8 +63,12 @@ export class AuthService {
   }
 
   public async logout() {
+    this.dispatch(setLoggingIn());
+
     await this.authApi.logout().wait();
+
     this.dispatch(setLoggedOut());
+    localStorage.clear();
   }
 
   public getInfo() {
@@ -43,8 +77,9 @@ export class AuthService {
   }
 
   private dispatchLogin(expiresIn: number) {
-    Logger.log('Setting refresh token timer for ' + expiresIn + ' seconds');
-    setTimeout(() => this.refresh(), expiresIn * 1000);
+    localStorage.setItem(AuthStorageKeys.ExpiresAt, (Date.now() + expiresIn * 1000).toString());
+
+    this.setRefreshTimer();
     this.dispatch(setLoggedIn(expiresIn));
 
     return true;
@@ -69,6 +104,8 @@ export class AuthService {
     const response = await this.authApi.userInfo().wait();
     if (response.success) {
       this.dispatch(setUserInfo(await response.data()));
+    } else if (response.status === 401) {
+      await this.logout();
     }
   }
 
@@ -76,6 +113,8 @@ export class AuthService {
     const response = await this.authApi.introspect().wait();
     if (response.success) {
       this.dispatch(setTokenInfo(await response.data()));
+    } else if (response.status === 401) {
+      await this.logout();
     }
   }
 }

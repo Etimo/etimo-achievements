@@ -10,3 +10,7 @@ export interface AuthState {
   userInfo?: UserInfoDto;
   tokenInfo?: TokenInfoDto;
 }
+
+export enum AuthStorageKeys {
+  ExpiresAt = 'expiresAt',
+}
