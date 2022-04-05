@@ -33,6 +33,6 @@ export class LoginService {
       });
     }
 
-    return this.createTokenService.create(user, ['w:achievements', 'r:awards', 'rw:users']);
+    return this.createTokenService.create(user, ['rw:achievements', 'rw:awards', 'rw:users']);
   }
 }
