@@ -5,6 +5,7 @@ import { decrypt, encrypt } from '..';
 
 export class JwtService {
   public static create(user: IUser, scopes: string[]): JWT {
+    const expirationSeconds = +getEnvVariable(Env.JWT_EXPIRATION_SECONDS);
     const token: JWT = {
       jti: uuid(),
       sub: user.id,
@@ -12,7 +13,7 @@ export class JwtService {
       email: user.email,
       iss: 'etimo-achievements',
       aud: 'etimo-achievements',
-      exp: Math.round(new Date().getTime() / 1000 + 3600),
+      exp: Math.round(new Date().getTime() / 1000 + expirationSeconds),
       iat: Math.round(new Date().getTime() / 1000),
       scope: scopes.join(' '),
     };

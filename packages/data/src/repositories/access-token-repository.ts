@@ -32,4 +32,10 @@ export class AccessTokenRepository {
       return AccessTokenModel.query().deleteById(id);
     });
   }
+
+  deleteInvalid(): Promise<number> {
+    return catchErrors(async () => {
+      return AccessTokenModel.query().where('expires_at', '<', new Date()).orWhere('disabled', true).delete();
+    });
+  }
 }

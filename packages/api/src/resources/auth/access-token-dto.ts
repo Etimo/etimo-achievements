@@ -11,7 +11,7 @@
  *         access_token:
  *           type: string
  *           description: Bearer access token used for authorization.
- *           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiIzZmRmMGNhNi1mNWI5LTRlMTUtYWFlOC04MWM0NTRmZGZmYjAiLCJzdWIiOiIzZDQxYjVkNC0zMmZhLTQxZDYtOTM5OS01NTFmOThmNWIxMjAiLCJuYW1lIjoiTmljbGFzIExpbmRzdGVkdCIsImVtYWlsIjoibmljbGFzLmxpbmRzdGVkdEBldGltby5zZSIsImlzcyI6ImV0aW1vLWFjaGlldmVtZW50cyIsImF1ZCI6ImV0aW1vLWFjaGlldmVtZW50cyIsImV4cCI6MTY0NzY4OTA5NywiaWF0IjoxNjQ3Njg1NDk3fQ.npzbTJxvdHYF5qYPbAq8cjWReDiQkGbEIEiMCVWNkic
+ *           example: U2FsdGVkX1/Vvv89nfMwgfO/CG24SnP9LIvf/h8VkbmiRIWa0dDraOuDSAEILlI3+ZvZ...
  *         token_type:
  *           type: string
  *           description: The type of token issued.
@@ -23,7 +23,7 @@
  *         refresh_token:
  *           type: string
  *           description: The refresh token that can be used to get a new access token.
- *           example: V2R3ARQDwpzrLPXhsBZgexPMCp7mPQfsnATPie6h5RCdmmkU4UAqKfWvypPkhbHG
+ *           example: U2FsdGVkX18fnSqv0NhgmH4gkUT+f4VYynZD5WA2hALnLluoop4wa98soXGxUVPcrHMa...
  *         scopes:
  *           type: array
  *           items:

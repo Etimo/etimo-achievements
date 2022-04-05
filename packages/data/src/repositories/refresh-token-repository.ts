@@ -32,4 +32,14 @@ export class RefreshTokenRepository {
       return RefreshTokenModel.query().deleteById(id);
     });
   }
+
+  deleteInvalid(): Promise<number> {
+    return catchErrors(async () => {
+      return RefreshTokenModel.query()
+        .where('expires_at', '<', new Date())
+        .orWhere('disabled', true)
+        .orWhere('used', true)
+        .delete();
+    });
+  }
 }

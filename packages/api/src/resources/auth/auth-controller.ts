@@ -141,7 +141,9 @@ export class AuthController {
      *     security:
      *       - jwtCookie: []
      *     responses:
-     *       200: *okResponse
+     *       200:
+     *         description: The request was successful.
+     *         content: *tokenValidationContent
      *       401: *unauthorizedResponse
      *     tags:
      *       - Auth
