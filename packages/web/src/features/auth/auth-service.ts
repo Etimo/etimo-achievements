@@ -31,6 +31,7 @@ export class AuthService {
 
     return false;
   }
+
   private dispatchLogin(expiresIn: number) {
     Logger.log('Setting refresh token timer for ' + expiresIn + ' seconds');
     setTimeout(() => this.refresh(), expiresIn * 1000);
