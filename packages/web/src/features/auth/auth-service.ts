@@ -63,8 +63,6 @@ export class AuthService {
   }
 
   public async logout() {
-    this.dispatch(setLoggingIn());
-
     await this.authApi.logout().wait();
 
     this.dispatch(setLoggedOut());
