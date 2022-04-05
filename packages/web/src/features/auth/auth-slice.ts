@@ -34,13 +34,6 @@ const authSlice = createSlice({
   },
 });
 
-export const selectExpiresAt = (state: RootState) => {
-  const auth = authSelector(state);
-  if (auth.tokenInfo) {
-    return new Date(auth.tokenInfo.exp * 1000);
-  }
-};
-
 export const { setLoggingIn, setLoggedIn, setLoggedOut, setUserInfo, setTokenInfo } = authSlice.actions;
 
 export const authSelector = (state: RootState) => state.auth;

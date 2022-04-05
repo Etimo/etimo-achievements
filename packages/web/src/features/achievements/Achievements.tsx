@@ -1,23 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { AchievementApi } from '../../api/achievement-api';
-import { AchievementDto } from '../../common/dtos/achievement-dto';
+import React, { useEffect } from 'react';
+import { useAppSelector } from '../../app/store';
+import { AchievementService } from './achievement-service';
+import { achievementSelector } from './achievement-slice';
 
 const Achievements = (): JSX.Element => {
-  const [achievements, setAchievements] = useState([] as AchievementDto[]);
+  const { achievements } = useAppSelector(achievementSelector);
+  const achievementService = new AchievementService();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    achievementService.load();
+  }, []);
 
-  console.log(achievements);
-  const renderAchievements = achievements.map((a) => {
-    return (
-      <div key={a.id}>
-        <h1>{a.name}</h1>
-        <p>{a.description}</p>
-      </div>
-    );
-  });
+  const achievementsRender = achievements.map((a) => (
+    <div key={a.id}>
+      <h1>{a.name}</h1>
+      <p>{a.description}</p>
+    </div>
+  ));
 
-  return <>{renderAchievements}</>;
+  return <>{achievementsRender}</>;
 };
 
 export default Achievements;

@@ -1,17 +1,16 @@
 import { AchievementApi } from '../../api/achievement-api';
 import { useAppDispatch } from '../../app/store';
+import { setAchievements } from './achievement-slice';
 
 export class AchievementService {
-  private;
+  private dispatch = useAppDispatch();
+  private api = new AchievementApi();
 
-  public async getMany() {
-    new AchievementApi()
-      .getMany()
-      .wait()
-      .then((response) => {
-        response.data().then((data) => {
-          setAchievements(data.data);
-        });
-      });
+  public async load() {
+    const response = await this.api.getMany().wait();
+    if (response.success) {
+      const { data } = await response.data();
+      this.dispatch(setAchievements(data));
+    }
   }
 }
