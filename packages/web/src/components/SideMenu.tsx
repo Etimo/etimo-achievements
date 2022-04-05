@@ -5,6 +5,7 @@ import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
+import { Routes } from '../app/Router';
 import useLoggedIn from '../common/hooks/use-logged-in';
 
 const SideMenu = (): JSX.Element => {
@@ -17,13 +18,13 @@ const SideMenu = (): JSX.Element => {
           <Menu iconShape="round">
             <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
               Profile
-              <Link to="/profile" />
+              <Link to={Routes.Profile} />
             </MenuItem>
           </Menu>
           <Menu iconShape="circle">
             <MenuItem icon={<FontAwesomeIcon icon={faStar} />}>
               Achievements
-              <Link to="/achievements" />
+              <Link to={Routes.Achievements} />
             </MenuItem>
             <MenuItem icon={<FontAwesomeIcon icon={faAward} />}>
               Awards
@@ -44,12 +45,12 @@ const SideMenu = (): JSX.Element => {
         {isLoggedIn ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
-            <Link to="/logout" />
+            <Link to={Routes.Logout} />
           </MenuItem>
         ) : (
           <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
             Sign in with Google
-            <Link to="/login" />
+            <Link to={Routes.Login} />
           </MenuItem>
         )}
       </Menu>
