@@ -1,8 +1,17 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { faAward, faRankingStar, faSignOut, faStar, faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
+import {
+  faAward,
+  faList,
+  faRankingStar,
+  faSignOut,
+  faSquarePlus,
+  faStar,
+  faUser,
+  faUsers,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
+import { Menu, MenuItem, ProSidebar, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
@@ -22,10 +31,16 @@ const SideMenu = (): JSX.Element => {
             </MenuItem>
           </Menu>
           <Menu iconShape="circle">
-            <MenuItem icon={<FontAwesomeIcon icon={faStar} />}>
-              Achievements
-              <Link to={Routes.Achievements} />
-            </MenuItem>
+            <SubMenu title="Achievements" icon={<FontAwesomeIcon icon={faStar} />}>
+              <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
+                List achievements
+                <Link to={Routes.AchievementsList} />
+              </MenuItem>
+              <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
+                Create achievement
+                <Link to={Routes.AchievementsCreate} />
+              </MenuItem>
+            </SubMenu>
             <MenuItem icon={<FontAwesomeIcon icon={faAward} />}>
               Awards
               <Link to="/awards" />
