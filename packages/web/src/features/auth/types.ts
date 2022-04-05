@@ -5,8 +5,11 @@ import { UserInfoDto } from '../../common/dtos/user-info-dto';
 export interface AuthState {
   isAuthenticated: boolean;
   isAuthenticating: boolean;
-  expiresIn?: number;
   user?: UserDto;
   userInfo?: UserInfoDto;
   tokenInfo?: TokenInfoDto;
+}
+
+export enum AuthStorageKeys {
+  ExpiresAt = 'expiresAt',
 }

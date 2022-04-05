@@ -2,11 +2,25 @@ import { Logger } from '@etimo-achievements/common';
 import { AuthApi } from '../../api/auth-api';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { authSelector, setLoggedIn, setLoggedOut, setLoggingIn, setTokenInfo, setUserInfo } from './auth-slice';
+import { AuthStorageKeys } from './types';
 
 export class AuthService {
   private authApi = new AuthApi();
   private dispatch = useAppDispatch();
   private auth = useAppSelector(authSelector);
+  private authenticated = false;
+
+  public async initialize() {
+    if (this.isAuthenticated()) {
+      this.dispatch(setLoggedIn());
+      this.setRefreshTimer();
+      return true;
+    } else if (await this.refresh()) {
+      return true;
+    }
+
+    return false;
+  }
 
   public async login(code: string) {
     this.dispatch(setLoggingIn());
@@ -27,25 +41,53 @@ export class AuthService {
       return this.dispatchLogin(data.expires_in);
     }
 
-    this.dispatch(setLoggedOut());
+    await this.logout();
 
     return false;
   }
 
   public async logout() {
     await this.authApi.logout().wait();
+
     this.dispatch(setLoggedOut());
+    localStorage.clear();
   }
 
   public getInfo() {
-    this.getUserInfo();
-    this.getTokenInfo();
+    if (this.isAuthenticated() || this.authenticated) {
+      this.getUserInfo();
+      this.getTokenInfo();
+    }
+  }
+
+  private isAuthenticated() {
+    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+    if (expiresAt) {
+      const isAuthed = +expiresAt > Date.now();
+      return isAuthed;
+    }
+
+    return false;
+  }
+
+  private setRefreshTimer() {
+    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+    const expiresIn = expiresAt ? +expiresAt - Date.now() - 2000 : 0;
+
+    if (expiresIn > 0) {
+      Logger.log('Setting refresh token timer for ' + expiresIn / 1000 + ' seconds');
+      setTimeout(() => this.refresh(), expiresIn);
+    } else {
+      this.refresh();
+    }
   }
 
   private dispatchLogin(expiresIn: number) {
-    Logger.log('Setting refresh token timer for ' + expiresIn + ' seconds');
-    setTimeout(() => this.refresh(), expiresIn * 1000);
-    this.dispatch(setLoggedIn(expiresIn));
+    localStorage.setItem(AuthStorageKeys.ExpiresAt, (Date.now() + expiresIn * 1000).toString());
+
+    this.setRefreshTimer();
+    this.dispatch(setLoggedIn());
+    this.authenticated = true;
 
     return true;
   }
@@ -58,17 +100,9 @@ export class AuthService {
     const response = await this.authApi.validate().wait();
     if (response.success) {
       const data = await response.data();
-      return this.dispatchLogin(data.expires_in);
-    }
-
-    await this.logout();
-    return false;
-  }
-
-  private async getUserInfo() {
-    const response = await this.authApi.userInfo().wait();
-    if (response.success) {
-      this.dispatch(setUserInfo(await response.data()));
+      this.dispatchLogin(data.expires_in);
+    } else {
+      this.logout();
     }
   }
 
@@ -76,6 +110,15 @@ export class AuthService {
     const response = await this.authApi.introspect().wait();
     if (response.success) {
       this.dispatch(setTokenInfo(await response.data()));
+    } else if (response.status === 401) {
+      this.logout();
+    }
+  }
+
+  private async getUserInfo() {
+    const response = await this.authApi.userInfo().wait();
+    if (response.success) {
+      this.dispatch(setUserInfo(await response.data()));
     }
   }
 }

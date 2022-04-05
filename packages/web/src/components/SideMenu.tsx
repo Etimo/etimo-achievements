@@ -5,40 +5,41 @@ import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
-import { RootState } from '../app/reducers';
-import { useAppSelector } from '../app/store';
+import { isLoggedIn } from '../features/auth/utils';
 
 const SideMenu = (): JSX.Element => {
-  const { isAuthenticated } = useAppSelector((state: RootState) => state.auth);
-
   return (
     <ProSidebar>
-      <Menu iconShape="round">
-        <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
-          Profile
-          <Link to="/profile" />
-        </MenuItem>
-      </Menu>
-      <Menu iconShape="circle">
-        <MenuItem icon={<FontAwesomeIcon icon={faStar} />}>
-          Achievements
-          <Link to="/achievements" />
-        </MenuItem>
-        <MenuItem icon={<FontAwesomeIcon icon={faAward} />}>
-          Awards
-          <Link to="/awards" />
-        </MenuItem>
-        <MenuItem icon={<FontAwesomeIcon icon={faUsers} />}>
-          Users
-          <Link to="/users" />
-        </MenuItem>
-        <MenuItem icon={<FontAwesomeIcon icon={faRankingStar} />}>
-          Ranking
-          <Link to="/ranking" />
-        </MenuItem>
-      </Menu>
+      {isLoggedIn() ? (
+        <>
+          <Menu iconShape="round">
+            <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
+              Profile
+              <Link to="/profile" />
+            </MenuItem>
+          </Menu>
+          <Menu iconShape="circle">
+            <MenuItem icon={<FontAwesomeIcon icon={faStar} />}>
+              Achievements
+              <Link to="/achievements" />
+            </MenuItem>
+            <MenuItem icon={<FontAwesomeIcon icon={faAward} />}>
+              Awards
+              <Link to="/awards" />
+            </MenuItem>
+            <MenuItem icon={<FontAwesomeIcon icon={faUsers} />}>
+              Users
+              <Link to="/users" />
+            </MenuItem>
+            <MenuItem icon={<FontAwesomeIcon icon={faRankingStar} />}>
+              Ranking
+              <Link to="/ranking" />
+            </MenuItem>
+          </Menu>
+        </>
+      ) : null}
       <Menu iconShape="square">
-        {isAuthenticated ? (
+        {isLoggedIn() ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
             <Link to="/logout" />

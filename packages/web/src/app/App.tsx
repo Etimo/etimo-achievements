@@ -11,7 +11,7 @@ const App = (): JSX.Element => {
   useEffect(() => {
     // If the user is not currently logging in, refresh the token.
     if (location.pathname !== Routes.LoginCallback) {
-      authService.refresh().then((success) => {
+      authService.initialize().then((success) => {
         if (success) {
           authService.getInfo();
         }

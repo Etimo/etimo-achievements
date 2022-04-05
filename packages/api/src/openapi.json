@@ -300,11 +300,6 @@
       "get": {
         "summary": "Logout",
         "operationId": "authLogout",
-        "security": [
-          {
-            "jwtCookie": []
-          }
-        ],
         "responses": {
           "200": {
             "description": "Logout success.",
