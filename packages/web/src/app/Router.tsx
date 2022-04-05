@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router-dom';
+import ProtectedRoute from '../components/ProtectedRoute';
 import Login from '../features/auth/Login';
 import LoginCallback from '../features/auth/LoginCallback';
 import Logout from '../features/auth/Logout';
@@ -21,7 +22,10 @@ const Router = (): JSX.Element => {
       <Route path={Routes.LoginCallback} element={<LoginCallback />} />
       <Route path={Routes.Login} element={<Login />} />
       <Route path={Routes.Logout} element={<Logout />} />
-      <Route path={Routes.Profile} element={<Profile />} />
+
+      <Route element={<ProtectedRoute />}>
+        <Route path={Routes.Profile} element={<Profile />} />
+      </Route>
     </ReactRoutes>
   );
 };

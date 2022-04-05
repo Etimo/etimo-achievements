@@ -5,12 +5,14 @@ import React from 'react';
 import { Menu, MenuItem, ProSidebar } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
-import { isLoggedIn } from '../features/auth/utils';
+import useLoggedIn from '../common/hooks/use-logged-in';
 
 const SideMenu = (): JSX.Element => {
+  const isLoggedIn = useLoggedIn();
+
   return (
     <ProSidebar>
-      {isLoggedIn() ? (
+      {isLoggedIn ? (
         <>
           <Menu iconShape="round">
             <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
@@ -39,7 +41,7 @@ const SideMenu = (): JSX.Element => {
         </>
       ) : null}
       <Menu iconShape="square">
-        {isLoggedIn() ? (
+        {isLoggedIn ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
             <Link to="/logout" />
