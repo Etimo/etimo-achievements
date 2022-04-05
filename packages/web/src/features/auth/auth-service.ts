@@ -49,8 +49,8 @@ export class AuthService {
   public async logout() {
     await this.authApi.logout().wait();
 
-    this.dispatch(setLoggedOut());
     localStorage.clear();
+    this.dispatch(setLoggedOut());
   }
 
   public getInfo() {
