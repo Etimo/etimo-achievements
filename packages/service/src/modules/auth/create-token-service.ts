@@ -55,6 +55,11 @@ export class CreateTokenService {
 
     const accessToken = await this.accessTokenRepo.create(newToken);
 
+    const deleted = await this.accessTokenRepo.deleteInvalid();
+    if (deleted) {
+      Logger.log(`Deleted ${deleted} invalid access tokens`);
+    }
+
     Logger.log(`Stored access token for user ${newToken.userId}`);
 
     return accessToken;
@@ -65,6 +70,7 @@ export class CreateTokenService {
     const data: IRefreshTokenData = {
       userId: token.userId,
       scopes: token.scopes,
+      accessTokenId: token.id,
     };
     const encryptedData = encrypt(data, key);
 

@@ -17,30 +17,26 @@ export class AuthService {
 
   public async refresh() {
     if (this.auth.isAuthenticating) {
-      console.log('Refresh is already in progress');
-      return;
-    }
-
-    const setRefreshTimer = (inSeconds: number) => {
-      Logger.log('Setting refresh token timer for ' + inSeconds + ' seconds');
-      setTimeout(() => this.refresh(), inSeconds * 1000);
-    };
-
-    const validateRes = await this.authApi.validate().wait();
-    if (validateRes.success) {
-      const data = await validateRes.data();
-      setRefreshTimer(data.expires_in);
-      return this.dispatch(setLoggedIn(data.expires_in));
+      Logger.log('Authentication already in progress');
+      return false;
     }
 
     const refreshRes = await this.authApi.refresh().wait();
     if (refreshRes.success) {
       const data = await refreshRes.data();
-      setRefreshTimer(data.expires_in);
-      return this.dispatch(setLoggedIn(data.expires_in));
+      return this.dispatchLogin(data.expires_in);
     }
 
     this.dispatch(setLoggedOut());
+
+    return false;
+  }
+  private dispatchLogin(expiresIn: number) {
+    Logger.log('Setting refresh token timer for ' + expiresIn + ' seconds');
+    setTimeout(() => this.refresh(), expiresIn * 1000);
+    this.dispatch(setLoggedIn(expiresIn));
+
+    return true;
   }
 
   public async logout() {
@@ -61,10 +57,11 @@ export class AuthService {
     const response = await this.authApi.validate().wait();
     if (response.success) {
       const data = await response.data();
-      return this.dispatch(setLoggedIn(data.expires_in));
+      return this.dispatchLogin(data.expires_in);
     }
 
     await this.logout();
+    return false;
   }
 
   private async getUserInfo() {

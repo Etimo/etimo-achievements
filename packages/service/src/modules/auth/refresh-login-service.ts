@@ -1,5 +1,5 @@
-import { BadRequestError, UnauthorizedError } from '@etimo-achievements/common';
-import { RefreshTokenRepository } from '@etimo-achievements/data';
+import { BadRequestError, Logger, UnauthorizedError } from '@etimo-achievements/common';
+import { AccessTokenRepository, RefreshTokenRepository } from '@etimo-achievements/data';
 import { decryptAs } from '@etimo-achievements/security';
 import { IRefreshTokenData } from '@etimo-achievements/types';
 import { GetUserService, ServiceOptions } from '..';
@@ -9,11 +9,13 @@ import { LoginResponse } from './types/login-response';
 export class RefreshLoginService {
   private getUserService: GetUserService;
   private createTokenService: CreateTokenService;
+  private accessTokenRepo: AccessTokenRepository;
   private refreshTokenRepo: RefreshTokenRepository;
 
   constructor(options?: ServiceOptions) {
     this.getUserService = new GetUserService(options);
     this.createTokenService = new CreateTokenService(options);
+    this.accessTokenRepo = options?.accessTokenRepository ?? new AccessTokenRepository();
     this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
   }
 
@@ -27,8 +29,15 @@ export class RefreshLoginService {
     const user = await this.getUserService.get(data.userId);
     if (!user) throw new BadRequestError('User not found');
 
-    refreshToken.used = true;
-    await this.refreshTokenRepo.update(refreshToken);
+    await Promise.allSettled([
+      this.refreshTokenRepo.delete(refreshTokenId),
+      this.accessTokenRepo.delete(data.accessTokenId),
+    ]);
+
+    const deleted = await this.refreshTokenRepo.deleteInvalid();
+    if (deleted) {
+      Logger.log(`Deleted ${deleted} invalid refresh tokens`);
+    }
 
     return this.createTokenService.create(user, data.scopes);
   }

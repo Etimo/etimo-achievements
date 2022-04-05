@@ -1,6 +1,7 @@
 export interface IRefreshTokenData {
   userId: string;
   scopes: string[];
+  accessTokenId: string;
 }
 
 export interface IRefreshToken {
