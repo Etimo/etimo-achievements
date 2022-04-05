@@ -32,14 +32,6 @@ export class AuthService {
     return false;
   }
 
-  private dispatchLogin(expiresIn: number) {
-    Logger.log('Setting refresh token timer for ' + expiresIn + ' seconds');
-    setTimeout(() => this.refresh(), expiresIn * 1000);
-    this.dispatch(setLoggedIn(expiresIn));
-
-    return true;
-  }
-
   public async logout() {
     await this.authApi.logout().wait();
     this.dispatch(setLoggedOut());
@@ -48,6 +40,14 @@ export class AuthService {
   public getInfo() {
     this.getUserInfo();
     this.getTokenInfo();
+  }
+
+  private dispatchLogin(expiresIn: number) {
+    Logger.log('Setting refresh token timer for ' + expiresIn + ' seconds');
+    setTimeout(() => this.refresh(), expiresIn * 1000);
+    this.dispatch(setLoggedIn(expiresIn));
+
+    return true;
   }
 
   private async getToken(code: string) {
