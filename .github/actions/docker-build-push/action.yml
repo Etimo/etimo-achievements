@@ -47,7 +47,7 @@ runs:
           COMMIT_SHA=${{ steps.info.outputs.current-commit }}
           GIT_BRANCH=${{ steps.info.outputs.branch-name }}
         tags: |
-          ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ github.sha }}
+          ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ steps.info.outputs.current-commit }}
           ${{ inputs.registry }}/${{ inputs.image-name }}${{ inputs.image-suffix }}:${{ inputs.tag }}
         cache-from: type=gha,scope=${{ inputs.image-name }}
         cache-to: type=gha,scope=${{ inputs.image-name }},mode=max
