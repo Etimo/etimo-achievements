@@ -17,10 +17,9 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.isAuthenticating = true;
     },
-    setLoggedIn: (state: AuthState, action: { payload: number }) => {
+    setLoggedIn: (state: AuthState) => {
       state.isAuthenticated = true;
       state.isAuthenticating = false;
-      state.expiresIn = action.payload;
     },
     setLoggedOut: (state: AuthState) => {
       state.isAuthenticated = false;

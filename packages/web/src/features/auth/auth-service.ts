@@ -8,12 +8,18 @@ export class AuthService {
   private authApi = new AuthApi();
   private dispatch = useAppDispatch();
   private auth = useAppSelector(authSelector);
+  private authenticated = false;
 
   public async initialize() {
-    if (this.isAuthenticated || (await this.refresh())) {
+    if (this.isAuthenticated()) {
+      this.dispatch(setLoggedIn());
       this.setRefreshTimer();
-      this.getInfo();
+      return true;
+    } else if (await this.refresh()) {
+      return true;
     }
+
+    return false;
   }
 
   public async login(code: string) {
@@ -21,28 +27,6 @@ export class AuthService {
     await this.getToken(code);
     await this.validateToken();
     this.getInfo();
-  }
-
-  public get isAuthenticated() {
-    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
-    if (expiresAt) {
-      this.dispatch(setLoggedIn(+expiresAt));
-      return +expiresAt > Date.now();
-    }
-
-    return false;
-  }
-
-  public setRefreshTimer() {
-    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
-    const expiresIn = expiresAt ? +expiresAt - Date.now() : 0;
-
-    if (expiresIn > 0) {
-      Logger.log('Setting refresh token timer for ' + expiresIn / 1000 + ' seconds');
-      setTimeout(() => this.refresh(), expiresIn);
-    } else {
-      this.refresh();
-    }
   }
 
   public async refresh() {
@@ -57,7 +41,7 @@ export class AuthService {
       return this.dispatchLogin(data.expires_in);
     }
 
-    this.dispatch(setLoggedOut());
+    await this.logout();
 
     return false;
   }
@@ -70,15 +54,40 @@ export class AuthService {
   }
 
   public getInfo() {
-    this.getUserInfo();
-    this.getTokenInfo();
+    if (this.isAuthenticated() || this.authenticated) {
+      this.getUserInfo();
+      this.getTokenInfo();
+    }
+  }
+
+  private isAuthenticated() {
+    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+    if (expiresAt) {
+      const isAuthed = +expiresAt > Date.now();
+      return isAuthed;
+    }
+
+    return false;
+  }
+
+  private setRefreshTimer() {
+    const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+    const expiresIn = expiresAt ? +expiresAt - Date.now() - 2000 : 0;
+
+    if (expiresIn > 0) {
+      Logger.log('Setting refresh token timer for ' + expiresIn / 1000 + ' seconds');
+      setTimeout(() => this.refresh(), expiresIn);
+    } else {
+      this.refresh();
+    }
   }
 
   private dispatchLogin(expiresIn: number) {
     localStorage.setItem(AuthStorageKeys.ExpiresAt, (Date.now() + expiresIn * 1000).toString());
 
     this.setRefreshTimer();
-    this.dispatch(setLoggedIn(expiresIn));
+    this.dispatch(setLoggedIn());
+    this.authenticated = true;
 
     return true;
   }
@@ -91,19 +100,9 @@ export class AuthService {
     const response = await this.authApi.validate().wait();
     if (response.success) {
       const data = await response.data();
-      return this.dispatchLogin(data.expires_in);
-    }
-
-    await this.logout();
-    return false;
-  }
-
-  private async getUserInfo() {
-    const response = await this.authApi.userInfo().wait();
-    if (response.success) {
-      this.dispatch(setUserInfo(await response.data()));
-    } else if (response.status === 401) {
-      await this.logout();
+      this.dispatchLogin(data.expires_in);
+    } else {
+      this.logout();
     }
   }
 
@@ -112,7 +111,14 @@ export class AuthService {
     if (response.success) {
       this.dispatch(setTokenInfo(await response.data()));
     } else if (response.status === 401) {
-      await this.logout();
+      this.logout();
+    }
+  }
+
+  private async getUserInfo() {
+    const response = await this.authApi.userInfo().wait();
+    if (response.success) {
+      this.dispatch(setUserInfo(await response.data()));
     }
   }
 }
