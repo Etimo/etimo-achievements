@@ -199,8 +199,21 @@ export class AuthController {
       await service.logout(jwt, refreshTokenId);
     }
 
-    res.cookie(CookieName.Jwt, 'deleted', { expires: new Date(0) });
-    res.cookie(CookieName.RefreshToken, 'deleted', { expires: new Date(0) });
+    const domain = new URL(getEnvVariable(Env.FRONTEND_URL)).hostname;
+    const deleteCookie = (name: string) => {
+      Logger.log(`Deleting cookie ${name} @ ${domain}`);
+      res.cookie(name, 'deleted', {
+        domain,
+        httpOnly: true,
+        signed: true,
+        secure: true,
+        sameSite: 'strict',
+        expires: new Date(0),
+      });
+    };
+
+    deleteCookie(CookieName.Jwt);
+    deleteCookie(CookieName.RefreshToken);
 
     return res.status(200).send();
   };
