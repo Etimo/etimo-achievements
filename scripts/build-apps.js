@@ -41,8 +41,12 @@ async function buildApps() {
 
         // If this is the api package, we need to update the openapi spec.
         if (packageName === 'api') {
-          const success = await runCommand('npm', ['run', 'openapi'], getPackageDirectory('api'));
-          if (!success) {
+          if (!(await runCommand('npm', ['run', 'openapi'], getPackageDirectory('api')))) {
+            process.exit(1);
+          }
+
+          // We also need to copy dtos to the web package.
+          if (!(await runCommand('npm', ['run', 'copy-dtos'], getPackageDirectory('web')))) {
             process.exit(1);
           }
         }

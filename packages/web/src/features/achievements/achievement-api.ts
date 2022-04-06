@@ -14,6 +14,6 @@ export class AchievementApi {
   }
 
   public create(achievement: AchievementDto) {
-    return this.api.post<{ achievementId: string }>('/auth/validate', achievement);
+    return this.api.post<{ achievementId: string }>('/achievements', achievement);
   }
 }

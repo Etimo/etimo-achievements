@@ -19,6 +19,8 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
   return (req: Request, res: Response, next: NextFunction) => {
     const ctx = getContext();
 
+    console.log(ctx);
+
     setJwt(req);
     setRefreshToken(req);
 

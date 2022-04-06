@@ -1,20 +1,21 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { FieldError, SubmitHandler, useForm, UseFormRegisterReturn } from 'react-hook-form';
+import { AchievementDto } from '../../common/dtos/achievement-dto';
+import { AchievementApi } from './achievement-api';
 
 const AchievementsCreate = (): JSX.Element => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm<AchievementDto>();
+  const achievementApi = new AchievementApi();
 
-  console.log(errors.points);
-
-  const onSubmit = (data: any): void => {
-    console.log('sending', data);
+  const onSubmit: SubmitHandler<AchievementDto> = (achievement) => {
+    achievementApi.create(achievement);
   };
 
-  const textInput = (name: string, label: string, validation?: any) => {
+  const textInput = (label: string, register: UseFormRegisterReturn, error: FieldError | undefined) => {
     return (
       <div className="md:flex md:items-center mb-6">
         <div className="md:w-1/3">
@@ -22,10 +23,10 @@ const AchievementsCreate = (): JSX.Element => {
         </div>
         <div className="md:w-2/3">
           <input
-            {...register(name, validation)}
+            {...register}
             className="bg-slate-200 appearance-none border-2 border-slate-300 rounded w-full py-2 px-4 text-slate-700 leading-tight focus:outline-none focus:bg-white focus:border-slate-500"
           />
-          <span className="text-sm text-red-400">{errors[name]?.message}</span>
+          {error?.message && <span className="text-sm text-red-400">{error.message}</span>}
         </div>
       </div>
     );
@@ -51,16 +52,26 @@ const AchievementsCreate = (): JSX.Element => {
       <h1 className="font-sans text-2xl font-bold text-center pb-6">Create Achievement</h1>
       <div className="w-full border-2 border-slate-200 rounded p-6 bg-slate-100">
         <form onSubmit={handleSubmit(onSubmit)}>
-          {textInput('name', 'Name', { required: true })}
-          {textInput('description', 'Description')}
-          {textInput('points', 'Points', {
-            required: true,
-            pattern: { value: /^[0-9]+$/, message: 'Points can only be numbers' },
-          })}
-          {textInput('minutes', 'Cooldown minutes', {
-            required: true,
-            pattern: { value: /^[0-9]+$/, message: 'Cooldown minutes can only be numbers' },
-          })}
+          {textInput('Name', register('name', { required: true }), errors.name)}
+          {textInput('Description', register('description'), errors.description)}
+          {textInput(
+            'Points',
+            register('achievementPoints', {
+              required: true,
+              pattern: { value: /^[0-9]+$/, message: 'Points can only be numbers' },
+              valueAsNumber: true,
+            }),
+            errors.achievementPoints
+          )}
+          {textInput(
+            'Cooldown minutes',
+            register('cooldownMinutes', {
+              required: true,
+              pattern: { value: /^[0-9]+$/, message: 'Cooldown minutes can only be numbers' },
+              valueAsNumber: true,
+            }),
+            errors.cooldownMinutes
+          )}
           {submitButton('Create')}
         </form>
       </div>

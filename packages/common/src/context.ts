@@ -13,9 +13,9 @@ export class Context {
   public refreshTokenId?: string;
   public refreshTokenKey?: string;
 
-  constructor() {
+  constructor(requestId?: string) {
     this.logger = new Logger();
-    this.requestId = uuid();
+    this.requestId = requestId ?? uuid();
     this.requestDate = new Date();
     this.timestamp = new Date().toTimeString().split(' ')[0];
     count++;
