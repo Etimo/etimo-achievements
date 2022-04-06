@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router';
 import SideMenu from '../components/SideMenu';
 import { AuthService } from '../features/auth/auth-service';
@@ -22,10 +23,11 @@ const App = (): JSX.Element => {
   return (
     <React.StrictMode>
       <div className="flex">
+        <Toaster position="top-right" reverseOrder={false} />
         <div className="flex-none">
           <SideMenu />
         </div>
-        <div className="flex-auto p-4 mx-auto">
+        <div className="p-4 mx-auto">
           <Router />
         </div>
       </div>

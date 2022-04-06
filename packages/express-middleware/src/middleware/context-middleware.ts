@@ -1,10 +1,16 @@
-import { Context } from '@etimo-achievements/common';
+import { Context, uuid } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
 import httpContext from 'express-http-context';
 
 export const setContextMiddleware = () => {
-  return (_req: Request, _res: Response, next: NextFunction) => {
-    const context = new Context();
+  return (req: Request, res: Response, next: NextFunction) => {
+    httpContext.ns.bindEmitter(req);
+    httpContext.ns.bindEmitter(res);
+
+    const requestId = req.get('X-Request-Id') ?? uuid();
+
+    const context = new Context(requestId);
+    console.log(context);
     httpContext.set('context', context);
     next();
   };

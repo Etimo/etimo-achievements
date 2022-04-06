@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/reducers';
 import { TokenInfoDto } from '../../common/dtos/token-info-dto';
 import { UserInfoDto } from '../../common/dtos/user-info-dto';
-import { AuthState } from './types';
+import { AuthState } from './auth-types';
 
 const initialState: AuthState = {
   isAuthenticated: false,

@@ -1820,7 +1820,9 @@ __metadata:
     postcss-loader: ^6.2.1
     react: ^17.0.2
     react-dom: ^17.0.2
+    react-hook-form: ^7.29.0
     react-hot-loader: ^4.13.0
+    react-hot-toast: ^2.2.0
     react-pro-sidebar: ^0.7.1
     react-redux: ^7.2.6
     react-router: ^6.2.2
@@ -7039,6 +7041,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"goober@npm:^2.1.1":
+  version: 2.1.8
+  resolution: "goober@npm:2.1.8"
+  peerDependencies:
+    csstype: ^3.0.10
+  checksum: c877e854814e29c085c0d3f7879492788ceff9b1a0a0d731bfe22e59a2d206f991c3fb44ad14a32a9c2f396e3280ad6a8e597a95bb2d052c59dd7c25814f1c67
+  languageName: node
+  linkType: hard
+
 "google-auth-library@npm:^7.14.0":
   version: 7.14.0
   resolution: "google-auth-library@npm:7.14.0"
@@ -11263,6 +11274,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-hook-form@npm:^7.29.0":
+  version: 7.29.0
+  resolution: "react-hook-form@npm:7.29.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 4379f972c916d01f4706c27c0fb207b1676b382fc4803ee557edf77cb2355ff320a659940325fda81c1f4fd799e685a6e228577c1050e5b8c32e815884d0defe
+  languageName: node
+  linkType: hard
+
 "react-hot-loader@npm:^4.13.0":
   version: 4.13.0
   resolution: "react-hot-loader@npm:4.13.0"
@@ -11283,6 +11303,18 @@ __metadata:
     "@types/react":
       optional: true
   checksum: effdbf4644ce912ae20ad94be62083970c74b26a59fe24ed0024cf73190a5b3edf59650cb693bdd7b70791df8ab8530de273d73b895c4831a91da8a76683e3a3
+  languageName: node
+  linkType: hard
+
+"react-hot-toast@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "react-hot-toast@npm:2.2.0"
+  dependencies:
+    goober: ^2.1.1
+  peerDependencies:
+    react: ">=16"
+    react-dom: ">=16"
+  checksum: bb34ddc8ada14cbd75a37f14d2563412174e23276eb05e9fb23a031b6d8374ca190cefa1940692f4371529ddafeb2d4b8d3e5023187c2851ec8cb247461553ee
   languageName: node
   linkType: hard
 

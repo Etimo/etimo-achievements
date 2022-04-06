@@ -1,7 +1,8 @@
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router-dom';
 import ProtectedRoute from '../components/ProtectedRoute';
-import Achievements from '../features/achievements/Achievements';
+import AchievementsCreate from '../features/achievements/AchievementsCreate';
+import AchievementsList from '../features/achievements/AchievementsList';
 import Login from '../features/auth/Login';
 import LoginCallback from '../features/auth/LoginCallback';
 import Logout from '../features/auth/Logout';
@@ -9,7 +10,7 @@ import Home from '../pages/Home';
 import Profile from '../pages/Profile';
 
 export enum Routes {
-  AchievementsList = '/achievements',
+  AchievementsList = '/achievements/list',
   AchievementsCreate = '/achievements/create',
   AchievementsEdit = '/achievements/edit',
   Home = '/',
@@ -28,7 +29,8 @@ const Router = (): JSX.Element => {
       <Route path={Routes.Logout} element={<Logout />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path={Routes.AchievementsList} element={<Achievements />} />
+        <Route path={Routes.AchievementsList} element={<AchievementsList />} />
+        <Route path={Routes.AchievementsCreate} element={<AchievementsCreate />} />
         <Route path={Routes.Profile} element={<Profile />} />
       </Route>
     </ReactRoutes>

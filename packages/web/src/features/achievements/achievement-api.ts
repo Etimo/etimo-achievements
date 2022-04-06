@@ -1,6 +1,6 @@
 import { PaginationType } from '@etimo-achievements/common';
-import { AchievementDto } from '../common/dtos/achievement-dto';
-import Api from '../common/utils/api';
+import { AchievementDto } from '../../common/dtos/achievement-dto';
+import Api from '../../common/utils/api';
 
 export class AchievementApi {
   private api = new Api();
@@ -14,6 +14,6 @@ export class AchievementApi {
   }
 
   public create(achievement: AchievementDto) {
-    return this.api.post<{ achievementId: string }>('/auth/validate', achievement);
+    return this.api.post<{ achievementId: string }>('/achievements', achievement);
   }
 }
