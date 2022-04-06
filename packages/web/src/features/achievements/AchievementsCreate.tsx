@@ -1,18 +1,35 @@
-import React from 'react';
+import { faSnowflake } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React, { useState } from 'react';
 import { FieldError, SubmitHandler, useForm, UseFormRegisterReturn } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { AchievementDto } from '../../common/dtos/achievement-dto';
 import { AchievementApi } from './achievement-api';
 
 const AchievementsCreate = (): JSX.Element => {
   const {
     register,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<AchievementDto>();
+  const [loading, setLoading] = useState(false);
   const achievementApi = new AchievementApi();
 
   const onSubmit: SubmitHandler<AchievementDto> = (achievement) => {
-    achievementApi.create(achievement);
+    setLoading(true);
+    achievementApi
+      .create(achievement)
+      .wait()
+      .then((response) => {
+        setLoading(false);
+        if (response.success) {
+          reset();
+          toast.success('Achievement created successfully.');
+        } else {
+          toast.error('Achievement could not be created: ' + response.message);
+        }
+      });
   };
 
   const textInput = (label: string, register: UseFormRegisterReturn, error: FieldError | undefined) => {
@@ -35,13 +52,16 @@ const AchievementsCreate = (): JSX.Element => {
   const submitButton = (label: string) => {
     return (
       <div className="md:flex md:items-center">
-        <div className="md:w-1/3"></div>
+        <div className="md:w-1/3 text-right pr-6"></div>
         <div className="md:w-2/3">
-          <input
+          <button
             type="submit"
             value={label}
-            className="shadow bg-slate-500 hover:bg-slate-600 hover:cursor-pointer focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
-          />
+            className="shadow w-1/2 bg-slate-500 hover:bg-slate-600 hover:cursor-pointer focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
+          >
+            {loading && <FontAwesomeIcon icon={faSnowflake} className="animate-spin text-white mr-2" />}
+            {label}
+          </button>
         </div>
       </div>
     );
