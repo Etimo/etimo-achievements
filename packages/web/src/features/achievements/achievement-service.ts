@@ -1,5 +1,5 @@
-import { AchievementApi } from '../../api/achievement-api';
 import { useAppDispatch } from '../../app/store';
+import { AchievementApi } from './achievement-api';
 import { setAchievements } from './achievement-slice';
 
 export class AchievementService {

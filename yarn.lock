@@ -1820,6 +1820,7 @@ __metadata:
     postcss-loader: ^6.2.1
     react: ^17.0.2
     react-dom: ^17.0.2
+    react-hook-form: ^7.29.0
     react-hot-loader: ^4.13.0
     react-pro-sidebar: ^0.7.1
     react-redux: ^7.2.6
@@ -11260,6 +11261,15 @@ __metadata:
   peerDependencies:
     react: 17.0.2
   checksum: 1c1eaa3bca7c7228d24b70932e3d7c99e70d1d04e13bb0843bbf321582bc25d7961d6b8a6978a58a598af2af496d1cedcfb1bf65f6b0960a0a8161cb8dab743c
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.29.0":
+  version: 7.29.0
+  resolution: "react-hook-form@npm:7.29.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18
+  checksum: 4379f972c916d01f4706c27c0fb207b1676b382fc4803ee557edf77cb2355ff320a659940325fda81c1f4fd799e685a6e228577c1050e5b8c32e815884d0defe
   languageName: node
   linkType: hard
 

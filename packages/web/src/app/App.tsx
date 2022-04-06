@@ -25,7 +25,7 @@ const App = (): JSX.Element => {
         <div className="flex-none">
           <SideMenu />
         </div>
-        <div className="flex-auto p-4 mx-auto">
+        <div className="p-4 mx-auto">
           <Router />
         </div>
       </div>

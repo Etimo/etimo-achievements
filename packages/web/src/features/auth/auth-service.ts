@@ -1,8 +1,8 @@
 import { Logger } from '@etimo-achievements/common';
-import { AuthApi } from '../../api/auth-api';
 import { useAppDispatch, useAppSelector } from '../../app/store';
+import { AuthApi } from './auth-api';
 import { authSelector, setLoggedIn, setLoggedOut, setLoggingIn, setTokenInfo, setUserInfo } from './auth-slice';
-import { AuthStorageKeys } from './types';
+import { AuthStorageKeys } from './auth-types';
 
 export class AuthService {
   private authApi = new AuthApi();
