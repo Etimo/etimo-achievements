@@ -2,9 +2,8 @@ import { AchievementDto } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { SubmitButton, TextInput } from '../../components/form';
 import Form from '../../components/form/Form';
-import SubmitButton from '../../components/form/SubmitButton';
-import TextInput from '../../components/form/TextInput';
 import { AchievementApi } from './achievement-api';
 
 const AchievementsCreate = (): JSX.Element => {
