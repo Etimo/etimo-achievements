@@ -16,4 +16,8 @@ export class AchievementApi {
   public create(achievement: AchievementDto) {
     return this.api.post<{ achievementId: string }>('/achievements', achievement);
   }
+
+  public delete(id: string) {
+    return this.api.delete<{ achievementId: string }>(`/achievements/${id}`);
+  }
 }

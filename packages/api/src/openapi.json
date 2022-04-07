@@ -470,6 +470,40 @@
         "tags": [
           "Achievements"
         ]
+      },
+      "delete": {
+        "summary": "Delete an achievement",
+        "operationId": "deleteAchievement",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "achievementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
       }
     },
     "/auth/login/{provider}": {

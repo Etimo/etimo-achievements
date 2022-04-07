@@ -33,6 +33,10 @@ class Api {
     return this.call<T>(endpoint, 'PUT', payload);
   }
 
+  public delete<T>(endpoint: string): ApiResult<T> {
+    return this.call<T>(endpoint, 'DELETE');
+  }
+
   private call<T>(endpoint: string, method: string, payload?: any): ApiResult<T> {
     const controller = new AbortController();
     const result = fetch(this.getUrl(endpoint), {
