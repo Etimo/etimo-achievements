@@ -1,16 +1,22 @@
 import { AchievementDto } from '@etimo-achievements/common';
+import { faPen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import ReactModal from 'react-modal';
 import { useAppSelector } from '../../app/store';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
 import TrashButton from '../../components/TrashButton';
 import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
+import AchievementsEdit from './AchievementsEdit';
 
 const AchievementsList = (): JSX.Element => {
   const { achievements } = useAppSelector(achievementSelector);
   const achievementService = new AchievementService();
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const toggleModal = () => setShowModal(!showModal);
   const formatNumber = Intl.NumberFormat('sv-SE').format;
 
   useEffect(() => {
@@ -40,6 +46,7 @@ const AchievementsList = (): JSX.Element => {
           <TableColumn>Points</TableColumn>
           <TableColumn>Cooldown</TableColumn>
           <TableColumn>Repeatable</TableColumn>
+          <TableColumn>Edit</TableColumn>
           <TableColumn>Delete</TableColumn>
         </TableHeader>
         <TableBody>
@@ -50,6 +57,11 @@ const AchievementsList = (): JSX.Element => {
               <TableCell>{formatNumber(a.achievementPoints)} pts</TableCell>
               <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
               <TableCell>Unsupported</TableCell>
+              <TableCell>
+                <button onClick={toggleModal}>
+                  <FontAwesomeIcon icon={faPen} />
+                </button>
+              </TableCell>
               <TableCell className="text-center">
                 <TrashButton id={a.id} onClick={trashHandler} loading={loading} />
               </TableCell>
@@ -57,6 +69,10 @@ const AchievementsList = (): JSX.Element => {
           ))}
         </TableBody>
       </Table>
+      <ReactModal isOpen={showModal} className="absolute top-50 left-1000 right-200 bottom-50">
+        <AchievementsEdit />
+        <button onClick={toggleModal}>Close</button>
+      </ReactModal>
     </div>
   );
 };
