@@ -1,7 +1,4 @@
-import { AccessTokenDto } from '../../common/dtos/access-token-dto';
-import { TokenInfoDto } from '../../common/dtos/token-info-dto';
-import { TokenValidationDto } from '../../common/dtos/token-validation-dto';
-import { UserInfoDto } from '../../common/dtos/user-info-dto';
+import { AccessTokenDto, TokenInfoDto, TokenValidationDto, UserInfoDto } from '@etimo-achievements/common';
 import Api from '../../common/utils/api';
 
 export class AuthApi {

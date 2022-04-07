@@ -1,6 +1,6 @@
+import { AchievementDto } from '@etimo-achievements/common';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/reducers';
-import { AchievementDto } from '../../common/dtos/achievement-dto';
 import { AchievementState } from './achievement-types';
 
 const initialState: AchievementState = {

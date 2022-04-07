@@ -1,9 +1,9 @@
+import { AchievementDto } from '@etimo-achievements/common';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
-import { AchievementDto } from '../../common/dtos/achievement-dto';
 import Spinner from '../../components/Spinner';
 import Table from '../../components/table/Table';
 import TableBody from '../../components/table/TableBody';

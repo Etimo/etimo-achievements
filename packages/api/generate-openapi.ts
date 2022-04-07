@@ -4,6 +4,7 @@ import { definition } from './openapi/definition';
 
 const options = {
   apis: [
+    `${__dirname}/../common/**/*-dto.ts`,
     `${__dirname}/src/resources/**/*.ts`,
     `${__dirname}/src/resources/**/openapi/*.yml`,
     `${__dirname}/openapi/**/*.yml`,

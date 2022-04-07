@@ -1,5 +1,4 @@
-import { PaginationType } from '@etimo-achievements/common';
-import { AchievementDto } from '../../common/dtos/achievement-dto';
+import { AchievementDto, PaginatedData } from '@etimo-achievements/common';
 import Api from '../../common/utils/api';
 
 export class AchievementApi {
@@ -10,7 +9,7 @@ export class AchievementApi {
   }
 
   public getMany() {
-    return this.api.get<PaginationType<AchievementDto>>('/achievements');
+    return this.api.get<PaginatedData<AchievementDto>>('/achievements');
   }
 
   public create(achievement: AchievementDto) {

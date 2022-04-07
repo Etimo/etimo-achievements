@@ -1,13 +1,11 @@
-import { getEnvVariable, Logger, UnauthorizedError } from '@etimo-achievements/common';
+import { AccessTokenDto, getEnvVariable, Logger, UnauthorizedError, UserInfoDto } from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
 import { Env } from '@etimo-achievements/types';
 import { Request, Response, Router } from 'express';
 import { endpoint, protectedEndpoint } from '../../utils';
-import { AccessTokenDto } from './access-token-dto';
 import { AccessTokenMapper } from './access-token-mapper';
-import { UserInfoDto } from './user-info-dto';
 
 export class AuthController {
   public get routes(): Router {

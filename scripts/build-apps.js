@@ -44,13 +44,6 @@ async function buildApps() {
           if (!(await runCommand('npm', ['run', 'openapi'], getPackageDirectory('api')))) {
             process.exit(1);
           }
-
-          // If a dto has been changed, copy them to api project.
-          if (updatedFiles.some((f) => f[0].endsWith('-dto.ts'))) {
-            if (!(await runCommand('npm', ['run', 'copy-dtos'], getPackageDirectory('web')))) {
-              process.exit(1);
-            }
-          }
         }
       }
     }
