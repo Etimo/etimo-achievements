@@ -11,11 +11,6 @@ type Props = {
 };
 
 const TrashButton: React.FC<Props> = ({ id, onClick, loading, icon }) => {
-  // If no loading is provided, always spin!
-  if (loading === undefined) {
-    loading = true;
-  }
-
   return (
     <button id={id} onClick={onClick}>
       {loading ? <Spinner /> : <FontAwesomeIcon icon={icon ?? faTrash} className="hover:text-slate-700" />}
