@@ -1,21 +1,28 @@
-import { CreateAchievementService, GetAchievementsService } from '@etimo-achievements/service';
+import {
+  CreateAchievementService,
+  DeleteAchievementService,
+  GetAchievementsService,
+} from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { createdResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AchievementMapper } from './achievement-mapper';
 
 export type AchievementControllerOptions = {
-  createAchievementsService?: CreateAchievementService;
-  getAchievementsService: GetAchievementsService;
+  createAchievementService?: CreateAchievementService;
+  getAchievementService: GetAchievementsService;
+  deleteAchievementService: DeleteAchievementService;
 };
 
 export class AchievementController {
-  private createAchievementsService: CreateAchievementService;
-  private getAchievementsService: GetAchievementsService;
+  private createAchievementService: CreateAchievementService;
+  private getAchievementService: GetAchievementsService;
+  private deleteAchievementService: DeleteAchievementService;
 
   constructor(options?: AchievementControllerOptions) {
-    this.createAchievementsService = options?.createAchievementsService ?? new CreateAchievementService();
-    this.getAchievementsService = options?.getAchievementsService ?? new GetAchievementsService();
+    this.createAchievementService = options?.createAchievementService ?? new CreateAchievementService();
+    this.getAchievementService = options?.getAchievementService ?? new GetAchievementsService();
+    this.deleteAchievementService = options?.deleteAchievementService ?? new DeleteAchievementService();
   }
 
   public get routes(): Router {
@@ -90,12 +97,34 @@ export class AchievementController {
      */
     router.post('/achievements', protectedEndpoint(this.createAchievements, ['rw:achievements', 'w:achievements']));
 
+    /**
+     * @openapi
+     * /achievements/{achievementId}:
+     *   delete:
+     *     summary: Delete an achievement
+     *     operationId: deleteAchievement
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *achievementIdParam
+     *     responses:
+     *       200: *okResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Achievements
+     */
+    router.delete(
+      '/achievements/:achievementId',
+      protectedEndpoint(this.deleteAchievement, ['rw:achievements', 'w:achievements'])
+    );
+
     return router;
   }
 
   private getAchievements = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
-    const achievements = await this.getAchievementsService.getMany(skip, take);
+    const achievements = await this.getAchievementService.getMany(skip, take);
     const output = {
       ...achievements,
       data: achievements.data.map(AchievementMapper.toAchievementDto),
@@ -112,8 +141,16 @@ export class AchievementController {
     const payload = req.body;
 
     const input = AchievementMapper.toAchievementDto(payload);
-    const achievement = await this.createAchievementsService.create(input);
+    const achievement = await this.createAchievementService.create(input);
 
     return createdResponse('/achievements', achievement, res);
+  };
+
+  private deleteAchievement = async (req: Request, res: Response) => {
+    const achievementId = req.params.achievementId;
+
+    await this.deleteAchievementService.delete(achievementId);
+
+    return res.status(200).send();
   };
 }

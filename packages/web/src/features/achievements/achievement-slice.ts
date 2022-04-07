@@ -14,10 +14,13 @@ const achievementSlice = createSlice({
     setAchievements: (state: AchievementState, action: { payload: AchievementDto[] }) => {
       state.achievements = action.payload;
     },
+    deleteAchievement: (state: AchievementState, action: { payload: string }) => {
+      state.achievements = state.achievements.filter((achievement) => achievement.id !== action.payload);
+    },
   },
 });
 
-export const { setAchievements } = achievementSlice.actions;
+export const { setAchievements, deleteAchievement } = achievementSlice.actions;
 
 export const achievementSelector = (state: RootState) => state.achievements;
 
