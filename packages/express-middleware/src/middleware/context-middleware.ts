@@ -10,7 +10,6 @@ export const setContextMiddleware = () => {
     const requestId = req.get('X-Request-Id') ?? uuid();
 
     const context = new Context(requestId);
-    console.log(context);
     httpContext.set('context', context);
     next();
   };
