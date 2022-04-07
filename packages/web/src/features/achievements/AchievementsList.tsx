@@ -1,16 +1,9 @@
 import { AchievementDto } from '@etimo-achievements/common';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
-import Spinner from '../../components/Spinner';
-import Table from '../../components/table/Table';
-import TableBody from '../../components/table/TableBody';
-import TableCell from '../../components/table/TableCell';
-import TableColumn from '../../components/table/TableColumn';
-import TableHeader from '../../components/table/TableHeader';
-import TableRow from '../../components/table/TableRow';
+import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
+import TrashButton from '../../components/TrashButton';
 import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
 
@@ -58,9 +51,7 @@ const AchievementsList = (): JSX.Element => {
               <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
               <TableCell>Unsupported</TableCell>
               <TableCell className="text-center">
-                <button id={a.id} onClick={trashHandler}>
-                  {loading ? <Spinner /> : <FontAwesomeIcon icon={faTrash} className="hover:text-slate-700" />}
-                </button>
+                <TrashButton id={a.id} onClick={trashHandler} loading={loading} />
               </TableCell>
             </TableRow>
           ))}
