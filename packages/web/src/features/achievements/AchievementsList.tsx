@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
 import { useAppSelector } from '../../app/store';
 import { AchievementDto } from '../../common/dtos/achievement-dto';
+import Table from '../../components/table/Table';
+import TableBody from '../../components/table/TableBody';
+import TableCell from '../../components/table/TableCell';
+import TableColumn from '../../components/table/TableColumn';
+import TableHeader from '../../components/table/TableHeader';
+import TableRow from '../../components/table/TableRow';
 import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
 
@@ -16,28 +22,26 @@ const AchievementsList = (): JSX.Element => {
   return (
     <div className="w-full place-content-center">
       <h1 className="font-sans text-2xl font-bold text-center pb-6">Achievements</h1>
-      <table className="table-auto m-3 rounded-md border-collapse border border-slate-500">
-        <thead>
-          <tr className="h-12 bg-slate-600 text-slate-200">
-            <th className="p-3 border border-slate-600">Name</th>
-            <th className="p-3 border border-slate-600">Description</th>
-            <th className="p-3 border border-slate-600">Points</th>
-            <th className="p-3 border border-slate-600">Cooldown</th>
-            <th className="p-3 border border-slate-600">Repeatable</th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table>
+        <TableHeader>
+          <TableColumn>Name</TableColumn>
+          <TableColumn>Description</TableColumn>
+          <TableColumn>Points</TableColumn>
+          <TableColumn>Cooldown</TableColumn>
+          <TableColumn>Repeatable</TableColumn>
+        </TableHeader>
+        <TableBody>
           {achievements.map((a: AchievementDto) => (
-            <tr key={a.id} className="h-8 bg-slate-300">
-              <td className="p-3 border border-slate-600">{a.name}</td>
-              <td className="p-3 border border-slate-600">{a.description}</td>
-              <td className="p-3 border border-slate-600">{formatNumber(a.achievementPoints)} pts</td>
-              <td className="p-3 border border-slate-600">{formatNumber(a.cooldownMinutes)} min</td>
-              <td className="p-3 border border-slate-600">Unsupported</td>
-            </tr>
+            <TableRow>
+              <TableCell>{a.name}</TableCell>
+              <TableCell>{a.description}</TableCell>
+              <TableCell>{formatNumber(a.achievementPoints)} pts</TableCell>
+              <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
+              <TableCell>Unsupported</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };
