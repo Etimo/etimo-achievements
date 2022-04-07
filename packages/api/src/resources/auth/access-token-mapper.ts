@@ -1,7 +1,6 @@
+import { AccessTokenDto, TokenInfoDto } from '@etimo-achievements/common';
 import { LoginResponse } from '@etimo-achievements/service';
 import { JWT } from '@etimo-achievements/types';
-import { AccessTokenDto } from './access-token-dto';
-import { TokenInfoDto } from './token-info-dto';
 
 export class AccessTokenMapper {
   public static toAccessTokenDto(loginResponse: LoginResponse): AccessTokenDto {

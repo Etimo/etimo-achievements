@@ -1,5 +1,5 @@
+import { AwardDto } from '@etimo-achievements/common';
 import { IAward } from '@etimo-achievements/types';
-import { AwardDto } from './award-dto';
 
 export class AwardMapper {
   public static toAwardDto(award: IAward): AwardDto {

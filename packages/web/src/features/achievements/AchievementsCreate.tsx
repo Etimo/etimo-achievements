@@ -1,7 +1,7 @@
+import { AchievementDto } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { AchievementDto } from '../../common/dtos/achievement-dto';
 import Form from '../../components/form/Form';
 import SubmitButton from '../../components/form/SubmitButton';
 import TextInput from '../../components/form/TextInput';

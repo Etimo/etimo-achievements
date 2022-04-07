@@ -1,5 +1,5 @@
+import { AchievementDto } from '@etimo-achievements/common';
 import { IAchievement } from '@etimo-achievements/types';
-import { AchievementDto } from './achievement-dto';
 
 export class AchievementMapper {
   public static toAchievementDto(achievement: IAchievement): AchievementDto {

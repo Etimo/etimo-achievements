@@ -131,9 +131,6 @@ jobs:
       - name: Generate OpenAPI spec
         run: npm run generate-openapi
 
-      - name: Copy DTOs from API project
-        run: npm run generate-dtos
-
       - name: Generate jest configs
         run: npm run generate-jest
 

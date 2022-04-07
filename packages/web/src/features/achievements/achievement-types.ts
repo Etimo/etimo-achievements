@@ -1,4 +1,4 @@
-import { AchievementDto } from '../../common/dtos/achievement-dto';
+import { AchievementDto } from '@etimo-achievements/common';
 
 export interface AchievementState {
   achievements: AchievementDto[];
