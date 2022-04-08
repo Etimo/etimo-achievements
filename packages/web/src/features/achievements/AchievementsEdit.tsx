@@ -37,7 +37,7 @@ const AchievementsEdit: React.FC<Props> = ({ achievement }) => {
   };
 
   return (
-    <Form title="Edit Achievement" onSubmit={handleSubmit(onSubmit)}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <TextInput
         label="Name"
         defaultValue={achievement.name}

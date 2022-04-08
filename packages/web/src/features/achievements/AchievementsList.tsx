@@ -3,8 +3,8 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import ReactModal from 'react-modal';
 import { useAppSelector } from '../../app/store';
+import Modal from '../../components/Modal';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
 import TrashButton from '../../components/TrashButton';
 import { AchievementService } from './achievement-service';
@@ -81,10 +81,9 @@ const AchievementsList: React.FC = () => {
           ))}
         </TableBody>
       </Table>
-      <ReactModal isOpen={showModal} className="w-1/3 mx-auto">
+      <Modal title="Achievements" isOpen={showModal} onRequestClose={toggleModal}>
         {achievement && <AchievementsEdit achievement={achievement} />}
-        <button onClick={toggleModal}>Close</button>
-      </ReactModal>
+      </Modal>
     </div>
   );
 };
