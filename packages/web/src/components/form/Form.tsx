@@ -3,7 +3,6 @@ import React, { FormEventHandler } from 'react';
 type Props = {
   title: string;
   onSubmit: FormEventHandler<HTMLFormElement>;
-  children: React.ReactNode;
 };
 
 const Form: React.FC<Props> = ({ title, onSubmit, children }) => {

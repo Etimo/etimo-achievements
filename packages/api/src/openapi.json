@@ -471,6 +471,50 @@
           "Achievements"
         ]
       },
+      "put": {
+        "summary": "Update an achievement",
+        "operationId": "updateAchievement",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "achievementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Achievement"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
+      },
       "delete": {
         "summary": "Delete an achievement",
         "operationId": "deleteAchievement",

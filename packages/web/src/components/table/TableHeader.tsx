@@ -1,6 +1,6 @@
 import React from 'react';
 
-const TableHeader: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const TableHeader: React.FC<{}> = ({ children }) => {
   return (
     <>
       <thead>

@@ -11,11 +11,12 @@ import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
 import AchievementsEdit from './AchievementsEdit';
 
-const AchievementsList = (): JSX.Element => {
+const AchievementsList: React.FC = () => {
   const { achievements } = useAppSelector(achievementSelector);
   const achievementService = new AchievementService();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [achievement, setAchievement] = useState(null as AchievementDto | null);
   const toggleModal = () => setShowModal(!showModal);
   const formatNumber = Intl.NumberFormat('sv-SE').format;
 
@@ -36,6 +37,17 @@ const AchievementsList = (): JSX.Element => {
     });
   };
 
+  const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    console.log(achievements);
+    console.log(e.currentTarget.id);
+    const achievement = achievements.find((a) => a.id === e.currentTarget.id);
+    if (achievement) {
+      setAchievement(achievement);
+      setShowModal(true);
+    }
+  };
+
   return (
     <div className="w-full place-content-center">
       <h1 className="font-sans text-2xl font-bold text-center pb-6">Achievements</h1>
@@ -51,14 +63,14 @@ const AchievementsList = (): JSX.Element => {
         </TableHeader>
         <TableBody>
           {achievements.map((a: AchievementDto) => (
-            <TableRow>
+            <TableRow key={a.id}>
               <TableCell>{a.name}</TableCell>
               <TableCell>{a.description}</TableCell>
               <TableCell>{formatNumber(a.achievementPoints)} pts</TableCell>
               <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
               <TableCell>Unsupported</TableCell>
               <TableCell>
-                <button onClick={toggleModal}>
+                <button id={a.id} onClick={editHandler}>
                   <FontAwesomeIcon icon={faPen} />
                 </button>
               </TableCell>
@@ -69,8 +81,8 @@ const AchievementsList = (): JSX.Element => {
           ))}
         </TableBody>
       </Table>
-      <ReactModal isOpen={showModal} className="absolute top-50 left-1000 right-200 bottom-50">
-        <AchievementsEdit />
+      <ReactModal isOpen={showModal} className="w-1/3 mx-auto">
+        {achievement && <AchievementsEdit achievement={achievement} />}
         <button onClick={toggleModal}>Close</button>
       </ReactModal>
     </div>

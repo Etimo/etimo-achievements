@@ -6,7 +6,7 @@ import { SubmitButton, TextInput } from '../../components/form';
 import Form from '../../components/form/Form';
 import { AchievementApi } from './achievement-api';
 
-const AchievementsCreate = (): JSX.Element => {
+const AchievementsCreate: React.FC = () => {
   const {
     register,
     reset,

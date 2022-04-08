@@ -6,7 +6,11 @@ import { SubmitButton, TextInput } from '../../components/form';
 import Form from '../../components/form/Form';
 import { AchievementApi } from './achievement-api';
 
-const AchievementsEdit = (): JSX.Element => {
+type Props = {
+  achievement: AchievementDto;
+};
+
+const AchievementsEdit: React.FC<Props> = ({ achievement }) => {
   const {
     register,
     reset,
@@ -16,10 +20,10 @@ const AchievementsEdit = (): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const achievementApi = new AchievementApi();
 
-  const onSubmit: SubmitHandler<AchievementDto> = (achievement) => {
+  const onSubmit: SubmitHandler<AchievementDto> = (updatedAchievement) => {
     setLoading(true);
     achievementApi
-      .update(achievement)
+      .update(achievement.id, updatedAchievement)
       .wait()
       .then((response) => {
         setLoading(false);
@@ -34,14 +38,21 @@ const AchievementsEdit = (): JSX.Element => {
 
   return (
     <Form title="Edit Achievement" onSubmit={handleSubmit(onSubmit)}>
-      <TextInput label="Name" register={register('name', { required: true })} error={errors.name} />
+      <TextInput
+        label="Name"
+        defaultValue={achievement.name}
+        register={register('name', { required: true })}
+        error={errors.name}
+      />
       <TextInput
         label="Description"
+        defaultValue={achievement.description}
         register={register('description', { required: true })}
         error={errors.description}
       />
       <TextInput
         label="Points"
+        defaultValue={achievement.achievementPoints}
         register={register('achievementPoints', {
           required: true,
           valueAsNumber: true,
@@ -50,6 +61,7 @@ const AchievementsEdit = (): JSX.Element => {
       />
       <TextInput
         label="Cooldown minutes"
+        defaultValue={achievement.cooldownMinutes}
         register={register('cooldownMinutes', {
           required: true,
           valueAsNumber: true,
