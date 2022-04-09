@@ -1,7 +1,6 @@
-import { faClose } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import ReactModal from 'react-modal';
+import CloseButton from './buttons/CloseButton';
 import Header from './Header';
 
 type Props = {
@@ -16,9 +15,7 @@ const Modal: React.FC<Props> = ({ title, showModal, onRequestClose, children }) 
       <div className="bg-slate-200 mt-8 align-middle p-4">
         <Header>
           {title}
-          <button id="close-modal-button" onClick={onRequestClose} className="float-right mr-4">
-            <FontAwesomeIcon icon={faClose} />
-          </button>
+          <CloseButton onClick={onRequestClose} />
         </Header>
       </div>
       {children}
