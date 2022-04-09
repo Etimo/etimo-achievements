@@ -1,28 +1,28 @@
 import { AchievementDto } from '@etimo-achievements/common';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
-import Modal from '../../components/Modal';
+import EditButton from '../../components/EditButton';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
 import TrashButton from '../../components/TrashButton';
 import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
-import AchievementsEdit from './AchievementsEdit';
+import AchievementsEditModal from './AchievementsEditModal';
 
 const AchievementsList: React.FC = () => {
   const { achievements } = useAppSelector(achievementSelector);
   const achievementService = new AchievementService();
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [achievement, setAchievement] = useState(null as AchievementDto | null);
-  const toggleModal = () => setShowModal(!showModal);
+  const [editAchievement, setEditAchievement] = useState<AchievementDto>();
   const formatNumber = Intl.NumberFormat('sv-SE').format;
 
   useEffect(() => {
     achievementService.load();
   }, []);
+
+  const closeModal = () => {
+    setEditAchievement(undefined);
+  };
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -39,12 +39,9 @@ const AchievementsList: React.FC = () => {
 
   const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    console.log(achievements);
-    console.log(e.currentTarget.id);
     const achievement = achievements.find((a) => a.id === e.currentTarget.id);
     if (achievement) {
-      setAchievement(achievement);
-      setShowModal(true);
+      setEditAchievement(achievement);
     }
   };
 
@@ -70,9 +67,7 @@ const AchievementsList: React.FC = () => {
               <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
               <TableCell>Unsupported</TableCell>
               <TableCell>
-                <button id={a.id} onClick={editHandler}>
-                  <FontAwesomeIcon icon={faPen} />
-                </button>
+                <EditButton id={a.id} onClick={editHandler} />
               </TableCell>
               <TableCell className="text-center">
                 <TrashButton id={a.id} onClick={trashHandler} loading={loading} />
@@ -81,9 +76,9 @@ const AchievementsList: React.FC = () => {
           ))}
         </TableBody>
       </Table>
-      <Modal title="Achievements" isOpen={showModal} onRequestClose={toggleModal}>
-        {achievement && <AchievementsEdit achievement={achievement} />}
-      </Modal>
+      {editAchievement && (
+        <AchievementsEditModal achievement={editAchievement} showModal={true} closeModal={closeModal} />
+      )}
     </div>
   );
 };

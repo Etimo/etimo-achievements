@@ -6,25 +6,23 @@ import Header from './Header';
 
 type Props = {
   title: string;
-  isOpen: boolean;
+  showModal: boolean;
   onRequestClose: () => void;
 };
 
-const Modal: React.FC<Props> = ({ title, isOpen, onRequestClose, children }) => {
+const Modal: React.FC<Props> = ({ title, showModal, onRequestClose, children }) => {
   return (
-    <>
-      <ReactModal isOpen={isOpen} className="w-1/3 mx-auto">
-        <div className="bg-slate-200 mt-8 align-middle p-4">
-          <Header>
-            {title}
-            <button onClick={onRequestClose} className="float-right mr-4">
-              <FontAwesomeIcon icon={faClose} />
-            </button>
-          </Header>
-        </div>
-        {children}
-      </ReactModal>
-    </>
+    <ReactModal isOpen={showModal} className="w-1/3 mx-auto" onRequestClose={onRequestClose}>
+      <div className="bg-slate-200 mt-8 align-middle p-4">
+        <Header>
+          {title}
+          <button id="close-modal-button" onClick={onRequestClose} className="float-right mr-4">
+            <FontAwesomeIcon icon={faClose} />
+          </button>
+        </Header>
+      </div>
+      {children}
+    </ReactModal>
   );
 };
 
