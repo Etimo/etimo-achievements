@@ -65,6 +65,12 @@ const UsersEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
           error={errors.name}
         />
         <FormTextInput
+          label="E-mail"
+          defaultValue={user.email}
+          register={register('email', { required: true, maxLength: 255 })}
+          error={errors.email}
+        />
+        <FormTextInput
           label="Slack handle"
           defaultValue={user.slackHandle}
           register={register('slackHandle', { required: true, maxLength: 255 })}

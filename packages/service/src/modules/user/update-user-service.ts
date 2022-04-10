@@ -10,6 +10,7 @@ export class UpdateUserService {
   }
 
   public async update(user: IUser) {
+    console.log(user);
     await this.userRepo.update(user);
   }
 }

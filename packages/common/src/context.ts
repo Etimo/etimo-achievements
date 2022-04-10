@@ -1,5 +1,5 @@
 import { JWT } from '@etimo-achievements/types';
-import { Logger, uuid } from '.';
+import { Logger, UnauthorizedError, uuid } from '.';
 
 let count: number = 0;
 
@@ -19,6 +19,15 @@ export class Context {
     this.requestDate = new Date();
     this.timestamp = new Date().toTimeString().split(' ')[0];
     count++;
+  }
+  public get userId() {
+    const userId = this.jwt?.sub;
+
+    if (!userId) {
+      throw new UnauthorizedError('You are not logged in');
+    }
+
+    return userId;
   }
 
   public get shortRequestId(): string {
