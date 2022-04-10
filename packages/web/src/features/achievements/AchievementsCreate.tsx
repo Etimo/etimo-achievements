@@ -2,8 +2,7 @@ import { AchievementDto } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { SubmitButton, TextInput } from '../../components/form';
-import Form from '../../components/form/Form';
+import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
 import { AchievementApi } from './achievement-api';
 
@@ -37,13 +36,17 @@ const AchievementsCreate: React.FC = () => {
     <>
       <Header>Create Achievement</Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput label="Name" register={register('name', { required: true, maxLength: 255 })} error={errors.name} />
-        <TextInput
+        <FormTextInput
+          label="Name"
+          register={register('name', { required: true, maxLength: 255 })}
+          error={errors.name}
+        />
+        <FormTextInput
           label="Description"
           register={register('description', { required: true, maxLength: 255 })}
           error={errors.description}
         />
-        <TextInput
+        <FormTextInput
           label="Points"
           register={register('achievementPoints', {
             required: true,
@@ -51,7 +54,7 @@ const AchievementsCreate: React.FC = () => {
           })}
           error={errors.achievementPoints}
         />
-        <TextInput
+        <FormTextInput
           label="Cooldown minutes"
           register={register('cooldownMinutes', {
             required: true,
@@ -59,7 +62,7 @@ const AchievementsCreate: React.FC = () => {
           })}
           error={errors.cooldownMinutes}
         />
-        <SubmitButton label="Create" loading={loading} />
+        <FormSubmitButton label="Create" loading={loading} />
       </Form>
     </>
   );

@@ -3,14 +3,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 type Props = {
-  id: string;
+  id?: string;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   icon?: IconDefinition;
+  className?: string;
 };
 
-const EditButton: React.FC<Props> = ({ id, onClick, icon }) => {
+const EditButton: React.FC<Props> = ({ id, onClick, icon, className }) => {
   return (
-    <button id={id} onClick={onClick}>
+    <button id={id ?? 'edit-button'} className={className} onClick={onClick}>
       <FontAwesomeIcon icon={icon ?? faPen} className="hover:text-slate-700" />
     </button>
   );
