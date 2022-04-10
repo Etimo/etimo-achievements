@@ -76,7 +76,7 @@ const AchievementsList: React.FC = () => {
         </TableBody>
       </Table>
       {editAchievement && (
-        <AchievementsEditModal achievement={editAchievement} showModal={true} closeModal={closeModal} />
+        <AchievementsEditModal achievementId={editAchievement.id} showModal={true} closeModal={closeModal} />
       )}
     </div>
   );

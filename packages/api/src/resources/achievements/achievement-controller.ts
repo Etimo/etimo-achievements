@@ -162,8 +162,12 @@ export class AchievementController {
     return res.status(200).send(output);
   };
 
-  private getAchievement = async (_req: Request, res: Response) => {
-    return res.status(501).send('Not implemented');
+  private getAchievement = async (req: Request, res: Response) => {
+    const achievementId = req.params.achievementId;
+
+    const achievement = await this.getAchievementService.get(achievementId);
+
+    return res.status(200).send(achievement);
   };
 
   private createAchievements = async (req: Request, res: Response) => {

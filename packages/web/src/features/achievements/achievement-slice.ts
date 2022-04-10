@@ -18,6 +18,8 @@ const achievementSlice = createSlice({
       const index = state.achievements.findIndex((achievement) => achievement.id === action.payload.id);
       if (index !== -1) {
         state.achievements[index] = action.payload;
+      } else {
+        state.achievements.push(action.payload);
       }
     },
     deleteAchievement: (state: AchievementState, action: { payload: string }) => {

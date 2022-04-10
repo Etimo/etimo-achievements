@@ -1,19 +1,20 @@
 import { AchievementDto } from '@etimo-achievements/common';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { SubmitButton, TextInput } from '../../components/form';
 import Form from '../../components/form/Form';
 import Modal from '../../components/Modal';
 import { AchievementApi } from './achievement-api';
+import { AchievementService } from './achievement-service';
 
 type Props = {
-  achievement: AchievementDto;
+  achievementId: string;
   showModal: boolean;
   closeModal: () => void;
 };
 
-const AchievementsEditModal: React.FC<Props> = ({ achievement, showModal, closeModal }) => {
+const AchievementsEditModal: React.FC<Props> = ({ achievementId, showModal, closeModal }) => {
   const {
     register,
     reset,
@@ -21,17 +22,33 @@ const AchievementsEditModal: React.FC<Props> = ({ achievement, showModal, closeM
     formState: { errors },
   } = useForm<AchievementDto>();
   const [loading, setLoading] = useState(false);
+  const [achievement, setAchievement] = useState<AchievementDto>();
   const achievementApi = new AchievementApi();
+  const achievementService = new AchievementService();
+
+  const refresh = () => {
+    achievementService.get(achievementId).then((achievement) => {
+      if (achievement) {
+        setAchievement(achievement);
+      }
+    });
+  };
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const onSubmit: SubmitHandler<AchievementDto> = (updatedAchievement) => {
     setLoading(true);
     achievementApi
-      .update(updatedAchievement.id, updatedAchievement)
+      .update(achievementId, updatedAchievement)
       .wait()
       .then((response) => {
         setLoading(false);
         if (response.success) {
           reset();
+          refresh();
+          closeModal();
           toast.success('Achievement edited successfully.');
         } else {
           toast.error('Achievement could not be updated: ' + response.message);
@@ -39,7 +56,7 @@ const AchievementsEditModal: React.FC<Props> = ({ achievement, showModal, closeM
       });
   };
 
-  return (
+  return achievement ? (
     <Modal title="Achievements" showModal={showModal} onRequestClose={closeModal}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
@@ -72,10 +89,10 @@ const AchievementsEditModal: React.FC<Props> = ({ achievement, showModal, closeM
           })}
           error={errors.cooldownMinutes}
         />
-        <SubmitButton label="Edit" loading={loading} />
+        <SubmitButton label="Update" loading={loading} />
       </Form>
     </Modal>
-  );
+  ) : null;
 };
 
 export default AchievementsEditModal;
