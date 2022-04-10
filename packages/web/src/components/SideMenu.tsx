@@ -17,7 +17,7 @@ import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
 import useLoggedIn from '../common/hooks/use-logged-in';
 
-const SideMenu = (): JSX.Element => {
+const SideMenu: React.FC = () => {
   const isLoggedIn = useLoggedIn();
 
   return (

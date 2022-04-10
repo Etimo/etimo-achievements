@@ -4,7 +4,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Routes } from '../app/Router';
 import useLoggedIn from '../common/hooks/use-logged-in';
 
-const ProtectedRoute = ({ children }: any) => {
+const ProtectedRoute: React.FC = ({ children }: any) => {
   const navigate = useNavigate();
   const loggedIn = useLoggedIn();
 
