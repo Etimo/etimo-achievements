@@ -4,9 +4,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { SubmitButton, TextInput } from '../../components/form';
 import Form from '../../components/form/Form';
+import Header from '../../components/Header';
 import { AchievementApi } from './achievement-api';
 
-const AchievementsCreate = (): JSX.Element => {
+const AchievementsCreate: React.FC = () => {
   const {
     register,
     reset,
@@ -33,31 +34,34 @@ const AchievementsCreate = (): JSX.Element => {
   };
 
   return (
-    <Form title="Create Achievement" onSubmit={handleSubmit(onSubmit)}>
-      <TextInput label="Name" register={register('name', { required: true })} error={errors.name} />
-      <TextInput
-        label="Description"
-        register={register('description', { required: true })}
-        error={errors.description}
-      />
-      <TextInput
-        label="Points"
-        register={register('achievementPoints', {
-          required: true,
-          valueAsNumber: true,
-        })}
-        error={errors.achievementPoints}
-      />
-      <TextInput
-        label="Cooldown minutes"
-        register={register('cooldownMinutes', {
-          required: true,
-          valueAsNumber: true,
-        })}
-        error={errors.cooldownMinutes}
-      />
-      <SubmitButton label="Create" loading={loading} />
-    </Form>
+    <>
+      <Header>Create Achievement</Header>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <TextInput label="Name" register={register('name', { required: true })} error={errors.name} />
+        <TextInput
+          label="Description"
+          register={register('description', { required: true })}
+          error={errors.description}
+        />
+        <TextInput
+          label="Points"
+          register={register('achievementPoints', {
+            required: true,
+            valueAsNumber: true,
+          })}
+          error={errors.achievementPoints}
+        />
+        <TextInput
+          label="Cooldown minutes"
+          register={register('cooldownMinutes', {
+            required: true,
+            valueAsNumber: true,
+          })}
+          error={errors.cooldownMinutes}
+        />
+        <SubmitButton label="Create" loading={loading} />
+      </Form>
+    </>
   );
 };
 

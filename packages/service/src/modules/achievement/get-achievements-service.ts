@@ -15,4 +15,8 @@ export class GetAchievementsService {
     const count = await this.achievementRepo.count();
     return paginate(achievements, skip, take, count);
   }
+
+  public async get(id: string): Promise<IAchievement> {
+    return this.achievementRepo.findById(id);
+  }
 }

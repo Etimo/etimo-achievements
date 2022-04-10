@@ -1809,6 +1809,7 @@ __metadata:
     "@reduxjs/toolkit": ^1.8.0
     "@types/react": ^17.0.40
     "@types/react-dom": ^17.0.13
+    "@types/react-modal": ^3.13.1
     "@types/redux-logger": ^3.0.9
     autoprefixer: ^10.4.4
     copy-webpack-plugin: ^10.2.4
@@ -1822,6 +1823,7 @@ __metadata:
     react-hook-form: ^7.29.0
     react-hot-loader: ^4.13.0
     react-hot-toast: ^2.2.0
+    react-modal: ^3.14.4
     react-pro-sidebar: ^0.7.1
     react-redux: ^7.2.6
     react-router: ^6.2.2
@@ -2753,6 +2755,15 @@ __metadata:
   dependencies:
     "@types/react": "*"
   checksum: 62c42a54ac8961c23a0e74b9cdd8b0a78563757e462b1ab665b2aa365bfd8b86a73d3f6eafc09a4a80fb08659321db168f012aa597c41c0df36f645a94e9266b
+  languageName: node
+  linkType: hard
+
+"@types/react-modal@npm:^3.13.1":
+  version: 3.13.1
+  resolution: "@types/react-modal@npm:3.13.1"
+  dependencies:
+    "@types/react": "*"
+  checksum: b0ad403e0051a2882e9086c6006cc342901b1c90caf760893b31717a5cbc04f86cc1ea7b5ce12a2c8350c9c09e9b344de3783404e70b7c7ea6a037d0ffd70e99
   languageName: node
   linkType: hard
 
@@ -6132,6 +6143,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"exenv@npm:^1.2.0":
+  version: 1.2.2
+  resolution: "exenv@npm:1.2.2"
+  checksum: a894f3b60ab8419e0b6eec99c690a009c8276b4c90655ccaf7d28faba2de3a6b93b3d92210f9dc5efd36058d44f04098f6bbccef99859151104bfd49939904dc
+  languageName: node
+  linkType: hard
+
 "exit@npm:^0.1.2":
   version: 0.1.2
   resolution: "exit@npm:0.1.2"
@@ -9410,7 +9428,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -11303,10 +11321,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-lifecycles-compat@npm:^3.0.4":
+"react-lifecycles-compat@npm:^3.0.0, react-lifecycles-compat@npm:^3.0.4":
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
+  languageName: node
+  linkType: hard
+
+"react-modal@npm:^3.14.4":
+  version: 3.14.4
+  resolution: "react-modal@npm:3.14.4"
+  dependencies:
+    exenv: ^1.2.0
+    prop-types: ^15.7.2
+    react-lifecycles-compat: ^3.0.0
+    warning: ^4.0.3
+  peerDependencies:
+    react: ^0.14.0 || ^15.0.0 || ^16 || ^17
+    react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17
+  checksum: 71457de902d45de390932fb68380c4a72fcd51e64faaf8b96138c3cb402d2e445002220560614ef6035eb349ff933bcbbe35c4cb85fb66c1129e65ad40336b8b
   languageName: node
   linkType: hard
 
@@ -13711,6 +13744,15 @@ typescript@^4.5.5:
   dependencies:
     makeerror: 1.0.x
   checksum: 4038fcf92f6ab0288267ad05008aec9e089a759f1bd32e1ea45cc2eb498eb12095ec43cf8ca2bf23a465f4580a0d33b25b89f450ba521dd27083cbc695ee6bf5
+  languageName: node
+  linkType: hard
+
+"warning@npm:^4.0.3":
+  version: 4.0.3
+  resolution: "warning@npm:4.0.3"
+  dependencies:
+    loose-envify: ^1.0.0
+  checksum: 4f2cb6a9575e4faf71ddad9ad1ae7a00d0a75d24521c193fa464f30e6b04027bd97aa5d9546b0e13d3a150ab402eda216d59c1d0f2d6ca60124d96cd40dfa35c
   languageName: node
   linkType: hard
 

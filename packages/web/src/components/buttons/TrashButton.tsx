@@ -1,7 +1,7 @@
 import { faTrash, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 
 type Props = {
   id: string;

@@ -16,6 +16,10 @@ export class AchievementApi {
     return this.api.post<{ achievementId: string }>('/achievements', achievement);
   }
 
+  public update(id: string, achievement: AchievementDto) {
+    return this.api.put<{ achievementId: string }>(`/achievements/${id}`, achievement);
+  }
+
   public delete(id: string) {
     return this.api.delete<{ achievementId: string }>(`/achievements/${id}`);
   }

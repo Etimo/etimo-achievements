@@ -2,7 +2,6 @@ import React from 'react';
 
 type Props = {
   className?: string;
-  children: React.ReactNode;
 };
 
 const TableCell: React.FC<Props> = ({ className, children }) => {
