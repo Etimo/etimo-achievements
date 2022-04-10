@@ -15,7 +15,5 @@ const element = (
   </BrowserRouter>
 );
 
-const container = document.getElementById('root');
 ReactModal.setAppElement('#root');
-
-ReactDOM.render(element, container);
+ReactDOM.render(element, document.getElementById('root'));
