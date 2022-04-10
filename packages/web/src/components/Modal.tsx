@@ -13,7 +13,7 @@ const Modal: React.FC<Props> = ({ title, showModal, onRequestClose, children }) 
   return (
     <ReactModal isOpen={showModal} className="w-1/3 mx-auto" onRequestClose={onRequestClose}>
       <div className="bg-slate-200 mt-8 align-middle p-4">
-        <Header>
+        <Header className="pb-0">
           {title}
           <CloseButton onClick={onRequestClose} />
         </Header>

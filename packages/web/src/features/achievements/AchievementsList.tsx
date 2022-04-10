@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
 import { EditButton, TrashButton } from '../../components/buttons';
+import Header from '../../components/Header';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
 import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
@@ -46,7 +47,7 @@ const AchievementsList: React.FC = () => {
 
   return (
     <div className="w-full place-content-center">
-      <h1 className="font-sans text-2xl font-bold text-center pb-6">Achievements</h1>
+      <Header>Achievements</Header>
       <Table>
         <TableHeader>
           <TableColumn>Name</TableColumn>
@@ -65,7 +66,7 @@ const AchievementsList: React.FC = () => {
               <TableCell>{formatNumber(a.achievementPoints)} pts</TableCell>
               <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
               <TableCell>Unsupported</TableCell>
-              <TableCell>
+              <TableCell className="text-center">
                 <EditButton id={a.id} onClick={editHandler} />
               </TableCell>
               <TableCell className="text-center">

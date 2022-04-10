@@ -57,18 +57,18 @@ const AchievementsEditModal: React.FC<Props> = ({ achievementId, showModal, clos
   };
 
   return achievement ? (
-    <Modal title="Achievements" showModal={showModal} onRequestClose={closeModal}>
+    <Modal title="Edit Achievement" showModal={showModal} onRequestClose={closeModal}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <TextInput
           label="Name"
           defaultValue={achievement.name}
-          register={register('name', { required: true })}
+          register={register('name', { required: true, maxLength: 255 })}
           error={errors.name}
         />
         <TextInput
           label="Description"
           defaultValue={achievement.description}
-          register={register('description', { required: true })}
+          register={register('description', { required: true, maxLength: 255 })}
           error={errors.description}
         />
         <TextInput

@@ -1,7 +1,12 @@
 import React from 'react';
+import { mergeClasses } from '../common/utils/merge-classes';
 
-const Table: React.FC = ({ children }) => {
-  return <h1 className="font-sans text-2xl font-bold text-center">{children}</h1>;
+type Props = {
+  className?: string;
 };
 
-export default Table;
+const Header: React.FC<Props> = ({ className, children }) => {
+  return <h1 className={mergeClasses('font-sans text-2xl font-bold text-center pb-6', className)}>{children}</h1>;
+};
+
+export default Header;
