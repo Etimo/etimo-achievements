@@ -37,10 +37,10 @@ const AchievementsCreate: React.FC = () => {
     <>
       <Header>Create Achievement</Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput label="Name" register={register('name', { required: true })} error={errors.name} />
+        <TextInput label="Name" register={register('name', { required: true, maxLength: 255 })} error={errors.name} />
         <TextInput
           label="Description"
-          register={register('description', { required: true })}
+          register={register('description', { required: true, maxLength: 255 })}
           error={errors.description}
         />
         <TextInput
