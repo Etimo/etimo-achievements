@@ -66,7 +66,7 @@ const AchievementsList: React.FC = () => {
               <TableCell>{formatNumber(a.achievementPoints)} pts</TableCell>
               <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
               <TableCell>Unsupported</TableCell>
-              <TableCell>
+              <TableCell className="text-center">
                 <EditButton id={a.id} onClick={editHandler} />
               </TableCell>
               <TableCell className="text-center">
