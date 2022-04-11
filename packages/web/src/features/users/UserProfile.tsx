@@ -1,35 +1,36 @@
 import { UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../app/store';
+import { useAppDispatch, useAppSelector } from '../../app/store';
 import { EditButton } from '../../components/buttons';
 import { Card, CardRow } from '../../components/cards';
 import Header from '../../components/Header';
-import { myUserIdSelector } from '../auth/auth-slice';
 import { UserService } from './user-service';
-import UserEditModal from './UserEditModal';
+import { profileSelector, updateUser } from './user-slice';
+import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile: React.FC = () => {
-  const userId = useAppSelector(myUserIdSelector);
   const userService = new UserService();
-  const [user, setUser] = useState<UserDto>();
-  const [editUser, setEditUser] = useState<UserDto>();
+  const dispatch = useAppDispatch();
+  const [editProfile, setEditProfile] = useState<UserDto>();
+  const profile = useAppSelector(profileSelector);
 
   useEffect(() => {
-    userId &&
-      userService.fetch(userId).then((user) => {
-        setUser(user);
-      });
-  }, [userId]);
+    userService.getProfile().then((user) => {
+      if (user) {
+        dispatch(updateUser(user));
+      }
+    });
+  }, []);
 
-  if (!userId || !user) return null;
+  if (!profile) return null;
 
   const closeModal = () => {
-    setEditUser(undefined);
+    setEditProfile(undefined);
   };
 
   const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setEditUser(user);
+    setEditProfile(profile);
   };
 
   return (
@@ -39,11 +40,11 @@ const UserProfile: React.FC = () => {
         <CardRow>
           <EditButton onClick={editHandler} className="float-right" />
         </CardRow>
-        <CardRow label="Name">{user?.name}</CardRow>
-        <CardRow label="E-mail">{user?.email}</CardRow>
-        <CardRow label="Slack handle">{user?.slackHandle}</CardRow>
+        <CardRow label="Name">{profile.name}</CardRow>
+        <CardRow label="E-mail">{profile.email}</CardRow>
+        <CardRow label="Slack handle">{profile.slackHandle}</CardRow>
       </Card>
-      {editUser && <UserEditModal userId={userId} showModal={true} closeModal={closeModal} />}
+      {editProfile && <UserProfileEditModal showModal={true} closeModal={closeModal} />}
     </>
   );
 };

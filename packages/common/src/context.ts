@@ -20,6 +20,7 @@ export class Context {
     this.timestamp = new Date().toTimeString().split(' ')[0];
     count++;
   }
+
   public get userId() {
     const userId = this.jwt?.sub;
 

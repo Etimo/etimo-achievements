@@ -30,6 +30,8 @@ const userSlice = createSlice({
 
 export const { setUsers, updateUser, deleteUser } = userSlice.actions;
 
+export const profileSelector = (state: RootState) =>
+  state.users.users.find((user: UserDto) => user.id === state.auth.userId);
 export const usersSelector = (state: RootState) => state.users;
 
 export default userSlice.reducer;

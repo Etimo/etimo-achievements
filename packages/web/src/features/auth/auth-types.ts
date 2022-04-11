@@ -1,9 +1,9 @@
-import { TokenInfoDto, UserDto, UserInfoDto } from '@etimo-achievements/common';
+import { TokenInfoDto, UserInfoDto } from '@etimo-achievements/common';
 
 export interface AuthState {
   isAuthenticated: boolean;
   isAuthenticating: boolean;
-  user?: UserDto;
+  userId?: string;
   userInfo?: UserInfoDto;
   tokenInfo?: TokenInfoDto;
 }

@@ -8,12 +8,11 @@ import { UserApi } from './user-api';
 import { UserService } from './user-service';
 
 type Props = {
-  userId: string;
   showModal: boolean;
   closeModal: () => void;
 };
 
-const UserEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
+const UserProfileEdit: React.FC<Props> = ({ showModal, closeModal }) => {
   const {
     register,
     reset,
@@ -26,7 +25,7 @@ const UserEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
   const userService = new UserService();
 
   const refresh = () => {
-    userService.fetch(userId).then((user) => {
+    userService.fetchProfile().then((user) => {
       if (user) {
         setUser(user);
       }
@@ -37,10 +36,10 @@ const UserEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
     refresh();
   }, []);
 
-  const onSubmit: SubmitHandler<UserDto> = (updatedUser) => {
+  const onSubmit: SubmitHandler<UserDto> = (profile) => {
     setLoading(true);
     userApi
-      .update(userId, updatedUser)
+      .updateProfile(profile)
       .wait()
       .then((response) => {
         setLoading(false);
@@ -82,4 +81,4 @@ const UserEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
   ) : null;
 };
 
-export default UserEditModal;
+export default UserProfileEdit;

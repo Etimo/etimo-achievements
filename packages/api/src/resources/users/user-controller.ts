@@ -69,7 +69,7 @@ export class UserController {
 
     /**
      * @openapi
-     * /users/profile:
+     * /profile:
      *   get:
      *     summary: Get your profile
      *     operationId: getProfile
@@ -85,7 +85,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.get('/users/profile', protectedEndpoint(this.getProfile, ['rw:profile', 'r:profile']));
+    router.get('/profile', protectedEndpoint(this.getProfile, ['rw:profile', 'r:profile']));
 
     /**
      * @openapi
@@ -134,7 +134,7 @@ export class UserController {
 
     /**
      * @openapi
-     * /users/profile:
+     * /profile:
      *   put:
      *     summary: Update your profile
      *     operationId: updateProfile
@@ -142,7 +142,7 @@ export class UserController {
      *       - jwtCookie: []
      *     requestBody:
      *       required: true
-     *       content: *profileContent
+     *       content: *userContent
      *     responses:
      *       204: *noContentResponse
      *       400: *badRequestResponse
@@ -150,7 +150,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.put('/users/profile', protectedEndpoint(this.updateProfile, ['rw:profile', 'w:profile']));
+    router.put('/profile', protectedEndpoint(this.updateProfile, ['rw:profile', 'w:profile']));
 
     return router;
   }
@@ -171,7 +171,7 @@ export class UserController {
     return res.status(200).send(userDto);
   };
 
-  private getProfile = async (req: Request, res: Response) => {
+  private getProfile = async (_req: Request, res: Response) => {
     const { userId } = getContext();
 
     const user = await this.getUserService.get(userId);
@@ -199,11 +199,10 @@ export class UserController {
   };
 
   private updateProfile = async (req: Request, res: Response) => {
-    const ctx = getContext();
-    console.log(ctx);
+    const { userId } = getContext();
     const payload = req.body;
 
-    const input = UserMapper.toUser({ ...payload, id: ctx.jwt?.sub });
+    const input = UserMapper.toUser({ ...payload, id: userId });
     await this.updateUserService.update(input);
 
     return res.status(204).send();

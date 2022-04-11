@@ -1293,7 +1293,7 @@
         ]
       }
     },
-    "/users/profile": {
+    "/profile": {
       "get": {
         "summary": "Get your profile",
         "operationId": "getProfile",

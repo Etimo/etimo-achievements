@@ -8,12 +8,20 @@ export class UserApi {
     return this.api.get<UserDto>(`/users/${id}`);
   }
 
+  public getProfile() {
+    return this.api.get<UserDto>('/profile');
+  }
+
   public getMany() {
     return this.api.get<PaginatedData<UserDto>>('/users');
   }
 
   public update(id: string, user: UserDto) {
     return this.api.put<{ userId: string }>(`/users/${id}`, user);
+  }
+
+  public updateProfile(user: UserDto) {
+    return this.api.put<{ userId: string }>('/profile', user);
   }
 
   public delete(id: string) {

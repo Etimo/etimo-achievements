@@ -26,6 +26,7 @@ const authSlice = createSlice({
     },
     setUserInfo: (state: AuthState, action: { payload: UserInfoDto }) => {
       state.userInfo = action.payload;
+      state.userId = action.payload.id;
     },
     setTokenInfo: (state: AuthState, action: { payload: TokenInfoDto }) => {
       state.tokenInfo = action.payload;
@@ -35,7 +36,7 @@ const authSlice = createSlice({
 
 export const { setLoggingIn, setLoggedIn, setLoggedOut, setUserInfo, setTokenInfo } = authSlice.actions;
 
-export const myUserIdSelector = (state: RootState) => state.auth.userInfo?.id;
+export const userIdSelector = (state: RootState) => state.auth.userId;
 export const authSelector = (state: RootState) => state.auth;
 
 export default authSlice.reducer;
