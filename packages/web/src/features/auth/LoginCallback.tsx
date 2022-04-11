@@ -12,7 +12,7 @@ const LoginCallback = (): JSX.Element => {
   useEffect(() => {
     if (code) {
       authService.login(code).then(() => {
-        navigate(Routes.Profile);
+        navigate(Routes.UserProfile);
       });
     }
   }, []);

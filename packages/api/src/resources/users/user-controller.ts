@@ -1,5 +1,5 @@
 import { getContext } from '@etimo-achievements/express-middleware';
-import { CreateUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
+import { CreateUserService, DeleteUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
@@ -9,17 +9,20 @@ export type UserControllerOptions = {
   createUserService?: CreateUserService;
   getUserService?: GetUserService;
   updateUserService?: UpdateUserService;
+  deleteUserService?: DeleteUserService;
 };
 
 export class UserController {
   private createUserService: CreateUserService;
   private getUserService: GetUserService;
   private updateUserService: UpdateUserService;
+  private deleteUserService: DeleteUserService;
 
   constructor(options?: UserControllerOptions) {
     this.createUserService = options?.createUserService ?? new CreateUserService();
     this.getUserService = options?.getUserService ?? new GetUserService();
     this.updateUserService = options?.updateUserService ?? new UpdateUserService();
+    this.deleteUserService = options?.deleteUserService ?? new DeleteUserService();
   }
 
   public get routes(): Router {
@@ -152,6 +155,25 @@ export class UserController {
      */
     router.put('/profile', protectedEndpoint(this.updateProfile, ['rw:profile', 'w:profile']));
 
+    /**
+     * @openapi
+     * /users/{userId}:
+     *   delete:
+     *     summary: Delete an user
+     *     operationId: deleteUser
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *userIdParam
+     *     responses:
+     *       200: *okResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Users
+     */
+    router.delete('/users/:userId', protectedEndpoint(this.deleteUser, ['rw:users', 'w:users']));
+
     return router;
   }
 
@@ -191,8 +213,9 @@ export class UserController {
 
   private updateUser = async (req: Request, res: Response) => {
     const payload = req.body;
+    const userId = req.params.userId;
 
-    const input = UserMapper.toUser(payload);
+    const input = UserMapper.toUser({ ...payload, id: userId });
     await this.updateUserService.update(input);
 
     return noContentResponse(res);
@@ -206,5 +229,13 @@ export class UserController {
     await this.updateUserService.update(input);
 
     return noContentResponse(res);
+  };
+
+  private deleteUser = async (req: Request, res: Response) => {
+    const userId = req.params.userId;
+
+    await this.deleteUserService.delete(userId);
+
+    return okResponse(res);
   };
 }

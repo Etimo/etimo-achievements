@@ -27,7 +27,7 @@ const SideMenu: React.FC = () => {
           <Menu iconShape="round">
             <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
               Profile
-              <Link to={Routes.Profile} />
+              <Link to={Routes.UserProfile} />
             </MenuItem>
           </Menu>
           <Menu iconShape="circle">
@@ -45,10 +45,16 @@ const SideMenu: React.FC = () => {
               Awards
               <Link to="/awards" />
             </MenuItem>
-            <MenuItem icon={<FontAwesomeIcon icon={faUsers} />}>
-              Users
-              <Link to="/users" />
-            </MenuItem>
+            <SubMenu title="Users" icon={<FontAwesomeIcon icon={faUsers} />}>
+              <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
+                List users
+                <Link to={Routes.UserList} />
+              </MenuItem>
+              <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
+                Create user
+                <Link to={Routes.UserCreate} />
+              </MenuItem>
+            </SubMenu>
             <MenuItem icon={<FontAwesomeIcon icon={faRankingStar} />}>
               Ranking
               <Link to="/ranking" />
