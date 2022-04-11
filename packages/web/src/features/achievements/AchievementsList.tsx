@@ -46,7 +46,7 @@ const AchievementsList: React.FC = () => {
   };
 
   return (
-    <div className="w-full place-content-center">
+    <div className="w-1/2 mx-auto">
       <Header>Achievements</Header>
       <Table>
         <TableHeader>

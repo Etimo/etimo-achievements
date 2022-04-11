@@ -68,5 +68,5 @@ export function endpoint(endpointFn: (req: Request, res: Response) => Promise<an
 
 export function createdResponse(path: string, resource: any, res: Response) {
   path = path.replace(/^\/?([a-z\-]*)\/?$/gi, '$1');
-  res.status(201).header('Location', `/${path}/${resource.id}`).send({ id: resource.id });
+  res.status(201).location(`/${path}/${resource.id}`).send({ id: resource.id });
 }

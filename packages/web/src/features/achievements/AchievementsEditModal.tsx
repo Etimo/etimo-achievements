@@ -2,8 +2,7 @@ import { AchievementDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { SubmitButton, TextInput } from '../../components/form';
-import Form from '../../components/form/Form';
+import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
 import { AchievementApi } from './achievement-api';
 import { AchievementService } from './achievement-service';
@@ -59,19 +58,19 @@ const AchievementsEditModal: React.FC<Props> = ({ achievementId, showModal, clos
   return achievement ? (
     <Modal title="Edit Achievement" showModal={showModal} onRequestClose={closeModal}>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <TextInput
+        <FormTextInput
           label="Name"
           defaultValue={achievement.name}
           register={register('name', { required: true, maxLength: 255 })}
           error={errors.name}
         />
-        <TextInput
+        <FormTextInput
           label="Description"
           defaultValue={achievement.description}
           register={register('description', { required: true, maxLength: 255 })}
           error={errors.description}
         />
-        <TextInput
+        <FormTextInput
           label="Points"
           defaultValue={achievement.achievementPoints}
           register={register('achievementPoints', {
@@ -80,7 +79,7 @@ const AchievementsEditModal: React.FC<Props> = ({ achievementId, showModal, clos
           })}
           error={errors.achievementPoints}
         />
-        <TextInput
+        <FormTextInput
           label="Cooldown minutes"
           defaultValue={achievement.cooldownMinutes}
           register={register('cooldownMinutes', {
@@ -89,7 +88,7 @@ const AchievementsEditModal: React.FC<Props> = ({ achievementId, showModal, clos
           })}
           error={errors.cooldownMinutes}
         />
-        <SubmitButton label="Update" loading={loading} />
+        <FormSubmitButton label="Update" loading={loading} />
       </Form>
     </Modal>
   ) : null;

@@ -1,4 +1,5 @@
-import { CreateUserService, GetUserService, GetUsersService } from '@etimo-achievements/service';
+import { getContext } from '@etimo-achievements/express-middleware';
+import { CreateUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { createdResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
@@ -6,19 +7,19 @@ import { UserMapper } from './user-mapper';
 
 export type UserControllerOptions = {
   createUserService?: CreateUserService;
-  getUsersService?: GetUsersService;
   getUserService?: GetUserService;
+  updateUserService?: UpdateUserService;
 };
 
 export class UserController {
   private createUserService: CreateUserService;
-  private getUsersService: GetUsersService;
   private getUserService: GetUserService;
+  private updateUserService: UpdateUserService;
 
   constructor(options?: UserControllerOptions) {
     this.createUserService = options?.createUserService ?? new CreateUserService();
-    this.getUsersService = options?.getUsersService ?? new GetUsersService();
     this.getUserService = options?.getUserService ?? new GetUserService();
+    this.updateUserService = options?.updateUserService ?? new UpdateUserService();
   }
 
   public get routes(): Router {
@@ -68,6 +69,26 @@ export class UserController {
 
     /**
      * @openapi
+     * /profile:
+     *   get:
+     *     summary: Get your profile
+     *     operationId: getProfile
+     *     security:
+     *       - jwtCookie: []
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *userContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
+     *     tags:
+     *       - Users
+     */
+    router.get('/profile', protectedEndpoint(this.getProfile, ['rw:profile', 'r:profile']));
+
+    /**
+     * @openapi
      * /users:
      *   post:
      *     summary: Create a user
@@ -89,12 +110,54 @@ export class UserController {
      */
     router.post('/users', protectedEndpoint(this.createUser, ['rw:users', 'w:users']));
 
+    /**
+     * @openapi
+     * /users/{userId}:
+     *   put:
+     *     summary: Update a user
+     *     operationId: updateUser
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *userIdParam
+     *     requestBody:
+     *       required: true
+     *       content: *userContent
+     *     responses:
+     *       204: *noContentResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Users
+     */
+    router.put('/users/:userId', protectedEndpoint(this.updateUser, ['rw:users', 'w:users']));
+
+    /**
+     * @openapi
+     * /profile:
+     *   put:
+     *     summary: Update your profile
+     *     operationId: updateProfile
+     *     security:
+     *       - jwtCookie: []
+     *     requestBody:
+     *       required: true
+     *       content: *userContent
+     *     responses:
+     *       204: *noContentResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Users
+     */
+    router.put('/profile', protectedEndpoint(this.updateProfile, ['rw:profile', 'w:profile']));
+
     return router;
   }
 
   private getUsers = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
-    const users = await this.getUsersService.getAll(skip, take);
+    const users = await this.getUserService.getMany(skip, take);
     const output = { ...users, data: users.data.map(UserMapper.toUserDto) };
 
     return res.status(200).send(output);
@@ -108,6 +171,15 @@ export class UserController {
     return res.status(200).send(userDto);
   };
 
+  private getProfile = async (_req: Request, res: Response) => {
+    const { userId } = getContext();
+
+    const user = await this.getUserService.get(userId);
+    const userDto = UserMapper.toUserDto(user);
+
+    return res.status(200).send(userDto);
+  };
+
   private createUser = async (req: Request, res: Response) => {
     const payload = req.body;
 
@@ -115,5 +187,24 @@ export class UserController {
     const user = await this.createUserService.create(input);
 
     return createdResponse('/users', user, res);
+  };
+
+  private updateUser = async (req: Request, res: Response) => {
+    const payload = req.body;
+
+    const input = UserMapper.toUser(payload);
+    await this.updateUserService.update(input);
+
+    return res.status(204).send();
+  };
+
+  private updateProfile = async (req: Request, res: Response) => {
+    const { userId } = getContext();
+    const payload = req.body;
+
+    const input = UserMapper.toUser({ ...payload, id: userId });
+    await this.updateUserService.update(input);
+
+    return res.status(204).send();
   };
 }

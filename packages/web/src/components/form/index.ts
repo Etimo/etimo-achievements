@@ -1,5 +1,5 @@
 import Form from './Form';
-import SubmitButton from './SubmitButton';
-import TextInput from './TextInput';
+import FormSubmitButton from './FormSubmitButton';
+import FormTextInput from './FormTextInput';
 
-export { Form, SubmitButton, TextInput };
+export { Form, FormSubmitButton, FormTextInput };
