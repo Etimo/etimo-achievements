@@ -47,15 +47,15 @@ const UserProfileEdit: React.FC<Props> = ({ showModal, closeModal }) => {
           reset();
           refresh();
           closeModal();
-          toast.success('User edited successfully.');
+          toast.success('Profile edited successfully.');
         } else {
-          toast.error('User could not be updated: ' + response.message);
+          toast.error('Profile could not be updated: ' + response.message);
         }
       });
   };
 
   return user ? (
-    <Modal title="Edit User" showModal={showModal} onRequestClose={closeModal}>
+    <Modal title="Edit Profile" showModal={showModal} onRequestClose={closeModal}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTextInput
           label="Name"

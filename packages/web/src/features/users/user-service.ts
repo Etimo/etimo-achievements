@@ -5,7 +5,7 @@ import { deleteUser, profileSelector, setUsers, updateUser, usersSelector } from
 
 export class UserService {
   private dispatch = useAppDispatch();
-  private state = useAppSelector(usersSelector);
+  private users = useAppSelector(usersSelector).users;
   private profile = useAppSelector(profileSelector);
   private api = new UserApi();
 
@@ -21,10 +21,11 @@ export class UserService {
     if (!this.profile) {
       return this.fetchProfile();
     }
+    return this.profile;
   }
 
   public async get(id: string) {
-    const user = this.state.users.find((user: UserDto) => user.id === id);
+    const user = this.users.find((user: UserDto) => user.id === id);
     if (!user) {
       return this.fetch(id);
     }
