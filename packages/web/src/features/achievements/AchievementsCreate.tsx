@@ -33,7 +33,7 @@ const AchievementsCreate: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="w-1/3 mx-auto">
       <Header>Create Achievement</Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTextInput
@@ -64,7 +64,7 @@ const AchievementsCreate: React.FC = () => {
         />
         <FormSubmitButton label="Create" loading={loading} />
       </Form>
-    </>
+    </div>
   );
 };
 

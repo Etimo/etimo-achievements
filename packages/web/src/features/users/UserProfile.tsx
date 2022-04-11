@@ -34,18 +34,24 @@ const UserProfile: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="w-1/3 mx-auto">
       <Header>Profile</Header>
       <Card>
-        <CardRow>
-          <EditButton onClick={editHandler} className="float-right" />
+        <CardRow label="Name">
+          <div className="py-2 px-4 text-slate-700">
+            {profile.name}
+            <EditButton onClick={editHandler} className="float-right" />
+          </div>
         </CardRow>
-        <CardRow label="Name">{profile.name}</CardRow>
-        <CardRow label="E-mail">{profile.email}</CardRow>
-        <CardRow label="Slack handle">{profile.slackHandle}</CardRow>
+        <CardRow label="E-mail">
+          <div className="py-2 px-4 text-slate-700">{profile.email}</div>
+        </CardRow>
+        <CardRow label="Slack handle">
+          <div className="py-2 px-4 text-slate-700">{profile.slackHandle}</div>
+        </CardRow>
       </Card>
       {editProfile && <UserProfileEditModal showModal={true} closeModal={closeModal} />}
-    </>
+    </div>
   );
 };
 
