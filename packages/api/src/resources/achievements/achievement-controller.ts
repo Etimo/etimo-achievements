@@ -5,7 +5,7 @@ import {
   UpdateAchievementService,
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, protectedEndpoint } from '../../utils';
+import { createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AchievementMapper } from './achievement-mapper';
 
@@ -159,15 +159,16 @@ export class AchievementController {
       data: achievements.data.map(AchievementMapper.toAchievementDto),
     };
 
-    return res.status(200).send(output);
+    return okResponse(res, output);
   };
 
   private getAchievement = async (req: Request, res: Response) => {
     const achievementId = req.params.achievementId;
 
     const achievement = await this.getAchievementService.get(achievementId);
+    const dto = AchievementMapper.toAchievementDto(achievement);
 
-    return res.status(200).send(achievement);
+    return okResponse(res, dto);
   };
 
   private createAchievements = async (req: Request, res: Response) => {
@@ -186,7 +187,7 @@ export class AchievementController {
     const input = AchievementMapper.toAchievementDto(payload);
     await this.updateAchievementService.update({ ...input, id: achievementId });
 
-    return res.status(204).send();
+    return noContentResponse(res);
   };
 
   private deleteAchievement = async (req: Request, res: Response) => {
@@ -194,6 +195,6 @@ export class AchievementController {
 
     await this.deleteAchievementService.delete(achievementId);
 
-    return res.status(200).send();
+    return okResponse(res);
   };
 }

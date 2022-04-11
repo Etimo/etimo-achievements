@@ -3,7 +3,7 @@ import { AwardRepository } from '@etimo-achievements/data';
 import { IAward } from '@etimo-achievements/types';
 import { ServiceOptions } from '../common/service-options';
 
-export class GetAwardsService {
+export class GetAwardService {
   private awardRepo: AwardRepository;
 
   constructor(options?: ServiceOptions) {

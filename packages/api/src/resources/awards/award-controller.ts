@@ -1,20 +1,20 @@
-import { CreateAwardService, GetAwardsService } from '@etimo-achievements/service';
+import { CreateAwardService, GetAwardService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, protectedEndpoint } from '../../utils';
+import { createdResponse, notImplementedResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AwardMapper } from './award-mapper';
 
 export type AwardControllerOptions = {
-  getAwardsService?: GetAwardsService;
+  getAwardsService?: GetAwardService;
   createAwardService?: CreateAwardService;
 };
 
 export class AwardController {
-  private getAwardsService: GetAwardsService;
+  private getAwardsService: GetAwardService;
   private createAwardService: CreateAwardService;
 
   constructor(options?: AwardControllerOptions) {
-    this.getAwardsService = options?.getAwardsService ?? new GetAwardsService();
+    this.getAwardsService = options?.getAwardsService ?? new GetAwardService();
     this.createAwardService = options?.createAwardService ?? new CreateAwardService();
   }
 
@@ -100,11 +100,11 @@ export class AwardController {
       data: awards.data.map(AwardMapper.toAwardDto),
     };
 
-    return res.status(200).send(output);
+    return okResponse(res, output);
   };
 
   private getAward = async (_req: Request, res: Response) => {
-    return res.status(501).send('Not implemented');
+    return notImplementedResponse(res);
   };
 
   private createAward = async (req: Request, res: Response) => {
