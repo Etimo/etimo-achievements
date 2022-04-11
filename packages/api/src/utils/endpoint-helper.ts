@@ -22,13 +22,30 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
     setJwt(req);
     setRefreshToken(req);
 
-    if (scopes && !ctx.scopes?.some((scope) => scopes.includes(scope))) {
+    if (scopes && !ctx.scopes?.some((scope) => scopeMatches(scope, scopes))) {
       Logger.log('User does not have required scopes');
       throw new UnauthorizedError('Insufficient scope');
     }
 
     endpointFn(req, res).catch((error) => next(error));
   };
+}
+
+function scopeMatches(userScope: string, requiredScopes: string[]) {
+  for (const requiredScope of requiredScopes) {
+    const parts = requiredScope.split(':');
+    const requiredGroups = parts[0].split('');
+    const requiredTarget = parts[1];
+    const userParts = userScope.split(':');
+    const userGroups = userParts[0].split('');
+    const userTarget = userParts[1];
+
+    const isAdmin = userGroups.includes('a');
+    const isPermissionMatch = requiredGroups.every((group) => userGroups.includes(group));
+    const hasPermission = (isAdmin || isPermissionMatch) && userTarget === requiredTarget;
+
+    if (hasPermission) return true;
+  }
 }
 
 function setJwt(req: Request) {

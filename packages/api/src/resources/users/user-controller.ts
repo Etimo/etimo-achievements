@@ -46,7 +46,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.get('/users', protectedEndpoint(this.getUsers, ['rw:users', 'r:users']));
+    router.get('/users', protectedEndpoint(this.getUsers, ['r:users']));
 
     /**
      * @openapi
@@ -68,7 +68,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.get('/users/:userId', protectedEndpoint(this.getUser, ['rw:users', 'r:users']));
+    router.get('/users/:userId', protectedEndpoint(this.getUser, ['r:users']));
 
     /**
      * @openapi
@@ -88,7 +88,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.get('/profile', protectedEndpoint(this.getProfile, ['rw:profile', 'r:profile']));
+    router.get('/profile', protectedEndpoint(this.getProfile, ['r:profile']));
 
     /**
      * @openapi
@@ -111,7 +111,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.post('/users', protectedEndpoint(this.createUser, ['rw:users', 'w:users']));
+    router.post('/users', protectedEndpoint(this.createUser, ['c:users']));
 
     /**
      * @openapi
@@ -133,7 +133,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.put('/users/:userId', protectedEndpoint(this.updateUser, ['rw:users', 'w:users']));
+    router.put('/users/:userId', protectedEndpoint(this.updateUser, ['u:users']));
 
     /**
      * @openapi
@@ -153,7 +153,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.put('/profile', protectedEndpoint(this.updateProfile, ['rw:profile', 'w:profile']));
+    router.put('/profile', protectedEndpoint(this.updateProfile, ['u:profile']));
 
     /**
      * @openapi
@@ -172,7 +172,7 @@ export class UserController {
      *     tags:
      *       - Users
      */
-    router.delete('/users/:userId', protectedEndpoint(this.deleteUser, ['rw:users', 'w:users']));
+    router.delete('/users/:userId', protectedEndpoint(this.deleteUser, ['d:users']));
 
     return router;
   }

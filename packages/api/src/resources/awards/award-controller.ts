@@ -40,7 +40,7 @@ export class AwardController {
      *     tags:
      *       - Awards
      */
-    router.get('/awards', protectedEndpoint(this.getAwards, ['rw:awards', 'r:awards']));
+    router.get('/awards', protectedEndpoint(this.getAwards, ['r:awards']));
 
     /**
      * @openapi
@@ -62,7 +62,7 @@ export class AwardController {
      *     tags:
      *       - Awards
      */
-    router.get('/awards/:awardId', protectedEndpoint(this.getAward, ['rw:awards', 'r:awards']));
+    router.get('/awards/:awardId', protectedEndpoint(this.getAward, ['r:awards']));
 
     /**
      * @openapi
@@ -87,7 +87,7 @@ export class AwardController {
      *     tags:
      *       - Awards
      */
-    router.post('/awards', protectedEndpoint(this.createAward, ['rw:awards', 'w:awards']));
+    router.post('/awards', protectedEndpoint(this.createAward, ['c:awards']));
 
     return router;
   }

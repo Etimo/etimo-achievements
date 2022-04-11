@@ -33,6 +33,14 @@ export class LoginService {
       });
     }
 
-    return this.createTokenService.create(user, ['rw:achievements', 'rw:awards', 'rw:users', 'rw:profile']);
+    let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile'];
+
+    // Administrator rights for certain users
+    const isAdmin = userInfo.email === 'niclas.lindstedt@etimo.se';
+    if (isAdmin) {
+      scopes = ['a:achievements', 'a:awards', 'a:users', 'a:profile'];
+    }
+
+    return this.createTokenService.create(user, scopes);
   }
 }
