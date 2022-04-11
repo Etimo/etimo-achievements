@@ -1,7 +1,7 @@
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CreateUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, protectedEndpoint } from '../../utils';
+import { createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { UserMapper } from './user-mapper';
 
@@ -160,24 +160,24 @@ export class UserController {
     const users = await this.getUserService.getMany(skip, take);
     const output = { ...users, data: users.data.map(UserMapper.toUserDto) };
 
-    return res.status(200).send(output);
+    return okResponse(res, output);
   };
 
   private getUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const user = await this.getUserService.get(userId);
-    const userDto = UserMapper.toUserDto(user);
+    const dto = UserMapper.toUserDto(user);
 
-    return res.status(200).send(userDto);
+    return okResponse(res, dto);
   };
 
   private getProfile = async (_req: Request, res: Response) => {
     const { userId } = getContext();
 
     const user = await this.getUserService.get(userId);
-    const userDto = UserMapper.toUserDto(user);
+    const dto = UserMapper.toUserDto(user);
 
-    return res.status(200).send(userDto);
+    return okResponse(res, dto);
   };
 
   private createUser = async (req: Request, res: Response) => {
@@ -195,7 +195,7 @@ export class UserController {
     const input = UserMapper.toUser(payload);
     await this.updateUserService.update(input);
 
-    return res.status(204).send();
+    return noContentResponse(res);
   };
 
   private updateProfile = async (req: Request, res: Response) => {
@@ -205,6 +205,6 @@ export class UserController {
     const input = UserMapper.toUser({ ...payload, id: userId });
     await this.updateUserService.update(input);
 
-    return res.status(204).send();
+    return noContentResponse(res);
   };
 }

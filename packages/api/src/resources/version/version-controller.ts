@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { endpoint } from '../../utils';
+import { endpoint, okResponse } from '../../utils';
 
 export class VersionController {
   public get routes(): Router {
@@ -22,6 +22,8 @@ export class VersionController {
   }
 
   private getVersion = async (_req: Request, res: Response) => {
-    res.send(require('./version.json'));
+    const versionInfo = require('./version.json');
+
+    return okResponse(res, versionInfo);
   };
 }

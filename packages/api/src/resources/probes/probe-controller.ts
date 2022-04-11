@@ -1,5 +1,5 @@
 import { Request, Response, Router } from 'express';
-import { endpoint } from '../../utils';
+import { endpoint, okResponse } from '../../utils';
 
 export class ProbeController {
   public get routes(): Router {
@@ -35,10 +35,10 @@ export class ProbeController {
   }
 
   private getReadiness = async (_req: Request, res: Response) => {
-    return res.status(200).send('OK');
+    return okResponse(res);
   };
 
   private getLiveness = async (_req: Request, res: Response) => {
-    return res.status(200).send('OK');
+    return okResponse(res);
   };
 }

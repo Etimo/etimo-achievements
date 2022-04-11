@@ -1,10 +1,17 @@
-import { AccessTokenDto, getEnvVariable, Logger, UnauthorizedError, UserInfoDto } from '@etimo-achievements/common';
+import {
+  AccessTokenDto,
+  getEnvVariable,
+  Logger,
+  TokenValidationDto,
+  UnauthorizedError,
+  UserInfoDto,
+} from '@etimo-achievements/common';
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
 import { Env } from '@etimo-achievements/types';
 import { Request, Response, Router } from 'express';
-import { endpoint, protectedEndpoint } from '../../utils';
+import { endpoint, okResponse, protectedEndpoint, redirectResponse } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
 
 export class AuthController {
@@ -172,7 +179,7 @@ export class AuthController {
     const service = OAuthServiceFactory.create(provider);
     const url = service.getAuthUrl();
 
-    return res.status(301).header({ Location: url, 'Cache-Control': 'no-cache' }).send();
+    return redirectResponse(url, res);
   };
 
   private refresh = async (_req: Request, res: Response) => {
@@ -184,7 +191,7 @@ export class AuthController {
 
       this.setCookies(res, dto, loginResponse);
 
-      return res.status(200).send(dto);
+      return okResponse(res, dto);
     }
 
     throw new UnauthorizedError('No refresh token');
@@ -213,7 +220,7 @@ export class AuthController {
     deleteCookie(CookieName.Jwt);
     deleteCookie(CookieName.RefreshToken);
 
-    return res.status(200).send();
+    return okResponse(res);
   };
 
   private callback = async (req: Request, res: Response) => {
@@ -226,7 +233,7 @@ export class AuthController {
 
     this.setCookies(res, dto, loginResponse);
 
-    return res.status(200).send(dto);
+    return okResponse(res, dto);
   };
 
   private userInfo = async (_req: Request, res: Response) => {
@@ -241,16 +248,18 @@ export class AuthController {
       name: jwt.name,
     } as Partial<UserInfoDto>;
 
-    return res.status(200).send(dto);
+    return okResponse(res, dto);
   };
 
   private validate = async (_req: Request, res: Response) => {
     const { jwt } = getContext();
     if (!jwt) throw new UnauthorizedError('Not authorized');
 
-    return res.status(200).send({
+    const dto: TokenValidationDto = {
       expires_in: Math.floor(jwt.exp - new Date().getTime() / 1000),
-    });
+    };
+
+    return okResponse(res, dto);
   };
 
   private introspect = async (_req: Request, res: Response) => {
@@ -259,7 +268,7 @@ export class AuthController {
 
     const dto = AccessTokenMapper.toTokenInfoDto(jwt);
 
-    return res.status(200).send(dto);
+    return okResponse(res, dto);
   };
 
   private setCookies(res: Response, dto: AccessTokenDto, loginResponse: LoginResponse) {
