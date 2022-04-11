@@ -6,7 +6,7 @@ type Props = {
 
 const CardRow: React.FC<Props> = ({ label, children }) => {
   return (
-    <div className="md:flex md:items-center mb-5 px-6">
+    <div className="md:flex md:items-center mb-5">
       <div className="md:w-1/3">
         {label && <label className="block text-slate-500 font-bold md:text-right mb-1 md:mb-0 pr-4">{label}</label>}
       </div>

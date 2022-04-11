@@ -38,17 +38,11 @@ const UserProfile: React.FC = () => {
       <Header>Profile</Header>
       <Card>
         <CardRow label="Name">
-          <div className="px-4 text-slate-700">
-            {profile.name}
-            <EditButton onClick={editHandler} className="float-right" />
-          </div>
+          {profile.name}
+          <EditButton onClick={editHandler} className="float-right px-0 mx-0" />
         </CardRow>
-        <CardRow label="E-mail">
-          <div className="px-4 text-slate-700">{profile.email}</div>
-        </CardRow>
-        <CardRow label="Slack handle">
-          <div className="px-4 text-slate-700">{profile.slackHandle}</div>
-        </CardRow>
+        <CardRow label="E-mail">{profile.email}</CardRow>
+        <CardRow label="Slack handle">{profile.slackHandle}</CardRow>
       </Card>
       {editProfile && <UserProfileEditModal showModal={true} closeModal={closeModal} />}
     </div>
