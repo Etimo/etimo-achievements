@@ -16,6 +16,10 @@ export class UserApi {
     return this.api.get<PaginatedData<UserDto>>('/users');
   }
 
+  public create(user: UserDto) {
+    return this.api.post<{ userId: string }>('/users', user);
+  }
+
   public update(id: string, user: UserDto) {
     return this.api.put<{ userId: string }>(`/users/${id}`, user);
   }

@@ -51,7 +51,7 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.get('/achievements', protectedEndpoint(this.getAchievements, ['rw:achievements', 'r:achievements']));
+    router.get('/achievements', protectedEndpoint(this.getAchievements, ['r:achievements']));
 
     /**
      * @openapi
@@ -73,10 +73,7 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.get(
-      '/achievements/:achievementId',
-      protectedEndpoint(this.getAchievement, ['rw:achievements', 'r:achievements'])
-    );
+    router.get('/achievements/:achievementId', protectedEndpoint(this.getAchievement, ['r:achievements']));
 
     /**
      * @openapi
@@ -99,7 +96,7 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.post('/achievements', protectedEndpoint(this.createAchievements, ['rw:achievements', 'w:achievements']));
+    router.post('/achievements', protectedEndpoint(this.createAchievements, ['c:achievements']));
 
     /**
      * @openapi
@@ -121,10 +118,7 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.put(
-      '/achievements/:achievementId',
-      protectedEndpoint(this.updateAchievement, ['rw:achievements', 'w:achievements'])
-    );
+    router.put('/achievements/:achievementId', protectedEndpoint(this.updateAchievement, ['u:achievements']));
 
     /**
      * @openapi
@@ -143,10 +137,7 @@ export class AchievementController {
      *     tags:
      *       - Achievements
      */
-    router.delete(
-      '/achievements/:achievementId',
-      protectedEndpoint(this.deleteAchievement, ['rw:achievements', 'w:achievements'])
-    );
+    router.delete('/achievements/:achievementId', protectedEndpoint(this.deleteAchievement, ['d:achievements']));
 
     return router;
   }

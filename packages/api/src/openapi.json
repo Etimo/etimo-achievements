@@ -1291,6 +1291,40 @@
         "tags": [
           "Users"
         ]
+      },
+      "delete": {
+        "summary": "Delete an user",
+        "operationId": "deleteUser",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
       }
     },
     "/profile": {
