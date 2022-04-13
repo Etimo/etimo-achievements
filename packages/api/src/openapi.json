@@ -552,6 +552,59 @@
         ]
       }
     },
+    "/achievements/list": {
+      "post": {
+        "summary": "Get many achievements by ids",
+        "operationId": "listAchievements",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "ID of the desired resource."
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Achievement"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
+      }
+    },
     "/auth/login/{provider}": {
       "get": {
         "summary": "Start a login request",

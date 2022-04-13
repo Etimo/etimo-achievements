@@ -1,0 +1,8 @@
+x-template: &idListObject
+  application/json:
+    schema:
+      type: array
+      items:
+        type: string
+        format: uuid
+        description: ID of the desired resource.

@@ -49,6 +49,12 @@ export class AchievementRepository {
     });
   }
 
+  getManyByIds(ids: string[]): Promise<IAchievement[]> {
+    return catchErrors(async () => {
+      return AchievementModel.query().whereIn('id', ids);
+    });
+  }
+
   getAll(): Promise<IAchievement[]> {
     return catchErrors(async () => {
       return AchievementModel.query();

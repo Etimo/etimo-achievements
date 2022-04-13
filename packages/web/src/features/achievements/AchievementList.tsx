@@ -7,9 +7,9 @@ import Header from '../../components/Header';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
 import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
-import AchievementsEditModal from './AchievementsEditModal';
+import AchievementsEditModal from './AchievementEditModal';
 
-const AchievementsList: React.FC = () => {
+const AchievementList: React.FC = () => {
   const { achievements } = useAppSelector(achievementSelector);
   const achievementService = new AchievementService();
   const [loading, setLoading] = useState(false);
@@ -83,4 +83,4 @@ const AchievementsList: React.FC = () => {
   );
 };
 
-export default AchievementsList;
+export default AchievementList;

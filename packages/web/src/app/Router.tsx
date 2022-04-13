@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Routes as ReactRoutes } from 'react-router-dom';
 import ProtectedRoute from '../components/ProtectedRoute';
-import AchievementsCreate from '../features/achievements/AchievementsCreate';
-import AchievementsList from '../features/achievements/AchievementsList';
+import AchievementCreate from '../features/achievements/AchievementCreate';
+import AchievementList from '../features/achievements/AchievementList';
 import Login from '../features/auth/Login';
 import LoginCallback from '../features/auth/LoginCallback';
 import Logout from '../features/auth/Logout';
@@ -32,8 +32,8 @@ const Router = (): JSX.Element => {
       <Route path={Routes.Logout} element={<Logout />} />
 
       <Route element={<ProtectedRoute />}>
-        <Route path={Routes.AchievementsList} element={<AchievementsList />} />
-        <Route path={Routes.AchievementsCreate} element={<AchievementsCreate />} />
+        <Route path={Routes.AchievementsList} element={<AchievementList />} />
+        <Route path={Routes.AchievementsCreate} element={<AchievementCreate />} />
         <Route path={Routes.UserProfile} element={<UserProfile />} />
         <Route path={Routes.UserList} element={<UserList />} />
         <Route path={Routes.UserCreate} element={<UserCreate />} />

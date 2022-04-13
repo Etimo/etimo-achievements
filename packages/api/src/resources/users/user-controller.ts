@@ -208,7 +208,7 @@ export class UserController {
     const input = UserMapper.toUser(payload);
     const user = await this.createUserService.create(input);
 
-    return createdResponse('/users', user, res);
+    return createdResponse(res, '/users', user);
   };
 
   private updateUser = async (req: Request, res: Response) => {

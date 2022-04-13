@@ -113,6 +113,6 @@ export class AwardController {
     const input = AwardMapper.toAward(payload);
     const award = await this.createAwardService.create(input);
 
-    return createdResponse('/awards', award, res);
+    return createdResponse(res, '/awards', award);
   };
 }
