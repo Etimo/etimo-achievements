@@ -1,6 +1,7 @@
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import {
   faAward,
+  faHandSparkles,
   faList,
   faRankingStar,
   faSignOut,
@@ -41,10 +42,16 @@ const SideMenu: React.FC = () => {
                 <Link to={Routes.AchievementCreate} />
               </MenuItem>
             </SubMenu>
-            <MenuItem icon={<FontAwesomeIcon icon={faAward} />}>
-              Awards
-              <Link to={Routes.AwardList} />
-            </MenuItem>
+            <SubMenu title="Awards" icon={<FontAwesomeIcon icon={faAward} />}>
+              <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
+                List awards
+                <Link to={Routes.AwardList} />
+              </MenuItem>
+              <MenuItem icon={<FontAwesomeIcon icon={faHandSparkles} />}>
+                Give award
+                <Link to={Routes.AwardGive} />
+              </MenuItem>
+            </SubMenu>
             <SubMenu title="Users" icon={<FontAwesomeIcon icon={faUsers} />}>
               <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
                 List users

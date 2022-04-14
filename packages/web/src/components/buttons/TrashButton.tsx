@@ -13,7 +13,11 @@ type Props = {
 const TrashButton: React.FC<Props> = ({ id, onClick, loading, icon }) => {
   return (
     <button id={id} onClick={onClick}>
-      {loading ? <Spinner /> : <FontAwesomeIcon icon={icon ?? faTrash} className="hover:text-slate-700" />}
+      {loading ? (
+        <Spinner color="text-slate-700" />
+      ) : (
+        <FontAwesomeIcon icon={icon ?? faTrash} className="hover:text-slate-700" />
+      )}
     </button>
   );
 };
