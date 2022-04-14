@@ -1,6 +1,6 @@
 import { useAppDispatch } from '../../app/store';
 import { AchievementApi } from './achievement-api';
-import { deleteAchievement, setAchievements, updateAchievement } from './achievement-slice';
+import { deleteAchievement, setAchievements, updateAchievement, updateAchievements } from './achievement-slice';
 
 export class AchievementService {
   private dispatch = useAppDispatch();
@@ -20,6 +20,15 @@ export class AchievementService {
       const achievement = await response.data();
       this.dispatch(updateAchievement(achievement));
       return achievement;
+    }
+  }
+
+  public async list(ids: string[]) {
+    const response = await this.api.list(ids).wait();
+    if (response.success) {
+      const achievements = await response.data();
+      this.dispatch(updateAchievements(achievements));
+      return achievements;
     }
   }
 

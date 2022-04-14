@@ -1,5 +1,12 @@
-import { AwardDto } from '@etimo-achievements/common';
+import { AchievementDto, AwardDto, UserDto } from '@etimo-achievements/common';
 
 export interface AwardState {
-  awards: AwardDto[];
+  composites: AwardComposite[];
 }
+
+export type AwardComposite = {
+  award: AwardDto;
+  awardedTo: UserDto;
+  awardedBy: UserDto;
+  achievement: AchievementDto;
+};

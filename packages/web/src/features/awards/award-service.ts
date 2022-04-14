@@ -1,30 +1,46 @@
 import { useAppDispatch } from '../../app/store';
+import { AchievementService } from '../achievements/achievement-service';
+import { UserService } from '../users/user-service';
 import { AwardApi } from './award-api';
-import { deleteAward, setAwards, updateAward } from './award-slice';
+import { deleteAward, setAwards } from './award-slice';
+import { AwardComposite } from './award-types';
 
 export class AwardService {
   private dispatch = useAppDispatch();
   private api = new AwardApi();
+  private achievementService = new AchievementService();
+  private userService = new UserService();
 
-  public async load() {
+  public async load(): Promise<AwardComposite[]> {
     const response = await this.api.getMany().wait();
     if (response.success) {
       const awards = (await response.data()).data;
-      const userIds = awards.map((a) => a.userId);
-      const achievementIds = awards.map((a) => a.achievementId);
-      console.log(userIds);
-      console.log(achievementIds);
-      this.dispatch(setAwards(awards));
-    }
-  }
 
-  public async get(id: string) {
-    const response = await this.api.get(id).wait();
-    if (response.success) {
-      const award = await response.data();
-      this.dispatch(updateAward(award));
-      return award;
+      const achievementIds = awards.map((a) => a.achievementId);
+      const achievementPromise = this.achievementService.list(achievementIds);
+
+      const userIds = [...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)];
+      const usersPromise = this.userService.list(userIds);
+
+      await Promise.allSettled([achievementPromise, usersPromise]);
+      const achievements = await achievementPromise;
+      const users = await usersPromise;
+
+      const composites = awards
+        .map((award) => {
+          const achievement = achievements?.find((a) => a.id === award.achievementId);
+          const awardedTo = users?.find((u) => u.id === award.userId);
+          const awardedBy = users?.find((u) => u.id === award.awardedByUserId);
+
+          if (achievement && awardedTo && awardedBy) {
+            return { award, achievement, awardedTo, awardedBy };
+          }
+        })
+        .filter((c) => !!c) as AwardComposite[];
+
+      this.dispatch(setAwards(composites));
     }
+    return [];
   }
 
   public async delete(id: string) {

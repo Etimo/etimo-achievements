@@ -55,6 +55,29 @@ export class AchievementController {
 
     /**
      * @openapi
+     * /achievements/list:
+     *   post:
+     *     summary: Get many achievements by list of ids
+     *     operationId: listAchievements
+     *     security:
+     *       - jwtCookie: []
+     *     requestBody:
+     *       required: true
+     *       content: *idListObject
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *achievementsContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
+     *     tags:
+     *       - Achievements
+     */
+    router.post('/achievements/list', protectedEndpoint(this.listAchievements, ['r:achievements']));
+
+    /**
+     * @openapi
      * /achievements/{achievementId}:
      *   get:
      *     summary: Get a single achievement
@@ -74,29 +97,6 @@ export class AchievementController {
      *       - Achievements
      */
     router.get('/achievements/:achievementId', protectedEndpoint(this.getAchievement, ['r:achievements']));
-
-    /**
-     * @openapi
-     * /achievements/list:
-     *   post:
-     *     summary: Get many achievements by ids
-     *     operationId: listAchievements
-     *     security:
-     *       - jwtCookie: []
-     *     requestBody:
-     *       required: true
-     *       content: *idListObject
-     *     responses:
-     *       200:
-     *         description: The request was successful.
-     *         content: *achievementsContent
-     *       400: *badRequestResponse
-     *       401: *unauthorizedResponse
-     *       404: *notFoundResponse
-     *     tags:
-     *       - Achievements
-     */
-    router.post('/achievements/list', protectedEndpoint(this.listAchievements, ['r:achievements']));
 
     /**
      * @openapi

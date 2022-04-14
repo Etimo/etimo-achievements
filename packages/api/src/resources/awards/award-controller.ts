@@ -1,21 +1,24 @@
-import { CreateAwardService, GetAwardService } from '@etimo-achievements/service';
+import { CreateAwardService, DeleteAwardService, GetAwardService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { createdResponse, notImplementedResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AwardMapper } from './award-mapper';
 
 export type AwardControllerOptions = {
-  getAwardsService?: GetAwardService;
-  createAwardService?: CreateAwardService;
+  services: typeof services;
+};
+
+const services = {
+  getAward: new GetAwardService(),
+  createAward: new CreateAwardService(),
+  deleteAward: new DeleteAwardService(),
 };
 
 export class AwardController {
-  private getAwardsService: GetAwardService;
-  private createAwardService: CreateAwardService;
+  private services: typeof services;
 
   constructor(options?: AwardControllerOptions) {
-    this.getAwardsService = options?.getAwardsService ?? new GetAwardService();
-    this.createAwardService = options?.createAwardService ?? new CreateAwardService();
+    this.services = options?.services ?? services;
   }
 
   public get routes(): Router {
@@ -89,12 +92,31 @@ export class AwardController {
      */
     router.post('/awards', protectedEndpoint(this.createAward, ['c:awards']));
 
+    /**
+     * @openapi
+     * /awards/{awardId}:
+     *   delete:
+     *     summary: Delete an award
+     *     operationId: deleteAward
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *awardIdParam
+     *     responses:
+     *       200: *okResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Awards
+     */
+    router.delete('/awards/:awardId', protectedEndpoint(this.deleteAward, ['d:awards']));
+
     return router;
   }
 
   private getAwards = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
-    const awards = await this.getAwardsService.getMany(skip, take);
+    const awards = await this.services.getAward.getMany(skip, take);
     const output = {
       ...awards,
       data: awards.data.map(AwardMapper.toAwardDto),
@@ -111,8 +133,16 @@ export class AwardController {
     const payload = req.body;
 
     const input = AwardMapper.toAward(payload);
-    const award = await this.createAwardService.create(input);
+    const award = await this.services.createAward.create(input);
 
     return createdResponse(res, '/awards', award);
+  };
+
+  private deleteAward = async (req: Request, res: Response) => {
+    const awardId = req.params.awardId;
+
+    await this.services.deleteAward.delete(awardId);
+
+    return okResponse(res);
   };
 }

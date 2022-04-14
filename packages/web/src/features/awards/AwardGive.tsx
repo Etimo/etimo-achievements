@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import Header from '../../components/Header';
 import { AwardApi } from './award-api';
 
-const AwardsCreate: React.FC = () => {
+const AwardGive: React.FC = () => {
   const {
     register,
     reset,
@@ -38,4 +38,4 @@ const AwardsCreate: React.FC = () => {
   );
 };
 
-export default AwardsCreate;
+export default AwardGive;

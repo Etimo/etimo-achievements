@@ -1,7 +1,7 @@
 import { getContext } from '@etimo-achievements/express-middleware';
 import { CreateUserService, DeleteUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
+import { badRequestResponse, createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { UserMapper } from './user-mapper';
 
@@ -47,6 +47,29 @@ export class UserController {
      *       - Users
      */
     router.get('/users', protectedEndpoint(this.getUsers, ['r:users']));
+
+    /**
+     * @openapi
+     * /users/list:
+     *   post:
+     *     summary: Get many users by list of ids
+     *     operationId: listAchievements
+     *     security:
+     *       - jwtCookie: []
+     *     requestBody:
+     *       required: true
+     *       content: *idListObject
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *usersContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
+     *     tags:
+     *       - Achievements
+     */
+    router.post('/users/list', protectedEndpoint(this.listUsers, ['r:users']));
 
     /**
      * @openapi
@@ -183,6 +206,19 @@ export class UserController {
     const output = { ...users, data: users.data.map(UserMapper.toUserDto) };
 
     return okResponse(res, output);
+  };
+
+  private listUsers = async (req: Request, res: Response) => {
+    const payload = req.body as string[];
+
+    if (payload.length > 100) {
+      return badRequestResponse(res, 'Too many ids');
+    }
+
+    const users = await this.getUserService.getManyByIds(payload);
+    const dtos = users.map(UserMapper.toUserDto);
+
+    return okResponse(res, dtos);
   };
 
   private getUser = async (req: Request, res: Response) => {

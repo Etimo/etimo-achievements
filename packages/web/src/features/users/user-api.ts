@@ -16,6 +16,10 @@ export class UserApi {
     return this.api.get<PaginatedData<UserDto>>('/users');
   }
 
+  public list(ids: string[]) {
+    return this.api.post<UserDto[]>('/users/list', ids);
+  }
+
   public create(user: UserDto) {
     return this.api.post<{ userId: string }>('/users', user);
   }

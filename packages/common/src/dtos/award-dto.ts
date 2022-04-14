@@ -17,6 +17,9 @@
  *         achievementId:
  *           type: string
  *           format: uuid
+ *         createdAt:
+ *           type: string
+ *           format: date-time
  *       required:
  *         - userId
  *         - achievementId
@@ -26,4 +29,5 @@ export interface AwardDto {
   userId: string;
   awardedByUserId: string;
   achievementId: string;
+  createdAt?: Date;
 }

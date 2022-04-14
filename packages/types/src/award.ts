@@ -3,6 +3,7 @@ export interface IAward {
   achievementId: string;
   awardedByUserId: string;
   userId: string;
+  createdAt?: Date;
 }
 
 export type INewAward = Omit<IAward, 'id'>;
