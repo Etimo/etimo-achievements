@@ -16,10 +16,6 @@ export class AwardApi {
     return this.api.post<{ awardId: string }>('/awards', award);
   }
 
-  public update(id: string, award: AwardDto) {
-    return this.api.put<{ awardId: string }>(`/awards/${id}`, award);
-  }
-
   public delete(id: string) {
     return this.api.delete<{ awardId: string }>(`/awards/${id}`);
   }
