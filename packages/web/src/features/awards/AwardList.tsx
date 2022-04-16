@@ -46,7 +46,7 @@ const AwardList: React.FC = () => {
             <TableRow key={row.award.id}>
               <TableCell>{row.achievement.name}</TableCell>
               <TableCell>{row.awardedTo.name}</TableCell>
-              <TableCell>{row.achievement.achievementPoints} pts</TableCell>
+              <TableCell>{formatNumber(row.achievement.achievementPoints)} pts</TableCell>
               <TableCell>{new Date(row.award.createdAt ?? 0).toLocaleString('sv-SE')}</TableCell>
               <TableCell className="text-center">
                 <TrashButton id={row.award.id} onClick={trashHandler} loading={loading} />
