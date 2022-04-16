@@ -17,7 +17,10 @@ export class UserApi {
   }
 
   public list(ids: string[]) {
-    return this.api.post<UserDto[]>('/users/list', ids);
+    return this.api.post<UserDto[]>(
+      '/users/list',
+      ids.filter((i) => !!i)
+    );
   }
 
   public create(user: UserDto) {

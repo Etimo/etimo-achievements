@@ -1,3 +1,4 @@
+import { getContext } from '@etimo-achievements/express-middleware';
 import { CreateAwardService, DeleteAwardService, GetAwardService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { createdResponse, notImplementedResponse, okResponse, protectedEndpoint } from '../../utils';
@@ -131,8 +132,9 @@ export class AwardController {
 
   private createAward = async (req: Request, res: Response) => {
     const payload = req.body;
+    const { userId } = getContext();
 
-    const input = AwardMapper.toAward(payload);
+    const input = AwardMapper.toAward({ ...payload, awardedByUserId: userId });
     const award = await this.services.createAward.create(input);
 
     return createdResponse(res, '/awards', award);

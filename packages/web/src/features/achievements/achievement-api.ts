@@ -13,7 +13,10 @@ export class AchievementApi {
   }
 
   public list(ids: string[]) {
-    return this.api.post<AchievementDto[]>('/achievements/list', ids);
+    return this.api.post<AchievementDto[]>(
+      '/achievements/list',
+      ids.filter((i) => !!i)
+    );
   }
 
   public create(achievement: AchievementDto) {

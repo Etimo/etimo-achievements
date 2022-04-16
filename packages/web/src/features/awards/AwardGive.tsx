@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
 import { Form, FormSubmitButton } from '../../components/form';
-import FormDropdown from '../../components/form/FormDropdown';
+import FormSelect from '../../components/form/FormSelect';
 import Header from '../../components/Header';
 import { AchievementService } from '../achievements/achievement-service';
 import { achievementSelector } from '../achievements/achievement-slice';
@@ -21,6 +21,8 @@ const AwardGive: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const { achievements } = useAppSelector(achievementSelector);
   const { users } = useAppSelector(usersSelector);
+  const [userId, setUserId] = useState<string>();
+  const [achievementId, setAchievementId] = useState<string>();
   const awardApi = new AwardApi();
   const userService = new UserService();
   const achievementService = new AchievementService();
@@ -30,15 +32,33 @@ const AwardGive: React.FC = () => {
     userService.load();
   }, []);
 
+  const onChangeAchievement = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setAchievementId(e.target.value);
+  };
+
+  const onChangeUser = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setUserId(e.target.value);
+  };
+
+  const resetForm = () => {
+    reset();
+    setUserId(undefined);
+    setAchievementId(undefined);
+  };
+
   const onSubmit: SubmitHandler<AwardDto> = (award) => {
     setLoading(true);
+    if (!userId || !achievementId) {
+      setLoading(false);
+      return toast.error('Please select an achievement and a user');
+    }
     awardApi
-      .create(award)
+      .create({ userId, achievementId } as AwardDto)
       .wait()
       .then((response) => {
         setLoading(false);
         if (response.success) {
-          reset();
+          resetForm();
           toast.success('Award created successfully.');
         } else {
           toast.error('Award could not be created: ' + response.message);
@@ -50,20 +70,18 @@ const AwardGive: React.FC = () => {
     <div className="w-1/3 mx-auto">
       <Header>Give Award</Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormDropdown label="Achievement" selectText="Select an achievement">
-          {achievements.map((a) => (
-            <option value={a.id} key={a.id}>
-              {a.name}
-            </option>
-          ))}
-        </FormDropdown>
-        <FormDropdown label="User" selectText="Select a user">
-          {users.map((a) => (
-            <option value={a.id} key={a.id}>
-              {a.name}
-            </option>
-          ))}
-        </FormDropdown>
+        <FormSelect
+          label="Achievement"
+          text="Select an achievement"
+          options={achievements.map((a) => ({ value: a.id, label: a.name }))}
+          onChange={onChangeAchievement}
+        />
+        <FormSelect
+          label="User"
+          text="Select a user"
+          options={users.map((a) => ({ value: a.id, label: a.name }))}
+          onChange={onChangeUser}
+        />
         <FormSubmitButton label="Give" loading={loading} />
       </Form>
     </div>
