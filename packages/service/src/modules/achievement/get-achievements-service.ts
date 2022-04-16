@@ -16,6 +16,11 @@ export class GetAchievementsService {
     return paginate(achievements, skip, take, count);
   }
 
+  public async getManyByIds(ids: string[]): Promise<IAchievement[]> {
+    const achievements = await this.achievementRepo.getManyByIds(ids);
+    return achievements;
+  }
+
   public async get(id: string): Promise<IAchievement> {
     return this.achievementRepo.findById(id);
   }

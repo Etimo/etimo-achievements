@@ -12,6 +12,24 @@ export class AchievementRepository {
     });
   }
 
+  getAll(): Promise<IAchievement[]> {
+    return catchErrors(async () => {
+      return AchievementModel.query();
+    });
+  }
+
+  getMany(skip: number, take: number): Promise<IAchievement[]> {
+    return catchErrors(async () => {
+      return AchievementModel.query().limit(take).offset(skip);
+    });
+  }
+
+  getManyByIds(ids: string[]): Promise<IAchievement[]> {
+    return catchErrors(async () => {
+      return AchievementModel.query().whereIn('id', ids);
+    });
+  }
+
   findById(id: string): Promise<IAchievement> {
     return catchErrors(async () => {
       return AchievementModel.query().findById(id);
@@ -40,18 +58,6 @@ export class AchievementRepository {
   delete(id: string): Promise<number> {
     return catchErrors(async () => {
       return AchievementModel.query().deleteById(id);
-    });
-  }
-
-  getMany(skip: number, take: number): Promise<IAchievement[]> {
-    return catchErrors(async () => {
-      return AchievementModel.query().limit(take).offset(skip);
-    });
-  }
-
-  getAll(): Promise<IAchievement[]> {
-    return catchErrors(async () => {
-      return AchievementModel.query();
     });
   }
 }

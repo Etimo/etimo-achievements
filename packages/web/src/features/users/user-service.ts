@@ -1,7 +1,7 @@
 import { UserDto } from '@etimo-achievements/common';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { UserApi } from './user-api';
-import { deleteUser, profileSelector, setUsers, updateUser, usersSelector } from './user-slice';
+import { deleteUser, profileSelector, setUsers, updateUser, updateUsers, usersSelector } from './user-slice';
 
 export class UserService {
   private dispatch = useAppDispatch();
@@ -46,6 +46,15 @@ export class UserService {
       const user = await response.data();
       this.dispatch(updateUser(user));
       return user;
+    }
+  }
+
+  public async list(ids: string[]) {
+    const response = await this.api.list(ids).wait();
+    if (response.success) {
+      const users = await response.data();
+      this.dispatch(updateUsers(users));
+      return users;
     }
   }
 

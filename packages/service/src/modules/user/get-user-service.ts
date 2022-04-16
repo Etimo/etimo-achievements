@@ -11,9 +11,14 @@ export class GetUserService {
   }
 
   public async getMany(skip: number, take: number): Promise<PaginatedData<IUser>> {
-    const users = await this.userRepo.getAll(skip, take);
+    const users = await this.userRepo.getMany(skip, take);
     const count = await this.userRepo.count();
     return paginate(users, skip, take, count);
+  }
+
+  public async getManyByIds(ids: string[]): Promise<IUser[]> {
+    const users = await this.userRepo.getManyByIds(ids);
+    return users;
   }
 
   public async get(userId: string): Promise<IUser> {

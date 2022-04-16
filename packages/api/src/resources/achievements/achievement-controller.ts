@@ -5,7 +5,7 @@ import {
   UpdateAchievementService,
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
+import { badRequestResponse, createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AchievementMapper } from './achievement-mapper';
 
@@ -52,6 +52,29 @@ export class AchievementController {
      *       - Achievements
      */
     router.get('/achievements', protectedEndpoint(this.getAchievements, ['r:achievements']));
+
+    /**
+     * @openapi
+     * /achievements/list:
+     *   post:
+     *     summary: Get many achievements by list of ids
+     *     operationId: listAchievements
+     *     security:
+     *       - jwtCookie: []
+     *     requestBody:
+     *       required: true
+     *       content: *idListObject
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *achievementsContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
+     *     tags:
+     *       - Achievements
+     */
+    router.post('/achievements/list', protectedEndpoint(this.listAchievements, ['r:achievements']));
 
     /**
      * @openapi
@@ -162,13 +185,26 @@ export class AchievementController {
     return okResponse(res, dto);
   };
 
+  private listAchievements = async (req: Request, res: Response) => {
+    const payload = req.body as string[];
+
+    if (payload.length > 100) {
+      return badRequestResponse(res, 'Too many ids');
+    }
+
+    const achievements = await this.getAchievementService.getManyByIds(payload);
+    const dtos = achievements.map(AchievementMapper.toAchievementDto);
+
+    return okResponse(res, dtos);
+  };
+
   private createAchievements = async (req: Request, res: Response) => {
     const payload = req.body;
 
     const input = AchievementMapper.toAchievementDto(payload);
     const achievement = await this.createAchievementService.create(input);
 
-    return createdResponse('/achievements', achievement, res);
+    return createdResponse(res, '/achievements', achievement);
   };
 
   private updateAchievement = async (req: Request, res: Response) => {

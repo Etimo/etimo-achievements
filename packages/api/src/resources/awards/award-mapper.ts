@@ -8,6 +8,7 @@ export class AwardMapper {
       achievementId: award.achievementId,
       awardedByUserId: award.awardedByUserId,
       userId: award.userId,
+      createdAt: award.createdAt,
     };
   }
 

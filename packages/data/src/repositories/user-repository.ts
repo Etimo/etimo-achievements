@@ -11,9 +11,15 @@ export class UserRepository {
     });
   }
 
-  getAll(skip: number, take: number): Promise<IUser[]> {
+  getMany(skip: number, take: number): Promise<IUser[]> {
     return catchErrors(async () => {
       return UserModel.query().limit(take).offset(skip);
+    });
+  }
+
+  getManyByIds(ids: string[]): Promise<IUser[]> {
+    return catchErrors(async () => {
+      return UserModel.query().whereIn('id', ids);
     });
   }
 

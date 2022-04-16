@@ -257,6 +257,10 @@
           "achievementId": {
             "type": "string",
             "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
           }
         },
         "required": [
@@ -421,6 +425,59 @@
           },
           "401": {
             "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
+      }
+    },
+    "/achievements/list": {
+      "post": {
+        "summary": "Get many achievements by list of ids",
+        "operationId": "listAchievements",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "ID of the desired resource."
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Achievement"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
           }
         },
         "tags": [
@@ -927,6 +984,40 @@
         "tags": [
           "Awards"
         ]
+      },
+      "delete": {
+        "summary": "Delete an award",
+        "operationId": "deleteAward",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "awardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Awards"
+        ]
       }
     },
     "/probes/readiness": {
@@ -1200,6 +1291,59 @@
         },
         "tags": [
           "Users"
+        ]
+      }
+    },
+    "/users/list": {
+      "post": {
+        "summary": "Get many users by list of ids",
+        "operationId": "listAchievements",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "ID of the desired resource."
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Achievements"
         ]
       }
     },

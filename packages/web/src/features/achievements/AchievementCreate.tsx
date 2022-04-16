@@ -6,7 +6,7 @@ import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
 import { AchievementApi } from './achievement-api';
 
-const AchievementsCreate: React.FC = () => {
+const AchievementCreate: React.FC = () => {
   const {
     register,
     reset,
@@ -68,4 +68,4 @@ const AchievementsCreate: React.FC = () => {
   );
 };
 
-export default AchievementsCreate;
+export default AchievementCreate;

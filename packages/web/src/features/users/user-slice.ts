@@ -22,13 +22,23 @@ const userSlice = createSlice({
         state.users.push(action.payload);
       }
     },
+    updateUsers: (state: UserState, action: { payload: UserDto[] }) => {
+      action.payload.forEach((user: UserDto) => {
+        const index = state.users.findIndex((user: UserDto) => user.id === user.id);
+        if (index !== -1) {
+          state.users[index] = user;
+        } else {
+          state.users.push(user);
+        }
+      });
+    },
     deleteUser: (state: UserState, action: { payload: string }) => {
       state.users = state.users.filter((user: UserDto) => user.id !== action.payload);
     },
   },
 });
 
-export const { setUsers, updateUser, deleteUser } = userSlice.actions;
+export const { setUsers, updateUser, updateUsers, deleteUser } = userSlice.actions;
 
 export const profileSelector = (state: RootState) =>
   state.users.users.find((user: UserDto) => user.id === state.auth.userId);

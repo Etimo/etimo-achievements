@@ -13,7 +13,7 @@ type Props = {
   closeModal: () => void;
 };
 
-const AchievementsEditModal: React.FC<Props> = ({ achievementId, showModal, closeModal }) => {
+const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, closeModal }) => {
   const {
     register,
     reset,
@@ -94,4 +94,4 @@ const AchievementsEditModal: React.FC<Props> = ({ achievementId, showModal, clos
   ) : null;
 };
 
-export default AchievementsEditModal;
+export default AchievementEditModal;

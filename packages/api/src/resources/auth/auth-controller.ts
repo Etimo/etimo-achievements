@@ -179,7 +179,7 @@ export class AuthController {
     const service = OAuthServiceFactory.create(provider);
     const url = service.getAuthUrl();
 
-    return redirectResponse(url, res);
+    return redirectResponse(res, url);
   };
 
   private refresh = async (_req: Request, res: Response) => {

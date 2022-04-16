@@ -12,6 +12,13 @@ export class AchievementApi {
     return this.api.get<PaginatedData<AchievementDto>>('/achievements');
   }
 
+  public list(ids: string[]) {
+    return this.api.post<AchievementDto[]>(
+      '/achievements/list',
+      ids.filter((i) => !!i)
+    );
+  }
+
   public create(achievement: AchievementDto) {
     return this.api.post<{ achievementId: string }>('/achievements', achievement);
   }
