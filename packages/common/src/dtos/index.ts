@@ -1,6 +1,7 @@
 export * from './access-token-dto';
 export * from './achievement-dto';
 export * from './award-dto';
+export * from './highscore-dto';
 export * from './paginated-data';
 export * from './pagination-info';
 export * from './response-dto';

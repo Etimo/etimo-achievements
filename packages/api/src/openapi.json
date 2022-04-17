@@ -268,6 +268,31 @@
           "achievementId"
         ]
       },
+      "Highscore": {
+        "title": "Highscore",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "achievements": {
+            "type": "integer",
+            "description": "How many achievements have been awarded to the user",
+            "example": 25
+          },
+          "points": {
+            "type": "integer",
+            "description": "How many achievement points have been awarded to the user",
+            "example": 12000
+          }
+        }
+      },
       "User": {
         "title": "User",
         "type": "object",
@@ -1010,6 +1035,59 @@
           },
           "400": {
             "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Awards"
+        ]
+      }
+    },
+    "/highscores": {
+      "get": {
+        "summary": "Get a list of awards",
+        "operationId": "getHighscores",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10000
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Highscore"
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "The request was unauthorized."

@@ -21,6 +21,7 @@ import {
   UserController,
   VersionController,
 } from './resources';
+import { HighscoreController } from './resources/highscore';
 import { ProbeController } from './resources/probes';
 
 export default class AchievementsServer {
@@ -123,6 +124,7 @@ export default class AchievementsServer {
     this.express.use(this.root, new AchievementController().routes);
     this.express.use(this.root, new AuthController().routes);
     this.express.use(this.root, new AwardController().routes);
+    this.express.use(this.root, new HighscoreController().routes);
     this.express.use(this.root, new ProbeController().routes);
     this.express.use(this.root, new SlackController().routes);
     this.express.use(this.root, new UserController().routes);

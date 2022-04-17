@@ -53,9 +53,15 @@ export class AwardRepository {
     });
   }
 
-  getAll(skip: number, take: number): Promise<IAward[]> {
+  getMany(skip: number, take: number): Promise<IAward[]> {
     return catchErrors(async () => {
       return AwardModel.query().limit(take).offset(skip);
+    });
+  }
+
+  getAll(): Promise<IAward[]> {
+    return catchErrors(async () => {
+      return AwardModel.query();
     });
   }
 }
