@@ -8,7 +8,7 @@ import LoginCallback from '../features/auth/LoginCallback';
 import Logout from '../features/auth/Logout';
 import AwardGive from '../features/awards/AwardGive';
 import AwardList from '../features/awards/AwardList';
-import Ranking from '../features/ranking/Ranking';
+import Highscores from '../features/highscore/Highscore';
 import UserCreate from '../features/users/UserCreate';
 import UserList from '../features/users/UserList';
 import UserProfile from '../features/users/UserProfile';
@@ -26,7 +26,7 @@ export enum Routes {
   UserProfile = '/profile',
   UserList = '/users/list',
   UserCreate = '/users/create',
-  Ranking = '/ranking',
+  Highscores = '/highscores',
 }
 
 const Router = (): JSX.Element => {
@@ -45,7 +45,7 @@ const Router = (): JSX.Element => {
         <Route path={Routes.UserProfile} element={<UserProfile />} />
         <Route path={Routes.UserList} element={<UserList />} />
         <Route path={Routes.UserCreate} element={<UserCreate />} />
-        <Route path={Routes.Ranking} element={<Ranking />} />
+        <Route path={Routes.Highscores} element={<Highscores />} />
       </Route>
     </ReactRoutes>
   );
