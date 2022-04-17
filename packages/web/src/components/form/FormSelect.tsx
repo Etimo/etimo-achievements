@@ -1,26 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import CardRow from '../cards/CardRow';
 
 type Props = {
   label: string;
   text?: string;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  bindValue: any;
+  onChange: (value: any) => void;
   options: { value: string; label: string }[];
 };
 
-const FormSelect: React.FC<Props> = ({ label, text, onChange, options }) => {
-  const [value, setValue] = useState(text ?? 'Select a value');
-
+const FormSelect: React.FC<Props> = ({ label, text, bindValue, onChange, options }) => {
   return (
     <CardRow label={label}>
       <div className="w-full">
         <div className="relative">
           <select
-            className="block appearance-none w-full bg-white-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            value={value}
+            className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            value={bindValue}
             onChange={(e) => {
-              setValue(e.target.value);
-              onChange(e);
+              onChange(e.target.value);
             }}
           >
             <option key="" value="">

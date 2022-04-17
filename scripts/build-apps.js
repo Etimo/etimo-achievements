@@ -18,7 +18,7 @@ async function buildApps() {
     const cwd = `${packageDir}/${packageName}`;
     const files = await FileHound.create()
       .paths(cwd)
-      .ext('.ts', '.js', '.tsx', '.jsx', '.json')
+      .ext('.ts', '.js', '.tsx', '.jsx', '.json', '.yml')
       .modified('< 2 minutes')
       .find();
 

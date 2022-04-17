@@ -1,3 +1,4 @@
+import { uniq } from '@etimo-achievements/common';
 import { useAppDispatch } from '../../app/store';
 import { AchievementService } from '../achievements/achievement-service';
 import { UserService } from '../users/user-service';
@@ -16,10 +17,10 @@ export class AwardService {
     if (response.success) {
       const awards = (await response.data()).data;
 
-      const achievementIds = awards.map((a) => a.achievementId);
+      const achievementIds = uniq(awards.map((a) => a.achievementId));
       const achievementPromise = this.achievementService.list(achievementIds);
 
-      const userIds = [...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)];
+      const userIds = uniq([...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)]);
       const usersPromise = this.userService.list(userIds);
 
       await Promise.allSettled([achievementPromise, usersPromise]);

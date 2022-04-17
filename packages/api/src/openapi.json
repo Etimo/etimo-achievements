@@ -350,7 +350,7 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
+              "maximum": 10000
             }
           }
         ],
@@ -855,7 +855,7 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
+              "maximum": 10000
             }
           }
         ],
@@ -1073,7 +1073,7 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
+              "maximum": 10000
             }
           }
         ],
@@ -1215,7 +1215,7 @@
             "schema": {
               "type": "integer",
               "minimum": 1,
-              "maximum": 50
+              "maximum": 10000
             }
           }
         ],

@@ -8,8 +8,8 @@ export class AwardApi {
     return this.api.get<AwardDto>(`/awards/${id}`);
   }
 
-  public getMany() {
-    return this.api.get<PaginatedData<AwardDto>>('/awards');
+  public getMany(skip: number = 0, take: number = 10) {
+    return this.api.get<PaginatedData<AwardDto>>(`/awards?skip=${skip}&take=${take}`);
   }
 
   public create(award: AwardDto) {

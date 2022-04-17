@@ -116,7 +116,7 @@ export class AwardController {
   }
 
   private getAwards = async (req: Request, res: Response) => {
-    const [skip, take] = getPaginationOptions(req);
+    const [skip, take] = getPaginationOptions(req, 10000);
     const awards = await this.services.getAward.getMany(skip, take);
     const output = {
       ...awards,
