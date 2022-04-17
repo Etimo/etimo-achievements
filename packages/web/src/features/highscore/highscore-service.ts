@@ -11,7 +11,7 @@ export class HighscoreService {
   private userService = new UserService();
 
   public async load(): Promise<HighscoreComposite[]> {
-    const response = await this.api.getMany(0, 10000).wait();
+    const response = await this.api.getMany().wait();
     if (response.success) {
       const highscores = (await response.data()).data;
 
