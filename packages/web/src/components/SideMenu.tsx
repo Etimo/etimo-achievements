@@ -63,8 +63,8 @@ const SideMenu: React.FC = () => {
               </MenuItem>
             </SubMenu>
             <MenuItem icon={<FontAwesomeIcon icon={faRankingStar} />}>
-              Ranking
-              <Link to="/ranking" />
+              Highscores
+              <Link to={Routes.Highscores} />
             </MenuItem>
           </Menu>
         </>

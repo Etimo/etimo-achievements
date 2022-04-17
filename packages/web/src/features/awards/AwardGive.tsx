@@ -3,8 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
-import { Form, FormSubmitButton } from '../../components/form';
-import FormSelect from '../../components/form/FormSelect';
+import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
 import { AchievementService } from '../achievements/achievement-service';
 import { achievementSelector } from '../achievements/achievement-slice';
@@ -13,11 +12,7 @@ import { usersSelector } from '../users/user-slice';
 import { AwardApi } from './award-api';
 
 const AwardGive: React.FC = () => {
-  const {
-    reset,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AwardDto>();
+  const { handleSubmit } = useForm<AwardDto>();
   const [loading, setLoading] = useState(false);
   const { achievements } = useAppSelector(achievementSelector);
   const { users } = useAppSelector(usersSelector);
@@ -32,21 +27,12 @@ const AwardGive: React.FC = () => {
     userService.load();
   }, []);
 
-  const onChangeAchievement = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setAchievementId(e.target.value);
-  };
-
-  const onChangeUser = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setUserId(e.target.value);
-  };
-
   const resetForm = () => {
-    reset();
-    setUserId(undefined);
-    setAchievementId(undefined);
+    setUserId('');
+    setAchievementId('');
   };
 
-  const onSubmit: SubmitHandler<AwardDto> = (award) => {
+  const onSubmit: SubmitHandler<AwardDto> = () => {
     setLoading(true);
     if (!userId || !achievementId) {
       setLoading(false);
@@ -74,13 +60,15 @@ const AwardGive: React.FC = () => {
           label="Achievement"
           text="Select an achievement"
           options={achievements.map((a) => ({ value: a.id, label: a.name }))}
-          onChange={onChangeAchievement}
+          bindValue={achievementId}
+          onChange={setAchievementId}
         />
         <FormSelect
           label="User"
           text="Select a user"
           options={users.map((a) => ({ value: a.id, label: a.name }))}
-          onChange={onChangeUser}
+          bindValue={userId}
+          onChange={setUserId}
         />
         <FormSubmitButton label="Give" loading={loading} />
       </Form>

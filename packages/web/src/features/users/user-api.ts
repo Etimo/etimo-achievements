@@ -1,4 +1,4 @@
-import { PaginatedData, UserDto } from '@etimo-achievements/common';
+import { PaginatedData, uniq, UserDto } from '@etimo-achievements/common';
 import Api from '../../common/utils/api';
 
 export class UserApi {
@@ -12,15 +12,12 @@ export class UserApi {
     return this.api.get<UserDto>('/profile');
   }
 
-  public getMany() {
-    return this.api.get<PaginatedData<UserDto>>('/users');
+  public getMany(skip: number = 0, take: number = 10) {
+    return this.api.get<PaginatedData<UserDto>>(`/users?skip=${skip}&take=${take}`);
   }
 
   public list(ids: string[]) {
-    return this.api.post<UserDto[]>(
-      '/users/list',
-      ids.filter((i) => !!i)
-    );
+    return this.api.post<UserDto[]>('/users/list', uniq(ids.filter((i) => !!i)));
   }
 
   public create(user: UserDto) {

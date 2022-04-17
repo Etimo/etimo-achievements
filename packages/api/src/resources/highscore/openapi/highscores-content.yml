@@ -1,0 +1,6 @@
+x-template: &highscoresContent
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/Highscore'

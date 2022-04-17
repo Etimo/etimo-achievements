@@ -11,8 +11,8 @@ export class GetAwardService {
   }
 
   public async getMany(skip: number, take: number): Promise<PaginatedData<IAward>> {
-    const users = await this.awardRepo.getAll(skip, take);
+    const awards = await this.awardRepo.getMany(skip, take);
     const count = await this.awardRepo.count();
-    return paginate(users, skip, take, count);
+    return paginate(awards, skip, take, count);
   }
 }
