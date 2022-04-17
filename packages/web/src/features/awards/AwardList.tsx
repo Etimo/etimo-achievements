@@ -42,7 +42,7 @@ const AwardList: React.FC = () => {
           <TableColumn>Awarded By</TableColumn>
         </TableHeader>
         <TableBody>
-          {[...composites].map((row) => (
+          {composites.map((row) => (
             <TableRow key={row.award.id}>
               <TableCell>{row.achievement.name}</TableCell>
               <TableCell>{row.awardedTo.name}</TableCell>

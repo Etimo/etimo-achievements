@@ -14,5 +14,5 @@
       "path": "../types"
     }
   ],
-  "include": ["./src", "./assets", "../common/src/uniq.ts"]
+  "include": ["./src", "./assets"]
 }
