@@ -1,15 +1,14 @@
-import { AchievementRepository } from '@etimo-achievements/data';
 import { IAchievement, INewAchievement } from '@etimo-achievements/types';
-import { ServiceOptions } from '../common/types';
+import { IContext } from '../..';
 
 export class CreateAchievementService {
-  private achievementRepo: AchievementRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options: ServiceOptions) {
-    this.achievementRepo = options.achievementRepository ?? new AchievementRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async create(achievement: INewAchievement): Promise<IAchievement> {
-    return await this.achievementRepo.create(achievement);
+    return await this.repos.achievement.create(achievement);
   }
 }

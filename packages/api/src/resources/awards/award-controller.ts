@@ -1,4 +1,4 @@
-import { CreateAwardService, DeleteAwardService, GetAwardService } from '@etimo-achievements/service';
+import { DeleteAwardService, GetAwardService, GiveAwardService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { createdResponse, getContext, notImplementedResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
@@ -101,7 +101,7 @@ export class AwardController {
   private getAwards = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req, 10000);
 
-    const service = new GetAwardService({ context: getContext() });
+    const service = new GetAwardService(getContext());
     const awards = await service.getMany(skip, take);
     const output = {
       ...awards,
@@ -119,7 +119,7 @@ export class AwardController {
     const payload = req.body;
     const { userId } = getContext();
 
-    const service = new CreateAwardService({ context: getContext() });
+    const service = new GiveAwardService(getContext());
     const input = AwardMapper.toAward({ ...payload, awardedByUserId: userId });
     const award = await service.create(input);
 
@@ -129,7 +129,7 @@ export class AwardController {
   private deleteAward = async (req: Request, res: Response) => {
     const awardId = req.params.awardId;
 
-    const service = new DeleteAwardService({ context: getContext() });
+    const service = new DeleteAwardService(getContext());
     await service.delete(awardId);
 
     return okResponse(res);

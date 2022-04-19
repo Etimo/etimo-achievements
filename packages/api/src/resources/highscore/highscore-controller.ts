@@ -35,7 +35,7 @@ export class HighscoreController {
   private getHighscores = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
 
-    const service = new GetHighscoreService({ context: getContext() });
+    const service = new GetHighscoreService(getContext());
     const awards = await service.get(skip, take);
     const output = {
       ...awards,

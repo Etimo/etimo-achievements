@@ -1,27 +1,22 @@
 import { paginate, PaginatedData, uniq } from '@etimo-achievements/common';
-import { AchievementRepository, AwardRepository, UserRepository } from '@etimo-achievements/data';
 import { IHighscore } from '@etimo-achievements/types';
-import { ServiceOptions } from '../common/types';
+import { IContext } from '../../context';
 
 export class GetHighscoreService {
-  private achievementRepo: AchievementRepository;
-  private awardRepo: AwardRepository;
-  private userRepo: UserRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options: ServiceOptions) {
-    this.achievementRepo = options.achievementRepository ?? new AchievementRepository();
-    this.awardRepo = options.awardRepository ?? new AwardRepository();
-    this.userRepo = options.userRepository ?? new UserRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async get(skip: number, take: number): Promise<PaginatedData<IHighscore>> {
-    const awards = await this.awardRepo.getMany(skip, take);
+    const awards = await this.repos.award.getMany(skip, take);
 
     const userIds = uniq(awards.map((a) => a.userId));
-    const users = await this.userRepo.getManyByIds(userIds);
+    const users = await this.repos.user.getManyByIds(userIds);
 
     const achievementIds = uniq(awards.map((a) => a.achievementId));
-    const achievements = await this.achievementRepo.getManyByIds(achievementIds);
+    const achievements = await this.repos.achievement.getManyByIds(achievementIds);
 
     const highscores: IHighscore[] = [];
     for (const user of users) {

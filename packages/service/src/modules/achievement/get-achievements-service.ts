@@ -1,27 +1,26 @@
 import { paginate, PaginatedData } from '@etimo-achievements/common';
-import { AchievementRepository } from '@etimo-achievements/data';
 import { IAchievement } from '@etimo-achievements/types';
-import { ServiceOptions } from '../common/types';
+import { IContext } from '../..';
 
-export class GetAchievementsService {
-  private achievementRepo: AchievementRepository;
+export class GetAchievementService {
+  private repos: IContext['repositories'];
 
-  constructor(options: ServiceOptions) {
-    this.achievementRepo = options.achievementRepository ?? new AchievementRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async getMany(skip: number, take: number): Promise<PaginatedData<IAchievement>> {
-    const achievements = await this.achievementRepo.getMany(skip, take);
-    const count = await this.achievementRepo.count();
+    const achievements = await this.repos.achievement.getMany(skip, take);
+    const count = await this.repos.achievement.count();
     return paginate(achievements, skip, take, count);
   }
 
   public async getManyByIds(ids: string[]): Promise<IAchievement[]> {
-    const achievements = await this.achievementRepo.getManyByIds(ids);
+    const achievements = await this.repos.achievement.getManyByIds(ids);
     return achievements;
   }
 
   public async get(id: string): Promise<IAchievement> {
-    return this.achievementRepo.findById(id);
+    return this.repos.achievement.findById(id);
   }
 }

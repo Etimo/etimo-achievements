@@ -1,28 +1,25 @@
 import { Logger } from '@etimo-achievements/common';
-import { AccessTokenRepository, RefreshTokenRepository } from '@etimo-achievements/data';
 import { JWT } from '@etimo-achievements/types';
-import { ServiceOptions } from '..';
+import { IContext } from '../..';
 
 export class LogoutService {
-  private accessTokenRepo: AccessTokenRepository;
-  private refreshTokenRepo: RefreshTokenRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options: ServiceOptions) {
-    this.accessTokenRepo = options.accessTokenRepository ?? new AccessTokenRepository();
-    this.refreshTokenRepo = options.refreshTokenRepository ?? new RefreshTokenRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async logout(jwt: JWT, refreshTokenId?: string): Promise<void> {
     Logger.log(`Logging out user ${jwt.sub}`);
 
-    const accessToken = await this.accessTokenRepo.findById(jwt.jti);
-    await this.accessTokenRepo.update({ ...accessToken, disabled: true });
+    const accessToken = await this.repos.accessToken.findById(jwt.jti);
+    await this.repos.accessToken.update({ ...accessToken, disabled: true });
 
     Logger.log(`Access token disabled: ${jwt.jti}`);
 
     if (refreshTokenId) {
-      const refreshToken = await this.refreshTokenRepo.findById(refreshTokenId);
-      await this.refreshTokenRepo.update({ ...refreshToken, disabled: true });
+      const refreshToken = await this.repos.refreshToken.findById(refreshTokenId);
+      await this.repos.refreshToken.update({ ...refreshToken, disabled: true });
 
       Logger.log(`Refresh token disabled: ${refreshTokenId}`);
     }

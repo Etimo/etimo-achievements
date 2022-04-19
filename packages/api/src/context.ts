@@ -1,8 +1,20 @@
 import { Logger, UnauthorizedError, uuid } from '@etimo-achievements/common';
-import { NotifyServiceFactory } from '@etimo-achievements/service';
-import { ContextOptions, IContext, ILogger, INotifyService, JWT } from '@etimo-achievements/types';
+import {
+  AccessTokenRepository,
+  AchievementRepository,
+  AwardRepository,
+  RefreshTokenRepository,
+  UserRepository,
+} from '@etimo-achievements/data';
+import { IContext, NotifyServiceFactory } from '@etimo-achievements/service';
+import { ILogger, INotifyService, JWT } from '@etimo-achievements/types';
 
 let count: number = 0;
+
+type ContextOptions = {
+  logger?: ILogger;
+  notifier: INotifyService;
+};
 
 export class Context implements IContext {
   public logger: ILogger;
@@ -17,11 +29,23 @@ export class Context implements IContext {
 
   constructor(requestId?: string, options?: ContextOptions) {
     this.logger = options?.logger ?? new Logger();
-    this.notifier = options?.notifier ?? NotifyServiceFactory.create('slack', { context: this });
+    this.notifier = options?.notifier ?? NotifyServiceFactory.create('slack', this);
     this.requestId = requestId ?? uuid();
     this.requestDate = new Date();
     this.timestamp = new Date().toTimeString().split(' ')[0];
     count++;
+  }
+
+  private _repositories: IContext['repositories'] = {
+    accessToken: new AccessTokenRepository(),
+    achievement: new AchievementRepository(),
+    award: new AwardRepository(),
+    refreshToken: new RefreshTokenRepository(),
+    user: new UserRepository(),
+  };
+
+  public get repositories() {
+    return this._repositories;
   }
 
   public get userId() {

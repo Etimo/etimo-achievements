@@ -1,7 +1,6 @@
 import {
   AwardSlackAchievementsService,
   CreateSlackAchievementsService,
-  Options,
   SlackInteractService,
   SyncSlackUsersService,
 } from '@etimo-achievements/service';
@@ -9,30 +8,7 @@ import { Request, Response, Router } from 'express';
 import { apiKeyEndpoint, getContext } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 
-export type SlackControllerOptions = {
-  awardSlackAchievementsService?: AwardSlackAchievementsService;
-  createSlackAchievementsService?: CreateSlackAchievementsService;
-  createSlackInteractService?: SlackInteractService;
-  syncSlackUsersService?: SyncSlackUsersService;
-} & Options;
-
 export class SlackController {
-  private awardSlackAchievementsService: AwardSlackAchievementsService;
-  private createSlackAchievementsService: CreateSlackAchievementsService;
-  private slackInteractService: SlackInteractService;
-  private syncSlackUsersService: SyncSlackUsersService;
-
-  constructor() {
-    const options: SlackControllerOptions = { context: getContext() };
-
-    this.awardSlackAchievementsService =
-      options.awardSlackAchievementsService ?? new AwardSlackAchievementsService(options);
-    this.createSlackAchievementsService =
-      options.createSlackAchievementsService ?? new CreateSlackAchievementsService(options);
-    this.slackInteractService = options.createSlackInteractService ?? new SlackInteractService(options);
-    this.syncSlackUsersService = options.syncSlackUsersService ?? new SyncSlackUsersService(options);
-  }
-
   public get routes(): Router {
     const router = Router();
 
@@ -136,25 +112,32 @@ export class SlackController {
   private awardAchievement = async (req: Request, res: Response) => {
     const triggerId = req.body.trigger_id;
     const channelId = req.body.channel_id;
-    await this.awardSlackAchievementsService.showModal(triggerId, channelId);
+
+    const service = new AwardSlackAchievementsService(getContext());
+    await service.showModal(triggerId, channelId);
 
     return res.status(200).send();
   };
 
   private interact = async (req: Request, res: Response) => {
     const payload = JSON.parse(req.body.payload);
-    await this.slackInteractService.handleInteract(payload);
+
+    const service = new SlackInteractService(getContext());
+    await service.handleInteract(payload);
+
     return res.status(200).send();
   };
 
   private displayAchievementModal = async (req: Request, res: Response) => {
-    await this.createSlackAchievementsService.getModal(req.body.trigger_id);
+    const service = new CreateSlackAchievementsService(getContext());
+    await service.getModal(req.body.trigger_id);
 
     return res.status(200).send();
   };
 
   private syncUsers = async (req: Request, res: Response) => {
-    await this.syncSlackUsersService.syncUsers();
+    const service = new SyncSlackUsersService(getContext());
+    await service.syncUsers();
 
     return res.status(200).send();
   };

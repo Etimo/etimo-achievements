@@ -1,4 +1,4 @@
-import { IContext } from '@etimo-achievements/types';
+import { IContext } from '@etimo-achievements/service';
 import httpContext from 'express-http-context';
 
 export function getContext(): IContext {

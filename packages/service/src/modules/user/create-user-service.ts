@@ -1,15 +1,14 @@
-import { UserRepository } from '@etimo-achievements/data';
 import { INewUser, IUser } from '@etimo-achievements/types';
-import { ServiceOptions } from '../common/types';
+import { IContext } from '../../context';
 
 export class CreateUserService {
-  private userRepo: UserRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options: ServiceOptions) {
-    this.userRepo = options.userRepository ?? new UserRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async create(user: INewUser): Promise<IUser> {
-    return await this.userRepo.create(user);
+    return await this.repos.user.create(user);
   }
 }

@@ -184,7 +184,7 @@ export class AuthController {
   private refresh = async (_req: Request, res: Response) => {
     const { refreshTokenId, refreshTokenKey } = getContext();
     if (refreshTokenId && refreshTokenKey) {
-      const service = new RefreshLoginService({ context: getContext() });
+      const service = new RefreshLoginService(getContext());
       const loginResponse = await service.refresh(refreshTokenId, refreshTokenKey);
       const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
@@ -199,7 +199,7 @@ export class AuthController {
   private logout = async (_req: Request, res: Response) => {
     const { jwt, refreshTokenId } = getContext();
     if (jwt) {
-      const service = new LogoutService({ context: getContext() });
+      const service = new LogoutService(getContext());
       await service.logout(jwt, refreshTokenId);
     }
 
@@ -226,7 +226,7 @@ export class AuthController {
     const { provider } = req.params;
     const code = req.query.code?.toString();
 
-    const service = new LoginService(provider, { context: getContext() });
+    const service = new LoginService(provider, getContext());
     const loginResponse = await service.login(code!);
     const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 

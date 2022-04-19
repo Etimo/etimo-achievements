@@ -1,14 +1,13 @@
-import { UserRepository } from '@etimo-achievements/data';
-import { ServiceOptions } from '../common/types';
+import { IContext } from '../../context';
 
 export class DeleteUserService {
-  private userRepo: UserRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options: ServiceOptions) {
-    this.userRepo = options.userRepository ?? new UserRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async delete(userId: string) {
-    await this.userRepo.delete(userId);
+    await this.repos.user.delete(userId);
   }
 }

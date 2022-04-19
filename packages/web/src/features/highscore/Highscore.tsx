@@ -1,3 +1,4 @@
+import { formatNumber } from '@etimo-achievements/common';
 import React, { useEffect } from 'react';
 import { useAppSelector } from '../../app/store';
 import Header from '../../components/Header';
@@ -8,7 +9,6 @@ import { highscoreSelector } from './highscore-slice';
 const Highscores: React.FC = () => {
   const { highscores } = useAppSelector(highscoreSelector);
   const highscoreService = new HighscoreService();
-  const formatNumber = Intl.NumberFormat('sv-SE').format;
 
   useEffect(() => {
     highscoreService.load();

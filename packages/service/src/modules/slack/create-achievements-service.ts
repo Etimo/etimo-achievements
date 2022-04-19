@@ -1,9 +1,9 @@
-import { ServiceOptions } from '..';
+import { IContext } from '../..';
 import { CreateAchievementModal } from './modals/create-achievement-modal-open';
 import { openSlackView } from './utils';
 
 export class CreateSlackAchievementsService {
-  constructor(options: ServiceOptions) {}
+  constructor(_context: IContext) {}
 
   public async getModal(triggerId: string) {
     const createAchievementModal = CreateAchievementModal;

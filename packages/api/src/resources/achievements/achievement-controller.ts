@@ -1,7 +1,7 @@
 import {
   CreateAchievementService,
   DeleteAchievementService,
-  GetAchievementsService,
+  GetAchievementService,
   UpdateAchievementService,
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
@@ -156,7 +156,7 @@ export class AchievementController {
   private getAchievements = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
 
-    const service = new GetAchievementsService({ context: getContext() });
+    const service = new GetAchievementService(getContext());
     const achievements = await service.getMany(skip, take);
     const output = {
       ...achievements,
@@ -169,7 +169,7 @@ export class AchievementController {
   private getAchievement = async (req: Request, res: Response) => {
     const achievementId = req.params.achievementId;
 
-    const service = new GetAchievementsService({ context: getContext() });
+    const service = new GetAchievementService(getContext());
     const achievement = await service.get(achievementId);
     const dto = AchievementMapper.toAchievementDto(achievement);
 
@@ -183,7 +183,7 @@ export class AchievementController {
       return badRequestResponse(res, 'Too many ids');
     }
 
-    const service = new GetAchievementsService({ context: getContext() });
+    const service = new GetAchievementService(getContext());
     const achievements = await service.getManyByIds(payload);
     const dtos = achievements.map(AchievementMapper.toAchievementDto);
 
@@ -193,7 +193,7 @@ export class AchievementController {
   private createAchievements = async (req: Request, res: Response) => {
     const payload = req.body;
 
-    const service = new CreateAchievementService({ context: getContext() });
+    const service = new CreateAchievementService(getContext());
     const input = AchievementMapper.toAchievementDto(payload);
     const achievement = await service.create(input);
 
@@ -204,7 +204,7 @@ export class AchievementController {
     const achievementId = req.params.achievementId;
     const payload = req.body;
 
-    const service = new UpdateAchievementService({ context: getContext() });
+    const service = new UpdateAchievementService(getContext());
     const input = AchievementMapper.toAchievementDto(payload);
     await service.update({ ...input, id: achievementId });
 
@@ -214,7 +214,7 @@ export class AchievementController {
   private deleteAchievement = async (req: Request, res: Response) => {
     const achievementId = req.params.achievementId;
 
-    const service = new DeleteAchievementService({ context: getContext() });
+    const service = new DeleteAchievementService(getContext());
     await service.delete(achievementId);
 
     return okResponse(res);

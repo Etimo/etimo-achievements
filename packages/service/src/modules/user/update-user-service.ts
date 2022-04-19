@@ -1,15 +1,14 @@
-import { UserRepository } from '@etimo-achievements/data';
 import { IUser } from '@etimo-achievements/types';
-import { ServiceOptions } from '../common/types';
+import { IContext } from '../../context';
 
 export class UpdateUserService {
-  private userRepo: UserRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options: ServiceOptions) {
-    this.userRepo = options.userRepository ?? new UserRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async update(user: IUser) {
-    await this.userRepo.update(user);
+    await this.repos.user.update(user);
   }
 }

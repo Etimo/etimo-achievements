@@ -1,25 +1,18 @@
-import { AchievementRepository, UserRepository } from '@etimo-achievements/data';
+import { getEnvVariable } from '@etimo-achievements/common';
 import { IAchievement, INewAward } from '@etimo-achievements/types';
 import { ChatPostMessageArguments, WebClient } from '@slack/web-api';
-import { CreateAwardService, ServiceOptions } from '..';
-
-type AwardSlackAchivementInteractServiceOptions = {
-  createAwardService?: CreateAwardService;
-} & ServiceOptions;
+import { GiveAwardService } from '..';
+import { IContext } from '../..';
 
 export class AwardSlackAchievementsInteractService {
-  private achievementRepo: AchievementRepository;
-  private createAwardService: CreateAwardService;
-  private userRepo: UserRepository;
+  private giveAwardService: GiveAwardService;
+  private repos: IContext['repositories'];
   private web: WebClient;
 
-  constructor(options: AwardSlackAchivementInteractServiceOptions) {
-    this.achievementRepo = options.achievementRepository ?? new AchievementRepository();
-    this.userRepo = options.userRepository ?? new UserRepository();
-    this.createAwardService = options.createAwardService ?? new CreateAwardService(options);
-
-    const token = process.env.SLACK_TOKEN;
-    this.web = new WebClient(token);
+  constructor(context: IContext) {
+    this.repos = context.repositories;
+    this.giveAwardService = new GiveAwardService(context);
+    this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
   }
 
   public async handleInteract(payload: any) {
@@ -30,9 +23,9 @@ export class AwardSlackAchievementsInteractService {
     const achievementId = values['achievement-input']['static_select-action'].selected_option.value;
     const toUserSlackHandles = values['user-input']['multi_users_select-action'].selected_users;
 
-    const achievement = await this.achievementRepo.findById(achievementId);
-    const fromUser = await this.userRepo.findBySlackHandle(fromUserSlackHandle);
-    const toUsers = await this.userRepo.findBySlackHandles(toUserSlackHandles);
+    const achievement = await this.repos.achievement.findById(achievementId);
+    const fromUser = await this.repos.user.findBySlackHandle(fromUserSlackHandle);
+    const toUsers = await this.repos.user.findBySlackHandles(toUserSlackHandles);
 
     // TODO: Improve error handling.
     if (achievement == null) {
@@ -52,7 +45,7 @@ export class AwardSlackAchievementsInteractService {
         }
     );
 
-    await this.createAwardService.createMultiple(awards);
+    await Promise.allSettled(awards.map((award) => this.giveAwardService.create(award)));
 
     await this.postAwardMessage(channel, fromUserSlackHandle, toUserSlackHandles, achievement);
   }

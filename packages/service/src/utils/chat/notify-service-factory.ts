@@ -1,12 +1,12 @@
 import { INotifyService } from '@etimo-achievements/types';
-import { ServiceOptions } from '../..';
+import { IContext } from '../..';
 import { NotifySlackService } from './notify-slack-service';
 
 export type NotifyServiceOptions = {
   channelHigh?: string;
   channelMedium?: string;
   channelLow?: string;
-} & ServiceOptions;
+} & IContext;
 
 export class NotifyServiceFactory {
   public static create(type: string, options: NotifyServiceOptions): INotifyService {

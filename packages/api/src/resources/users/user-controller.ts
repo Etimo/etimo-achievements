@@ -190,7 +190,7 @@ export class UserController {
   private getUsers = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
 
-    const service = new GetUserService({ context: getContext() });
+    const service = new GetUserService(getContext());
     const users = await service.getMany(skip, take);
     const output = { ...users, data: users.data.map(UserMapper.toUserDto) };
 
@@ -204,7 +204,7 @@ export class UserController {
       return badRequestResponse(res, 'Too many ids');
     }
 
-    const service = new GetUserService({ context: getContext() });
+    const service = new GetUserService(getContext());
     const users = await service.getManyByIds(payload);
     const dtos = users.map(UserMapper.toUserDto);
 
@@ -214,7 +214,7 @@ export class UserController {
   private getUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
 
-    const service = new GetUserService({ context: getContext() });
+    const service = new GetUserService(getContext());
     const user = await service.get(userId);
     const dto = UserMapper.toUserDto(user);
 
@@ -224,7 +224,7 @@ export class UserController {
   private getProfile = async (_req: Request, res: Response) => {
     const { userId } = getContext();
 
-    const service = new GetUserService({ context: getContext() });
+    const service = new GetUserService(getContext());
     const user = await service.get(userId);
     const dto = UserMapper.toUserDto(user);
 
@@ -234,7 +234,7 @@ export class UserController {
   private createUser = async (req: Request, res: Response) => {
     const payload = req.body;
 
-    const service = new CreateUserService({ context: getContext() });
+    const service = new CreateUserService(getContext());
     const input = UserMapper.toUser(payload);
     const user = await service.create(input);
 
@@ -245,7 +245,7 @@ export class UserController {
     const payload = req.body;
     const userId = req.params.userId;
 
-    const service = new UpdateUserService({ context: getContext() });
+    const service = new UpdateUserService(getContext());
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
 
@@ -256,7 +256,7 @@ export class UserController {
     const { userId } = getContext();
     const payload = req.body;
 
-    const service = new UpdateUserService({ context: getContext() });
+    const service = new UpdateUserService(getContext());
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
 
@@ -266,7 +266,7 @@ export class UserController {
   private deleteUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
 
-    const service = new DeleteUserService({ context: getContext() });
+    const service = new DeleteUserService(getContext());
     await service.delete(userId);
 
     return okResponse(res);
