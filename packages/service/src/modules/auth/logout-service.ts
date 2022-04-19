@@ -7,9 +7,9 @@ export class LogoutService {
   private accessTokenRepo: AccessTokenRepository;
   private refreshTokenRepo: RefreshTokenRepository;
 
-  constructor(options?: ServiceOptions) {
-    this.accessTokenRepo = options?.accessTokenRepository ?? new AccessTokenRepository();
-    this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
+  constructor(options: ServiceOptions) {
+    this.accessTokenRepo = options.accessTokenRepository ?? new AccessTokenRepository();
+    this.refreshTokenRepo = options.refreshTokenRepository ?? new RefreshTokenRepository();
   }
 
   public async logout(jwt: JWT, refreshTokenId?: string): Promise<void> {

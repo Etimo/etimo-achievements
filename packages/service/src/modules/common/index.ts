@@ -1,1 +1,1 @@
-export * from './service-options';
+export * from './types';

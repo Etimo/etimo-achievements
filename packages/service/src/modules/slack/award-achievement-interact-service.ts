@@ -3,9 +3,9 @@ import { IAchievement, INewAward } from '@etimo-achievements/types';
 import { ChatPostMessageArguments, WebClient } from '@slack/web-api';
 import { CreateAwardService, ServiceOptions } from '..';
 
-type awardSlackAchivementInteractServiceOptions = ServiceOptions & {
+type AwardSlackAchivementInteractServiceOptions = {
   createAwardService?: CreateAwardService;
-};
+} & ServiceOptions;
 
 export class AwardSlackAchievementsInteractService {
   private achievementRepo: AchievementRepository;
@@ -13,10 +13,10 @@ export class AwardSlackAchievementsInteractService {
   private userRepo: UserRepository;
   private web: WebClient;
 
-  constructor(options?: awardSlackAchivementInteractServiceOptions) {
-    this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
-    this.userRepo = options?.userRepository ?? new UserRepository();
-    this.createAwardService = options?.createAwardService ?? new CreateAwardService();
+  constructor(options: AwardSlackAchivementInteractServiceOptions) {
+    this.achievementRepo = options.achievementRepository ?? new AchievementRepository();
+    this.userRepo = options.userRepository ?? new UserRepository();
+    this.createAwardService = options.createAwardService ?? new CreateAwardService(options);
 
     const token = process.env.SLACK_TOKEN;
     this.web = new WebClient(token);

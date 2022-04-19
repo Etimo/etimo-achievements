@@ -12,11 +12,11 @@ export class RefreshLoginService {
   private accessTokenRepo: AccessTokenRepository;
   private refreshTokenRepo: RefreshTokenRepository;
 
-  constructor(options?: ServiceOptions) {
+  constructor(options: ServiceOptions) {
     this.getUserService = new GetUserService(options);
     this.createTokenService = new CreateTokenService(options);
-    this.accessTokenRepo = options?.accessTokenRepository ?? new AccessTokenRepository();
-    this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
+    this.accessTokenRepo = options.accessTokenRepository ?? new AccessTokenRepository();
+    this.refreshTokenRepo = options.refreshTokenRepository ?? new RefreshTokenRepository();
   }
 
   public async refresh(refreshTokenId: string, key: string): Promise<LoginResponse> {

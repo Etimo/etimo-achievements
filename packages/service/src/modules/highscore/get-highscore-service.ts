@@ -1,17 +1,17 @@
 import { paginate, PaginatedData, uniq } from '@etimo-achievements/common';
 import { AchievementRepository, AwardRepository, UserRepository } from '@etimo-achievements/data';
 import { IHighscore } from '@etimo-achievements/types';
-import { ServiceOptions } from '../common/service-options';
+import { ServiceOptions } from '../common/types';
 
 export class GetHighscoreService {
   private achievementRepo: AchievementRepository;
   private awardRepo: AwardRepository;
   private userRepo: UserRepository;
 
-  constructor(options?: ServiceOptions) {
-    this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
-    this.awardRepo = options?.awardRepository ?? new AwardRepository();
-    this.userRepo = options?.userRepository ?? new UserRepository();
+  constructor(options: ServiceOptions) {
+    this.achievementRepo = options.achievementRepository ?? new AchievementRepository();
+    this.awardRepo = options.awardRepository ?? new AwardRepository();
+    this.userRepo = options.userRepository ?? new UserRepository();
   }
 
   public async get(skip: number, take: number): Promise<PaginatedData<IHighscore>> {

@@ -1,15 +1,15 @@
-import { AwardSlackAchievementsInteractService } from '..';
+import { AwardSlackAchievementsInteractService, ServiceOptions } from '..';
 
 export type SlackInteractOptions = {
   AwardSlackAchievementsInteractService?: AwardSlackAchievementsInteractService;
-};
+} & ServiceOptions;
 
 export class SlackInteractService {
   private awardSlackAchievementsInteractService: AwardSlackAchievementsInteractService;
 
-  constructor(options?: SlackInteractOptions) {
+  constructor(options: SlackInteractOptions) {
     this.awardSlackAchievementsInteractService =
-      options?.AwardSlackAchievementsInteractService ?? new AwardSlackAchievementsInteractService();
+      options.AwardSlackAchievementsInteractService ?? new AwardSlackAchievementsInteractService(options);
   }
 
   public async handleInteract(payload: any) {

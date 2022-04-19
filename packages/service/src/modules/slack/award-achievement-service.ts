@@ -8,8 +8,8 @@ export class AwardSlackAchievementsService {
   private achievementRepo: AchievementRepository;
   private web: WebClient;
 
-  constructor(options?: ServiceOptions) {
-    this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
+  constructor(options: ServiceOptions) {
+    this.achievementRepo = options.achievementRepository ?? new AchievementRepository();
 
     const token = process.env.SLACK_TOKEN;
     this.web = new WebClient(token);

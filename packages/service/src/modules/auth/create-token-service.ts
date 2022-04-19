@@ -18,9 +18,9 @@ export class CreateTokenService {
   private accessTokenRepo: AccessTokenRepository;
   private refreshTokenRepo: RefreshTokenRepository;
 
-  constructor(options?: ServiceOptions) {
-    this.accessTokenRepo = options?.accessTokenRepository ?? new AccessTokenRepository();
-    this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
+  constructor(options: ServiceOptions) {
+    this.accessTokenRepo = options.accessTokenRepository ?? new AccessTokenRepository();
+    this.refreshTokenRepo = options.refreshTokenRepository ?? new RefreshTokenRepository();
   }
 
   public async create(user: IUser, scopes: string[]): Promise<LoginResponse> {

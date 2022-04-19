@@ -1,30 +1,17 @@
-import { getContext } from '@etimo-achievements/express-middleware';
 import { CreateUserService, DeleteUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { badRequestResponse, createdResponse, noContentResponse, okResponse, protectedEndpoint } from '../../utils';
+import {
+  badRequestResponse,
+  createdResponse,
+  getContext,
+  noContentResponse,
+  okResponse,
+  protectedEndpoint,
+} from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { UserMapper } from './user-mapper';
 
-export type UserControllerOptions = {
-  createUserService?: CreateUserService;
-  getUserService?: GetUserService;
-  updateUserService?: UpdateUserService;
-  deleteUserService?: DeleteUserService;
-};
-
 export class UserController {
-  private createUserService: CreateUserService;
-  private getUserService: GetUserService;
-  private updateUserService: UpdateUserService;
-  private deleteUserService: DeleteUserService;
-
-  constructor(options?: UserControllerOptions) {
-    this.createUserService = options?.createUserService ?? new CreateUserService();
-    this.getUserService = options?.getUserService ?? new GetUserService();
-    this.updateUserService = options?.updateUserService ?? new UpdateUserService();
-    this.deleteUserService = options?.deleteUserService ?? new DeleteUserService();
-  }
-
   public get routes(): Router {
     const router = Router();
 
@@ -202,7 +189,9 @@ export class UserController {
 
   private getUsers = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
-    const users = await this.getUserService.getMany(skip, take);
+
+    const service = new GetUserService({ context: getContext() });
+    const users = await service.getMany(skip, take);
     const output = { ...users, data: users.data.map(UserMapper.toUserDto) };
 
     return okResponse(res, output);
@@ -215,7 +204,8 @@ export class UserController {
       return badRequestResponse(res, 'Too many ids');
     }
 
-    const users = await this.getUserService.getManyByIds(payload);
+    const service = new GetUserService({ context: getContext() });
+    const users = await service.getManyByIds(payload);
     const dtos = users.map(UserMapper.toUserDto);
 
     return okResponse(res, dtos);
@@ -223,7 +213,9 @@ export class UserController {
 
   private getUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
-    const user = await this.getUserService.get(userId);
+
+    const service = new GetUserService({ context: getContext() });
+    const user = await service.get(userId);
     const dto = UserMapper.toUserDto(user);
 
     return okResponse(res, dto);
@@ -232,7 +224,8 @@ export class UserController {
   private getProfile = async (_req: Request, res: Response) => {
     const { userId } = getContext();
 
-    const user = await this.getUserService.get(userId);
+    const service = new GetUserService({ context: getContext() });
+    const user = await service.get(userId);
     const dto = UserMapper.toUserDto(user);
 
     return okResponse(res, dto);
@@ -241,8 +234,9 @@ export class UserController {
   private createUser = async (req: Request, res: Response) => {
     const payload = req.body;
 
+    const service = new CreateUserService({ context: getContext() });
     const input = UserMapper.toUser(payload);
-    const user = await this.createUserService.create(input);
+    const user = await service.create(input);
 
     return createdResponse(res, '/users', user);
   };
@@ -251,8 +245,9 @@ export class UserController {
     const payload = req.body;
     const userId = req.params.userId;
 
+    const service = new UpdateUserService({ context: getContext() });
     const input = UserMapper.toUser({ ...payload, id: userId });
-    await this.updateUserService.update(input);
+    await service.update(input);
 
     return noContentResponse(res);
   };
@@ -261,8 +256,9 @@ export class UserController {
     const { userId } = getContext();
     const payload = req.body;
 
+    const service = new UpdateUserService({ context: getContext() });
     const input = UserMapper.toUser({ ...payload, id: userId });
-    await this.updateUserService.update(input);
+    await service.update(input);
 
     return noContentResponse(res);
   };
@@ -270,7 +266,8 @@ export class UserController {
   private deleteUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
 
-    await this.deleteUserService.delete(userId);
+    const service = new DeleteUserService({ context: getContext() });
+    await service.delete(userId);
 
     return okResponse(res);
   };

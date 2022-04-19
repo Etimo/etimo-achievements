@@ -10,7 +10,7 @@ export class LoginService {
   private createUserService: CreateUserService;
   private createTokenService: CreateTokenService;
 
-  constructor(provider: string, options?: ServiceOptions) {
+  constructor(provider: string, options: ServiceOptions) {
     this.oauthService = OAuthServiceFactory.create(provider);
     this.getUserService = new GetUserService(options);
     this.createUserService = new CreateUserService(options);

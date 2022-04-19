@@ -5,6 +5,7 @@ import {
   RefreshTokenRepository,
   UserRepository,
 } from '@etimo-achievements/data';
+import { IContext } from '@etimo-achievements/types';
 
 export type ServiceOptions = {
   accessTokenRepository?: AccessTokenRepository;
@@ -12,4 +13,8 @@ export type ServiceOptions = {
   achievementRepository?: AchievementRepository;
   awardRepository?: AwardRepository;
   refreshTokenRepository?: RefreshTokenRepository;
+} & Options;
+
+export type Options = {
+  context: IContext;
 };

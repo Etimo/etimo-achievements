@@ -38,7 +38,6 @@
       "@etimo-achievements/api(.*)$": "<rootDir>/../api/src/$1",
       "@etimo-achievements/common(.*)$": "<rootDir>/../common/src/$1",
       "@etimo-achievements/data(.*)$": "<rootDir>/../data/src/$1",
-      "@etimo-achievements/express-middleware(.*)$": "<rootDir>/../express-middleware/src/$1",
       "@etimo-achievements/security(.*)$": "<rootDir>/../security/src/$1",
       "@etimo-achievements/service(.*)$": "<rootDir>/../service/src/$1",
       "@etimo-achievements/types(.*)$": "<rootDir>/../types/src/$1",

@@ -1,11 +1,12 @@
 import {
   AwardSlackAchievementsService,
   CreateSlackAchievementsService,
+  Options,
   SlackInteractService,
   SyncSlackUsersService,
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { apiKeyEndpoint } from '../../utils';
+import { apiKeyEndpoint, getContext } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 
 export type SlackControllerOptions = {
@@ -13,7 +14,7 @@ export type SlackControllerOptions = {
   createSlackAchievementsService?: CreateSlackAchievementsService;
   createSlackInteractService?: SlackInteractService;
   syncSlackUsersService?: SyncSlackUsersService;
-};
+} & Options;
 
 export class SlackController {
   private awardSlackAchievementsService: AwardSlackAchievementsService;
@@ -21,12 +22,15 @@ export class SlackController {
   private slackInteractService: SlackInteractService;
   private syncSlackUsersService: SyncSlackUsersService;
 
-  constructor(options?: SlackControllerOptions) {
-    this.awardSlackAchievementsService = options?.awardSlackAchievementsService ?? new AwardSlackAchievementsService();
+  constructor() {
+    const options: SlackControllerOptions = { context: getContext() };
+
+    this.awardSlackAchievementsService =
+      options.awardSlackAchievementsService ?? new AwardSlackAchievementsService(options);
     this.createSlackAchievementsService =
-      options?.createSlackAchievementsService ?? new CreateSlackAchievementsService();
-    this.slackInteractService = options?.createSlackInteractService ?? new SlackInteractService();
-    this.syncSlackUsersService = options?.syncSlackUsersService ?? new SyncSlackUsersService();
+      options.createSlackAchievementsService ?? new CreateSlackAchievementsService(options);
+    this.slackInteractService = options.createSlackInteractService ?? new SlackInteractService(options);
+    this.syncSlackUsersService = options.syncSlackUsersService ?? new SyncSlackUsersService(options);
   }
 
   public get routes(): Router {

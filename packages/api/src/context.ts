@@ -1,10 +1,12 @@
-import { JWT } from '@etimo-achievements/types';
-import { Logger, UnauthorizedError, uuid } from '.';
+import { Logger, UnauthorizedError, uuid } from '@etimo-achievements/common';
+import { NotifyServiceFactory } from '@etimo-achievements/service';
+import { ContextOptions, IContext, ILogger, INotifyService, JWT } from '@etimo-achievements/types';
 
 let count: number = 0;
 
-export class Context {
-  public logger: Logger;
+export class Context implements IContext {
+  public logger: ILogger;
+  public notifier: INotifyService;
   public requestId: string;
   public requestDate: Date;
   public timestamp: string;
@@ -13,8 +15,9 @@ export class Context {
   public refreshTokenId?: string;
   public refreshTokenKey?: string;
 
-  constructor(requestId?: string) {
-    this.logger = new Logger();
+  constructor(requestId?: string, options?: ContextOptions) {
+    this.logger = options?.logger ?? new Logger();
+    this.notifier = options?.notifier ?? NotifyServiceFactory.create('slack', { context: this });
     this.requestId = requestId ?? uuid();
     this.requestDate = new Date();
     this.timestamp = new Date().toTimeString().split(' ')[0];

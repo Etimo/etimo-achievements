@@ -1,24 +1,10 @@
 import { GetHighscoreService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { okResponse, protectedEndpoint } from '../../utils';
+import { getContext, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { HighscoreMapper } from './highscore-mapper';
 
-export type HighscoreControllerOptions = {
-  services: typeof services;
-};
-
-const services = {
-  getHighscore: new GetHighscoreService(),
-};
-
 export class HighscoreController {
-  private services: typeof services;
-
-  constructor(options?: HighscoreControllerOptions) {
-    this.services = options?.services ?? services;
-  }
-
   public get routes(): Router {
     const router = Router();
 
@@ -48,7 +34,9 @@ export class HighscoreController {
 
   private getHighscores = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req);
-    const awards = await this.services.getHighscore.get(skip, take);
+
+    const service = new GetHighscoreService({ context: getContext() });
+    const awards = await service.get(skip, take);
     const output = {
       ...awards,
       data: awards.data.map(HighscoreMapper.toHighscoreDto),

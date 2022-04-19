@@ -1,22 +1,7 @@
+import { ILogger, LoggerOptions, LoggingColor } from '@etimo-achievements/types';
 import { isProduction, isStaging } from '.';
 
-type LoggerOptions = {
-  extras?: any[];
-  color?: LoggingColor;
-  timestamp?: boolean;
-};
-
-export enum LoggingColor {
-  Reset,
-  Bright,
-  Normal,
-  Dim,
-  Green,
-  Yellow,
-  Red,
-}
-
-export class Logger {
+export class Logger implements ILogger {
   private static instance?: Logger;
 
   public static log(message: string, options?: LoggerOptions) {

@@ -1,7 +1,7 @@
 import { Logger, UnauthorizedError } from '@etimo-achievements/common';
-import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, JwtService, RefreshTokenService } from '@etimo-achievements/security';
 import { NextFunction, Request, Response } from 'express';
+import { getContext } from '.';
 
 export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>) {
   return (req: Request, res: Response, next: NextFunction) => {

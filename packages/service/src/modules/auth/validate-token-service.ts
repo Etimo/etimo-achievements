@@ -5,8 +5,8 @@ import { ServiceOptions } from '..';
 export class ValidateTokenService {
   private repo: AccessTokenRepository;
 
-  constructor(options?: ServiceOptions) {
-    this.repo = options?.accessTokenRepository ?? new AccessTokenRepository();
+  constructor(options: ServiceOptions) {
+    this.repo = options.accessTokenRepository ?? new AccessTokenRepository();
   }
 
   public async validate(jwt: JWT): Promise<boolean> {

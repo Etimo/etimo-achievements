@@ -8,8 +8,8 @@ export class SyncSlackUsersService {
   private userRepo: UserRepository;
   private web: WebClient;
 
-  constructor(options?: ServiceOptions) {
-    this.userRepo = options?.userRepository ?? new UserRepository();
+  constructor(options: ServiceOptions) {
+    this.userRepo = options.userRepository ?? new UserRepository();
 
     const token = process.env.SLACK_TOKEN;
     this.web = new WebClient(token);

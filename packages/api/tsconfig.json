@@ -11,9 +11,6 @@
       "path": "../common"
     },
     {
-      "path": "../express-middleware"
-    },
-    {
       "path": "../security"
     },
     {
