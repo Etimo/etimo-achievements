@@ -1,4 +1,5 @@
 import { getEnvVariable, Logger } from '@etimo-achievements/common';
+import { Env } from '@etimo-achievements/types';
 import { WebClient } from '@slack/web-api';
 import { Member } from '@slack/web-api/dist/response/UsersListResponse';
 import { IContext } from '../..';
@@ -9,7 +10,7 @@ export class SyncSlackUsersService {
 
   constructor(context: IContext) {
     this.repos = context.repositories;
-    this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
+    this.web = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
   }
 
   public async syncUsers() {
