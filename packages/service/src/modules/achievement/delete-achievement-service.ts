@@ -1,13 +1,11 @@
 import { IContext } from '../..';
 
 export class DeleteAchievementService {
-  private repos: IContext['repositories'];
-
-  constructor(private context: IContext) {
-    this.repos = context.repositories;
-  }
+  constructor(private context: IContext) {}
 
   public async delete(achievementId: string) {
-    await this.repos.achievement.delete(achievementId);
+    const { repositories } = this.context;
+
+    await repositories.achievement.delete(achievementId);
   }
 }

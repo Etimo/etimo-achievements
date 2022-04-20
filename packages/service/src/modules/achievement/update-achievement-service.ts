@@ -2,13 +2,11 @@ import { IAchievement } from '@etimo-achievements/types';
 import { IContext } from '../..';
 
 export class UpdateAchievementService {
-  private repos: IContext['repositories'];
-
-  constructor(private context: IContext) {
-    this.repos = context.repositories;
-  }
+  constructor(private context: IContext) {}
 
   public async update(achievement: IAchievement) {
-    await this.repos.achievement.update(achievement);
+    const { repositories } = this.context;
+
+    await repositories.achievement.update(achievement);
   }
 }

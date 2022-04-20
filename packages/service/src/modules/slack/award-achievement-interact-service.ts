@@ -5,17 +5,15 @@ import { GiveAwardService } from '..';
 import { IContext } from '../..';
 
 export class AwardSlackAchievementsInteractService {
-  private giveAwardService: GiveAwardService;
-  private repos: IContext['repositories'];
   private web: WebClient;
 
   constructor(private context: IContext) {
-    this.repos = context.repositories;
-    this.giveAwardService = new GiveAwardService(context);
     this.web = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
   }
 
   public async handleInteract(payload: any) {
+    const { repositories } = this.context;
+
     const fromUserSlackHandle = payload.user.id;
     const metadata = JSON.parse(payload.view.private_metadata);
     const channel = metadata.channelId;
@@ -23,9 +21,9 @@ export class AwardSlackAchievementsInteractService {
     const achievementId = values['achievement-input']['static_select-action'].selected_option.value;
     const toUserSlackHandles = values['user-input']['multi_users_select-action'].selected_users;
 
-    const achievement = await this.repos.achievement.findById(achievementId);
-    const fromUser = await this.repos.user.findBySlackHandle(fromUserSlackHandle);
-    const toUsers = await this.repos.user.findBySlackHandles(toUserSlackHandles);
+    const achievement = await repositories.achievement.findById(achievementId);
+    const fromUser = await repositories.user.findBySlackHandle(fromUserSlackHandle);
+    const toUsers = await repositories.user.findBySlackHandles(toUserSlackHandles);
 
     // TODO: Improve error handling.
     if (achievement == null) {
@@ -45,7 +43,8 @@ export class AwardSlackAchievementsInteractService {
         }
     );
 
-    await Promise.allSettled(awards.map((award) => this.giveAwardService.give(award)));
+    const service = new GiveAwardService(this.context);
+    await Promise.allSettled(awards.map((award) => service.give(award)));
 
     await this.postAwardMessage(channel, fromUserSlackHandle, toUserSlackHandles, achievement);
   }

@@ -3,15 +3,13 @@ import { IAward } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 export class GetAwardService {
-  private repos: IContext['repositories'];
-
-  constructor(private context: IContext) {
-    this.repos = context.repositories;
-  }
+  constructor(private context: IContext) {}
 
   public async getMany(skip: number, take: number): Promise<PaginatedData<IAward>> {
-    const awards = await this.repos.award.getMany(skip, take);
-    const count = await this.repos.award.count();
+    const { repositories } = this.context;
+
+    const awards = await repositories.award.getMany(skip, take);
+    const count = await repositories.award.count();
     return paginate(awards, skip, take, count);
   }
 }

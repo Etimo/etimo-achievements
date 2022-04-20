@@ -2,14 +2,12 @@ import { JWT } from '@etimo-achievements/types';
 import { IContext } from '../..';
 
 export class ValidateTokenService {
-  private repos: IContext['repositories'];
-
-  constructor(private context: IContext) {
-    this.repos = context.repositories;
-  }
+  constructor(private context: IContext) {}
 
   public async validate(jwt: JWT): Promise<boolean> {
-    const accessToken = await this.repos.accessToken.findById(jwt.jti);
+    const { repositories } = this.context;
+
+    const accessToken = await repositories.accessToken.findById(jwt.jti);
     return accessToken && !accessToken.disabled;
   }
 }
