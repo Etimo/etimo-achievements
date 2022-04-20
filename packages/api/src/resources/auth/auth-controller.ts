@@ -6,12 +6,11 @@ import {
   UnauthorizedError,
   UserInfoDto,
 } from '@etimo-achievements/common';
-import { getContext } from '@etimo-achievements/express-middleware';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
 import { Env } from '@etimo-achievements/types';
 import { Request, Response, Router } from 'express';
-import { endpoint, okResponse, protectedEndpoint, redirectResponse } from '../../utils';
+import { endpoint, getContext, okResponse, protectedEndpoint, redirectResponse } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
 
 export class AuthController {
@@ -185,7 +184,7 @@ export class AuthController {
   private refresh = async (_req: Request, res: Response) => {
     const { refreshTokenId, refreshTokenKey } = getContext();
     if (refreshTokenId && refreshTokenKey) {
-      const service = new RefreshLoginService();
+      const service = new RefreshLoginService(getContext());
       const loginResponse = await service.refresh(refreshTokenId, refreshTokenKey);
       const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 
@@ -200,7 +199,7 @@ export class AuthController {
   private logout = async (_req: Request, res: Response) => {
     const { jwt, refreshTokenId } = getContext();
     if (jwt) {
-      const service = new LogoutService();
+      const service = new LogoutService(getContext());
       await service.logout(jwt, refreshTokenId);
     }
 
@@ -227,7 +226,7 @@ export class AuthController {
     const { provider } = req.params;
     const code = req.query.code?.toString();
 
-    const service = new LoginService(provider);
+    const service = new LoginService(provider, getContext());
     const loginResponse = await service.login(code!);
     const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
 

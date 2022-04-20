@@ -1,14 +1,13 @@
-import { AwardRepository } from '@etimo-achievements/data';
-import { ServiceOptions } from '../common/service-options';
+import { IContext } from '../../context';
 
 export class DeleteAwardService {
-  private awardRepo: AwardRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options?: ServiceOptions) {
-    this.awardRepo = options?.awardRepository ?? new AwardRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async delete(awardId: string) {
-    await this.awardRepo.delete(awardId);
+    await this.repos.award.delete(awardId);
   }
 }

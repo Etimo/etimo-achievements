@@ -31,7 +31,6 @@ COPY --chown=1000:1000 .yarn/plugins .yarn/plugins
 COPY --chown=1000:1000 packages/api/package.json packages/api/package.json
 COPY --chown=1000:1000 packages/common/package.json packages/common/package.json
 COPY --chown=1000:1000 packages/data/package.json packages/data/package.json
-COPY --chown=1000:1000 packages/express-middleware/package.json packages/express-middleware/package.json
 COPY --chown=1000:1000 packages/security/package.json packages/security/package.json
 COPY --chown=1000:1000 packages/service/package.json packages/service/package.json
 COPY --chown=1000:1000 packages/types/package.json packages/types/package.json

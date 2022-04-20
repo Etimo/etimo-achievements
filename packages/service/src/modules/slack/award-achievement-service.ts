@@ -1,22 +1,19 @@
-import { Logger } from '@etimo-achievements/common';
-import { AchievementRepository } from '@etimo-achievements/data';
+import { getEnvVariable, Logger } from '@etimo-achievements/common';
 import { IAchievement } from '@etimo-achievements/types';
 import { PlainTextOption, View, WebClient } from '@slack/web-api';
-import { ServiceOptions } from '..';
+import { IContext } from '../..';
 
 export class AwardSlackAchievementsService {
-  private achievementRepo: AchievementRepository;
+  private repos: IContext['repositories'];
   private web: WebClient;
 
-  constructor(options?: ServiceOptions) {
-    this.achievementRepo = options?.achievementRepository ?? new AchievementRepository();
-
-    const token = process.env.SLACK_TOKEN;
-    this.web = new WebClient(token);
+  constructor(context: IContext) {
+    this.repos = context.repositories;
+    this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
   }
 
   public async showModal(triggerId: string, channelId: string) {
-    const achievements = await this.achievementRepo.getAll();
+    const achievements = await this.repos.achievement.getAll();
     const view = this.generateView(channelId, achievements);
     try {
       const result = await this.web.views.open({ view, trigger_id: triggerId });

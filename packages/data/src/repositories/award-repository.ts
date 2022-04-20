@@ -1,4 +1,4 @@
-import { IAward, INewAward, IPartialAward } from '@etimo-achievements/types';
+import { IAward, INewAward } from '@etimo-achievements/types';
 import { Database } from '..';
 import { AwardModel } from '../models/award-model';
 import { catchErrors } from '../utils';
@@ -23,27 +23,9 @@ export class AwardRepository {
     });
   }
 
-  findByAchievementId(id: string): Promise<Array<IAward>> {
-    return catchErrors(async () => {
-      return AwardModel.query().where('achievement_id', id);
-    });
-  }
-
   create(award: INewAward): Promise<IAward> {
     return catchErrors(async () => {
       return AwardModel.query().insert(award);
-    });
-  }
-
-  createMultiple(awards: INewAward[]): Promise<IAward[]> {
-    return catchErrors(async () => {
-      return AwardModel.query().insert(awards);
-    });
-  }
-
-  update(award: IPartialAward): Promise<IAward> {
-    return catchErrors(async () => {
-      return AwardModel.query().patchAndFetchById(award.id, award);
     });
   }
 
@@ -56,12 +38,6 @@ export class AwardRepository {
   getMany(skip: number, take: number): Promise<IAward[]> {
     return catchErrors(async () => {
       return AwardModel.query().limit(take).offset(skip);
-    });
-  }
-
-  getAll(): Promise<IAward[]> {
-    return catchErrors(async () => {
-      return AwardModel.query();
     });
   }
 }

@@ -1,4 +1,4 @@
-import { AchievementDto } from '@etimo-achievements/common';
+import { AchievementDto, formatNumber } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
@@ -14,7 +14,6 @@ const AchievementList: React.FC = () => {
   const achievementService = new AchievementService();
   const [loading, setLoading] = useState(false);
   const [editAchievement, setEditAchievement] = useState<AchievementDto>();
-  const formatNumber = Intl.NumberFormat('sv-SE').format;
 
   useEffect(() => {
     achievementService.load();

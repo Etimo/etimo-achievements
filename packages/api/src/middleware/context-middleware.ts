@@ -1,6 +1,7 @@
-import { Context, uuid } from '@etimo-achievements/common';
+import { uuid } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
 import httpContext from 'express-http-context';
+import { Context } from '../context';
 
 export const setContextMiddleware = () => {
   return (req: Request, res: Response, next: NextFunction) => {

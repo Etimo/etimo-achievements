@@ -1,33 +1,33 @@
 import { Logger } from '@etimo-achievements/common';
-import { IOAuthService, OAuthServiceFactory } from '@etimo-achievements/security';
-import { CreateUserService, GetUserService, ServiceOptions } from '..';
+import { OAuthServiceFactory } from '@etimo-achievements/security';
+import { CreateUserService, GetUserService } from '..';
+import { IContext } from '../..';
 import { CreateTokenService } from './create-token-service';
 import { LoginResponse } from './types/login-response';
 
 export class LoginService {
-  private oauthService: IOAuthService;
-  private getUserService: GetUserService;
-  private createUserService: CreateUserService;
-  private createTokenService: CreateTokenService;
+  private provider: string;
+  private context: IContext;
 
-  constructor(provider: string, options?: ServiceOptions) {
-    this.oauthService = OAuthServiceFactory.create(provider);
-    this.getUserService = new GetUserService(options);
-    this.createUserService = new CreateUserService(options);
-    this.createTokenService = new CreateTokenService(options);
+  constructor(provider: string, context: IContext) {
+    this.provider = provider;
+    this.context = context;
   }
 
   public async login(code: string): Promise<LoginResponse> {
     // Get user from provider service
-    const userInfo = await this.oauthService.getUserInfo(code);
+    const oauthService = OAuthServiceFactory.create(this.provider);
+    const userInfo = await oauthService.getUserInfo(code);
 
     // Check if user exists in our store
-    let user = await this.getUserService.getByEmail(userInfo.email);
+    const getUserService = new GetUserService(this.context);
+    let user = await getUserService.getByEmail(userInfo.email);
 
     // If user doesn't exist, create it
     if (!user) {
       Logger.log(`User ${userInfo.email} is not found. Creating a new user.`);
-      user = await this.createUserService.create({
+      const createUserService = new CreateUserService(this.context);
+      user = await createUserService.create({
         name: userInfo.name,
         email: userInfo.email,
       });
@@ -41,6 +41,7 @@ export class LoginService {
       scopes = ['a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore'];
     }
 
-    return this.createTokenService.create(user, scopes);
+    const createTokenService = new CreateTokenService(this.context);
+    return createTokenService.create(user, scopes);
   }
 }

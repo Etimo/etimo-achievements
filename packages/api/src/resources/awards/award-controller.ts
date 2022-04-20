@@ -1,27 +1,10 @@
-import { getContext } from '@etimo-achievements/express-middleware';
-import { CreateAwardService, DeleteAwardService, GetAwardService } from '@etimo-achievements/service';
+import { DeleteAwardService, GetAwardService, GiveAwardService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, notImplementedResponse, okResponse, protectedEndpoint } from '../../utils';
+import { createdResponse, getContext, notImplementedResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { AwardMapper } from './award-mapper';
 
-export type AwardControllerOptions = {
-  services: typeof services;
-};
-
-const services = {
-  getAward: new GetAwardService(),
-  createAward: new CreateAwardService(),
-  deleteAward: new DeleteAwardService(),
-};
-
 export class AwardController {
-  private services: typeof services;
-
-  constructor(options?: AwardControllerOptions) {
-    this.services = options?.services ?? services;
-  }
-
   public get routes(): Router {
     const router = Router();
 
@@ -117,7 +100,9 @@ export class AwardController {
 
   private getAwards = async (req: Request, res: Response) => {
     const [skip, take] = getPaginationOptions(req, 10000);
-    const awards = await this.services.getAward.getMany(skip, take);
+
+    const service = new GetAwardService(getContext());
+    const awards = await service.getMany(skip, take);
     const output = {
       ...awards,
       data: awards.data.map(AwardMapper.toAwardDto),
@@ -134,8 +119,9 @@ export class AwardController {
     const payload = req.body;
     const { userId } = getContext();
 
+    const service = new GiveAwardService(getContext());
     const input = AwardMapper.toAward({ ...payload, awardedByUserId: userId });
-    const award = await this.services.createAward.create(input);
+    const award = await service.create(input);
 
     return createdResponse(res, '/awards', award);
   };
@@ -143,7 +129,8 @@ export class AwardController {
   private deleteAward = async (req: Request, res: Response) => {
     const awardId = req.params.awardId;
 
-    await this.services.deleteAward.delete(awardId);
+    const service = new DeleteAwardService(getContext());
+    await service.delete(awardId);
 
     return okResponse(res);
   };

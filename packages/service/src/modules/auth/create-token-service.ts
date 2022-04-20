@@ -1,5 +1,4 @@
 import { Logger, uuid } from '@etimo-achievements/common';
-import { AccessTokenRepository, RefreshTokenRepository } from '@etimo-achievements/data';
 import { encrypt, JwtService, randomPassword, RefreshTokenService } from '@etimo-achievements/security';
 import {
   IAccessToken,
@@ -11,16 +10,14 @@ import {
   JWT,
 } from '@etimo-achievements/types';
 import spacetime from 'spacetime';
-import { ServiceOptions } from '..';
+import { IContext } from '../..';
 import { LoginResponse } from './types/login-response';
 
 export class CreateTokenService {
-  private accessTokenRepo: AccessTokenRepository;
-  private refreshTokenRepo: RefreshTokenRepository;
+  private repos: IContext['repositories'];
 
-  constructor(options?: ServiceOptions) {
-    this.accessTokenRepo = options?.accessTokenRepository ?? new AccessTokenRepository();
-    this.refreshTokenRepo = options?.refreshTokenRepository ?? new RefreshTokenRepository();
+  constructor(context: IContext) {
+    this.repos = context.repositories;
   }
 
   public async create(user: IUser, scopes: string[]): Promise<LoginResponse> {
@@ -53,9 +50,9 @@ export class CreateTokenService {
       scopes: token.scope.split(' '),
     };
 
-    const accessToken = await this.accessTokenRepo.create(newToken);
+    const accessToken = await this.repos.accessToken.create(newToken);
 
-    const deleted = await this.accessTokenRepo.deleteInvalid();
+    const deleted = await this.repos.accessToken.deleteInvalid();
     if (deleted) {
       Logger.log(`Deleted ${deleted} invalid access tokens`);
     }
@@ -82,7 +79,7 @@ export class CreateTokenService {
       expiresAt: spacetime().add(30, 'day').toNativeDate(),
     };
 
-    const refreshToken = await this.refreshTokenRepo.create(newRefreshToken);
+    const refreshToken = await this.repos.refreshToken.create(newRefreshToken);
 
     Logger.log(`Stored refresh token (${refreshToken.id}) for user ${data.userId}`);
 

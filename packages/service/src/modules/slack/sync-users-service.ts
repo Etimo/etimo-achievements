@@ -1,18 +1,15 @@
-import { Logger } from '@etimo-achievements/common';
-import { UserRepository } from '@etimo-achievements/data';
+import { getEnvVariable, Logger } from '@etimo-achievements/common';
 import { WebClient } from '@slack/web-api';
 import { Member } from '@slack/web-api/dist/response/UsersListResponse';
-import { ServiceOptions } from '..';
+import { IContext } from '../..';
 
 export class SyncSlackUsersService {
-  private userRepo: UserRepository;
+  private repos: IContext['repositories'];
   private web: WebClient;
 
-  constructor(options?: ServiceOptions) {
-    this.userRepo = options?.userRepository ?? new UserRepository();
-
-    const token = process.env.SLACK_TOKEN;
-    this.web = new WebClient(token);
+  constructor(context: IContext) {
+    this.repos = context.repositories;
+    this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
   }
 
   public async syncUsers() {
@@ -20,17 +17,17 @@ export class SyncSlackUsersService {
     const etimoUsers = slackUsers.filter((user) => user.profile?.email?.endsWith('@etimo.se'));
 
     for (const user of etimoUsers) {
-      const foundUser = await this.userRepo.findByEmail(user.profile?.email!);
+      const foundUser = await this.repos.user.findByEmail(user.profile?.email!);
       if (!foundUser) {
         Logger.log(`Creating user ${user.profile?.real_name}`);
-        await this.userRepo.create({
+        await this.repos.user.create({
           email: user.profile?.email!,
           slackHandle: user.id!,
           name: user.profile?.real_name!,
         });
       } else {
         Logger.log(`Updating user ${user.profile?.real_name}`);
-        await this.userRepo.update({ id: foundUser.id, slackHandle: user.id, name: user.profile?.real_name });
+        await this.repos.user.update({ id: foundUser.id, slackHandle: user.id, name: user.profile?.real_name });
       }
     }
   }

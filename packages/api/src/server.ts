@@ -1,18 +1,18 @@
 import { getEnvVariable, isDevelopment, Logger } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
-import {
-  contextMiddleware,
-  errorMiddleware,
-  loggingMiddleware,
-  setContextMiddleware,
-  winstonMiddleware,
-} from '@etimo-achievements/express-middleware';
 import { Env } from '@etimo-achievements/types';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, static as serveStatic } from 'express';
 import { Server } from 'http';
 import swaggerUi from 'swagger-ui-express';
+import {
+  contextMiddleware,
+  errorMiddleware,
+  loggingMiddleware,
+  setContextMiddleware,
+  winstonMiddleware,
+} from './middleware';
 import {
   AchievementController,
   AuthController,

@@ -3,6 +3,7 @@ export * from './achievement';
 export * from './award';
 export * from './enums';
 export * from './highscore';
+export * from './interfaces';
 export * from './jwt';
 export * from './refresh-token';
 export * from './user';

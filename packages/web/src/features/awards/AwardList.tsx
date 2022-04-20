@@ -1,3 +1,4 @@
+import { formatNumber } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
@@ -11,7 +12,6 @@ const AwardList: React.FC = () => {
   const { composites } = useAppSelector(awardSelector);
   const awardService = new AwardService();
   const [loading, setLoading] = useState(false);
-  const formatNumber = Intl.NumberFormat('sv-SE').format;
 
   useEffect(() => {
     awardService.load();

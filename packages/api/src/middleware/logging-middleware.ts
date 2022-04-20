@@ -1,4 +1,4 @@
-import { LoggingColor } from '@etimo-achievements/common';
+import { LoggingColor } from '@etimo-achievements/types';
 import { NextFunction, Request, Response } from 'express';
 import { getContext } from '../utils';
 
