@@ -13,19 +13,7 @@ export class AwardRepository {
     });
   }
 
-  findByUserId(id: string): Promise<Array<IAward>> {
-    return catchErrors(async () => {
-      return AwardModel.query().where('user_id', id);
-    });
-  }
-
-  findByAwardedByUserId(id: string): Promise<Array<IAward>> {
-    return catchErrors(async () => {
-      return AwardModel.query().where('awarded_by_user_id', id);
-    });
-  }
-
-  findLatest(userId: string, achievementId: string): Promise<IAward> {
+  findLatest(userId: string, achievementId: string): Promise<IAward | undefined> {
     return catchErrors(async () => {
       return AwardModel.query().orderBy('created_at', 'desc').findOne({
         user_id: userId,

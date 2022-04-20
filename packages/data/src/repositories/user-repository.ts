@@ -25,25 +25,19 @@ export class UserRepository {
     });
   }
 
-  findById(id: string): Promise<IUser> {
+  findById(id: string): Promise<IUser | undefined> {
     return catchErrors(async () => {
       return UserModel.query().findById(id);
     });
   }
 
-  findByUsername(username: string): Promise<IUser> {
-    return catchErrors(async () => {
-      return UserModel.query().findOne({ username });
-    });
-  }
-
-  findByEmail(email: string): Promise<IUser> {
+  findByEmail(email: string): Promise<IUser | undefined> {
     return catchErrors(async () => {
       return UserModel.query().findOne({ email });
     });
   }
 
-  findBySlackHandle(slackHandle: string): Promise<IUser> {
+  findBySlackHandle(slackHandle: string): Promise<IUser | undefined> {
     return catchErrors(async () => {
       return UserModel.query().findOne({ slack_handle: slackHandle });
     });

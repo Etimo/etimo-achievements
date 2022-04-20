@@ -5,15 +5,9 @@ import { catchErrors } from '../utils';
 export class AccessTokenRepository {
   constructor(private context: IRequestContext) {}
 
-  findById(id: string): Promise<IAccessToken> {
+  findById(id: string): Promise<IAccessToken | undefined> {
     return catchErrors(async () => {
       return AccessTokenModel.query().findById(id);
-    });
-  }
-
-  findByRefreshToken(refreshToken: string): Promise<IAccessToken> {
-    return catchErrors(async () => {
-      return AccessTokenModel.query().findOne({ refreshToken });
     });
   }
 

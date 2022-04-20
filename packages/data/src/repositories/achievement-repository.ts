@@ -32,15 +32,9 @@ export class AchievementRepository {
     });
   }
 
-  findById(id: string): Promise<IAchievement> {
+  findById(id: string): Promise<IAchievement | undefined> {
     return catchErrors(async () => {
       return AchievementModel.query().findById(id);
-    });
-  }
-
-  findByAchievementName(achievement: string): Promise<IAchievement> {
-    return catchErrors(async () => {
-      return AchievementModel.query().findOne({ achievement });
     });
   }
 
