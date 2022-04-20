@@ -9,10 +9,10 @@ export type NotifyServiceOptions = {
 } & IContext;
 
 export class NotifyServiceFactory {
-  public static create(type: string, options: NotifyServiceOptions): INotifyService {
+  public static create(type: string, context: IContext): INotifyService {
     switch (type) {
       case 'slack':
-        return new NotifySlackService(options);
+        return new NotifySlackService(context);
 
       default:
         throw new Error(`Unknown NotifyService type: ${type}`);

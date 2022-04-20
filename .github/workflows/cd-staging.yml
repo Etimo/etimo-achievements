@@ -29,6 +29,9 @@ env:
   INGRESS_URL: achievements-test.staging.etimo-test.live
   NODE_ENV: staging
   PGADMIN_URL: achievements-test-pgadmin.staging.etimo-test.live
+  SLACK_CHANNEL_HIGH: C03BQBQ29PH
+  SLACK_CHANNEL_MEDIUM: C03BQBQ29PH
+  SLACK_CHANNEL_LOW: C03BQBQ29PH
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
