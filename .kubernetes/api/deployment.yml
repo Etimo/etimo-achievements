@@ -61,6 +61,12 @@ spec:
               value: '${API_PORT}'
             - name: SLACK_TOKEN
               value: '${SLACK_TOKEN}'
+            - name: SLACK_CHANNEL_HIGH
+              value: '${SLACK_CHANNEL_HIGH}'
+            - name: SLACK_CHANNEL_MEDIUM
+              value: '${SLACK_CHANNEL_MEDIUM}'
+            - name: SLACK_CHANNEL_LOW
+              value: '${SLACK_CHANNEL_LOW}'
           ports:
             - containerPort: ${API_PORT}
               protocol: TCP
