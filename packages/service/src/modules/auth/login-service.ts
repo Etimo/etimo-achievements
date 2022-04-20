@@ -1,6 +1,6 @@
 import { Logger } from '@etimo-achievements/common';
 import { OAuthServiceFactory } from '@etimo-achievements/security';
-import { CreateUserService, GetUserService } from '..';
+import { CreateUserService } from '..';
 import { IContext } from '../..';
 import { CreateTokenService } from './create-token-service';
 import { LoginResponse } from './types/login-response';
@@ -9,13 +9,14 @@ export class LoginService {
   constructor(private provider: string, private context: IContext) {}
 
   public async login(code: string): Promise<LoginResponse> {
+    const { repositories } = this.context;
+
     // Get user from provider service
     const oauthService = OAuthServiceFactory.create(this.provider);
     const userInfo = await oauthService.getUserInfo(code);
 
     // Check if user exists in our store
-    const getUserService = new GetUserService(this.context);
-    let user = await getUserService.getByEmail(userInfo.email);
+    let user = await repositories.user.findByEmail(userInfo.email);
 
     // If user doesn't exist, create it
     if (!user) {
