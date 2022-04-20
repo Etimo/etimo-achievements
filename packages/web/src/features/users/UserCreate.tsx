@@ -1,7 +1,7 @@
 import { UserDto } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
 import { UserApi } from './user-api';
@@ -23,12 +23,7 @@ const UserCreate: React.FC = () => {
       .wait()
       .then((response) => {
         setLoading(false);
-        if (response.success) {
-          reset();
-          toast.success('User created successfully.');
-        } else {
-          toast.error('User could not be created: ' + response.message);
-        }
+        toastResponse(response, 'User created successfully', 'User could not be created', () => reset());
       });
   };
 

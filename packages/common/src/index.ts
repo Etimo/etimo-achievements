@@ -1,4 +1,5 @@
 export * from './array-helper';
+export * from './date-helper';
 export * from './dtos';
 export * from './env-helper';
 export * from './errors';

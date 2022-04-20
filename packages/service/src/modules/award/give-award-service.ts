@@ -1,34 +1,35 @@
-import { formatNumber } from '@etimo-achievements/common';
+import { BadRequestError, formatNumber, minutesSince } from '@etimo-achievements/common';
 import { IAward, INewAward } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 export class GiveAwardService {
-  private repos: IContext['repositories'];
-  private chat: IContext['notifier'];
+  constructor(private context: IContext) {}
 
-  constructor(context: IContext) {
-    this.repos = context.repositories;
-    this.chat = context.notifier;
-  }
+  public async give(award: INewAward): Promise<IAward> {
+    const { repositories, notifier } = this.context;
 
-  public async create(award: INewAward): Promise<IAward> {
-    const achievementPromise = this.repos.achievement.findById(award.achievementId);
-    const awardedToPromise = this.repos.user.findById(award.userId);
-    const awardedByPromise = this.repos.user.findById(award.awardedByUserId);
+    const lastAwardPromise = repositories.award.findLatest(award.userId, award.achievementId);
+    const achievementPromise = repositories.achievement.findById(award.achievementId);
 
-    const [achievement, awardedTo, awardedBy] = await Promise.all([
-      achievementPromise,
-      awardedToPromise,
-      awardedByPromise,
-    ]);
+    const [lastAward, achievement] = await Promise.all([lastAwardPromise, achievementPromise]);
 
-    this.chat.notify(
+    // Check if the user can get this achievement (cooldown)
+    if (achievement.cooldownMinutes > 0 && minutesSince(lastAward.createdAt) < achievement.cooldownMinutes) {
+      throw new BadRequestError('Achievement on cooldown for this user');
+    }
+
+    const awardedToPromise = repositories.user.findById(award.userId);
+    const awardedByPromise = repositories.user.findById(award.awardedByUserId);
+
+    const [awardedTo, awardedBy] = await Promise.all([awardedToPromise, awardedByPromise]);
+
+    notifier.notify(
       `*${awardedTo.name}* was awarded *${achievement.name}* (${formatNumber(achievement.achievementPoints)} pts) by ${
         awardedBy.name
       }`,
       'medium'
     );
 
-    return await this.repos.award.create(award);
+    return await repositories.award.create(award);
   }
 }

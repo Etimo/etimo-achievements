@@ -1,7 +1,7 @@
 import { AchievementDto } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
 import { AchievementApi } from './achievement-api';
@@ -23,12 +23,7 @@ const AchievementCreate: React.FC = () => {
       .wait()
       .then((response) => {
         setLoading(false);
-        if (response.success) {
-          reset();
-          toast.success('Achievement created successfully.');
-        } else {
-          toast.error('Achievement could not be created: ' + response.message);
-        }
+        toastResponse(response, 'Achievement created successfully', 'Achievement could not be created', () => reset());
       });
   };
 

@@ -6,4 +6,5 @@ export * from './highscore';
 export * from './interfaces';
 export * from './jwt';
 export * from './refresh-token';
+export * from './request-context';
 export * from './user';

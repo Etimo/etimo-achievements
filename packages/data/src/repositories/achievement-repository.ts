@@ -1,10 +1,12 @@
 import { Logger } from '@etimo-achievements/common';
-import { IAchievement, INewAchievement, IPartialAchievement } from '@etimo-achievements/types';
+import { IAchievement, INewAchievement, IPartialAchievement, IRequestContext } from '@etimo-achievements/types';
 import { Database } from '..';
 import { AchievementModel } from '../models/achievement-model';
 import { catchErrors } from '../utils';
 
 export class AchievementRepository {
+  constructor(private context: IRequestContext) {}
+
   async count(): Promise<number> {
     return catchErrors(async () => {
       const result = await Database.knex.raw('select count(*) from achievements');

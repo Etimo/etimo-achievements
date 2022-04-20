@@ -1,9 +1,11 @@
-import { INewUser, IPartialUser, IUser } from '@etimo-achievements/types';
+import { INewUser, IPartialUser, IRequestContext, IUser } from '@etimo-achievements/types';
 import { Database } from '..';
 import { UserModel } from '../models/user-model';
 import { catchErrors } from '../utils';
 
 export class UserRepository {
+  constructor(private context: IRequestContext) {}
+
   async count(): Promise<number> {
     return catchErrors(async () => {
       const result = await Database.knex.raw('select count(*) from users');

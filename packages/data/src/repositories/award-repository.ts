@@ -1,9 +1,11 @@
-import { IAward, INewAward } from '@etimo-achievements/types';
+import { IAward, INewAward, IRequestContext } from '@etimo-achievements/types';
 import { Database } from '..';
 import { AwardModel } from '../models/award-model';
 import { catchErrors } from '../utils';
 
 export class AwardRepository {
+  constructor(private context: IRequestContext) {}
+
   async count(): Promise<number> {
     return catchErrors(async () => {
       const result = await Database.knex.raw('select count(*) from "awards"');
@@ -20,6 +22,15 @@ export class AwardRepository {
   findByAwardedByUserId(id: string): Promise<Array<IAward>> {
     return catchErrors(async () => {
       return AwardModel.query().where('awarded_by_user_id', id);
+    });
+  }
+
+  findLatest(userId: string, achievementId: string): Promise<IAward> {
+    return catchErrors(async () => {
+      return AwardModel.query().orderBy('created_at', 'desc').findOne({
+        user_id: userId,
+        achievement_id: achievementId,
+      });
     });
   }
 

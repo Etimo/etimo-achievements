@@ -1,7 +1,7 @@
 import { AchievementDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
 import { AchievementApi } from './achievement-api';
@@ -44,14 +44,11 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, close
       .wait()
       .then((response) => {
         setLoading(false);
-        if (response.success) {
+        toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
           reset();
           refresh();
           closeModal();
-          toast.success('Achievement edited successfully.');
-        } else {
-          toast.error('Achievement could not be updated: ' + response.message);
-        }
+        });
       });
   };
 

@@ -2,11 +2,7 @@ import { AwardSlackAchievementsInteractService } from '..';
 import { IContext } from '../..';
 
 export class SlackInteractService {
-  private context: IContext;
-
-  constructor(context: IContext) {
-    this.context = context;
-  }
+  constructor(private context: IContext) {}
 
   public async handleInteract(payload: any) {
     const service = new AwardSlackAchievementsInteractService(this.context);

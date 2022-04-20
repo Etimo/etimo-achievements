@@ -1,8 +1,10 @@
-import { IAccessToken, INewAccessToken, IPartialAccessToken } from '@etimo-achievements/types';
+import { IAccessToken, INewAccessToken, IPartialAccessToken, IRequestContext } from '@etimo-achievements/types';
 import { AccessTokenModel } from '../models/access-token-model';
 import { catchErrors } from '../utils';
 
 export class AccessTokenRepository {
+  constructor(private context: IRequestContext) {}
+
   findById(id: string): Promise<IAccessToken> {
     return catchErrors(async () => {
       return AccessTokenModel.query().findById(id);

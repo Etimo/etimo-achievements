@@ -1,13 +1,11 @@
 import { IContext } from '../../context';
 
 export class DeleteAwardService {
-  private repos: IContext['repositories'];
-
-  constructor(context: IContext) {
-    this.repos = context.repositories;
-  }
+  constructor(private context: IContext) {}
 
   public async delete(awardId: string) {
-    await this.repos.award.delete(awardId);
+    const { repositories } = this.context;
+
+    await repositories.award.delete(awardId);
   }
 }

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
+import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
 import { AchievementService } from '../achievements/achievement-service';
@@ -43,12 +44,7 @@ const AwardGive: React.FC = () => {
       .wait()
       .then((response) => {
         setLoading(false);
-        if (response.success) {
-          resetForm();
-          toast.success('Award created successfully.');
-        } else {
-          toast.error('Award could not be created: ' + response.message);
-        }
+        toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
       });
   };
 

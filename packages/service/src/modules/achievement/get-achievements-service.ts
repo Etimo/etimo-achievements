@@ -5,7 +5,7 @@ import { IContext } from '../..';
 export class GetAchievementService {
   private repos: IContext['repositories'];
 
-  constructor(context: IContext) {
+  constructor(private context: IContext) {
     this.repos = context.repositories;
   }
 

@@ -3,20 +3,18 @@ import { IHighscore } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 export class GetHighscoreService {
-  private repos: IContext['repositories'];
-
-  constructor(context: IContext) {
-    this.repos = context.repositories;
-  }
+  constructor(private context: IContext) {}
 
   public async get(skip: number, take: number): Promise<PaginatedData<IHighscore>> {
-    const awards = await this.repos.award.getMany(skip, take);
+    const { repositories } = this.context;
+
+    const awards = await repositories.award.getMany(skip, take);
 
     const userIds = uniq(awards.map((a) => a.userId));
-    const users = await this.repos.user.getManyByIds(userIds);
+    const users = await repositories.user.getManyByIds(userIds);
 
     const achievementIds = uniq(awards.map((a) => a.achievementId));
-    const achievements = await this.repos.achievement.getManyByIds(achievementIds);
+    const achievements = await repositories.achievement.getManyByIds(achievementIds);
 
     const highscores: IHighscore[] = [];
     for (const user of users) {

@@ -7,16 +7,12 @@ import { CreateTokenService } from './create-token-service';
 import { LoginResponse } from './types/login-response';
 
 export class RefreshLoginService {
-  private context: IContext;
-  private repos: IContext['repositories'];
-
-  constructor(context: IContext) {
-    this.context = context;
-    this.repos = context.repositories;
-  }
+  constructor(private context: IContext) {}
 
   public async refresh(refreshTokenId: string, key: string): Promise<LoginResponse> {
-    const refreshToken = await this.repos.refreshToken.findById(refreshTokenId);
+    const { repositories } = this.context;
+
+    const refreshToken = await repositories.refreshToken.findById(refreshTokenId);
     if (!refreshToken) throw new UnauthorizedError('Refresh token not found');
     if (refreshToken.expiresAt < new Date()) throw new UnauthorizedError('Refresh token has expired');
     if (refreshToken.used) throw new UnauthorizedError('Refresh token has already been used');
@@ -27,11 +23,11 @@ export class RefreshLoginService {
     if (!user) throw new BadRequestError('User not found');
 
     await Promise.allSettled([
-      this.repos.refreshToken.delete(refreshTokenId),
-      this.repos.accessToken.delete(data.accessTokenId),
+      repositories.refreshToken.delete(refreshTokenId),
+      repositories.accessToken.delete(data.accessTokenId),
     ]);
 
-    const deleted = await this.repos.refreshToken.deleteInvalid();
+    const deleted = await repositories.refreshToken.deleteInvalid();
     if (deleted) {
       Logger.log(`Deleted ${deleted} invalid refresh tokens`);
     }
