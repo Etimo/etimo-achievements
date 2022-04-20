@@ -28,13 +28,4 @@ export class GetUserService {
 
     return user;
   }
-
-  public async getByEmail(email: string): Promise<IUser> {
-    const user = await this.repos.user.findByEmail(email);
-    if (!user) {
-      throw new BadRequestError('User not found');
-    }
-
-    return user;
-  }
 }
