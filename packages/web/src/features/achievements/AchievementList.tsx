@@ -1,7 +1,7 @@
-import { AchievementDto, formatNumber } from '@etimo-achievements/common';
+import { AchievementDto, formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
+import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
@@ -13,10 +13,11 @@ const AchievementList: React.FC = () => {
   const { achievements } = useAppSelector(achievementSelector);
   const achievementService = new AchievementService();
   const [loading, setLoading] = useState(false);
+  const [deleting, setDeleting] = useState<string>();
   const [editAchievement, setEditAchievement] = useState<AchievementDto>();
 
   useEffect(() => {
-    achievementService.load();
+    achievementService.load().then(() => setLoading(false));
   }, []);
 
   const closeModal = () => {
@@ -25,14 +26,10 @@ const AchievementList: React.FC = () => {
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setLoading(true);
-    achievementService.delete(e.currentTarget.id).then((success) => {
-      setLoading(false);
-      if (success) {
-        toast.success('Achievement deleted successfully.');
-      } else {
-        toast.error('Achievement could not be deleted');
-      }
+    setDeleting(e.currentTarget.id);
+    achievementService.delete(e.currentTarget.id).then((response) => {
+      setDeleting(undefined);
+      toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
     });
   };
 
@@ -58,7 +55,7 @@ const AchievementList: React.FC = () => {
           <TableColumn>Delete</TableColumn>
         </TableHeader>
         <TableBody>
-          {achievements.map((a: AchievementDto) => (
+          {sort(achievements, 'name').map((a: AchievementDto) => (
             <TableRow key={a.id}>
               <TableCell>{a.name}</TableCell>
               <TableCell>{a.description}</TableCell>
@@ -69,7 +66,7 @@ const AchievementList: React.FC = () => {
                 <EditButton id={a.id} onClick={editHandler} />
               </TableCell>
               <TableCell className="text-center">
-                <TrashButton id={a.id} onClick={trashHandler} loading={loading} />
+                <TrashButton id={a.id} onClick={trashHandler} loading={deleting} />
               </TableCell>
             </TableRow>
           ))}

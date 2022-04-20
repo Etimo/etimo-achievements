@@ -62,8 +62,7 @@ export class UserService {
     const response = await this.api.delete(id).wait();
     if (response.success) {
       this.dispatch(deleteUser(id));
-      return true;
     }
-    return false;
+    return response;
   }
 }
