@@ -8,7 +8,7 @@ export class AchievementApi {
     return this.api.get<AchievementDto>(`/achievements/${id}`);
   }
 
-  public getMany(skip: number = 0, take: number = 10) {
+  public getMany(skip: number = 0, take: number = 1000) {
     return this.api.get<PaginatedData<AchievementDto>>(`/achievements?skip=${skip}&take=${take}`);
   }
 

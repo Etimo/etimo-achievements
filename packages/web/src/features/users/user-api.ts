@@ -12,7 +12,7 @@ export class UserApi {
     return this.api.get<UserDto>('/profile');
   }
 
-  public getMany(skip: number = 0, take: number = 10) {
+  public getMany(skip: number = 0, take: number = 100) {
     return this.api.get<PaginatedData<UserDto>>(`/users?skip=${skip}&take=${take}`);
   }
 

@@ -8,7 +8,7 @@ export class AwardApi {
     return this.api.get<AwardDto>(`/awards/${id}`);
   }
 
-  public getMany(skip: number = 0, take: number = 10) {
+  public getMany(skip: number = 0, take: number = 100) {
     return this.api.get<PaginatedData<AwardDto>>(`/awards?skip=${skip}&take=${take}`);
   }
 
