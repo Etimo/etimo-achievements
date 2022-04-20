@@ -1,4 +1,4 @@
-import { paginate, PaginatedData } from '@etimo-achievements/common';
+import { NotFoundError, paginate, PaginatedData } from '@etimo-achievements/common';
 import { IAchievement } from '@etimo-achievements/types';
 import { IContext } from '../..';
 
@@ -21,6 +21,11 @@ export class GetAchievementService {
   }
 
   public async get(id: string): Promise<IAchievement> {
-    return this.repos.achievement.findById(id);
+    const achievement = await this.repos.achievement.findById(id);
+    if (!achievement) {
+      throw new NotFoundError('Achievement not found');
+    }
+
+    return achievement;
   }
 }

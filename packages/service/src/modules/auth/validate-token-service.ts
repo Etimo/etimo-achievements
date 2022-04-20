@@ -8,6 +8,6 @@ export class ValidateTokenService {
     const { repositories } = this.context;
 
     const accessToken = await repositories.accessToken.findById(jwt.jti);
-    return accessToken && !accessToken.disabled;
+    return accessToken !== undefined && !accessToken.disabled;
   }
 }

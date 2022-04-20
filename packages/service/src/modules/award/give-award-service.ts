@@ -13,8 +13,16 @@ export class GiveAwardService {
 
     const [lastAward, achievement] = await Promise.all([lastAwardPromise, achievementPromise]);
 
+    if (!achievement) {
+      throw new BadRequestError('Achievement does not exist');
+    }
+
     // Check if the user can get this achievement (cooldown)
-    if (achievement.cooldownMinutes > 0 && minutesSince(lastAward.createdAt) < achievement.cooldownMinutes) {
+    if (
+      lastAward &&
+      achievement.cooldownMinutes > 0 &&
+      minutesSince(lastAward.createdAt) < achievement.cooldownMinutes
+    ) {
       throw new BadRequestError('Achievement on cooldown for this user');
     }
 
@@ -22,6 +30,10 @@ export class GiveAwardService {
     const awardedByPromise = repositories.user.findById(award.awardedByUserId);
 
     const [awardedTo, awardedBy] = await Promise.all([awardedToPromise, awardedByPromise]);
+
+    if (!awardedTo || !awardedBy) {
+      throw new BadRequestError('Awarded user or awarded by user does not exist');
+    }
 
     notifier.notify(
       `*${awardedTo.name}* was awarded *${achievement.name}* (${formatNumber(achievement.achievementPoints)} pts) by ${

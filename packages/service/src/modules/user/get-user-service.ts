@@ -1,4 +1,4 @@
-import { paginate, PaginatedData } from '@etimo-achievements/common';
+import { BadRequestError, paginate, PaginatedData } from '@etimo-achievements/common';
 import { IUser } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
@@ -21,10 +21,20 @@ export class GetUserService {
   }
 
   public async get(userId: string): Promise<IUser> {
-    return this.repos.user.findById(userId);
+    const user = await this.repos.user.findById(userId);
+    if (!user) {
+      throw new BadRequestError('User not found');
+    }
+
+    return user;
   }
 
   public async getByEmail(email: string): Promise<IUser> {
-    return this.repos.user.findByEmail(email);
+    const user = await this.repos.user.findByEmail(email);
+    if (!user) {
+      throw new BadRequestError('User not found');
+    }
+
+    return user;
   }
 }

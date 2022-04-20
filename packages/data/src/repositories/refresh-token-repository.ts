@@ -5,15 +5,9 @@ import { catchErrors } from '../utils';
 export class RefreshTokenRepository {
   constructor(private context: IRequestContext) {}
 
-  findById(id: string): Promise<IRefreshToken> {
+  findById(id: string): Promise<IRefreshToken | undefined> {
     return catchErrors(async () => {
       return RefreshTokenModel.query().findById(id);
-    });
-  }
-
-  findByRefreshToken(refreshToken: string): Promise<IRefreshToken> {
-    return catchErrors(async () => {
-      return RefreshTokenModel.query().findOne({ refreshToken });
     });
   }
 
