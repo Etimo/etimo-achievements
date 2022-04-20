@@ -1,3 +1,4 @@
+import { Logger } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
 
 export const errorMiddleware = () => {
@@ -6,6 +7,7 @@ export const errorMiddleware = () => {
 
     switch (error.name) {
       case 'Bad Request': // express-openapi-validator
+      case 'BadRequestError':
         res.statusCode = 400;
         break;
 
@@ -26,6 +28,7 @@ export const errorMiddleware = () => {
 
       default:
         res.statusCode = 500;
+        Logger.log(`Unmapped error '${error.name}' occurred: ${error.message}`);
         break;
     }
 

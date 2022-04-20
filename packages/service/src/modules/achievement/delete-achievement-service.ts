@@ -3,7 +3,7 @@ import { IContext } from '../..';
 export class DeleteAchievementService {
   private repos: IContext['repositories'];
 
-  constructor(context: IContext) {
+  constructor(private context: IContext) {
     this.repos = context.repositories;
   }
 

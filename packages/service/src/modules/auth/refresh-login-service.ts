@@ -7,11 +7,9 @@ import { CreateTokenService } from './create-token-service';
 import { LoginResponse } from './types/login-response';
 
 export class RefreshLoginService {
-  private context: IContext;
   private repos: IContext['repositories'];
 
-  constructor(context: IContext) {
-    this.context = context;
+  constructor(private context: IContext) {
     this.repos = context.repositories;
   }
 

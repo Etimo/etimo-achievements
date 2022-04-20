@@ -1,8 +1,10 @@
-import { INewRefreshToken, IPartialRefreshToken, IRefreshToken } from '@etimo-achievements/types';
+import { INewRefreshToken, IPartialRefreshToken, IRefreshToken, IRequestContext } from '@etimo-achievements/types';
 import { RefreshTokenModel } from '../models/refresh-token-model';
 import { catchErrors } from '../utils';
 
 export class RefreshTokenRepository {
+  constructor(private context: IRequestContext) {}
+
   findById(id: string): Promise<IRefreshToken> {
     return catchErrors(async () => {
       return RefreshTokenModel.query().findById(id);

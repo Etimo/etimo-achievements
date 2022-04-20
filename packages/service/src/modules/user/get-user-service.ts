@@ -5,7 +5,7 @@ import { IContext } from '../../context';
 export class GetUserService {
   private repos: IContext['repositories'];
 
-  constructor(context: IContext) {
+  constructor(private context: IContext) {
     this.repos = context.repositories;
   }
 

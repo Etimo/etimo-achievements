@@ -6,13 +6,7 @@ import { CreateTokenService } from './create-token-service';
 import { LoginResponse } from './types/login-response';
 
 export class LoginService {
-  private provider: string;
-  private context: IContext;
-
-  constructor(provider: string, context: IContext) {
-    this.provider = provider;
-    this.context = context;
-  }
+  constructor(private provider: string, private context: IContext) {}
 
   public async login(code: string): Promise<LoginResponse> {
     // Get user from provider service

@@ -3,8 +3,8 @@ export interface IAward {
   achievementId: string;
   awardedByUserId: string;
   userId: string;
-  createdAt?: Date;
+  createdAt: Date;
 }
 
-export type INewAward = Omit<IAward, 'id'>;
+export type INewAward = Omit<IAward, 'id' | 'createdAt'>;
 export type IPartialAward = Pick<IAward, 'id'> & Partial<IAward>;

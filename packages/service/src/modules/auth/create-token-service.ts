@@ -16,7 +16,7 @@ import { LoginResponse } from './types/login-response';
 export class CreateTokenService {
   private repos: IContext['repositories'];
 
-  constructor(context: IContext) {
+  constructor(private context: IContext) {
     this.repos = context.repositories;
   }
 

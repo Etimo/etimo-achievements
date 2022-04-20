@@ -1,7 +1,7 @@
 import { UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
 import { UserApi } from './user-api';
@@ -43,14 +43,11 @@ const UserProfileEdit: React.FC<Props> = ({ showModal, closeModal }) => {
       .wait()
       .then((response) => {
         setLoading(false);
-        if (response.success) {
+        toastResponse(response, 'Profile edited successfully', 'Profile could not be updated', () => {
           reset();
           refresh();
           closeModal();
-          toast.success('Profile edited successfully.');
-        } else {
-          toast.error('Profile could not be updated: ' + response.message);
-        }
+        });
       });
   };
 

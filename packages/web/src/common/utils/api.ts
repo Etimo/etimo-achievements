@@ -1,12 +1,13 @@
 import { Logger } from '@etimo-achievements/common';
 
-type ApiResponse<T> = {
+export type ApiResponse<T> = {
   success: boolean;
   body?: Promise<T>;
   data: () => Promise<T>;
   status: number;
   message: string;
   error?: string;
+  errorMessage?: Promise<string>;
 };
 
 type ApiResult<T> = {
@@ -69,26 +70,27 @@ class Api {
         .then((res) => {
           const statusCode = res.status;
           const message = res.statusText;
-          let error: string | undefined;
           let bodyPromise: Promise<T> | undefined;
           let success: boolean = false;
+          let error: string | undefined;
+          let errorMessage: Promise<string> | undefined;
           const headers = res.headers;
           const contentType = headers.get('content-type');
           const isJson = contentType && contentType.includes('application/json');
           if (statusCode >= 200 && statusCode < 300) {
             success = true;
-            bodyPromise = new Promise((resolve, reject) => {
-              if (isJson) {
-                return res
-                  .json()
-                  .then((data) => resolve(data ? (data as T) : ({} as T)))
-                  .catch(reject);
-              }
-
-              return {} as T;
-            });
+            bodyPromise = this.getBodyPromise<T>(res, isJson);
           } else {
             error = message;
+            errorMessage = new Promise<string>((resolve) => {
+              this.getBodyPromise<{ error: string }>(res, isJson)?.then((data) => {
+                if (data?.error) {
+                  resolve(data.error);
+                } else {
+                  resolve(message);
+                }
+              });
+            });
           }
 
           resolve({
@@ -98,6 +100,7 @@ class Api {
             status: statusCode,
             message,
             error,
+            errorMessage,
           });
         })
         .catch((err) => reject(err));
@@ -107,6 +110,19 @@ class Api {
       wait: async () => await responsePromise,
       abort,
     };
+  }
+
+  private getBodyPromise<T>(res: Response, isJson: string | boolean | null): Promise<T> | undefined {
+    return new Promise((resolve, reject) => {
+      if (isJson) {
+        return res
+          .json()
+          .then((data) => resolve(data ? (data as T) : ({} as T)))
+          .catch(reject);
+      }
+
+      return {} as T;
+    });
   }
 }
 

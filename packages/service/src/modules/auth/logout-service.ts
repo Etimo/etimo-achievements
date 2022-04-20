@@ -5,7 +5,7 @@ import { IContext } from '../..';
 export class LogoutService {
   private repos: IContext['repositories'];
 
-  constructor(context: IContext) {
+  constructor(private context: IContext) {
     this.repos = context.repositories;
   }
 

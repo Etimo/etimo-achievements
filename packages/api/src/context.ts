@@ -37,11 +37,11 @@ export class Context implements IContext {
   }
 
   private _repositories: IContext['repositories'] = {
-    accessToken: new AccessTokenRepository(),
-    achievement: new AchievementRepository(),
-    award: new AwardRepository(),
-    refreshToken: new RefreshTokenRepository(),
-    user: new UserRepository(),
+    accessToken: new AccessTokenRepository(this),
+    achievement: new AchievementRepository(this),
+    award: new AwardRepository(this),
+    refreshToken: new RefreshTokenRepository(this),
+    user: new UserRepository(this),
   };
 
   public get repositories() {

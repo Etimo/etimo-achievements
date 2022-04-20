@@ -8,7 +8,7 @@ export class SyncSlackUsersService {
   private repos: IContext['repositories'];
   private web: WebClient;
 
-  constructor(context: IContext) {
+  constructor(private context: IContext) {
     this.repos = context.repositories;
     this.web = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
   }

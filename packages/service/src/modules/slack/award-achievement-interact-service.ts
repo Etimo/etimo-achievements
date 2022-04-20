@@ -9,7 +9,7 @@ export class AwardSlackAchievementsInteractService {
   private repos: IContext['repositories'];
   private web: WebClient;
 
-  constructor(context: IContext) {
+  constructor(private context: IContext) {
     this.repos = context.repositories;
     this.giveAwardService = new GiveAwardService(context);
     this.web = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
