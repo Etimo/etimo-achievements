@@ -24,7 +24,7 @@ const achievementSlice = createSlice({
     },
     updateAchievements: (state: AchievementState, action: { payload: AchievementDto[] }) => {
       action.payload.forEach((achievement) => {
-        const index = state.achievements.findIndex((achievement) => achievement.id === achievement.id);
+        const index = state.achievements.findIndex((a) => a.id === achievement.id);
         if (index !== -1) {
           state.achievements[index] = achievement;
         } else {
