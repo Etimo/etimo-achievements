@@ -1,10 +1,18 @@
-import { UserDto } from '@etimo-achievements/common';
+import { sort, UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useAppSelector } from '../../app/store';
+import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
+import {
+  SkeletonTableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from '../../components/table';
 import { UserService } from './user-service';
 import { usersSelector } from './user-slice';
 import UserEditModal from './UserEditModal';
@@ -12,11 +20,12 @@ import UserEditModal from './UserEditModal';
 const UserList: React.FC = () => {
   const { users } = useAppSelector(usersSelector);
   const userService = new UserService();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState<string>();
   const [editUser, setEditUser] = useState<UserDto>();
 
   useEffect(() => {
-    userService.load();
+    userService.load().then(() => setLoading(false));
   }, []);
 
   const closeModal = () => {
@@ -25,14 +34,10 @@ const UserList: React.FC = () => {
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setLoading(true);
-    userService.delete(e.currentTarget.id).then((success) => {
-      setLoading(false);
-      if (success) {
-        toast.success('User deleted successfully.');
-      } else {
-        toast.error('User could not be deleted');
-      }
+    setDeleting(e.currentTarget.id);
+    userService.delete(e.currentTarget.id).then((response) => {
+      setDeleting(undefined);
+      toastResponse(response, 'User deleted successfully', 'User could not be deleted');
     });
   };
 
@@ -56,19 +61,23 @@ const UserList: React.FC = () => {
           <TableColumn>Delete</TableColumn>
         </TableHeader>
         <TableBody>
-          {users.map((u: UserDto) => (
-            <TableRow key={u.id}>
-              <TableCell>{u.name}</TableCell>
-              <TableCell>{u.email}</TableCell>
-              <TableCell>{u.slackHandle}</TableCell>
-              <TableCell className="text-center">
-                <EditButton id={u.id} onClick={editHandler} />
-              </TableCell>
-              <TableCell className="text-center">
-                <TrashButton id={u.id} onClick={trashHandler} loading={loading} />
-              </TableCell>
-            </TableRow>
-          ))}
+          {loading ? (
+            <SkeletonTableRow columns={5} rows={3} />
+          ) : (
+            sort(users, 'name').map((u: UserDto) => (
+              <TableRow key={u.id}>
+                <TableCell>{u.name}</TableCell>
+                <TableCell>{u.email}</TableCell>
+                <TableCell>{u.slackHandle}</TableCell>
+                <TableCell className="text-center">
+                  <EditButton id={u.id} onClick={editHandler} />
+                </TableCell>
+                <TableCell className="text-center">
+                  <TrashButton id={u.id} onClick={trashHandler} loading={deleting} />
+                </TableCell>
+              </TableRow>
+            ))
+          )}
         </TableBody>
       </Table>
       {editUser && <UserEditModal userId={editUser.id} showModal={true} closeModal={closeModal} />}

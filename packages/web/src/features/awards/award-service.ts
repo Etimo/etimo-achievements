@@ -48,8 +48,7 @@ export class AwardService {
     const response = await this.api.delete(id).wait();
     if (response.success) {
       this.dispatch(deleteAward(id));
-      return true;
     }
-    return false;
+    return response;
   }
 }

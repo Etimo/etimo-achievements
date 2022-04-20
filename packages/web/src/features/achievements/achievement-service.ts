@@ -36,8 +36,7 @@ export class AchievementService {
     const response = await this.api.delete(id).wait();
     if (response.success) {
       this.dispatch(deleteAchievement(id));
-      return true;
     }
-    return false;
+    return response;
   }
 }

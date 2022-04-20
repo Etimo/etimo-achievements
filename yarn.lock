@@ -1808,6 +1808,7 @@ __metadata:
     react-hook-form: ^7.29.0
     react-hot-loader: ^4.13.0
     react-hot-toast: ^2.2.0
+    react-loading-skeleton: ^3.1.0
     react-modal: ^3.14.4
     react-pro-sidebar: ^0.7.1
     react-redux: ^7.2.6
@@ -11300,6 +11301,15 @@ __metadata:
   version: 3.0.4
   resolution: "react-lifecycles-compat@npm:3.0.4"
   checksum: a904b0fc0a8eeb15a148c9feb7bc17cec7ef96e71188280061fc340043fd6d8ee3ff233381f0e8f95c1cf926210b2c4a31f38182c8f35ac55057e453d6df204f
+  languageName: node
+  linkType: hard
+
+"react-loading-skeleton@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "react-loading-skeleton@npm:3.1.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 53d257c88e442e979fb9148ae826fc998a5a54c08a01e894395cf1ebb1e1c83e426f9c4884800e5564ba3308cf33e32d3abc75e07589ae0b48e4a2ed544fda2a
   languageName: node
   linkType: hard
 
