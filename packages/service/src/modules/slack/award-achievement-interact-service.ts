@@ -45,7 +45,7 @@ export class AwardSlackAchievementsInteractService {
         }
     );
 
-    await Promise.allSettled(awards.map((award) => this.giveAwardService.create(award)));
+    await Promise.allSettled(awards.map((award) => this.giveAwardService.give(award)));
 
     await this.postAwardMessage(channel, fromUserSlackHandle, toUserSlackHandles, achievement);
   }

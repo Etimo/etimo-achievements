@@ -121,7 +121,7 @@ export class AwardController {
 
     const service = new GiveAwardService(getContext());
     const input = AwardMapper.toNewAward({ ...payload, awardedByUserId: userId });
-    const award = await service.create(input);
+    const award = await service.give(input);
 
     return createdResponse(res, '/awards', award);
   };

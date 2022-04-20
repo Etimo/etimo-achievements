@@ -3,17 +3,13 @@ import { IAward, INewAward } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 export class GiveAwardService {
-  private repos: IContext['repositories'];
-  private chat: IContext['notifier'];
+  constructor(private context: IContext) {}
 
-  constructor(private context: IContext) {
-    this.repos = context.repositories;
-    this.chat = context.notifier;
-  }
+  public async give(award: INewAward): Promise<IAward> {
+    const { repositories, notifier } = this.context;
 
-  public async create(award: INewAward): Promise<IAward> {
-    const lastAwardPromise = this.repos.award.findLatest(award.userId, award.achievementId);
-    const achievementPromise = this.repos.achievement.findById(award.achievementId);
+    const lastAwardPromise = repositories.award.findLatest(award.userId, award.achievementId);
+    const achievementPromise = repositories.achievement.findById(award.achievementId);
 
     const [lastAward, achievement] = await Promise.all([lastAwardPromise, achievementPromise]);
 
@@ -22,18 +18,18 @@ export class GiveAwardService {
       throw new BadRequestError('Achievement on cooldown for this user');
     }
 
-    const awardedToPromise = this.repos.user.findById(award.userId);
-    const awardedByPromise = this.repos.user.findById(award.awardedByUserId);
+    const awardedToPromise = repositories.user.findById(award.userId);
+    const awardedByPromise = repositories.user.findById(award.awardedByUserId);
 
     const [awardedTo, awardedBy] = await Promise.all([awardedToPromise, awardedByPromise]);
 
-    this.chat.notify(
+    notifier.notify(
       `*${awardedTo.name}* was awarded *${achievement.name}* (${formatNumber(achievement.achievementPoints)} pts) by ${
         awardedBy.name
       }`,
       'medium'
     );
 
-    return await this.repos.award.create(award);
+    return await repositories.award.create(award);
   }
 }
