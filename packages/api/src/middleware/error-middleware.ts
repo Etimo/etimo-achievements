@@ -9,7 +9,7 @@ export const errorMiddleware = () => {
       case 'Bad Request': // express-openapi-validator
       case 'BadRequestError':
         res.statusCode = 400;
-        break;
+        return res.send({ error: error.message });
 
       case 'Unauthorized': // express-openapi-validator
       case 'UnauthorizedError':
@@ -20,18 +20,16 @@ export const errorMiddleware = () => {
       case 'Not Found':
       case 'NotFoundError':
         res.statusCode = 404;
-        break;
+        return res.send({ error: 'Not Found' });
 
       case 'ConflictError':
         res.statusCode = 409;
-        break;
+        return res.send({ error: 'Conflict' });
 
       default:
         res.statusCode = 500;
         Logger.log(`Unmapped error '${error.name}' occurred: ${error.message}`);
-        break;
+        return res.send({ error: 'Internal Server Error' });
     }
-
-    return res.send({ error: error.message });
   };
 };
