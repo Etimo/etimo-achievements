@@ -24,7 +24,7 @@ const userSlice = createSlice({
     },
     updateUsers: (state: UserState, action: { payload: UserDto[] }) => {
       action.payload.forEach((user: UserDto) => {
-        const index = state.users.findIndex((user: UserDto) => user.id === user.id);
+        const index = state.users.findIndex((u: UserDto) => u.id === user.id);
         if (index !== -1) {
           state.users[index] = user;
         } else {
