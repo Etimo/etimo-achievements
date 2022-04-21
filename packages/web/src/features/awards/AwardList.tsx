@@ -1,18 +1,12 @@
 import { formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
+import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
+import { insensitiveCompare } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import {
-  SkeletonTableRow,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow,
-} from '../../components/table';
+import NewTable from '../../components/table/NewTable';
 import { AwardService } from './award-service';
 import { awardSelector } from './award-slice';
 
@@ -35,37 +29,55 @@ const AwardList: React.FC = () => {
     });
   };
 
+  const columns = React.useMemo(
+    (): Column[] => [
+      {
+        Header: 'Name',
+        accessor: 'name',
+        sortType: insensitiveCompare,
+      },
+      {
+        Header: 'Awarded To',
+        accessor: 'awardedTo',
+        sortType: insensitiveCompare,
+      },
+      {
+        Header: 'Points',
+        accessor: 'points',
+      },
+      {
+        Header: 'Date',
+        accessor: 'date',
+      },
+      {
+        Header: 'Awarded By',
+        accessor: 'awardedBy',
+        sortType: insensitiveCompare,
+      },
+      {
+        Header: 'Delete',
+        accessor: 'delete',
+      },
+    ],
+    []
+  );
+
   return (
     <div className="w-3/4 mx-auto">
       <Header>Awards</Header>
-      <Table>
-        <TableHeader>
-          <TableColumn>Name</TableColumn>
-          <TableColumn>Awarded To</TableColumn>
-          <TableColumn>Points</TableColumn>
-          <TableColumn>Date</TableColumn>
-          <TableColumn>Awarded By</TableColumn>
-          <TableColumn>Delete</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {loading ? (
-            <SkeletonTableRow columns={6} rows={3} />
-          ) : (
-            sort(composites, 'award.createdAt', 'desc').map((row) => (
-              <TableRow key={row.award.id}>
-                <TableCell>{row.achievement.name}</TableCell>
-                <TableCell>{row.awardedTo.name}</TableCell>
-                <TableCell>{formatNumber(row.achievement.achievementPoints)} pts</TableCell>
-                <TableCell>{new Date(row.award.createdAt ?? 0).toLocaleString('sv-SE')}</TableCell>
-                <TableCell>{row.awardedBy.name}</TableCell>
-                <TableCell className="text-center">
-                  <TrashButton id={row.award.id} onClick={trashHandler} loading={deleting} />
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+      <NewTable
+        columns={columns}
+        data={sort(composites, 'award.createdAt', 'desc').map((c) => ({
+          name: c.achievement.name,
+          awardedTo: c.awardedTo.name,
+          points: `${formatNumber(c.achievement.achievementPoints)} pts`,
+          date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
+          awardedBy: c.awardedBy.name,
+          delete: (
+            <TrashButton id={c.award.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />
+          ),
+        }))}
+      />
     </div>
   );
 };

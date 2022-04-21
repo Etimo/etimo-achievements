@@ -1795,6 +1795,7 @@ __metadata:
     "@types/react": ^17.0.40
     "@types/react-dom": ^17.0.13
     "@types/react-modal": ^3.13.1
+    "@types/react-table": ^7.7.10
     "@types/redux-logger": ^3.0.9
     autoprefixer: ^10.4.4
     copy-webpack-plugin: ^10.2.4
@@ -2763,6 +2764,15 @@ __metadata:
     hoist-non-react-statics: ^3.3.0
     redux: ^4.0.0
   checksum: 7cedb0f20806ce67255f676fab2d4d9534c12705d43636df95224cfa77fdf5a2e792dc76c6e072c02cad1c88030aea822c14f36fe85d459b898ee68fcff6f05c
+  languageName: node
+  linkType: hard
+
+"@types/react-table@npm:^7.7.10":
+  version: 7.7.10
+  resolution: "@types/react-table@npm:7.7.10"
+  dependencies:
+    "@types/react": "*"
+  checksum: 840f845c226c37c3f13f023974c37b4e941b7588c42dc5fcd5165463fd25005a9504a2c0d48df3325c0a63c2dc99c60fe1dfee4654b501b781ec2df3a4abfa64
   languageName: node
   linkType: hard
 

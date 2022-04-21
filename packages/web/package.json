@@ -44,6 +44,7 @@
     "@types/react": "^17.0.40",
     "@types/react-dom": "^17.0.13",
     "@types/react-modal": "^3.13.1",
+    "@types/react-table": "^7.7.10",
     "@types/redux-logger": "^3.0.9",
     "autoprefixer": "^10.4.4",
     "copy-webpack-plugin": "^10.2.4",
