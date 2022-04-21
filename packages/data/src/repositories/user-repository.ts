@@ -1,4 +1,5 @@
-import { INewUser, IPartialUser, IRequestContext, IUser } from '@etimo-achievements/types';
+import { camelToSnakeCase } from '@etimo-achievements/common';
+import { INewUser, IPartialUser, IRequestContext, IUser, PaginationOptions } from '@etimo-achievements/types';
 import { Database } from '..';
 import { UserModel } from '../models/user-model';
 import { catchErrors } from '../utils';
@@ -12,10 +13,13 @@ export class UserRepository {
       return parseInt(result.rows[0]['count'], 10);
     });
   }
-
-  getMany(skip: number, take: number): Promise<IUser[]> {
+  getMany(options: PaginationOptions): Promise<IUser[]> {
     return catchErrors(async () => {
-      return UserModel.query().limit(take).offset(skip);
+      const query = UserModel.query().limit(options.take).offset(options.skip);
+      for (const [key, order] of options.orderBy) {
+        query.orderBy(camelToSnakeCase(key), order);
+      }
+      return query;
     });
   }
 

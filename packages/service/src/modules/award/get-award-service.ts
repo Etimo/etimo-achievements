@@ -1,15 +1,15 @@
 import { paginate, PaginatedData } from '@etimo-achievements/common';
-import { IAward } from '@etimo-achievements/types';
+import { IAward, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 export class GetAwardService {
   constructor(private context: IContext) {}
 
-  public async getMany(skip: number, take: number): Promise<PaginatedData<IAward>> {
+  public async getMany(options: PaginationOptions): Promise<PaginatedData<IAward>> {
     const { repositories } = this.context;
 
-    const awards = await repositories.award.getMany(skip, take);
+    const awards = await repositories.award.getMany(options);
     const count = await repositories.award.count();
-    return paginate(awards, skip, take, count);
+    return paginate(awards, count, options);
   }
 }

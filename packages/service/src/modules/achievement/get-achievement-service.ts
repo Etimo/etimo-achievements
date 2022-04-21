@@ -1,5 +1,5 @@
 import { NotFoundError, paginate, PaginatedData } from '@etimo-achievements/common';
-import { IAchievement } from '@etimo-achievements/types';
+import { IAchievement, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../..';
 
 export class GetAchievementService {
@@ -9,10 +9,10 @@ export class GetAchievementService {
     this.repos = context.repositories;
   }
 
-  public async getMany(skip: number, take: number): Promise<PaginatedData<IAchievement>> {
-    const achievements = await this.repos.achievement.getMany(skip, take);
+  public async getMany(options: PaginationOptions): Promise<PaginatedData<IAchievement>> {
+    const achievements = await this.repos.achievement.getMany(options);
     const count = await this.repos.achievement.count();
-    return paginate(achievements, skip, take, count);
+    return paginate(achievements, count, options);
   }
 
   public async getManyByIds(ids: string[]): Promise<IAchievement[]> {

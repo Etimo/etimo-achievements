@@ -1,0 +1,8 @@
+x-template: &orderByParam
+  name: orderBy
+  in: query
+  description: The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').
+  schema:
+    type: array
+    items:
+      type: string

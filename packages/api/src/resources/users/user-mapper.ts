@@ -1,5 +1,5 @@
-import { IUser } from '@etimo-achievements/types';
 import { UserDto } from '@etimo-achievements/common';
+import { IUser } from '@etimo-achievements/types';
 
 export class UserMapper {
   public static toUserDto(user: IUser): UserDto {
@@ -18,5 +18,10 @@ export class UserMapper {
       email: userDto.email,
       slackHandle: userDto.slackHandle,
     };
+  }
+
+  public static isProperty(property: string) {
+    const test = UserMapper.toUser({} as UserDto);
+    return !!test.hasOwnProperty(property);
   }
 }

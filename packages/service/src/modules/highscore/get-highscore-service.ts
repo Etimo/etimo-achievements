@@ -1,14 +1,15 @@
-import { paginate, PaginatedData, uniq } from '@etimo-achievements/common';
-import { IHighscore } from '@etimo-achievements/types';
+import { paginate, PaginatedData, sort, uniq } from '@etimo-achievements/common';
+import { IHighscore, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 export class GetHighscoreService {
   constructor(private context: IContext) {}
 
-  public async get(skip: number, take: number): Promise<PaginatedData<IHighscore>> {
+  public async get(options: PaginationOptions): Promise<PaginatedData<IHighscore>> {
     const { repositories } = this.context;
+    const { skip, take } = options;
 
-    const awards = await repositories.award.getMany(skip, take);
+    const awards = await repositories.award.getAll();
 
     const userIds = uniq(awards.map((a) => a.userId));
     const users = await repositories.user.getManyByIds(userIds);
@@ -26,14 +27,20 @@ export class GetHighscoreService {
         const userHighscore: IHighscore = {
           userId: user.id,
           achievements: userAchievements.length,
-          points: userAchievements.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0),
+          points: userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0,
         };
         highscores.push(userHighscore);
       }
     }
 
-    const sortedHighscores = highscores.sort((a, b) => b.points - a.points);
+    let orderBy = 'points';
+    let order: 'asc' | 'desc' = 'desc';
+    if (options.orderBy?.length) {
+      [orderBy, order] = options.orderBy[0];
+    }
 
-    return paginate(sortedHighscores.slice(skip, skip + take), skip, take, sortedHighscores.length);
+    const sortedHighscores = sort(highscores, orderBy, order);
+
+    return paginate(sortedHighscores.slice(skip, skip + take), sortedHighscores.length, options);
   }
 }

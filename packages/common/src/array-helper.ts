@@ -15,6 +15,11 @@ function sortBy(key: any, order: 'asc' | 'desc' = 'asc') {
     for (let i = 0; i < keys.length; i++) {
       value = value[keys[i]];
     }
+
+    if (parseInt(value) !== NaN) {
+      return parseInt(value);
+    }
+
     return `${value}`.toLowerCase();
   };
 

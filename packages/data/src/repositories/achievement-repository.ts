@@ -1,5 +1,11 @@
-import { Logger } from '@etimo-achievements/common';
-import { IAchievement, INewAchievement, IPartialAchievement, IRequestContext } from '@etimo-achievements/types';
+import { camelToSnakeCase, Logger } from '@etimo-achievements/common';
+import {
+  IAchievement,
+  INewAchievement,
+  IPartialAchievement,
+  IRequestContext,
+  PaginationOptions,
+} from '@etimo-achievements/types';
 import { Database } from '..';
 import { AchievementModel } from '../models/achievement-model';
 import { catchErrors } from '../utils';
@@ -20,9 +26,13 @@ export class AchievementRepository {
     });
   }
 
-  getMany(skip: number, take: number): Promise<IAchievement[]> {
+  getMany(options: PaginationOptions): Promise<IAchievement[]> {
     return catchErrors(async () => {
-      return AchievementModel.query().limit(take).offset(skip);
+      const query = AchievementModel.query().limit(options.take).offset(options.skip);
+      for (const [key, order] of options.orderBy) {
+        query.orderBy(camelToSnakeCase(key), order);
+      }
+      return query;
     });
   }
 

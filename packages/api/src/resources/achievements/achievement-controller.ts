@@ -14,6 +14,7 @@ import {
   protectedEndpoint,
 } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
+import { validateOrderBy } from '../../utils/validation-helper';
 import { AchievementMapper } from './achievement-mapper';
 
 export class AchievementController {
@@ -31,6 +32,8 @@ export class AchievementController {
      *     parameters:
      *       - *skipParam
      *       - *takeParam
+     *       - *orderByParam
+     *       - *pageTokenParam
      *     responses:
      *       200:
      *         description: The request was successful.
@@ -154,10 +157,11 @@ export class AchievementController {
   }
 
   private getAchievements = async (req: Request, res: Response) => {
-    const [skip, take] = getPaginationOptions(req);
+    const paginationOpts = getPaginationOptions(req);
+    validateOrderBy(paginationOpts.orderBy, AchievementMapper.isProperty);
 
     const service = new GetAchievementService(getContext());
-    const achievements = await service.getMany(skip, take);
+    const achievements = await service.getMany(paginationOpts);
     const output = {
       ...achievements,
       data: achievements.data.map(AchievementMapper.toAchievementDto),

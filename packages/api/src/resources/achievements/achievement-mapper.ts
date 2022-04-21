@@ -21,4 +21,9 @@ export class AchievementMapper {
       cooldownMinutes: achievementDto.cooldownMinutes,
     };
   }
+
+  public static isProperty(property: string) {
+    const test = AchievementMapper.toAchievement({} as AchievementDto);
+    return !!test.hasOwnProperty(property);
+  }
 }

@@ -1,4 +1,5 @@
-import { IAward, INewAward, IRequestContext } from '@etimo-achievements/types';
+import { camelToSnakeCase } from '@etimo-achievements/common';
+import { IAward, INewAward, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
 import { Database } from '..';
 import { AwardModel } from '../models/award-model';
 import { catchErrors } from '../utils';
@@ -10,6 +11,22 @@ export class AwardRepository {
     return catchErrors(async () => {
       const result = await Database.knex.raw('select count(*) from "awards"');
       return parseInt(result.rows[0]['count'], 10);
+    });
+  }
+
+  getAll(): Promise<IAward[]> {
+    return catchErrors(async () => {
+      return AwardModel.query().select();
+    });
+  }
+
+  getMany(options: PaginationOptions): Promise<IAward[]> {
+    return catchErrors(async () => {
+      const query = AwardModel.query().limit(options.take).offset(options.skip);
+      for (const [key, order] of options.orderBy) {
+        query.orderBy(camelToSnakeCase(key), order);
+      }
+      return query;
     });
   }
 
@@ -31,12 +48,6 @@ export class AwardRepository {
   delete(id: string): Promise<number> {
     return catchErrors(async () => {
       return AwardModel.query().deleteById(id);
-    });
-  }
-
-  getMany(skip: number, take: number): Promise<IAward[]> {
-    return catchErrors(async () => {
-      return AwardModel.query().limit(take).offset(skip);
     });
   }
 }
