@@ -46,6 +46,8 @@ const Highscores: React.FC = () => {
           achievements: formatNumber(h.achievements),
           points: `${formatNumber(h.points)} pts`,
         }))}
+        loading={false}
+        fetchData={() => highscoreService.load()}
       />
     </div>
   );

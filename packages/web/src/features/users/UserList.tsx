@@ -84,6 +84,8 @@ const UserList: React.FC = () => {
           edit: <EditButton id={u.id} onClick={editHandler} className="w-full text-center" />,
           delete: <TrashButton id={u.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
         }))}
+        loading={false}
+        fetchData={() => userService.load()}
       />
       {editUser && <UserEditModal userId={editUser.id} showModal={true} closeModal={closeModal} />}
     </div>

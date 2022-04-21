@@ -24,7 +24,7 @@ const AwardGive: React.FC = () => {
   const achievementService = new AchievementService();
 
   useEffect(() => {
-    achievementService.load();
+    achievementService.load(0, 50);
     userService.load();
   }, []);
 

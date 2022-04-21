@@ -7,16 +7,29 @@ import {
   faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Column, usePagination, useSortBy, useTable } from 'react-table';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
 
 type Props = {
   columns: Column[];
   data: any[];
+  loading: boolean;
+  controlledPageIndex?: number;
+  controlledPageCount?: number;
+  fetchData: any;
 };
 
-const NewTable: React.FC<Props> = ({ columns, data, children, ...rest }) => {
+const NewTable: React.FC<Props> = ({
+  columns,
+  data,
+  loading,
+  controlledPageIndex,
+  controlledPageCount,
+  fetchData,
+  children,
+  ...rest
+}) => {
   const {
     getTableProps,
     getTableBodyProps,
@@ -30,9 +43,22 @@ const NewTable: React.FC<Props> = ({ columns, data, children, ...rest }) => {
     gotoPage,
     nextPage,
     previousPage,
-    setPageSize,
     state: { pageIndex, pageSize },
-  } = useTable({ columns, data, initialState: { pageIndex: 0 } }, useSortBy, usePagination);
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: controlledPageIndex, pageSize: 10 },
+      manualPagination: true,
+      pageCount: controlledPageCount,
+    },
+    useSortBy,
+    usePagination
+  );
+
+  useEffect(() => {
+    fetchData({ pageIndex, pageSize });
+  }, [pageIndex]);
 
   return (
     <div>
@@ -60,16 +86,22 @@ const NewTable: React.FC<Props> = ({ columns, data, children, ...rest }) => {
           ))}
         </TableHead>
         <TableBody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <TableRow {...row.getRowProps()}>
-                {row.cells.map((cell) => {
-                  return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>;
-                })}
-              </TableRow>
-            );
-          })}
+          {loading ? (
+            <TableRow>
+              <TableCell>Loading...</TableCell>
+            </TableRow>
+          ) : (
+            page.map((row) => {
+              prepareRow(row);
+              return (
+                <TableRow {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>;
+                  })}
+                </TableRow>
+              );
+            })
+          )}
         </TableBody>
       </Table>
       <div className="m-1 float-left">

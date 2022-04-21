@@ -1,26 +1,25 @@
-import { AchievementDto, formatNumber, sort } from '@etimo-achievements/common';
-import React, { useEffect, useState } from 'react';
+import { AchievementDto, formatNumber } from '@etimo-achievements/common';
+import React, { useCallback, useState } from 'react';
 import { Column } from 'react-table';
-import { useAppSelector } from '../../app/store';
 import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import NewTable from '../../components/table/NewTable';
+import { AchievementApi } from './achievement-api';
 import { AchievementService } from './achievement-service';
-import { achievementSelector } from './achievement-slice';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
-  const { achievements } = useAppSelector(achievementSelector);
+  const [achievements, setAchievements] = useState<AchievementDto[]>([]);
   const achievementService = new AchievementService();
+  const achievementApi = new AchievementApi();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
+  const [data, setData] = React.useState<any[]>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [pageIndex, setPageIndex] = useState(0);
   const [editAchievement, setEditAchievement] = useState<AchievementDto>();
-
-  useEffect(() => {
-    achievementService.load().then(() => setLoading(false));
-  }, []);
 
   const closeModal = () => {
     setEditAchievement(undefined);
@@ -30,6 +29,7 @@ const AchievementList: React.FC = () => {
     e.preventDefault();
     setDeleting(e.currentTarget.id);
     achievementService.delete(e.currentTarget.id).then((response) => {
+      setData(data.filter((d) => d.id !== e.currentTarget.id));
       setDeleting(undefined);
       toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
     });
@@ -81,20 +81,48 @@ const AchievementList: React.FC = () => {
     []
   );
 
+  const fetchData = useCallback(({ pageSize, pageIndex }) => {
+    setLoading(true);
+    setPageIndex(pageIndex);
+    achievementApi
+      .getMany(pageIndex * pageSize, pageSize)
+      .wait()
+      .then((response) => {
+        if (response.success) {
+          response.data().then((slice) => {
+            setAchievements(slice.data);
+            const data = slice.data.map((a) => ({
+              id: a.id,
+              name: a.name,
+              description: a.description,
+              points: `${formatNumber(a.achievementPoints)} pts`,
+              cooldown: `${formatNumber(a.cooldownMinutes)} min`,
+              repeatable: 'Unsupported',
+              edit: <EditButton id={a.id} onClick={editHandler} className="w-full text-center" />,
+              delete: (
+                <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />
+              ),
+            }));
+            setData(data);
+            setPageCount(slice.pagination.totalPages);
+          });
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
   return (
     <div className="w-3/4 mx-auto">
       <Header>Achievements</Header>
       <NewTable
         columns={columns}
-        data={sort(achievements, 'name').map((a) => ({
-          name: a.name,
-          description: a.description,
-          points: `${formatNumber(a.achievementPoints)} pts`,
-          cooldown: `${formatNumber(a.cooldownMinutes)} min`,
-          repeatable: 'Unsupported',
-          edit: <EditButton id={a.id} onClick={editHandler} className="w-full text-center" />,
-          delete: <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
-        }))}
+        data={data}
+        fetchData={fetchData}
+        loading={loading}
+        controlledPageCount={pageCount}
+        controlledPageIndex={pageIndex}
       />
       {editAchievement && (
         <AchievementsEditModal achievementId={editAchievement.id} showModal={true} closeModal={closeModal} />
