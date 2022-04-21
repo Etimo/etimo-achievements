@@ -9,7 +9,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
 import { Column, usePagination, useSortBy, useTable } from 'react-table';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
+import { SkeletonTableRow, Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
 
 type Props = {
   columns: Column[];
@@ -48,7 +48,7 @@ const NewTable: React.FC<Props> = ({
     {
       columns,
       data,
-      initialState: { pageIndex: controlledPageIndex, pageSize: 10 },
+      initialState: { pageIndex: controlledPageIndex, pageSize: 3 },
       manualPagination: true,
       pageCount: controlledPageCount,
     },
@@ -59,6 +59,10 @@ const NewTable: React.FC<Props> = ({
   useEffect(() => {
     fetchData({ pageIndex, pageSize });
   }, [pageIndex]);
+
+  const columnCount = headerGroups.reduce((a, b) => {
+    return a + b.headers.length;
+  }, 0);
 
   return (
     <div>
@@ -87,9 +91,7 @@ const NewTable: React.FC<Props> = ({
         </TableHead>
         <TableBody {...getTableBodyProps()}>
           {loading ? (
-            <TableRow>
-              <TableCell>Loading...</TableCell>
-            </TableRow>
+            <SkeletonTableRow columns={columnCount} rows={10} />
           ) : (
             page.map((row) => {
               prepareRow(row);

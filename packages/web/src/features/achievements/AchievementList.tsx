@@ -1,5 +1,5 @@
 import { AchievementDto, formatNumber } from '@etimo-achievements/common';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { Column } from 'react-table';
 import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
@@ -19,6 +19,7 @@ const AchievementList: React.FC = () => {
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
+  const [pageSize, setPageSize] = useState(0);
   const [editAchievement, setEditAchievement] = useState<AchievementDto>();
 
   const closeModal = () => {
@@ -29,7 +30,7 @@ const AchievementList: React.FC = () => {
     e.preventDefault();
     setDeleting(e.currentTarget.id);
     achievementService.delete(e.currentTarget.id).then((response) => {
-      setData(data.filter((d) => d.id !== e.currentTarget.id));
+      fetchData({ pageSize, pageIndex });
       setDeleting(undefined);
       toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
     });
@@ -81,9 +82,24 @@ const AchievementList: React.FC = () => {
     []
   );
 
-  const fetchData = useCallback(({ pageSize, pageIndex }) => {
+  const mapToData = (achievements: AchievementDto[]): any[] => {
+    return achievements.map((a) => ({
+      id: a.id,
+      name: a.name,
+      description: a.description,
+      points: `${formatNumber(a.achievementPoints)} pts`,
+      cooldown: `${formatNumber(a.cooldownMinutes)} min`,
+      repeatable: 'Unsupported',
+      edit: <EditButton id={a.id} onClick={editHandler} className="w-full text-center" />,
+      delete: <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
+    }));
+  };
+
+  const fetchData = (input: { pageSize: number; pageIndex: number }) => {
+    const { pageSize, pageIndex } = input;
     setLoading(true);
-    setPageIndex(pageIndex);
+    console.log('pageIndex', pageIndex);
+    console.log('pageSize', pageSize);
     achievementApi
       .getMany(pageIndex * pageSize, pageSize)
       .wait()
@@ -91,19 +107,7 @@ const AchievementList: React.FC = () => {
         if (response.success) {
           response.data().then((slice) => {
             setAchievements(slice.data);
-            const data = slice.data.map((a) => ({
-              id: a.id,
-              name: a.name,
-              description: a.description,
-              points: `${formatNumber(a.achievementPoints)} pts`,
-              cooldown: `${formatNumber(a.cooldownMinutes)} min`,
-              repeatable: 'Unsupported',
-              edit: <EditButton id={a.id} onClick={editHandler} className="w-full text-center" />,
-              delete: (
-                <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />
-              ),
-            }));
-            setData(data);
+            setData(mapToData(slice.data));
             setPageCount(slice.pagination.totalPages);
           });
         }
@@ -111,7 +115,7 @@ const AchievementList: React.FC = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  };
 
   return (
     <div className="w-3/4 mx-auto">
