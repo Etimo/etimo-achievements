@@ -1,10 +1,10 @@
 import React from 'react';
 
-const TableHeader: React.FC = ({ children }) => {
+const TableHeader: React.FC = ({ children, ...rest }) => {
   return (
-    <thead>
-      <tr className="h-12 bg-slate-600">{children}</tr>
-    </thead>
+    <th className="p-3 text-slate-200" {...rest}>
+      {children}
+    </th>
   );
 };
 

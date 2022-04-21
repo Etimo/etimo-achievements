@@ -8,11 +8,12 @@ type Props = {
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   loading?: any;
   icon?: IconDefinition;
+  className?: string;
 };
 
-const TrashButton: React.FC<Props> = ({ id, onClick, loading, icon }) => {
+const TrashButton: React.FC<Props> = ({ id, onClick, loading, icon, className }) => {
   return (
-    <button id={id} onClick={onClick}>
+    <button id={id} onClick={onClick} className={className}>
       {loading === id ? (
         <Spinner color="text-slate-700" />
       ) : (

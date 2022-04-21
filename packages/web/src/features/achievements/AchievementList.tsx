@@ -1,10 +1,12 @@
 import { AchievementDto, formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
+import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
+import { insensitiveCompare } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '../../components/table';
+import NewTable from '../../components/table/NewTable';
 import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
 import AchievementsEditModal from './AchievementEditModal';
@@ -41,37 +43,57 @@ const AchievementList: React.FC = () => {
     }
   };
 
+  const columns = React.useMemo(
+    (): Column[] => [
+      {
+        Header: 'Name',
+        accessor: 'name',
+        sortType: insensitiveCompare,
+      },
+      {
+        Header: 'Description',
+        accessor: 'description',
+        sortType: insensitiveCompare,
+      },
+      {
+        Header: 'Points',
+        accessor: 'points',
+      },
+      {
+        Header: 'Cooldown',
+        accessor: 'cooldown',
+      },
+      {
+        Header: 'Repeatable',
+        accessor: 'repeatable',
+      },
+      {
+        Header: 'Edit',
+        accessor: 'edit',
+      },
+      {
+        Header: 'Delete',
+        accessor: 'delete',
+      },
+    ],
+    []
+  );
+
   return (
-    <div className="w-1/2 mx-auto">
+    <div className="w-3/4 mx-auto">
       <Header>Achievements</Header>
-      <Table>
-        <TableHeader>
-          <TableColumn>Name</TableColumn>
-          <TableColumn>Description</TableColumn>
-          <TableColumn>Points</TableColumn>
-          <TableColumn>Cooldown</TableColumn>
-          <TableColumn>Repeatable</TableColumn>
-          <TableColumn>Edit</TableColumn>
-          <TableColumn>Delete</TableColumn>
-        </TableHeader>
-        <TableBody>
-          {sort(achievements, 'name').map((a: AchievementDto) => (
-            <TableRow key={a.id}>
-              <TableCell>{a.name}</TableCell>
-              <TableCell>{a.description}</TableCell>
-              <TableCell>{formatNumber(a.achievementPoints)} pts</TableCell>
-              <TableCell>{formatNumber(a.cooldownMinutes)} min</TableCell>
-              <TableCell>Unsupported</TableCell>
-              <TableCell className="text-center">
-                <EditButton id={a.id} onClick={editHandler} />
-              </TableCell>
-              <TableCell className="text-center">
-                <TrashButton id={a.id} onClick={trashHandler} loading={deleting} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <NewTable
+        columns={columns}
+        data={sort(achievements, 'name', 'asc').map((a) => ({
+          name: a.name,
+          description: a.description,
+          points: `${formatNumber(a.achievementPoints)} pts`,
+          cooldown: `${formatNumber(a.cooldownMinutes)} min`,
+          repeatable: 'Unsupported',
+          edit: <EditButton id={a.id} onClick={editHandler} className="w-full text-center" />,
+          delete: <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
+        }))}
+      />
       {editAchievement && (
         <AchievementsEditModal achievementId={editAchievement.id} showModal={true} closeModal={closeModal} />
       )}
