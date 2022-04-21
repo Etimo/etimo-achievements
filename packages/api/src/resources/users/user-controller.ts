@@ -9,6 +9,7 @@ import {
   protectedEndpoint,
 } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
+import { validateOrderBy } from '../../utils/validation-helper';
 import { UserMapper } from './user-mapper';
 
 export class UserController {
@@ -26,6 +27,8 @@ export class UserController {
      *     parameters:
      *       - *skipParam
      *       - *takeParam
+     *       - *orderByParam
+     *       - *pageTokenParam
      *     responses:
      *       200:
      *         description: The request was successful.
@@ -188,10 +191,11 @@ export class UserController {
   }
 
   private getUsers = async (req: Request, res: Response) => {
-    const [skip, take] = getPaginationOptions(req);
+    const paginationOpts = getPaginationOptions(req);
+    validateOrderBy(paginationOpts.orderBy, UserMapper.isProperty);
 
     const service = new GetUserService(getContext());
-    const users = await service.getMany(skip, take);
+    const users = await service.getMany(paginationOpts);
     const output = { ...users, data: users.data.map(UserMapper.toUserDto) };
 
     return okResponse(res, output);

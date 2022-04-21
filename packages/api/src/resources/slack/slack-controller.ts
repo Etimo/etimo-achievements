@@ -6,7 +6,6 @@ import {
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { apiKeyEndpoint, getContext } from '../../utils';
-import { getPaginationOptions } from '../../utils/pagination-helper';
 
 export class SlackController {
   public get routes(): Router {
@@ -103,9 +102,7 @@ export class SlackController {
     return router;
   }
 
-  private listAchievements = async (req: Request, res: Response) => {
-    const [skip, take] = getPaginationOptions(req);
-
+  private listAchievements = async (_req: Request, res: Response) => {
     return res.status(200).send();
   };
 

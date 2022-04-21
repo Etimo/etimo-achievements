@@ -9,4 +9,9 @@ export class HighscoreMapper {
       points: award.points,
     };
   }
+
+  public static isProperty(property: string) {
+    const test = HighscoreMapper.toHighscoreDto({} as IHighscore);
+    return !!test.hasOwnProperty(property);
+  }
 }

@@ -377,6 +377,25 @@
               "minimum": 1,
               "maximum": 50
             }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "The base64-encoded token that gives you the next page of results.",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -882,6 +901,25 @@
               "minimum": 1,
               "maximum": 50
             }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "The base64-encoded token that gives you the next page of results.",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1072,6 +1110,25 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "The base64-encoded token that gives you the next page of results.",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -1294,6 +1351,25 @@
               "type": "integer",
               "minimum": 1,
               "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "pageToken",
+            "in": "query",
+            "description": "The base64-encoded token that gives you the next page of results.",
+            "schema": {
+              "type": "string"
             }
           }
         ],

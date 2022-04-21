@@ -1,5 +1,5 @@
 import { BadRequestError, paginate, PaginatedData } from '@etimo-achievements/common';
-import { IUser } from '@etimo-achievements/types';
+import { IUser, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 export class GetUserService {
@@ -9,10 +9,10 @@ export class GetUserService {
     this.repos = context.repositories;
   }
 
-  public async getMany(skip: number, take: number): Promise<PaginatedData<IUser>> {
-    const users = await this.repos.user.getMany(skip, take);
+  public async getMany(options: PaginationOptions): Promise<PaginatedData<IUser>> {
+    const users = await this.repos.user.getMany(options);
     const count = await this.repos.user.count();
-    return paginate(users, skip, take, count);
+    return paginate(users, count, options);
   }
 
   public async getManyByIds(ids: string[]): Promise<IUser[]> {

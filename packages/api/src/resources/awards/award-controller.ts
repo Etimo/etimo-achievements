@@ -2,6 +2,7 @@ import { DeleteAwardService, GetAwardService, GiveAwardService } from '@etimo-ac
 import { Request, Response, Router } from 'express';
 import { createdResponse, getContext, notImplementedResponse, okResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
+import { validateOrderBy } from '../../utils/validation-helper';
 import { AwardMapper } from './award-mapper';
 
 export class AwardController {
@@ -19,6 +20,8 @@ export class AwardController {
      *     parameters:
      *       - *skipParam
      *       - *takeParam
+     *       - *orderByParam
+     *       - *pageTokenParam
      *     responses:
      *       200:
      *         description: The request was successful.
@@ -99,10 +102,11 @@ export class AwardController {
   }
 
   private getAwards = async (req: Request, res: Response) => {
-    const [skip, take] = getPaginationOptions(req, 10000);
+    const paginationOpts = getPaginationOptions(req);
+    validateOrderBy(paginationOpts.orderBy, AwardMapper.isProperty);
 
     const service = new GetAwardService(getContext());
-    const awards = await service.getMany(skip, take);
+    const awards = await service.getMany(paginationOpts);
     const output = {
       ...awards,
       data: awards.data.map(AwardMapper.toAwardDto),

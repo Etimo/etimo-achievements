@@ -1,8 +1,11 @@
-import { PaginatedData } from '.';
+import { PaginationOptions } from '@etimo-achievements/types';
+import { PaginatedData, toBase64 } from '.';
 
-export function paginate<T>(data: T[], skip: number, take: number, count: number): PaginatedData<T> {
+export function paginate<T>(data: T[], count: number, options: PaginationOptions): PaginatedData<T> {
+  const { skip, take } = options;
+
   const currentPage = skip === 0 ? 1 : Math.floor(skip / take) + 1;
-  return {
+  const pagination = {
     data: data,
     pagination: {
       items: data.length,
@@ -11,5 +14,15 @@ export function paginate<T>(data: T[], skip: number, take: number, count: number
       currentPage,
       totalPages: Math.ceil(count / take),
     },
+  };
+
+  let token: string | undefined = undefined;
+  if (skip + take < count) {
+    token = toBase64(JSON.stringify({ ...options, skip: options.skip + options.take }));
+  }
+
+  return {
+    ...pagination,
+    nextPageToken: token,
   };
 }
