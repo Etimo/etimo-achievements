@@ -12,6 +12,9 @@ const defaultConfig = {
   detectOpenHandles: true,
   preset: 'ts-jest',
   testMatch: ['**/src/**/*.test.ts', '**/src/**/*.spec.ts'],
+  globals: {
+    babelConfig: true,
+  },
 
   moduleNameMapper: {
     ...packageNames.reduce(

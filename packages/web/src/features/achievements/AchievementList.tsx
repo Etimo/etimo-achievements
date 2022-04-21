@@ -86,7 +86,7 @@ const AchievementList: React.FC = () => {
       <Header>Achievements</Header>
       <NewTable
         columns={columns}
-        data={sort(achievements, 'name', 'asc').map((a) => ({
+        data={sort(achievements, 'name').map((a) => ({
           name: a.name,
           description: a.description,
           points: `${formatNumber(a.achievementPoints)} pts`,

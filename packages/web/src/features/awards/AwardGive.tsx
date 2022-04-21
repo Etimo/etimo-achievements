@@ -1,4 +1,4 @@
-import { AwardDto } from '@etimo-achievements/common';
+import { AwardDto, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -55,14 +55,14 @@ const AwardGive: React.FC = () => {
         <FormSelect
           label="Achievement"
           text="Select an achievement"
-          options={achievements.map((a) => ({ value: a.id, label: a.name }))}
+          options={sort(achievements, 'name').map((a) => ({ value: a.id, label: a.name }))}
           bindValue={achievementId}
           onChange={setAchievementId}
         />
         <FormSelect
           label="User"
           text="Select a user"
-          options={users.map((a) => ({ value: a.id, label: a.name }))}
+          options={sort(users, 'name').map((a) => ({ value: a.id, label: a.name }))}
           bindValue={userId}
           onChange={setUserId}
         />
