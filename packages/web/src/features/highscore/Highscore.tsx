@@ -46,6 +46,7 @@ const Highscores: React.FC = () => {
           achievements: formatNumber(h.achievements),
           points: `${formatNumber(h.points)} pts`,
         }))}
+        pageCount={0}
         loading={false}
         fetchData={() => highscoreService.load()}
       />

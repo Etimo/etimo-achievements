@@ -1,18 +1,19 @@
-import { AchievementDto, formatNumber } from '@etimo-achievements/common';
+import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { Column } from 'react-table';
+import { useAppDispatch, useAppSelector } from '../../app/store';
 import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import NewTable from '../../components/table/NewTable';
 import { AchievementApi } from './achievement-api';
-import { AchievementService } from './achievement-service';
+import { achievementSelector, setAchievements } from './achievement-slice';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
-  const [achievements, setAchievements] = useState<AchievementDto[]>([]);
-  const achievementService = new AchievementService();
+  const dispatch = useAppDispatch();
+  const { achievements } = useAppSelector(achievementSelector);
   const achievementApi = new AchievementApi();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
@@ -20,6 +21,7 @@ const AchievementList: React.FC = () => {
   const [pageCount, setPageCount] = useState(0);
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(0);
+  const [monitor, setMonitor] = useState(uuid());
   const [editAchievement, setEditAchievement] = useState<AchievementDto>();
 
   const closeModal = () => {
@@ -29,11 +31,16 @@ const AchievementList: React.FC = () => {
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setDeleting(e.currentTarget.id);
-    achievementService.delete(e.currentTarget.id).then((response) => {
-      fetchData({ pageSize, pageIndex });
-      setDeleting(undefined);
-      toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
-    });
+    achievementApi
+      .delete(e.currentTarget.id)
+      .wait()
+      .then((response) => {
+        if (response.success) {
+          setMonitor(uuid());
+        }
+        setDeleting(undefined);
+        toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
+      });
   };
 
   const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -46,6 +53,10 @@ const AchievementList: React.FC = () => {
 
   const columns = React.useMemo(
     (): Column[] => [
+      {
+        Header: 'ID',
+        accessor: 'id',
+      },
       {
         Header: 'Name',
         accessor: 'name',
@@ -98,15 +109,16 @@ const AchievementList: React.FC = () => {
   const fetchData = (input: { pageSize: number; pageIndex: number }) => {
     const { pageSize, pageIndex } = input;
     setLoading(true);
-    console.log('pageIndex', pageIndex);
-    console.log('pageSize', pageSize);
+    setPageIndex(pageIndex);
+    setPageSize(pageSize);
+    console.log(pageSize, pageIndex);
     achievementApi
       .getMany(pageIndex * pageSize, pageSize)
       .wait()
       .then((response) => {
         if (response.success) {
           response.data().then((slice) => {
-            setAchievements(slice.data);
+            dispatch(setAchievements(slice.data));
             setData(mapToData(slice.data));
             setPageCount(slice.pagination.totalPages);
           });
@@ -125,8 +137,9 @@ const AchievementList: React.FC = () => {
         data={data}
         fetchData={fetchData}
         loading={loading}
-        controlledPageCount={pageCount}
-        controlledPageIndex={pageIndex}
+        pageCount={pageCount}
+        monitor={monitor}
+        hiddenColumns={['id']}
       />
       {editAchievement && (
         <AchievementsEditModal achievementId={editAchievement.id} showModal={true} closeModal={closeModal} />

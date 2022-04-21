@@ -84,6 +84,7 @@ const UserList: React.FC = () => {
           edit: <EditButton id={u.id} onClick={editHandler} className="w-full text-center" />,
           delete: <TrashButton id={u.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
         }))}
+        pageCount={0}
         loading={false}
         fetchData={() => userService.load()}
       />

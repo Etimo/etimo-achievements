@@ -15,18 +15,20 @@ type Props = {
   columns: Column[];
   data: any[];
   loading: boolean;
-  controlledPageIndex?: number;
-  controlledPageCount?: number;
+  hiddenColumns?: string[];
+  pageCount: number;
   fetchData: any;
+  monitor?: any;
 };
 
 const NewTable: React.FC<Props> = ({
   columns,
   data,
   loading,
-  controlledPageIndex,
-  controlledPageCount,
+  pageCount: controlledPageCount,
+  hiddenColumns,
   fetchData,
+  monitor,
   children,
   ...rest
 }) => {
@@ -48,9 +50,15 @@ const NewTable: React.FC<Props> = ({
     {
       columns,
       data,
-      initialState: { pageIndex: controlledPageIndex, pageSize: 3 },
+      initialState: { pageIndex: 0, pageSize: 3, hiddenColumns: hiddenColumns ?? [] },
       manualPagination: true,
       pageCount: controlledPageCount,
+      autoResetPage: false,
+      autoResetExpanded: false,
+      autoResetGroupBy: false,
+      autoResetSelectedRows: false,
+      autoResetFilters: false,
+      autoResetRowState: false,
     },
     useSortBy,
     usePagination
@@ -58,11 +66,7 @@ const NewTable: React.FC<Props> = ({
 
   useEffect(() => {
     fetchData({ pageIndex, pageSize });
-  }, [pageIndex]);
-
-  const columnCount = headerGroups.reduce((a, b) => {
-    return a + b.headers.length;
-  }, 0);
+  }, [pageIndex, monitor]);
 
   return (
     <div>
@@ -91,7 +95,7 @@ const NewTable: React.FC<Props> = ({
         </TableHead>
         <TableBody {...getTableBodyProps()}>
           {loading ? (
-            <SkeletonTableRow columns={columnCount} rows={10} />
+            <SkeletonTableRow columns={headerGroups.reduce((a, b) => a + b.headers.length, 0)} rows={10} />
           ) : (
             page.map((row) => {
               prepareRow(row);

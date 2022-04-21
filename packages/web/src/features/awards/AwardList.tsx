@@ -78,6 +78,7 @@ const AwardList: React.FC = () => {
             <TrashButton id={c.award.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />
           ),
         }))}
+        pageCount={0}
         loading={false}
         fetchData={() => awardService.load()}
       />
