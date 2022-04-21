@@ -16,7 +16,11 @@ function sortBy(key: any, order: 'asc' | 'desc' = 'asc') {
       value = value[keys[i]];
     }
 
-    if (parseInt(value) !== NaN) {
+    const isNumber = (str: string) => {
+      return !str.slice(1).includes('-') && parseInt(str) !== NaN;
+    };
+
+    if (isNumber(value)) {
       return parseInt(value);
     }
 

@@ -2,7 +2,7 @@ import { sort, UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
-import { insensitiveCompare } from '../../common/utils/react-table-helpers';
+import { insensitiveSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
@@ -48,16 +48,17 @@ const UserList: React.FC = () => {
       {
         Header: 'Name',
         accessor: 'name',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'E-mail',
         accessor: 'email',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Slack Handle',
         accessor: 'slackHandle',
+        sortType: insensitiveSort,
       },
       {
         Header: 'Edit',

@@ -2,7 +2,7 @@ import { formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect } from 'react';
 import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
-import { insensitiveCompare } from '../../common/utils/react-table-helpers';
+import { insensitiveSort } from '../../common/utils/react-table-helpers';
 import Header from '../../components/Header';
 import NewTable from '../../components/table/NewTable';
 import { HighscoreService } from './highscore-service';
@@ -21,12 +21,12 @@ const Highscores: React.FC = () => {
       {
         Header: 'Name',
         accessor: 'name',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Achievements',
         accessor: 'achievements',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Points',
