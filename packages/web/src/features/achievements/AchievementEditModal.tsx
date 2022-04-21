@@ -5,7 +5,6 @@ import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
 import { AchievementApi } from './achievement-api';
-import { AchievementService } from './achievement-service';
 
 type Props = {
   achievementId: string;
@@ -23,14 +22,18 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, close
   const [loading, setLoading] = useState(false);
   const [achievement, setAchievement] = useState<AchievementDto>();
   const achievementApi = new AchievementApi();
-  const achievementService = new AchievementService();
 
   const refresh = () => {
-    achievementService.get(achievementId).then((achievement) => {
-      if (achievement) {
-        setAchievement(achievement);
-      }
-    });
+    achievementApi
+      .get(achievementId)
+      .wait()
+      .then((response) => {
+        if (response.success) {
+          response.data().then((data) => {
+            setAchievement(data);
+          });
+        }
+      });
   };
 
   useEffect(() => {
@@ -46,7 +49,6 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, close
         setLoading(false);
         toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
           reset();
-          refresh();
           closeModal();
         });
       });

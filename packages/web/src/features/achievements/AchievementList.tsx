@@ -1,26 +1,21 @@
 import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Column } from 'react-table';
-import { useAppDispatch, useAppSelector } from '../../app/store';
 import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import NewTable from '../../components/table/NewTable';
 import { AchievementApi } from './achievement-api';
-import { achievementSelector, setAchievements } from './achievement-slice';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const { achievements } = useAppSelector(achievementSelector);
+  const [achievements, setAchievements] = useState<AchievementDto[]>([]);
   const achievementApi = new AchievementApi();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
-  const [pageIndex, setPageIndex] = useState(0);
-  const [pageSize, setPageSize] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
   const [editAchievement, setEditAchievement] = useState<AchievementDto>();
 
@@ -41,14 +36,6 @@ const AchievementList: React.FC = () => {
         setDeleting(undefined);
         toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
       });
-  };
-
-  const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const achievement = achievements.find((a) => a.id === e.currentTarget.id);
-    if (achievement) {
-      setEditAchievement(achievement);
-    }
   };
 
   const columns = React.useMemo(
@@ -101,32 +88,21 @@ const AchievementList: React.FC = () => {
       points: `${formatNumber(a.achievementPoints)} pts`,
       cooldown: `${formatNumber(a.cooldownMinutes)} min`,
       repeatable: 'Unsupported',
-      edit: <EditButton id={a.id} onClick={editHandler} className="w-full text-center" />,
+      edit: (
+        <EditButton
+          id={a.id}
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            e.preventDefault();
+            const achievement = achievements.find((a) => a.id === e.currentTarget.id);
+            if (achievement) {
+              setEditAchievement(achievement);
+            }
+          }}
+          className="w-full text-center"
+        />
+      ),
       delete: <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
     }));
-  };
-
-  const fetchData = (input: { pageSize: number; pageIndex: number }) => {
-    const { pageSize, pageIndex } = input;
-    setLoading(true);
-    setPageIndex(pageIndex);
-    setPageSize(pageSize);
-    console.log(pageSize, pageIndex);
-    achievementApi
-      .getMany(pageIndex * pageSize, pageSize)
-      .wait()
-      .then((response) => {
-        if (response.success) {
-          response.data().then((slice) => {
-            dispatch(setAchievements(slice.data));
-            setData(mapToData(slice.data));
-            setPageCount(slice.pagination.totalPages);
-          });
-        }
-      })
-      .finally(() => {
-        setLoading(false);
-      });
   };
 
   return (
@@ -135,14 +111,40 @@ const AchievementList: React.FC = () => {
       <NewTable
         columns={columns}
         data={data}
-        fetchData={fetchData}
+        fetchData={useCallback(
+          (input: { pageSize: any; pageIndex: any }) => {
+            const { pageSize, pageIndex } = input;
+            setLoading(true);
+            achievementApi
+              .getMany(pageIndex * pageSize, pageSize)
+              .wait()
+              .then((response) => {
+                if (response.success) {
+                  response.data().then((slice) => {
+                    setAchievements(slice.data);
+                    setData(mapToData(slice.data));
+                    setPageCount(slice.pagination.totalPages);
+                  });
+                }
+                setLoading(false);
+              });
+          },
+          [monitor]
+        )}
         loading={loading}
         pageCount={pageCount}
         monitor={monitor}
         hiddenColumns={['id']}
       />
       {editAchievement && (
-        <AchievementsEditModal achievementId={editAchievement.id} showModal={true} closeModal={closeModal} />
+        <AchievementsEditModal
+          achievementId={editAchievement.id}
+          showModal={true}
+          closeModal={() => {
+            closeModal();
+            setMonitor(uuid());
+          }}
+        />
       )}
     </div>
   );
