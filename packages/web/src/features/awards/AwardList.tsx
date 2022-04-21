@@ -2,7 +2,7 @@ import { formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
-import { insensitiveCompare } from '../../common/utils/react-table-helpers';
+import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
@@ -34,16 +34,17 @@ const AwardList: React.FC = () => {
       {
         Header: 'Name',
         accessor: 'name',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Awarded To',
         accessor: 'awardedTo',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Points',
         accessor: 'points',
+        sortType: numberSort,
       },
       {
         Header: 'Date',
@@ -52,7 +53,7 @@ const AwardList: React.FC = () => {
       {
         Header: 'Awarded By',
         accessor: 'awardedBy',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Delete',

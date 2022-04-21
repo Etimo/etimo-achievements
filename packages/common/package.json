@@ -14,7 +14,7 @@
     "compile-test": "tsc --build",
     "start": "ts-node src/index.ts",
     "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
-    "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
+    "test": "jest --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/types": "^1.0.0",
@@ -34,6 +34,9 @@
       "**/src/**/*.test.ts",
       "**/src/**/*.spec.ts"
     ],
+    "globals": {
+      "babelConfig": true
+    },
     "moduleNameMapper": {
       "@etimo-achievements/api(.*)$": "<rootDir>/../api/src/$1",
       "@etimo-achievements/common(.*)$": "<rootDir>/../common/src/$1",

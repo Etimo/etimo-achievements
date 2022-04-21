@@ -2,7 +2,7 @@ import { AchievementDto, formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
-import { insensitiveCompare } from '../../common/utils/react-table-helpers';
+import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
@@ -48,20 +48,22 @@ const AchievementList: React.FC = () => {
       {
         Header: 'Name',
         accessor: 'name',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Description',
         accessor: 'description',
-        sortType: insensitiveCompare,
+        sortType: insensitiveSort,
       },
       {
         Header: 'Points',
         accessor: 'points',
+        sortType: numberSort,
       },
       {
         Header: 'Cooldown',
         accessor: 'cooldown',
+        sortType: numberSort,
       },
       {
         Header: 'Repeatable',
@@ -84,7 +86,7 @@ const AchievementList: React.FC = () => {
       <Header>Achievements</Header>
       <NewTable
         columns={columns}
-        data={sort(achievements, 'name', 'asc').map((a) => ({
+        data={sort(achievements, 'name').map((a) => ({
           name: a.name,
           description: a.description,
           points: `${formatNumber(a.achievementPoints)} pts`,

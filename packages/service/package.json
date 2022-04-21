@@ -40,6 +40,9 @@
       "**/src/**/*.test.ts",
       "**/src/**/*.spec.ts"
     ],
+    "globals": {
+      "babelConfig": true
+    },
     "moduleNameMapper": {
       "@etimo-achievements/api(.*)$": "<rootDir>/../api/src/$1",
       "@etimo-achievements/common(.*)$": "<rootDir>/../common/src/$1",
