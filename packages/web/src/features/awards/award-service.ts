@@ -1,4 +1,4 @@
-import { uniq } from '@etimo-achievements/common';
+import { PaginatedData, uniq } from '@etimo-achievements/common';
 import { useAppDispatch } from '../../app/store';
 import { AchievementService } from '../achievements/achievement-service';
 import { UserService } from '../users/user-service';
@@ -12,10 +12,10 @@ export class AwardService {
   private achievementService = new AchievementService();
   private userService = new UserService();
 
-  public async load(skip: number, take: number): Promise<AwardComposite[]> {
+  public async load(skip: number, take: number): Promise<PaginatedData<AwardComposite> | undefined> {
     const response = await this.api.getMany(skip, take).wait();
     if (response.success) {
-      const awards = (await response.data()).data;
+      const awards = await response.data();
 
       const achievementIds = uniq(awards.map((a) => a.achievementId));
       const achievementPromise = this.achievementService.list(achievementIds);
@@ -41,9 +41,8 @@ export class AwardService {
 
       this.dispatch(setAwards(composites));
 
-      return { ...response, data: composites };
+      return { pagination: response.pagination!, data: composites };
     }
-    return [];
   }
 
   public async delete(id: string) {
