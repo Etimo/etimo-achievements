@@ -9,9 +9,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation } from 'react-router';
 import { SkeletonTableRow, Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
-import useQuery from '../../common/hooks/use-query';
+import { queryParam } from '../../common/utils/query-helper';
 import PaginationButton from './PaginationButton';
 
 export type Column = {
@@ -42,24 +42,26 @@ const NewTable: React.FC<Props> = ({
   children,
   ...rest
 }) => {
-  const query = useQuery();
-  const [page, setPage] = useState<number>(parseInt(query.get('page') ?? '1'));
-  const [size, setSize] = useState<number>(parseInt(query.get('size') ?? '10'));
+  const location = useLocation();
   const [sortBy, setSortBy] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
-  const [canNavigateBack, setCanNavigateBack] = useState(page > 1);
-  const [canNavigateForward, setCanNavigateForward] = useState(page < pageCount);
-  const navigate = useNavigate();
+  const [canNavigateBack, setCanNavigateBack] = useState(false);
+  const [canNavigateForward, setCanNavigateForward] = useState(true);
+
+  const getPage = () => queryParam<number>(window.location, 'page', 1);
+  const getSize = () => queryParam<number>(window.location, 'size', 10);
 
   useEffect(() => {
-    navigate(`?page=${page}&size=${size}`);
+    const page = getPage();
+    const size = getSize();
     fetchData({ page, size });
-  }, [page, size, monitor]);
+  }, [location, monitor]);
 
   useEffect(() => {
+    const page = getPage();
     setCanNavigateBack(page > 1);
     setCanNavigateForward(page < pageCount);
-  }, [page, pageCount]);
+  }, [location, pageCount]);
 
   return (
     <div>
@@ -86,7 +88,7 @@ const NewTable: React.FC<Props> = ({
         </TableHead>
         <TableBody>
           {loading ? (
-            <SkeletonTableRow columns={columns.filter((c) => !c.hidden).length} rows={size} />
+            <SkeletonTableRow columns={columns.filter((c) => !c.hidden).length} rows={getSize()} />
           ) : (
             data.map((row) => {
               return (
@@ -106,35 +108,31 @@ const NewTable: React.FC<Props> = ({
         <PaginationButton
           icon={faAnglesLeft}
           disabled={!canNavigateBack}
-          link={`?page=1&size=${size}`}
-          onClick={() => setPage(1)}
+          link={`?page=1&size=${getSize()}`}
           title="Go to first page"
         />
         <PaginationButton
           icon={faAngleLeft}
           disabled={!canNavigateBack}
-          link={`?page=${page - 1}&size=${size}`}
-          onClick={() => setPage(page - 1)}
+          link={`?page=${getPage() - 1}&size=${getSize()}`}
           title="Go to previous page"
         />
         <PaginationButton
           icon={faAngleRight}
           disabled={!canNavigateForward}
-          link={`?page=${page + 1}&size=${size}`}
-          onClick={() => setPage(page + 1)}
-          title="Go to first page"
+          link={`?page=${getPage() + 1}&size=${getSize()}`}
+          title="Go to next page"
         />
         <PaginationButton
           icon={faAnglesRight}
           disabled={!canNavigateForward}
-          link={`?page=${pageCount}&size=${size}`}
-          onClick={() => setPage(pageCount)}
-          title="Go to first page"
+          link={`?page=${pageCount}&size=${getSize()}`}
+          title="Go to last page"
         />
       </div>
       <div className="float-right m-2">
         <span className="text-slate-800">
-          {page} of {pageCount}
+          {getPage()} of {pageCount}
         </span>
       </div>
     </div>
