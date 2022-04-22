@@ -12,8 +12,8 @@ export class AwardService {
   private achievementService = new AchievementService();
   private userService = new UserService();
 
-  public async load(): Promise<AwardComposite[]> {
-    const response = await this.api.getMany().wait();
+  public async load(skip: number, take: number): Promise<AwardComposite[]> {
+    const response = await this.api.getMany(skip, take).wait();
     if (response.success) {
       const awards = (await response.data()).data;
 
@@ -40,6 +40,8 @@ export class AwardService {
         .filter((c) => !!c) as AwardComposite[];
 
       this.dispatch(setAwards(composites));
+
+      return { ...response, data: composites };
     }
     return [];
   }
