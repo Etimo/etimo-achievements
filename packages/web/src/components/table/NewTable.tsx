@@ -8,8 +8,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { Column, usePagination, useSortBy, useTable } from 'react-table';
 import { SkeletonTableRow, Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
+import useQuery from '../../common/hooks/use-query';
+import PaginationButton from './PaginationButton';
 
 type Props = {
   columns: Column[];
@@ -32,6 +35,9 @@ const NewTable: React.FC<Props> = ({
   children,
   ...rest
 }) => {
+  const requestedPageSize = useQuery().get('size');
+  const requestedPageIndex = useQuery().get('page');
+  const navigate = useNavigate();
   const {
     getTableProps,
     getTableBodyProps,
@@ -50,7 +56,11 @@ const NewTable: React.FC<Props> = ({
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 10, hiddenColumns: hiddenColumns ?? [] },
+      initialState: {
+        pageIndex: requestedPageIndex ? Math.max(parseInt(requestedPageIndex) - 1, 0) : 0,
+        pageSize: requestedPageSize ? parseInt(requestedPageSize) : 10,
+        hiddenColumns: hiddenColumns ?? [],
+      },
       manualPagination: true,
       pageCount: controlledPageCount,
       autoResetPage: false,
@@ -65,6 +75,7 @@ const NewTable: React.FC<Props> = ({
   );
 
   useEffect(() => {
+    navigate(`?page=${pageIndex + 1}&size=${pageSize}`);
     fetchData({ pageIndex, pageSize });
   }, [pageIndex, monitor]);
 
@@ -111,38 +122,34 @@ const NewTable: React.FC<Props> = ({
         </TableBody>
       </Table>
       <div className="m-1 float-left">
-        <button
+        <PaginationButton
+          icon={faAnglesLeft}
+          disabled={!canPreviousPage}
+          link={`?page=0&size=${pageSize}`}
           onClick={() => gotoPage(0)}
-          disabled={!canPreviousPage}
           title="Go to first page"
-          className="w-8 h-8 text-center align-middle hover:cursor-pointer"
-        >
-          <FontAwesomeIcon icon={faAnglesLeft} className="text-xl text-slate-600 hover:text-slate-500" />
-        </button>{' '}
-        <button
-          onClick={() => previousPage()}
+        />
+        <PaginationButton
+          icon={faAngleLeft}
           disabled={!canPreviousPage}
+          link={`?page=${pageIndex - 1}&size=${pageSize}`}
+          onClick={() => previousPage()}
           title="Go to previous page"
-          className="w-8 h-8 text-center align-middle hover:cursor-pointer"
-        >
-          <FontAwesomeIcon icon={faAngleLeft} className="text-xl text-slate-600 hover:text-slate-500" />
-        </button>{' '}
-        <button
+        />
+        <PaginationButton
+          icon={faAngleRight}
+          disabled={!canNextPage}
+          link={`?page=${pageIndex + 1}&size=${pageSize}`}
           onClick={() => nextPage()}
+          title="Go to first page"
+        />
+        <PaginationButton
+          icon={faAnglesRight}
           disabled={!canNextPage}
-          title="Go to next page"
-          className="w-8 h-8 text-center align-middle hover:cursor-pointer"
-        >
-          <FontAwesomeIcon icon={faAngleRight} className="text-xl text-slate-600 hover:text-slate-500" />
-        </button>{' '}
-        <button
+          link={`?page=${pageCount}&size=${pageSize}`}
           onClick={() => gotoPage(pageCount - 1)}
-          disabled={!canNextPage}
-          title="Go to last page"
-          className="w-8 h-8 text-center align-middle hover:cursor-pointer"
-        >
-          <FontAwesomeIcon icon={faAnglesRight} className="text-xl text-slate-600 hover:text-slate-500" />
-        </button>{' '}
+          title="Go to first page"
+        />
       </div>
       <div className="float-right m-2">
         <span className="text-slate-800">

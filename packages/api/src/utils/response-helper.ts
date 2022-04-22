@@ -12,6 +12,7 @@ export function paginatedResponse<T>(
   paginatedData: PaginatedData<T>,
   mapper: (resource: T) => any
 ) {
+  // Generate content range information
   const { itemsPerPage, currentPage, totalItems } = paginatedData.pagination;
   const start = (currentPage - 1) * itemsPerPage;
   const end = start + itemsPerPage;
