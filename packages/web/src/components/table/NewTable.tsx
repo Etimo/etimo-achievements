@@ -50,7 +50,7 @@ const NewTable: React.FC<Props> = ({
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 3, hiddenColumns: hiddenColumns ?? [] },
+      initialState: { pageIndex: 0, pageSize: 10, hiddenColumns: hiddenColumns ?? [] },
       manualPagination: true,
       pageCount: controlledPageCount,
       autoResetPage: false,
@@ -95,7 +95,7 @@ const NewTable: React.FC<Props> = ({
         </TableHead>
         <TableBody {...getTableBodyProps()}>
           {loading ? (
-            <SkeletonTableRow columns={headerGroups.reduce((a, b) => a + b.headers.length, 0)} rows={10} />
+            <SkeletonTableRow columns={headerGroups.reduce((a, b) => a + b.headers.length, 0)} rows={pageSize} />
           ) : (
             page.map((row) => {
               prepareRow(row);

@@ -114,16 +114,18 @@ const AchievementList: React.FC = () => {
         fetchData={useCallback(
           (input: { pageSize: any; pageIndex: any }) => {
             const { pageSize, pageIndex } = input;
+            console.log(pageSize, pageIndex);
             setLoading(true);
             achievementApi
               .getMany(pageIndex * pageSize, pageSize)
               .wait()
               .then((response) => {
                 if (response.success) {
-                  response.data().then((slice) => {
-                    setAchievements(slice.data);
-                    setData(mapToData(slice.data));
-                    setPageCount(slice.pagination.totalPages);
+                  response.data().then((data) => {
+                    setAchievements(data);
+                    setData(mapToData(data));
+                    console.log(response);
+                    setPageCount(response.pagination?.totalPages ?? 0);
                   });
                 }
                 setLoading(false);

@@ -5,14 +5,12 @@ import { deleteAchievement, updateAchievement, updateAchievements } from './achi
 export class AchievementService {
   private dispatch = useAppDispatch();
   private api = new AchievementApi();
-  private nextPageToken?: string;
 
   public async load(skip: number, take: number) {
     const response = await this.api.getMany(skip, take).wait();
     if (response.success) {
-      const slice = await response.data();
-      this.nextPageToken = slice.nextPageToken;
-      this.dispatch(updateAchievements(slice.data));
+      const data = await response.data();
+      this.dispatch(updateAchievements(data));
     }
     return response;
   }
