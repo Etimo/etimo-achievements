@@ -1,12 +1,10 @@
 import { sort, UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
-import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
-import { insensitiveSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import NewTable from '../../components/table/NewTable';
+import NewTable, { Column } from '../../components/table/NewTable';
 import { UserService } from './user-service';
 import { usersSelector } from './user-slice';
 import UserEditModal from './UserEditModal';
@@ -46,26 +44,23 @@ const UserList: React.FC = () => {
   const columns = React.useMemo(
     (): Column[] => [
       {
-        Header: 'Name',
+        title: 'Name',
         accessor: 'name',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'E-mail',
+        title: 'E-mail',
         accessor: 'email',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Slack Handle',
+        title: 'Slack Handle',
         accessor: 'slackHandle',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Edit',
+        title: 'Edit',
         accessor: 'edit',
       },
       {
-        Header: 'Delete',
+        title: 'Delete',
         accessor: 'delete',
       },
     ],

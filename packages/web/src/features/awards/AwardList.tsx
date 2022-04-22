@@ -1,12 +1,10 @@
 import { formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
-import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
-import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
 import { toastResponse } from '../../common/utils/toast-response';
 import { TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import NewTable from '../../components/table/NewTable';
+import NewTable, { Column } from '../../components/table/NewTable';
 import { AwardService } from './award-service';
 import { awardSelector } from './award-slice';
 
@@ -32,31 +30,27 @@ const AwardList: React.FC = () => {
   const columns = React.useMemo(
     (): Column[] => [
       {
-        Header: 'Name',
+        title: 'Name',
         accessor: 'name',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Awarded To',
+        title: 'Awarded To',
         accessor: 'awardedTo',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Points',
+        title: 'Points',
         accessor: 'points',
-        sortType: numberSort,
       },
       {
-        Header: 'Date',
+        title: 'Date',
         accessor: 'date',
       },
       {
-        Header: 'Awarded By',
+        title: 'Awarded By',
         accessor: 'awardedBy',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Delete',
+        title: 'Delete',
         accessor: 'delete',
       },
     ],

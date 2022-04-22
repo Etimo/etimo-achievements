@@ -1,3 +1,4 @@
+import { uuid } from '@etimo-achievements/common';
 import {
   faAngleLeft,
   faAngleRight,
@@ -7,12 +8,18 @@ import {
   faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Column, usePagination, useSortBy, useTable } from 'react-table';
 import { SkeletonTableRow, Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
 import useQuery from '../../common/hooks/use-query';
 import PaginationButton from './PaginationButton';
+
+export type Column = {
+  title: string;
+  accessor: string;
+  sortType?: (a: any, b: any) => number;
+  hidden?: boolean;
+};
 
 type Props = {
   columns: Column[];
@@ -28,93 +35,67 @@ const NewTable: React.FC<Props> = ({
   columns,
   data,
   loading,
-  pageCount: controlledPageCount,
+  pageCount,
   hiddenColumns,
   fetchData,
   monitor,
   children,
   ...rest
 }) => {
-  const requestedPageSize = useQuery().get('size');
-  const requestedPageIndex = useQuery().get('page');
+  const query = useQuery();
+  const [page, setPage] = useState<number>(parseInt(query.get('page') ?? '1'));
+  const [size, setSize] = useState<number>(parseInt(query.get('size') ?? '10'));
+  const [sortBy, setSortBy] = useState<string>('');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [canNavigateBack, setCanNavigateBack] = useState(page > 1);
+  const [canNavigateForward, setCanNavigateForward] = useState(page < pageCount);
   const navigate = useNavigate();
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    prepareRow,
-    page,
-    canPreviousPage,
-    canNextPage,
-    pageOptions,
-    pageCount,
-    gotoPage,
-    nextPage,
-    previousPage,
-    state: { pageIndex, pageSize },
-  } = useTable(
-    {
-      columns,
-      data,
-      initialState: {
-        pageIndex: requestedPageIndex ? Math.max(parseInt(requestedPageIndex) - 1, 0) : 0,
-        pageSize: requestedPageSize ? parseInt(requestedPageSize) : 10,
-        hiddenColumns: hiddenColumns ?? [],
-      },
-      manualPagination: true,
-      pageCount: controlledPageCount,
-      autoResetPage: false,
-      autoResetExpanded: false,
-      autoResetGroupBy: false,
-      autoResetSelectedRows: false,
-      autoResetFilters: false,
-      autoResetRowState: false,
-    },
-    useSortBy,
-    usePagination
-  );
 
   useEffect(() => {
-    navigate(`?page=${pageIndex + 1}&size=${pageSize}`);
-    fetchData({ pageIndex, pageSize });
-  }, [pageIndex, monitor]);
+    navigate(`?page=${page}&size=${size}`);
+    fetchData({ page, size });
+  }, [page, size, monitor]);
+
+  useEffect(() => {
+    setCanNavigateBack(page > 1);
+    setCanNavigateForward(page < pageCount);
+  }, [page, pageCount]);
 
   return (
     <div>
-      <Table {...getTableProps()} {...rest}>
+      <Table {...rest}>
         <TableHead>
-          {headerGroups.map((headerGroup) => (
-            <TableHeaderRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <TableHeader {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  <span className={column.isSorted ? 'text-slate-100' : ''}>{column.render('Header')}</span>
-                  <span>
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
-                      ) : (
-                        <FontAwesomeIcon icon={faChevronUp} className="ml-2 text-slate-100" />
-                      )
-                    ) : (
-                      ''
-                    )}
-                  </span>
-                </TableHeader>
-              ))}
-            </TableHeaderRow>
-          ))}
+          <TableHeaderRow>
+            {columns.map(
+              (column) =>
+                !column.hidden && (
+                  <TableHeader key={uuid()}>
+                    <span>{column.title}</span>
+                    <span>
+                      {sortBy === column.title &&
+                        (sortDirection === 'asc' ? (
+                          <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
+                        ) : (
+                          <FontAwesomeIcon icon={faChevronUp} className="ml-2 text-slate-100" />
+                        ))}
+                    </span>
+                  </TableHeader>
+                )
+            )}
+          </TableHeaderRow>
         </TableHead>
-        <TableBody {...getTableBodyProps()}>
+        <TableBody>
           {loading ? (
-            <SkeletonTableRow columns={headerGroups.reduce((a, b) => a + b.headers.length, 0)} rows={pageSize} />
+            <SkeletonTableRow columns={columns.filter((c) => !c.hidden).length} rows={size} />
           ) : (
-            page.map((row) => {
-              prepareRow(row);
+            data.map((row) => {
               return (
-                <TableRow {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>;
-                  })}
+                <TableRow key={uuid()}>
+                  {columns
+                    .filter((c) => !c.hidden)
+                    .map((column) => {
+                      return <TableCell key={uuid()}>{row[column.accessor]}</TableCell>;
+                    })}
                 </TableRow>
               );
             })
@@ -124,36 +105,36 @@ const NewTable: React.FC<Props> = ({
       <div className="m-1 float-left">
         <PaginationButton
           icon={faAnglesLeft}
-          disabled={!canPreviousPage}
-          link={`?page=0&size=${pageSize}`}
-          onClick={() => gotoPage(0)}
+          disabled={!canNavigateBack}
+          link={`?page=1&size=${size}`}
+          onClick={() => setPage(1)}
           title="Go to first page"
         />
         <PaginationButton
           icon={faAngleLeft}
-          disabled={!canPreviousPage}
-          link={`?page=${pageIndex - 1}&size=${pageSize}`}
-          onClick={() => previousPage()}
+          disabled={!canNavigateBack}
+          link={`?page=${page - 1}&size=${size}`}
+          onClick={() => setPage(page - 1)}
           title="Go to previous page"
         />
         <PaginationButton
           icon={faAngleRight}
-          disabled={!canNextPage}
-          link={`?page=${pageIndex + 1}&size=${pageSize}`}
-          onClick={() => nextPage()}
+          disabled={!canNavigateForward}
+          link={`?page=${page + 1}&size=${size}`}
+          onClick={() => setPage(page + 1)}
           title="Go to first page"
         />
         <PaginationButton
           icon={faAnglesRight}
-          disabled={!canNextPage}
-          link={`?page=${pageCount}&size=${pageSize}`}
-          onClick={() => gotoPage(pageCount - 1)}
+          disabled={!canNavigateForward}
+          link={`?page=${pageCount}&size=${size}`}
+          onClick={() => setPage(pageCount)}
           title="Go to first page"
         />
       </div>
       <div className="float-right m-2">
         <span className="text-slate-800">
-          {pageIndex + 1} of {pageOptions.length}
+          {page} of {pageCount}
         </span>
       </div>
     </div>

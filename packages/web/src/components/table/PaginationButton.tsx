@@ -15,7 +15,7 @@ type Props = {
 const PaginationButton: React.FC<Props> = ({ icon, link, onClick, title, disabled }) => {
   return (
     <div className="inline-block w-8 h-8 text-center hover:cursor-pointer">
-      {disabled || (!link && !onClick) ? (
+      {disabled ? (
         <FontAwesomeIcon icon={icon} className="text-xl text-slate-200" />
       ) : (
         <Link to={link} onClick={onClick} title={title} className="w-8 h-8 text-center hover:cursor-pointer">

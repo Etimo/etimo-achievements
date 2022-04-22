@@ -1,15 +1,15 @@
 import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useCallback, useState } from 'react';
-import { Column } from 'react-table';
-import { insensitiveSort, numberSort } from '../../common/utils/react-table-helpers';
+import React, { useCallback, useEffect, useState } from 'react';
+import useQuery from '../../common/hooks/use-query';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import NewTable from '../../components/table/NewTable';
+import NewTable, { Column } from '../../components/table/NewTable';
 import { AchievementApi } from './achievement-api';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
+  const query = useQuery();
   const [achievements, setAchievements] = useState<AchievementDto[]>([]);
   const achievementApi = new AchievementApi();
   const [loading, setLoading] = useState(false);
@@ -17,10 +17,15 @@ const AchievementList: React.FC = () => {
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
-  const [editAchievement, setEditAchievement] = useState<AchievementDto>();
+  const [editAchievementId, setEditAchievementId] = useState<string>();
+
+  useEffect(() => {
+    const achievementId = query.get('edit');
+    if (achievementId) setEditAchievementId(achievementId);
+  }, [query]);
 
   const closeModal = () => {
-    setEditAchievement(undefined);
+    setEditAchievementId(undefined);
   };
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -41,39 +46,36 @@ const AchievementList: React.FC = () => {
   const columns = React.useMemo(
     (): Column[] => [
       {
-        Header: 'ID',
+        title: 'ID',
         accessor: 'id',
+        hidden: true,
       },
       {
-        Header: 'Name',
+        title: 'Name',
         accessor: 'name',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Description',
+        title: 'Description',
         accessor: 'description',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Points',
+        title: 'Points',
         accessor: 'points',
-        sortType: numberSort,
       },
       {
-        Header: 'Cooldown',
+        title: 'Cooldown',
         accessor: 'cooldown',
-        sortType: numberSort,
       },
       {
-        Header: 'Repeatable',
+        title: 'Repeatable',
         accessor: 'repeatable',
       },
       {
-        Header: 'Edit',
+        title: 'Edit',
         accessor: 'edit',
       },
       {
-        Header: 'Delete',
+        title: 'Delete',
         accessor: 'delete',
       },
     ],
@@ -95,7 +97,7 @@ const AchievementList: React.FC = () => {
             e.preventDefault();
             const achievement = achievements.find((a) => a.id === e.currentTarget.id);
             if (achievement) {
-              setEditAchievement(achievement);
+              setEditAchievementId(achievement.id);
             }
           }}
           className="w-full text-center"
@@ -112,12 +114,11 @@ const AchievementList: React.FC = () => {
         columns={columns}
         data={data}
         fetchData={useCallback(
-          (input: { pageSize: any; pageIndex: any }) => {
-            const { pageSize, pageIndex } = input;
-            console.log(pageSize, pageIndex);
+          (input: { size: any; page: any }) => {
+            const { size, page } = input;
             setLoading(true);
             achievementApi
-              .getMany(pageIndex * pageSize, pageSize)
+              .getMany((page - 1) * size, size)
               .wait()
               .then((response) => {
                 if (response.success) {
@@ -138,9 +139,9 @@ const AchievementList: React.FC = () => {
         monitor={monitor}
         hiddenColumns={['id']}
       />
-      {editAchievement && (
+      {editAchievementId && (
         <AchievementsEditModal
-          achievementId={editAchievement.id}
+          achievementId={editAchievementId}
           showModal={true}
           closeModal={() => {
             closeModal();

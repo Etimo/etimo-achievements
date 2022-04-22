@@ -1,3 +1,4 @@
+import NewTable, { Column } from './NewTable';
 import SkeletonTableRow from './SkeletonTableRow';
 import Table from './Table';
 import TableBody from './TableBody';
@@ -7,4 +8,15 @@ import TableHeader from './TableHeader';
 import TableHeaderRow from './TableHeaderRow';
 import TableRow from './TableRow';
 
-export { SkeletonTableRow, Table, TableBody, TableCell, TableHeader, TableHead, TableHeaderRow, TableRow };
+export {
+  Column,
+  NewTable,
+  SkeletonTableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableHeaderRow,
+  TableRow,
+};

@@ -1,10 +1,8 @@
 import { formatNumber, sort } from '@etimo-achievements/common';
 import React, { useEffect } from 'react';
-import { Column } from 'react-table';
 import { useAppSelector } from '../../app/store';
-import { insensitiveSort } from '../../common/utils/react-table-helpers';
 import Header from '../../components/Header';
-import NewTable from '../../components/table/NewTable';
+import NewTable, { Column } from '../../components/table/NewTable';
 import { HighscoreService } from './highscore-service';
 import { highscoreSelector } from './highscore-slice';
 
@@ -19,17 +17,15 @@ const Highscores: React.FC = () => {
   const columns = React.useMemo(
     (): Column[] => [
       {
-        Header: 'Name',
+        title: 'Name',
         accessor: 'name',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Achievements',
+        title: 'Achievements',
         accessor: 'achievements',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Points',
+        title: 'Points',
         accessor: 'points',
       },
     ],
