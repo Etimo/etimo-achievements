@@ -1,6 +1,7 @@
 import { AchievementDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
@@ -19,6 +20,7 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, close
     handleSubmit,
     formState: { errors },
   } = useForm<AchievementDto>();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [achievement, setAchievement] = useState<AchievementDto>();
   const achievementApi = new AchievementApi();

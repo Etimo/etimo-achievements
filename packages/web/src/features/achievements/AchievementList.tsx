@@ -1,6 +1,7 @@
 import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useCallback, useEffect, useState } from 'react';
-import useQuery from '../../common/hooks/use-query';
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/query-helper';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
@@ -9,24 +10,15 @@ import { AchievementApi } from './achievement-api';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
-  const query = useQuery();
-  const [achievements, setAchievements] = useState<AchievementDto[]>([]);
+  const navigate = useNavigate();
   const achievementApi = new AchievementApi();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
-  const [editAchievementId, setEditAchievementId] = useState<string>();
 
-  useEffect(() => {
-    const achievementId = query.get('edit');
-    if (achievementId) setEditAchievementId(achievementId);
-  }, [query]);
-
-  const closeModal = () => {
-    setEditAchievementId(undefined);
-  };
+  const getEditId = () => queryParam<string>(window.location, 'edit', '');
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -90,19 +82,7 @@ const AchievementList: React.FC = () => {
       points: `${formatNumber(a.achievementPoints)} pts`,
       cooldown: `${formatNumber(a.cooldownMinutes)} min`,
       repeatable: 'Unsupported',
-      edit: (
-        <EditButton
-          id={a.id}
-          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-            e.preventDefault();
-            const achievement = achievements.find((a) => a.id === e.currentTarget.id);
-            if (achievement) {
-              setEditAchievementId(achievement.id);
-            }
-          }}
-          className="w-full text-center"
-        />
-      ),
+      edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} className="w-full text-center" />,
       delete: <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
     }));
   };
@@ -123,9 +103,7 @@ const AchievementList: React.FC = () => {
               .then((response) => {
                 if (response.success) {
                   response.data().then((data) => {
-                    setAchievements(data);
                     setData(mapToData(data));
-                    console.log(response);
                     setPageCount(response.pagination?.totalPages ?? 0);
                   });
                 }
@@ -139,12 +117,12 @@ const AchievementList: React.FC = () => {
         monitor={monitor}
         hiddenColumns={['id']}
       />
-      {editAchievementId && (
+      {getEditId() && (
         <AchievementsEditModal
-          achievementId={editAchievementId}
+          achievementId={getEditId()}
           showModal={true}
           closeModal={() => {
-            closeModal();
+            navigate(removeQueryParam(window.location, 'edit'));
             setMonitor(uuid());
           }}
         />

@@ -76,7 +76,7 @@ const UserList: React.FC = () => {
           name: u.name,
           email: u.email,
           slackHandle: u.slackHandle,
-          edit: <EditButton id={u.id} onClick={editHandler} className="w-full text-center" />,
+          edit: <EditButton id={u.id} link="broken" className="w-full text-center" />,
           delete: <TrashButton id={u.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
         }))}
         pageCount={0}

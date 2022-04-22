@@ -39,7 +39,7 @@ const UserProfile: React.FC = () => {
       <Card>
         <CardRow label="Name">
           {profile.name}
-          <EditButton onClick={editHandler} className="float-right px-0 mx-0" />
+          <EditButton link="broken" className="float-right px-0 mx-0" />
         </CardRow>
         <CardRow label="E-mail">{profile.email}</CardRow>
         <CardRow label="Slack handle">{profile.slackHandle}</CardRow>

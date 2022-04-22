@@ -45,6 +45,7 @@ const NewTable: React.FC<Props> = ({
   const location = useLocation();
   const [sortBy, setSortBy] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [pagination, setPagination] = useState([1, 10, '']);
   const [canNavigateBack, setCanNavigateBack] = useState(false);
   const [canNavigateForward, setCanNavigateForward] = useState(true);
 
@@ -52,9 +53,13 @@ const NewTable: React.FC<Props> = ({
   const getSize = () => queryParam<number>(window.location, 'size', 10);
 
   useEffect(() => {
+    const [oldPage, oldSize, oldMonitor] = pagination;
     const page = getPage();
     const size = getSize();
-    fetchData({ page, size });
+    if (page !== oldPage || size !== oldSize || monitor !== oldMonitor) {
+      fetchData({ page, size });
+      setPagination([page, size, monitor]);
+    }
   }, [location, monitor]);
 
   useEffect(() => {
