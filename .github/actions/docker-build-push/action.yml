@@ -44,6 +44,7 @@ runs:
         target: ${{ inputs.target }}
         push: ${{ inputs.push }}
         build-args: |
+          BUILD_NUMBER=${GITHUB_RUN_NUMBER}
           COMMIT_SHA=${{ steps.info.outputs.current-commit }}
           GIT_BRANCH=${{ steps.info.outputs.branch-name }}
         tags: |
