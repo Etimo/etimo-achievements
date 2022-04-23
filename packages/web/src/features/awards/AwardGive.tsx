@@ -10,7 +10,7 @@ import { AchievementService } from '../achievements/achievement-service';
 import { achievementSelector } from '../achievements/achievement-slice';
 import { UserService } from '../users/user-service';
 import { usersSelector } from '../users/user-slice';
-import { AwardApi } from './award-api';
+import { AwardService } from './award-service';
 
 const AwardGive: React.FC = () => {
   const { handleSubmit } = useForm<AwardDto>();
@@ -19,12 +19,12 @@ const AwardGive: React.FC = () => {
   const { users } = useAppSelector(usersSelector);
   const [userId, setUserId] = useState<string>();
   const [achievementId, setAchievementId] = useState<string>();
-  const awardApi = new AwardApi();
+  const awardService = new AwardService();
   const userService = new UserService();
   const achievementService = new AchievementService();
 
   useEffect(() => {
-    achievementService.load(0, 50);
+    achievementService.load();
     userService.load();
   }, []);
 
@@ -39,13 +39,10 @@ const AwardGive: React.FC = () => {
       setLoading(false);
       return toast.error('Please select an achievement and a user');
     }
-    awardApi
-      .create({ userId, achievementId } as AwardDto)
-      .wait()
-      .then((response) => {
-        setLoading(false);
-        toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
-      });
+    awardService.create(userId, achievementId).then((response) => {
+      setLoading(false);
+      toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
+    });
   };
 
   return (

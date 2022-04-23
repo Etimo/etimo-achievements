@@ -1,13 +1,10 @@
-import { PaginatedData, uniq } from '@etimo-achievements/common';
-import { useAppDispatch } from '../../app/store';
+import { AwardDto, PaginatedData, uniq } from '@etimo-achievements/common';
 import { AchievementService } from '../achievements/achievement-service';
 import { UserService } from '../users/user-service';
 import { AwardApi } from './award-api';
-import { deleteAward, setAwards } from './award-slice';
 import { AwardComposite } from './award-types';
 
 export class AwardService {
-  private dispatch = useAppDispatch();
   private api = new AwardApi();
   private achievementService = new AchievementService();
   private userService = new UserService();
@@ -39,17 +36,15 @@ export class AwardService {
         })
         .filter((c) => !!c) as AwardComposite[];
 
-      this.dispatch(setAwards(composites));
-
       return { pagination: response.pagination!, data: composites };
     }
   }
 
+  public async create(userId: string, achievementId: string) {
+    return await this.api.create({ userId, achievementId } as AwardDto).wait();
+  }
+
   public async delete(id: string) {
-    const response = await this.api.delete(id).wait();
-    if (response.success) {
-      this.dispatch(deleteAward(id));
-    }
-    return response;
+    return await this.api.delete(id).wait();
   }
 }

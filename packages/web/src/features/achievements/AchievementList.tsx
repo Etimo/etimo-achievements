@@ -11,12 +11,12 @@ import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
   const navigate = useNavigate();
-  const achievementApi = new AchievementApi();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
+  const achievementApi = new AchievementApi();
 
   const getEditId = () => queryParam<string>(window.location, 'edit', '');
 

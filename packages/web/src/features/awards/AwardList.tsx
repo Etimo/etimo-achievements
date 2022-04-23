@@ -8,12 +8,12 @@ import { AwardService } from './award-service';
 import { AwardComposite } from './award-types';
 
 const AwardList: React.FC = () => {
-  const awardService = new AwardService();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
+  const awardService = new AwardService();
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();

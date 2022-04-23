@@ -51,7 +51,7 @@ const NewTable: React.FC<Props> = ({
   const [canNavigateForward, setCanNavigateForward] = useState(true);
 
   const getPage = () => Math.max(queryParam<number>(window.location, 'page', 1), 1);
-  const getSize = () => Math.max(queryParam<number>(window.location, 'size', 10), 1);
+  const getSize = () => Math.min(Math.max(queryParam<number>(window.location, 'size', 10), 1), 50);
 
   useEffect(() => {
     const [oldPage, oldSize, oldMonitor] = pagination;
