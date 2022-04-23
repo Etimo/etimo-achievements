@@ -17,6 +17,11 @@ export const errorMiddleware = () => {
         res.header('WWW-Authenticate', 'Bearer error="invalid_token", error_description="' + error.message + '"');
         return res.send({ error: 'Unauthorized' });
 
+      case 'ForbiddenError':
+        res.statusCode = 403;
+        res.header('WWW-Authenticate', 'Bearer error="insufficient_scope", error_description="' + error.message + '"');
+        return res.send({ error: 'Forbidden' });
+
       case 'Not Found':
       case 'NotFoundError':
         res.statusCode = 404;
