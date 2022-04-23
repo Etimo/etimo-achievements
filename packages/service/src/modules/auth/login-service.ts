@@ -33,7 +33,7 @@ export class LoginService {
     // Administrator rights for certain users
     const isAdmin = userInfo.email === 'niclas.lindstedt@etimo.se';
     if (isAdmin) {
-      scopes = ['a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore'];
+      scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore'];
     }
 
     const createTokenService = new CreateTokenService(this.context);
