@@ -7,12 +7,22 @@ export class AchievementService {
   private api = new AchievementApi();
 
   public async load() {
-    const response = await this.api.getMany(0, 50).wait();
+    const response = await this.api.getMany().wait();
     if (response.success) {
       const data = await response.data();
       this.dispatch(updateAchievements(data));
     }
     return response;
+  }
+
+  public async getMany(skip: number, take: number) {
+    const response = await this.api.getMany(skip, take).wait();
+    if (response.success) {
+      const data = await response.data();
+      this.dispatch(updateAchievements(data));
+
+      return { pagination: response.pagination!, data };
+    }
   }
 
   public async get(id: string) {

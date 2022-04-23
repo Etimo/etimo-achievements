@@ -26,23 +26,12 @@ type Props = {
   columns: Column[];
   data: any[];
   loading: boolean;
-  hiddenColumns?: string[];
   pageCount: number;
   fetchData: any;
   monitor?: any;
 };
 
-const NewTable: React.FC<Props> = ({
-  columns,
-  data,
-  loading,
-  pageCount,
-  hiddenColumns,
-  fetchData,
-  monitor,
-  children,
-  ...rest
-}) => {
+const NewTable: React.FC<Props> = ({ columns, data, loading, pageCount, fetchData, monitor, children, ...rest }) => {
   const location = useLocation();
   const [sortBy, setSortBy] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');

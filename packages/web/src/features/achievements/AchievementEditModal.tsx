@@ -1,46 +1,33 @@
 import { AchievementDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router';
+import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
 import { AchievementApi } from './achievement-api';
+import { achievementSelector } from './achievement-slice';
 
 type Props = {
   achievementId: string;
-  showModal: boolean;
   closeModal: () => void;
 };
 
-const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, closeModal }) => {
+const AchievementEditModal: React.FC<Props> = ({ achievementId, closeModal }) => {
   const {
     register,
     reset,
     handleSubmit,
     formState: { errors },
   } = useForm<AchievementDto>();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const { achievements } = useAppSelector(achievementSelector);
   const [achievement, setAchievement] = useState<AchievementDto>();
   const achievementApi = new AchievementApi();
 
-  const refresh = () => {
-    achievementApi
-      .get(achievementId)
-      .wait()
-      .then((response) => {
-        if (response.success) {
-          response.data().then((data) => {
-            setAchievement(data);
-          });
-        }
-      });
-  };
-
   useEffect(() => {
-    refresh();
-  }, []);
+    setAchievement(achievements.find((a) => a.id === achievementId));
+  }, [achievements]);
 
   const onSubmit: SubmitHandler<AchievementDto> = (updatedAchievement) => {
     setLoading(true);
@@ -57,7 +44,7 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, close
   };
 
   return achievement ? (
-    <Modal title="Edit Achievement" showModal={showModal} onRequestClose={closeModal}>
+    <Modal title="Edit Achievement" showModal={true} onRequestClose={closeModal}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTextInput
           label="Name"

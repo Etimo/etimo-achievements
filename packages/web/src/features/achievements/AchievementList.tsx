@@ -6,7 +6,7 @@ import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import NewTable, { Column } from '../../components/table/NewTable';
-import { AchievementApi } from './achievement-api';
+import { AchievementService } from './achievement-service';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
@@ -16,23 +16,20 @@ const AchievementList: React.FC = () => {
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
-  const achievementApi = new AchievementApi();
+  const achievementService = new AchievementService();
 
   const getEditId = () => queryParam<string>(window.location, 'edit', '');
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setDeleting(e.currentTarget.id);
-    achievementApi
-      .delete(e.currentTarget.id)
-      .wait()
-      .then((response) => {
-        if (response.success) {
-          setMonitor(uuid());
-        }
-        setDeleting(undefined);
-        toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
-      });
+    achievementService.delete(e.currentTarget.id).then((response) => {
+      if (response.success) {
+        setMonitor(uuid());
+      }
+      setDeleting(undefined);
+      toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
+    });
   };
 
   const columns = React.useMemo(
@@ -103,30 +100,24 @@ const AchievementList: React.FC = () => {
           (input: { size: any; page: any }) => {
             const { size, page } = input;
             setLoading(true);
-            achievementApi
-              .getMany((page - 1) * size, size)
-              .wait()
-              .then((response) => {
-                if (response.success) {
-                  response.data().then((data) => {
-                    setData(mapToData(data));
-                    setPageCount(response.pagination?.totalPages ?? 0);
-                  });
-                }
-                setLoading(false);
-              });
+            achievementService.getMany((page - 1) * size, size).then((response) => {
+              if (response) {
+                const { data, pagination } = response;
+                setData(mapToData(data));
+                setPageCount(pagination.totalPages ?? 0);
+              }
+              setLoading(false);
+            });
           },
           [monitor]
         )}
         loading={loading}
         pageCount={pageCount}
         monitor={monitor}
-        hiddenColumns={['id']}
       />
       {getEditId() && (
         <AchievementsEditModal
           achievementId={getEditId()}
-          showModal={true}
           closeModal={() => {
             navigate(removeQueryParam(window.location, 'edit'));
             setMonitor(uuid());

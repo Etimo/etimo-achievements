@@ -1,44 +1,35 @@
-import { sort, UserDto } from '@etimo-achievements/common';
-import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../app/store';
+import { UserDto, uuid } from '@etimo-achievements/common';
+import React, { useCallback, useState } from 'react';
+import { useNavigate } from 'react-router';
+import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/query-helper';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import NewTable, { Column } from '../../components/table/NewTable';
 import { UserService } from './user-service';
-import { usersSelector } from './user-slice';
 import UserEditModal from './UserEditModal';
 
 const UserList: React.FC = () => {
-  const { users } = useAppSelector(usersSelector);
-  const userService = new UserService();
-  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
-  const [editUser, setEditUser] = useState<UserDto>();
+  const [data, setData] = React.useState<any[]>([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [monitor, setMonitor] = useState(uuid());
+  const userService = new UserService();
 
-  useEffect(() => {
-    userService.load().then(() => setLoading(false));
-  }, []);
-
-  const closeModal = () => {
-    setEditUser(undefined);
-  };
+  const getEditId = () => queryParam<string>(window.location, 'edit', '');
 
   const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     setDeleting(e.currentTarget.id);
     userService.delete(e.currentTarget.id).then((response) => {
+      if (response.success) {
+        setMonitor(uuid());
+      }
       setDeleting(undefined);
       toastResponse(response, 'User deleted successfully', 'User could not be deleted');
     });
-  };
-
-  const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    const user = users.find((a) => a.id === e.currentTarget.id);
-    if (user) {
-      setEditUser(user);
-    }
   };
 
   const columns = React.useMemo(
@@ -46,6 +37,7 @@ const UserList: React.FC = () => {
       {
         title: 'Name',
         accessor: 'name',
+        className: 'w-40',
       },
       {
         title: 'E-mail',
@@ -54,36 +46,66 @@ const UserList: React.FC = () => {
       {
         title: 'Slack Handle',
         accessor: 'slackHandle',
+        className: 'w-32',
       },
       {
         title: 'Edit',
         accessor: 'edit',
+        className: 'w-16',
       },
       {
         title: 'Delete',
         accessor: 'delete',
+        className: 'w-16',
       },
     ],
     []
   );
+
+  const mapToData = (users: UserDto[]): any[] => {
+    return users.map((u) => ({
+      name: u.name,
+      email: u.email,
+      slackHandle: u.slackHandle,
+      edit: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} className="w-full text-center" />,
+      delete: <TrashButton id={u.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
+    }));
+  };
 
   return (
     <div className="w-3/4 mx-auto">
       <Header>Users</Header>
       <NewTable
         columns={columns}
-        data={sort(users, 'name').map((u) => ({
-          name: u.name,
-          email: u.email,
-          slackHandle: u.slackHandle,
-          edit: <EditButton id={u.id} link="broken" className="w-full text-center" />,
-          delete: <TrashButton id={u.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
-        }))}
-        pageCount={0}
-        loading={false}
-        fetchData={() => userService.load()}
+        data={data}
+        fetchData={useCallback(
+          (input: { size: any; page: any }) => {
+            const { size, page } = input;
+            setLoading(true);
+            userService.getMany((page - 1) * size, size).then((response) => {
+              if (response) {
+                const { data, pagination } = response;
+                setData(mapToData(data));
+                setPageCount(pagination.totalPages ?? 0);
+              }
+              setLoading(false);
+            });
+          },
+          [monitor]
+        )}
+        loading={loading}
+        pageCount={pageCount}
+        monitor={monitor}
       />
-      {editUser && <UserEditModal userId={editUser.id} showModal={true} closeModal={closeModal} />}
+      {getEditId() && (
+        <UserEditModal
+          userId={getEditId()}
+          closeModal={() => {
+            navigate(removeQueryParam(window.location, 'edit'));
+            setMonitor(uuid());
+          }}
+        />
+      )}
     </div>
   );
 };

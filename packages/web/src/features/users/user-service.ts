@@ -12,8 +12,18 @@ export class UserService {
   public async load() {
     const response = await this.api.getMany().wait();
     if (response.success) {
-      const { data } = await response.data();
+      const data = await response.data();
       this.dispatch(setUsers(data));
+    }
+  }
+
+  public async getMany(skip: number, take: number) {
+    const response = await this.api.getMany(skip, take).wait();
+    if (response.success) {
+      const data = await response.data();
+      this.dispatch(setUsers(data));
+
+      return { pagination: response.pagination!, data };
     }
   }
 

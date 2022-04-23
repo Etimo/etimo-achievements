@@ -1,19 +1,19 @@
 import { UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
 import { UserApi } from './user-api';
-import { UserService } from './user-service';
+import { usersSelector } from './user-slice';
 
 type Props = {
   userId: string;
-  showModal: boolean;
   closeModal: () => void;
 };
 
-const UserEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
+const UserEditModal: React.FC<Props> = ({ userId, closeModal }) => {
   const {
     register,
     reset,
@@ -21,21 +21,13 @@ const UserEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
     formState: { errors },
   } = useForm<UserDto>();
   const [loading, setLoading] = useState(false);
+  const { users } = useAppSelector(usersSelector);
   const [user, setUser] = useState<UserDto>();
   const userApi = new UserApi();
-  const userService = new UserService();
-
-  const refresh = () => {
-    userService.fetch(userId).then((user) => {
-      if (user) {
-        setUser(user);
-      }
-    });
-  };
 
   useEffect(() => {
-    refresh();
-  }, []);
+    setUser(users.find((u) => u.id === userId));
+  }, [users]);
 
   const onSubmit: SubmitHandler<UserDto> = (updatedUser) => {
     setLoading(true);
@@ -46,14 +38,13 @@ const UserEditModal: React.FC<Props> = ({ userId, showModal, closeModal }) => {
         setLoading(false);
         toastResponse(response, 'User edited successfully', 'User could not be updated', () => {
           reset();
-          refresh();
           closeModal();
         });
       });
   };
 
   return user ? (
-    <Modal title="Edit User" showModal={showModal} onRequestClose={closeModal}>
+    <Modal title="Edit User" showModal={true} onRequestClose={closeModal}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTextInput
           label="Name"
