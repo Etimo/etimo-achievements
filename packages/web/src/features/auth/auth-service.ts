@@ -1,5 +1,6 @@
 import { Logger } from '@etimo-achievements/common';
 import { useAppDispatch, useAppSelector } from '../../app/store';
+import { LocalStorage } from '../../common/enums/local-storage';
 import { AuthApi } from './auth-api';
 import { authSelector, setLoggedIn, setLoggedOut, setLoggingIn, setTokenInfo, setUserInfo } from './auth-slice';
 import { AuthStorageKeys } from './auth-types';
@@ -49,7 +50,20 @@ export class AuthService {
   public async logout() {
     await this.authApi.logout().wait();
 
+    /*
+      The redirect url is set before the token is refreshed.
+      When the token fails to refresh, this function is called,
+      and the local storage is cleared. Because of this, we need
+      to save the redirectUrl in a variable, clear local storage
+      and then set the redirectUrl again in local storage, to allow
+      the user to be redirected properly after getting his/her token.
+    */
+    const redirectUrl = localStorage.getItem(LocalStorage.RedirectUrl);
     localStorage.clear();
+    if (redirectUrl) {
+      localStorage.setItem(LocalStorage.RedirectUrl, redirectUrl);
+    }
+
     this.dispatch(setLoggedOut());
   }
 
