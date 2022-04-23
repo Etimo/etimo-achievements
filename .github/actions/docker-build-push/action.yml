@@ -33,6 +33,7 @@ runs:
       id: info
       shell: bash
       run: |
+        echo "::set-output name=build-number::${GITHUB_RUN_NUMBER}"
         echo "::set-output name=branch-name::${GITHUB_REF##*/}"
         echo "::set-output name=current-commit::$(git rev-parse HEAD)"
 
@@ -44,7 +45,7 @@ runs:
         target: ${{ inputs.target }}
         push: ${{ inputs.push }}
         build-args: |
-          BUILD_NUMBER=${GITHUB_RUN_NUMBER}
+          BUILD_NUMBER=${{ steps.info.outputs.build-number }}
           COMMIT_SHA=${{ steps.info.outputs.current-commit }}
           GIT_BRANCH=${{ steps.info.outputs.branch-name }}
         tags: |
