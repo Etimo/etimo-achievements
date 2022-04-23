@@ -109,7 +109,6 @@ export default class AchievementsServer {
     const options = { customSiteTitle: 'EA Swagger' };
     this.express.use(this.root + 'swagger.json', serveStatic(`${__dirname}/openapi.json`));
     this.express.use(this.root + 'swagger', swaggerUi.serve, swaggerUi.setup(OpenApiDocument, options));
-    this.express.use(this.root, (_req, res) => res.redirect(this.root + 'swagger'));
     this.express.use(
       OpenApiValidator.middleware({
         apiSpec: OpenApiDocument,
