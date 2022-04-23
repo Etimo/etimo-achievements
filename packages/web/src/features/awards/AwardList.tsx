@@ -62,6 +62,7 @@ const AwardList: React.FC = () => {
         title: 'Delete',
         accessor: 'delete',
         className: 'w-16',
+        hasAccess: ['remove', 'awards'],
       },
     ],
     []

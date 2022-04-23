@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
+import useHasAccess, { Action, Resource } from '../../common/hooks/use-has-access';
 import { queryParam } from '../../common/utils/query-helper';
 import PaginationButton from './PaginationButton';
 
@@ -20,6 +21,7 @@ export type Column = {
   sortType?: (a: any, b: any) => number;
   className?: string;
   hidden?: boolean;
+  hasAccess?: [Action, Resource];
 };
 
 type Props = {
@@ -41,6 +43,7 @@ const PaginatedTable: React.FC<Props> = ({
   children,
   ...rest
 }) => {
+  const hasAccess = useHasAccess();
   const location = useLocation();
   const [sortBy, setSortBy] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -67,6 +70,13 @@ const PaginatedTable: React.FC<Props> = ({
     setCanNavigateForward(page < pageCount);
   }, [location, pageCount]);
 
+  const userHasAccess = (column: Column) => {
+    if (!column.hasAccess) return true;
+
+    const [action, resource] = column.hasAccess;
+    return hasAccess(action, resource);
+  };
+
   return (
     <div>
       <Table {...rest}>
@@ -74,7 +84,8 @@ const PaginatedTable: React.FC<Props> = ({
           <TableHeaderRow>
             {columns.map(
               (column) =>
-                !column.hidden && (
+                !column.hidden &&
+                userHasAccess(column) && (
                   <TableHeader key={uuid()}>
                     <span>{column.title}</span>
                     <span>
@@ -98,7 +109,7 @@ const PaginatedTable: React.FC<Props> = ({
                   return (
                     <TableRow key={uuid()}>
                       {columns
-                        .filter((c) => !c.hidden)
+                        .filter((c) => !c.hidden && userHasAccess(c))
                         .map((column) => {
                           return (
                             <TableCell key={uuid()} className={column.className}>
@@ -113,7 +124,7 @@ const PaginatedTable: React.FC<Props> = ({
                 return (
                   <TableRow key={uuid()}>
                     {columns
-                      .filter((c) => !c.hidden)
+                      .filter((c) => !c.hidden && userHasAccess(c))
                       .map((column) => {
                         return (
                           <TableCell key={uuid()} className={column.className}>
