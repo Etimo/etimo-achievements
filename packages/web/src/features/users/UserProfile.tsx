@@ -31,11 +31,13 @@ const UserProfile: React.FC = () => {
       <Card>
         <CardRow label="Name">
           {profile.name}
-          <EditButton
-            id={profile.id}
-            link={addQueryParam(window.location, 'edit', 'true')}
-            className="float-right px-0 mx-0"
-          />
+          <RequirePermission update="profile">
+            <EditButton
+              id={profile.id}
+              link={addQueryParam(window.location, 'edit', 'true')}
+              className="float-right px-0 mx-0"
+            />
+          </RequirePermission>
         </CardRow>
         <CardRow label="E-mail">{profile.email}</CardRow>
         <CardRow label="Slack handle">{profile.slackHandle}</CardRow>

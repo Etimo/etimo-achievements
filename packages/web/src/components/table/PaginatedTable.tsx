@@ -137,7 +137,7 @@ const PaginatedTable: React.FC<Props> = ({
               })}
         </TableBody>
       </Table>
-      <div className="m-1 float-left">
+      <div className="m-2 float-left">
         <PaginationButton
           icon={faAnglesLeft}
           disabled={!canNavigateBack}
