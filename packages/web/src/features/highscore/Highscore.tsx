@@ -1,51 +1,64 @@
-import { formatNumber, sort } from '@etimo-achievements/common';
-import React, { useEffect } from 'react';
-import { Column } from 'react-table';
-import { useAppSelector } from '../../app/store';
-import { insensitiveSort } from '../../common/utils/react-table-helpers';
+import { formatNumber } from '@etimo-achievements/common';
+import React, { useCallback, useState } from 'react';
 import Header from '../../components/Header';
-import NewTable from '../../components/table/NewTable';
+import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
 import { HighscoreService } from './highscore-service';
-import { highscoreSelector } from './highscore-slice';
+import { HighscoreComposite } from './highscore-types';
 
 const Highscores: React.FC = () => {
-  const { highscores } = useAppSelector(highscoreSelector);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = React.useState<any[]>([]);
+  const [pageCount, setPageCount] = useState(0);
   const highscoreService = new HighscoreService();
-
-  useEffect(() => {
-    highscoreService.load();
-  }, []);
 
   const columns = React.useMemo(
     (): Column[] => [
       {
-        Header: 'Name',
+        title: 'Name',
         accessor: 'name',
-        sortType: insensitiveSort,
       },
       {
-        Header: 'Achievements',
+        title: 'Achievements',
         accessor: 'achievements',
-        sortType: insensitiveSort,
+        className: 'w-40',
       },
       {
-        Header: 'Points',
+        title: 'Points',
         accessor: 'points',
+        className: 'w-40',
       },
     ],
     []
   );
 
+  const mapToData = (composites: HighscoreComposite[]): any[] => {
+    return composites.map((h) => ({
+      name: h.user.name,
+      achievements: formatNumber(h.achievements),
+      points: `${formatNumber(h.points)} pts`,
+    }));
+  };
+
   return (
     <div className="w-1/2 mx-auto">
       <Header>Highscores</Header>
-      <NewTable
+      <PaginatedTable
         columns={columns}
-        data={sort(highscores, 'points').map((h) => ({
-          name: h.user.name,
-          achievements: formatNumber(h.achievements),
-          points: `${formatNumber(h.points)} pts`,
-        }))}
+        data={data}
+        pageCount={pageCount}
+        loading={loading}
+        fetchData={useCallback((input: { size: any; page: any }) => {
+          const { size, page } = input;
+          setLoading(true);
+          highscoreService.load((page - 1) * size, size).then((response) => {
+            if (response) {
+              const { data, pagination } = response;
+              setData(mapToData(data));
+              setPageCount(pagination.totalPages ?? 0);
+            }
+            setLoading(false);
+          });
+        }, [])}
       />
     </div>
   );

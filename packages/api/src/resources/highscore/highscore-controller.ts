@@ -1,6 +1,6 @@
 import { GetHighscoreService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { getContext, okResponse, protectedEndpoint } from '../../utils';
+import { getContext, paginatedResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { validateOrderBy } from '../../utils/validation-helper';
 import { HighscoreMapper } from './highscore-mapper';
@@ -40,12 +40,8 @@ export class HighscoreController {
     validateOrderBy(paginationOpts.orderBy, HighscoreMapper.isProperty);
 
     const service = new GetHighscoreService(getContext());
-    const awards = await service.get(paginationOpts);
-    const output = {
-      ...awards,
-      data: awards.data.map(HighscoreMapper.toHighscoreDto),
-    };
+    const highscores = await service.get(paginationOpts);
 
-    return okResponse(res, output);
+    return paginatedResponse(res, '/highscores', highscores, HighscoreMapper.toHighscoreDto);
   };
 }

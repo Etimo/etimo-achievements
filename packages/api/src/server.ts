@@ -80,6 +80,7 @@ export default class AchievementsServer {
     this.express.use(
       cors({
         origin: getEnvVariable(Env.FRONTEND_URL),
+        exposedHeaders: ['Content-Range', 'Link'],
         optionsSuccessStatus: 200,
         credentials: true,
       })

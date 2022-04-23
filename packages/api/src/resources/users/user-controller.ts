@@ -6,6 +6,7 @@ import {
   getContext,
   noContentResponse,
   okResponse,
+  paginatedResponse,
   protectedEndpoint,
 } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
@@ -196,9 +197,8 @@ export class UserController {
 
     const service = new GetUserService(getContext());
     const users = await service.getMany(paginationOpts);
-    const output = { ...users, data: users.data.map(UserMapper.toUserDto) };
 
-    return okResponse(res, output);
+    return paginatedResponse(res, '/users', users, UserMapper.toUserDto);
   };
 
   private listUsers = async (req: Request, res: Response) => {

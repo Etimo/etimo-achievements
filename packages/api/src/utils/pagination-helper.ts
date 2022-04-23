@@ -10,7 +10,6 @@ export function getPaginationOptions(req: any, max: number = 50): PaginationOpti
     const pagination = JSON.parse(fromBase64(token)) as PaginationOptions;
 
     if (req.query.skip !== undefined && req.query.take !== undefined) {
-      console.log(skip, take);
       return { ...pagination, skip, take };
     }
 

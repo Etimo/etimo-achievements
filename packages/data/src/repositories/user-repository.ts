@@ -16,6 +16,9 @@ export class UserRepository {
   getMany(options: PaginationOptions): Promise<IUser[]> {
     return catchErrors(async () => {
       const query = UserModel.query().limit(options.take).offset(options.skip);
+      if (!options.orderBy.length) {
+        query.orderBy('name', 'asc');
+      }
       for (const [key, order] of options.orderBy) {
         query.orderBy(camelToSnakeCase(key), order);
       }

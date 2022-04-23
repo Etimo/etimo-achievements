@@ -1,4 +1,4 @@
-import { PaginatedData, uniq, UserDto } from '@etimo-achievements/common';
+import { uniq, UserDto } from '@etimo-achievements/common';
 import Api from '../../common/utils/api';
 
 export class UserApi {
@@ -13,7 +13,7 @@ export class UserApi {
   }
 
   public getMany(skip: number = 0, take: number = 50) {
-    return this.api.get<PaginatedData<UserDto>>(`/users?skip=${skip}&take=${take}`);
+    return this.api.get<UserDto[]>(`/users?skip=${skip}&take=${take}`);
   }
 
   public list(ids: string[]) {

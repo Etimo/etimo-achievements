@@ -1,7 +1,7 @@
 import { UserDto } from '@etimo-achievements/common';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { UserApi } from './user-api';
-import { deleteUser, profileSelector, setUsers, updateUser, updateUsers, usersSelector } from './user-slice';
+import { addUser, deleteUser, profileSelector, setUsers, updateUser, updateUsers, usersSelector } from './user-slice';
 
 export class UserService {
   private dispatch = useAppDispatch();
@@ -12,8 +12,18 @@ export class UserService {
   public async load() {
     const response = await this.api.getMany().wait();
     if (response.success) {
-      const { data } = await response.data();
+      const data = await response.data();
       this.dispatch(setUsers(data));
+    }
+  }
+
+  public async getMany(skip: number, take: number) {
+    const response = await this.api.getMany(skip, take).wait();
+    if (response.success) {
+      const data = await response.data();
+      this.dispatch(setUsers(data));
+
+      return { pagination: response.pagination!, data };
     }
   }
 
@@ -56,6 +66,30 @@ export class UserService {
       this.dispatch(updateUsers(users));
       return users;
     }
+  }
+
+  public async create(user: UserDto) {
+    const response = await this.api.create(user).wait();
+    if (response.success) {
+      this.dispatch(addUser(user));
+    }
+    return response;
+  }
+
+  public async update(id: string, user: UserDto) {
+    const response = await this.api.update(id, user).wait();
+    if (response.success) {
+      this.dispatch(updateUser(user));
+    }
+    return response;
+  }
+
+  public async updateProfile(user: UserDto) {
+    const response = await this.api.updateProfile(user).wait();
+    if (response.success) {
+      this.fetchProfile();
+    }
+    return response;
   }
 
   public async delete(id: string) {

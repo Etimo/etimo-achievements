@@ -11,6 +11,7 @@ import {
   getContext,
   noContentResponse,
   okResponse,
+  paginatedResponse,
   protectedEndpoint,
 } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
@@ -33,7 +34,6 @@ export class AchievementController {
      *       - *skipParam
      *       - *takeParam
      *       - *orderByParam
-     *       - *pageTokenParam
      *     responses:
      *       200:
      *         description: The request was successful.
@@ -162,12 +162,8 @@ export class AchievementController {
 
     const service = new GetAchievementService(getContext());
     const achievements = await service.getMany(paginationOpts);
-    const output = {
-      ...achievements,
-      data: achievements.data.map(AchievementMapper.toAchievementDto),
-    };
 
-    return okResponse(res, output);
+    return paginatedResponse(res, '/achievements', achievements, AchievementMapper.toAchievementDto);
   };
 
   private getAchievement = async (req: Request, res: Response) => {

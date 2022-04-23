@@ -4,4 +4,9 @@ export type PaginationInfo = {
   itemsPerPage: number;
   currentPage: number;
   totalPages: number;
+  firstLink?: string;
+  nextLink?: string;
+  prevLink?: string;
+  lastLink?: string;
+  cursor?: string;
 };

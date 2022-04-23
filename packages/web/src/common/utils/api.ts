@@ -1,4 +1,4 @@
-import { Logger } from '@etimo-achievements/common';
+import { Logger, PaginationInfo } from '@etimo-achievements/common';
 
 export type ApiResponse<T> = {
   success: boolean;
@@ -6,6 +6,7 @@ export type ApiResponse<T> = {
   data: () => Promise<T>;
   status: number;
   message: string;
+  pagination?: PaginationInfo;
   error?: string;
   errorMessage?: Promise<string>;
 };
@@ -74,12 +75,14 @@ class Api {
           let success: boolean = false;
           let error: string | undefined;
           let errorMessage: Promise<string> | undefined;
+          let pagination: PaginationInfo | undefined;
           const headers = res.headers;
           const contentType = headers.get('content-type');
           const isJson = contentType && contentType.includes('application/json');
           if (statusCode >= 200 && statusCode < 300) {
             success = true;
             bodyPromise = this.getBodyPromise<T>(res, isJson);
+            pagination = this.getPagination(headers);
           } else {
             error = message;
             errorMessage = new Promise<string>((resolve) => {
@@ -101,6 +104,7 @@ class Api {
             message,
             error,
             errorMessage,
+            pagination,
           });
         })
         .catch((err) => reject(err));
@@ -110,6 +114,54 @@ class Api {
       wait: async () => await responsePromise,
       abort,
     };
+  }
+
+  private getPagination(headers: Headers): PaginationInfo | undefined {
+    let pagination: PaginationInfo | undefined;
+    const contentRange = headers.get('Content-Range');
+    if (contentRange) {
+      const paginationInfo = contentRange.split(' ')[1].split('/');
+      const countInfo = paginationInfo[0].split('-');
+      const start = parseInt(countInfo[0]);
+      const end = parseInt(countInfo[1]);
+      const itemsPerPage = end - start;
+      const totalItems = parseInt(paginationInfo[1]);
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const currentPage = Math.ceil(start / itemsPerPage + 1);
+
+      // Get navigation links
+      const linkHeader = headers.get('Link');
+      let firstLink: string | undefined;
+      let nextLink: string | undefined;
+      let prevLink: string | undefined;
+      let lastLink: string | undefined;
+      if (linkHeader) {
+        const links = linkHeader.split(',');
+        for (const link of links) {
+          const linkParts = link.split(';');
+          const linkUrl = linkParts[0].replace(/<|>/g, '').trim();
+          const linkRel = linkParts[1].replace('rel=', '').replace(/"/g, '').trim();
+          if (linkRel == 'first') firstLink = linkUrl;
+          if (linkRel == 'next') nextLink = linkUrl;
+          if (linkRel == 'prev') prevLink = linkUrl;
+          if (linkRel == 'last') lastLink = linkUrl;
+        }
+      }
+
+      pagination = {
+        items: itemsPerPage,
+        itemsPerPage,
+        totalPages,
+        currentPage,
+        totalItems,
+        firstLink,
+        nextLink,
+        prevLink,
+        lastLink,
+      };
+    }
+
+    return pagination;
   }
 
   private getBodyPromise<T>(res: Response, isJson: string | boolean | null): Promise<T> | undefined {

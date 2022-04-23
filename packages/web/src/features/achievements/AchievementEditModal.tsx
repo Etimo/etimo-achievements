@@ -1,19 +1,19 @@
 import { AchievementDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { AchievementApi } from './achievement-api';
 import { AchievementService } from './achievement-service';
+import { achievementSelector } from './achievement-slice';
 
 type Props = {
   achievementId: string;
-  showModal: boolean;
   closeModal: () => void;
 };
 
-const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, closeModal }) => {
+const AchievementEditModal: React.FC<Props> = ({ achievementId, closeModal }) => {
   const {
     register,
     reset,
@@ -21,39 +21,27 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, showModal, close
     formState: { errors },
   } = useForm<AchievementDto>();
   const [loading, setLoading] = useState(false);
+  const { achievements } = useAppSelector(achievementSelector);
   const [achievement, setAchievement] = useState<AchievementDto>();
-  const achievementApi = new AchievementApi();
   const achievementService = new AchievementService();
 
-  const refresh = () => {
-    achievementService.get(achievementId).then((achievement) => {
-      if (achievement) {
-        setAchievement(achievement);
-      }
-    });
-  };
-
   useEffect(() => {
-    refresh();
-  }, []);
+    setAchievement(achievements.find((a) => a.id === achievementId));
+  }, [achievements]);
 
   const onSubmit: SubmitHandler<AchievementDto> = (updatedAchievement) => {
     setLoading(true);
-    achievementApi
-      .update(achievementId, updatedAchievement)
-      .wait()
-      .then((response) => {
-        setLoading(false);
-        toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
-          reset();
-          refresh();
-          closeModal();
-        });
+    achievementService.update(achievementId, updatedAchievement).then((response) => {
+      setLoading(false);
+      toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
+        reset();
+        closeModal();
       });
+    });
   };
 
   return achievement ? (
-    <Modal title="Edit Achievement" showModal={showModal} onRequestClose={closeModal}>
+    <Modal title="Edit Achievement" showModal={true} onRequestClose={closeModal}>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTextInput
           label="Name"

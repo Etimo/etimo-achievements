@@ -1,10 +1,11 @@
 import { PaginationOptions } from '@etimo-achievements/types';
-import { PaginatedData, toBase64 } from '.';
+import { PaginatedData } from '.';
 
 export function paginate<T>(data: T[], count: number, options: PaginationOptions): PaginatedData<T> {
   const { skip, take } = options;
 
   const currentPage = skip === 0 ? 1 : Math.floor(skip / take) + 1;
+  const totalPages = Math.ceil(count / take);
   const pagination = {
     data: data,
     pagination: {
@@ -12,17 +13,27 @@ export function paginate<T>(data: T[], count: number, options: PaginationOptions
       totalItems: count,
       itemsPerPage: take,
       currentPage,
-      totalPages: Math.ceil(count / take),
+      totalPages,
+      nextLink: skip + take < count ? generateLink({ ...options, skip: skip + take }) : undefined,
+      prevLink: skip - take >= 0 ? generateLink({ ...options, skip: skip - take }) : undefined,
+      firstLink: generateLink({ ...options, skip: 0 }),
+      lastLink: generateLink({ ...options, skip: skip + take * (totalPages - 1) }),
     },
   };
 
-  let token: string | undefined = undefined;
-  if (skip + take < count) {
-    token = toBase64(JSON.stringify({ ...options, skip: options.skip + options.take }));
-  }
-
   return {
     ...pagination,
-    nextPageToken: token,
   };
+}
+
+function generateLink(options: PaginationOptions) {
+  const { skip, take, orderBy } = options;
+  let link = `?skip=${skip}&take=${take}`;
+
+  // Add order by params
+  for (const order of orderBy) {
+    link += `&orderBy=${order[0]},${order[1]}`;
+  }
+
+  return link;
 }

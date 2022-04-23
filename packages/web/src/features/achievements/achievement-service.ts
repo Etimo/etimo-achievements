@@ -1,6 +1,7 @@
+import { AchievementDto } from '@etimo-achievements/common';
 import { useAppDispatch } from '../../app/store';
 import { AchievementApi } from './achievement-api';
-import { deleteAchievement, setAchievements, updateAchievement, updateAchievements } from './achievement-slice';
+import { addAchievement, deleteAchievement, updateAchievement, updateAchievements } from './achievement-slice';
 
 export class AchievementService {
   private dispatch = useAppDispatch();
@@ -9,8 +10,19 @@ export class AchievementService {
   public async load() {
     const response = await this.api.getMany().wait();
     if (response.success) {
-      const { data } = await response.data();
-      this.dispatch(setAchievements(data));
+      const data = await response.data();
+      this.dispatch(updateAchievements(data));
+    }
+    return response;
+  }
+
+  public async getMany(skip: number, take: number) {
+    const response = await this.api.getMany(skip, take).wait();
+    if (response.success) {
+      const data = await response.data();
+      this.dispatch(updateAchievements(data));
+
+      return { pagination: response.pagination!, data };
     }
   }
 
@@ -30,6 +42,22 @@ export class AchievementService {
       this.dispatch(updateAchievements(achievements));
       return achievements;
     }
+  }
+
+  public async create(achievement: AchievementDto) {
+    const response = await this.api.create(achievement).wait();
+    if (response.success) {
+      this.dispatch(addAchievement(achievement));
+    }
+    return response;
+  }
+
+  public async update(id: string, achievement: AchievementDto) {
+    const response = await this.api.update(id, achievement).wait();
+    if (response.success) {
+      this.dispatch(updateAchievement(achievement));
+    }
+    return response;
   }
 
   public async delete(id: string) {

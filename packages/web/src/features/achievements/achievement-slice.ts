@@ -14,6 +14,9 @@ const achievementSlice = createSlice({
     setAchievements: (state: AchievementState, action: { payload: AchievementDto[] }) => {
       state.achievements = action.payload;
     },
+    addAchievement: (state: AchievementState, action: { payload: AchievementDto }) => {
+      state.achievements.push(action.payload);
+    },
     updateAchievement: (state: AchievementState, action: { payload: AchievementDto }) => {
       const index = state.achievements.findIndex((achievement) => achievement.id === action.payload.id);
       if (index !== -1) {
@@ -38,7 +41,8 @@ const achievementSlice = createSlice({
   },
 });
 
-export const { setAchievements, updateAchievement, updateAchievements, deleteAchievement } = achievementSlice.actions;
+export const { setAchievements, addAchievement, updateAchievement, updateAchievements, deleteAchievement } =
+  achievementSlice.actions;
 
 export const achievementSelector = (state: RootState) => state.achievements;
 

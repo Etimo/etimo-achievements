@@ -5,6 +5,7 @@ import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
 import { AchievementApi } from './achievement-api';
+import { AchievementService } from './achievement-service';
 
 const AchievementCreate: React.FC = () => {
   const {
@@ -14,17 +15,14 @@ const AchievementCreate: React.FC = () => {
     formState: { errors },
   } = useForm<AchievementDto>();
   const [loading, setLoading] = useState(false);
-  const achievementApi = new AchievementApi();
+  const achievementService = new AchievementService();
 
   const onSubmit: SubmitHandler<AchievementDto> = (achievement) => {
     setLoading(true);
-    achievementApi
-      .create(achievement)
-      .wait()
-      .then((response) => {
-        setLoading(false);
-        toastResponse(response, 'Achievement created successfully', 'Achievement could not be created', () => reset());
-      });
+    achievementService.create(achievement).then((response) => {
+      setLoading(false);
+      toastResponse(response, 'Achievement created successfully', 'Achievement could not be created', () => reset());
+    });
   };
 
   return (

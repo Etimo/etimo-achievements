@@ -29,6 +29,9 @@ export class AchievementRepository {
   getMany(options: PaginationOptions): Promise<IAchievement[]> {
     return catchErrors(async () => {
       const query = AchievementModel.query().limit(options.take).offset(options.skip);
+      if (!options.orderBy.length) {
+        query.orderBy('name', 'asc');
+      }
       for (const [key, order] of options.orderBy) {
         query.orderBy(camelToSnakeCase(key), order);
       }

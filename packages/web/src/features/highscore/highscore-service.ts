@@ -1,19 +1,16 @@
-import { uniq } from '@etimo-achievements/common';
-import { useAppDispatch } from '../../app/store';
+import { PaginatedData, uniq } from '@etimo-achievements/common';
 import { UserService } from '../users/user-service';
 import { HighscoreApi } from './highscore-api';
-import { setHighscore } from './highscore-slice';
 import { HighscoreComposite } from './highscore-types';
 
 export class HighscoreService {
-  private dispatch = useAppDispatch();
   private api = new HighscoreApi();
   private userService = new UserService();
 
-  public async load(): Promise<HighscoreComposite[]> {
-    const response = await this.api.getMany().wait();
+  public async load(skip: number, take: number): Promise<PaginatedData<HighscoreComposite> | undefined> {
+    const response = await this.api.getMany(skip, take).wait();
     if (response.success) {
-      const highscores = (await response.data()).data;
+      const highscores = await response.data();
 
       const userIds = uniq(highscores.map((a) => a.userId));
       const users = await this.userService.list(userIds);
@@ -30,8 +27,7 @@ export class HighscoreService {
         }
       }
 
-      this.dispatch(setHighscore(composites));
+      return { pagination: response.pagination!, data: composites };
     }
-    return [];
   }
 }

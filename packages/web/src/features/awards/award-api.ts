@@ -1,4 +1,4 @@
-import { AwardDto, PaginatedData } from '@etimo-achievements/common';
+import { AwardDto } from '@etimo-achievements/common';
 import Api from '../../common/utils/api';
 
 export class AwardApi {
@@ -9,7 +9,7 @@ export class AwardApi {
   }
 
   public getMany(skip: number = 0, take: number = 50) {
-    return this.api.get<PaginatedData<AwardDto>>(`/awards?skip=${skip}&take=${take}`);
+    return this.api.get<AwardDto[]>(`/awards?skip=${skip}&take=${take}`);
   }
 
   public create(award: AwardDto) {
