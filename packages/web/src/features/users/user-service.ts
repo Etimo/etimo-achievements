@@ -87,7 +87,7 @@ export class UserService {
   public async updateProfile(user: UserDto) {
     const response = await this.api.updateProfile(user).wait();
     if (response.success) {
-      this.dispatch(updateUser(user));
+      this.fetchProfile();
     }
     return response;
   }

@@ -1,37 +1,29 @@
-import { UserDto } from '@etimo-achievements/common';
+import { uuid } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useAppDispatch, useAppSelector } from '../../app/store';
+import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/query-helper';
 import { EditButton } from '../../components/buttons';
 import { Card, CardRow } from '../../components/cards';
 import Header from '../../components/Header';
 import { UserService } from './user-service';
-import { profileSelector, updateUser } from './user-slice';
+import { profileSelector } from './user-slice';
 import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [editProfile, setEditProfile] = useState<UserDto>();
   const profile = useAppSelector(profileSelector);
+  const [monitor, setMonitor] = useState(uuid());
   const userService = new UserService();
 
+  const getEditState = () => queryParam<string>(window.location, 'edit', '');
+
   useEffect(() => {
-    userService.getProfile().then((user) => {
-      if (user) {
-        dispatch(updateUser(user));
-      }
-    });
-  }, []);
+    userService.getProfile();
+  }, [monitor]);
 
   if (!profile) return null;
-
-  const closeModal = () => {
-    setEditProfile(undefined);
-  };
-
-  const editHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setEditProfile(profile);
-  };
 
   return (
     <div className="w-1/3 mx-auto">
@@ -39,12 +31,23 @@ const UserProfile: React.FC = () => {
       <Card>
         <CardRow label="Name">
           {profile.name}
-          <EditButton link="broken" className="float-right px-0 mx-0" />
+          <EditButton
+            id={profile.id}
+            link={addQueryParam(window.location, 'edit', 'true')}
+            className="float-right px-0 mx-0"
+          />
         </CardRow>
         <CardRow label="E-mail">{profile.email}</CardRow>
         <CardRow label="Slack handle">{profile.slackHandle}</CardRow>
       </Card>
-      {editProfile && <UserProfileEditModal showModal={true} closeModal={closeModal} />}
+      {getEditState() && (
+        <UserProfileEditModal
+          closeModal={() => {
+            navigate(removeQueryParam(window.location, 'edit'));
+            setMonitor(uuid());
+          }}
+        />
+      )}
     </div>
   );
 };
