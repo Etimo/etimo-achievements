@@ -21,7 +21,7 @@ inputs:
     default: false
   debug:
     description: Output the resulting deployment yaml file
-    default: false
+    default: true
 
 outputs:
   deployment-yaml:
