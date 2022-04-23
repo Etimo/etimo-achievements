@@ -106,7 +106,7 @@ const SideMenu: React.FC = () => {
         )}
       </Menu>
       <RequirePermission scope="admin">
-        <div className="absolute bottom-0 left-0 p-2 text-xs">{versionInfo}</div>
+        <div className="absolute bottom-0 left-0 p-2 text-xs">v{versionInfo}</div>
       </RequirePermission>
     </ProSidebar>
   );
