@@ -9,10 +9,10 @@ import { profileSelector, updateUser } from './user-slice';
 import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile: React.FC = () => {
-  const userService = new UserService();
   const dispatch = useAppDispatch();
   const [editProfile, setEditProfile] = useState<UserDto>();
   const profile = useAppSelector(profileSelector);
+  const userService = new UserService();
 
   useEffect(() => {
     userService.getProfile().then((user) => {

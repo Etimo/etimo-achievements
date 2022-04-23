@@ -4,7 +4,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { UserApi } from './user-api';
 import { UserService } from './user-service';
 
 type Props = {
@@ -21,7 +20,6 @@ const UserProfileEdit: React.FC<Props> = ({ showModal, closeModal }) => {
   } = useForm<UserDto>();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<UserDto>();
-  const userApi = new UserApi();
   const userService = new UserService();
 
   const refresh = () => {
@@ -38,17 +36,14 @@ const UserProfileEdit: React.FC<Props> = ({ showModal, closeModal }) => {
 
   const onSubmit: SubmitHandler<UserDto> = (profile) => {
     setLoading(true);
-    userApi
-      .updateProfile(profile)
-      .wait()
-      .then((response) => {
-        setLoading(false);
-        toastResponse(response, 'Profile edited successfully', 'Profile could not be updated', () => {
-          reset();
-          refresh();
-          closeModal();
-        });
+    userService.updateProfile(profile).then((response) => {
+      setLoading(false);
+      toastResponse(response, 'Profile edited successfully', 'Profile could not be updated', () => {
+        reset();
+        refresh();
+        closeModal();
       });
+    });
   };
 
   return user ? (

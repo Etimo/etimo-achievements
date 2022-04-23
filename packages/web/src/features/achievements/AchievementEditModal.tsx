@@ -5,7 +5,7 @@ import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { AchievementApi } from './achievement-api';
+import { AchievementService } from './achievement-service';
 import { achievementSelector } from './achievement-slice';
 
 type Props = {
@@ -23,7 +23,7 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, closeModal }) =>
   const [loading, setLoading] = useState(false);
   const { achievements } = useAppSelector(achievementSelector);
   const [achievement, setAchievement] = useState<AchievementDto>();
-  const achievementApi = new AchievementApi();
+  const achievementService = new AchievementService();
 
   useEffect(() => {
     setAchievement(achievements.find((a) => a.id === achievementId));
@@ -31,16 +31,13 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, closeModal }) =>
 
   const onSubmit: SubmitHandler<AchievementDto> = (updatedAchievement) => {
     setLoading(true);
-    achievementApi
-      .update(achievementId, updatedAchievement)
-      .wait()
-      .then((response) => {
-        setLoading(false);
-        toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
-          reset();
-          closeModal();
-        });
+    achievementService.update(achievementId, updatedAchievement).then((response) => {
+      setLoading(false);
+      toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
+        reset();
+        closeModal();
       });
+    });
   };
 
   return achievement ? (

@@ -5,7 +5,7 @@ import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { UserApi } from './user-api';
+import { UserService } from './user-service';
 import { usersSelector } from './user-slice';
 
 type Props = {
@@ -23,7 +23,7 @@ const UserEditModal: React.FC<Props> = ({ userId, closeModal }) => {
   const [loading, setLoading] = useState(false);
   const { users } = useAppSelector(usersSelector);
   const [user, setUser] = useState<UserDto>();
-  const userApi = new UserApi();
+  const userService = new UserService();
 
   useEffect(() => {
     setUser(users.find((u) => u.id === userId));
@@ -31,16 +31,13 @@ const UserEditModal: React.FC<Props> = ({ userId, closeModal }) => {
 
   const onSubmit: SubmitHandler<UserDto> = (updatedUser) => {
     setLoading(true);
-    userApi
-      .update(userId, updatedUser)
-      .wait()
-      .then((response) => {
-        setLoading(false);
-        toastResponse(response, 'User edited successfully', 'User could not be updated', () => {
-          reset();
-          closeModal();
-        });
+    userService.update(userId, updatedUser).then((response) => {
+      setLoading(false);
+      toastResponse(response, 'User edited successfully', 'User could not be updated', () => {
+        reset();
+        closeModal();
       });
+    });
   };
 
   return user ? (

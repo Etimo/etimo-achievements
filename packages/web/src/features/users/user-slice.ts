@@ -14,6 +14,9 @@ const userSlice = createSlice({
     setUsers: (state: UserState, action: { payload: UserDto[] }) => {
       state.users = action.payload;
     },
+    addUser: (state: UserState, action: { payload: UserDto }) => {
+      state.users.push(action.payload);
+    },
     updateUser: (state: UserState, action: { payload: UserDto }) => {
       const index = state.users.findIndex((user: UserDto) => user.id === action.payload.id);
       if (index !== -1) {
@@ -38,7 +41,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUsers, updateUser, updateUsers, deleteUser } = userSlice.actions;
+export const { setUsers, addUser, updateUser, updateUsers, deleteUser } = userSlice.actions;
 
 export const profileSelector = (state: RootState) =>
   state.users.users.find((user: UserDto) => user.id === state.auth.userId);

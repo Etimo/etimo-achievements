@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
-import { UserApi } from './user-api';
+import { UserService } from './user-service';
 
 const UserCreate: React.FC = () => {
   const {
@@ -14,17 +14,14 @@ const UserCreate: React.FC = () => {
     formState: { errors },
   } = useForm<UserDto>();
   const [loading, setLoading] = useState(false);
-  const userApi = new UserApi();
+  const userService = new UserService();
 
   const onSubmit: SubmitHandler<UserDto> = (user) => {
     setLoading(true);
-    userApi
-      .create(user)
-      .wait()
-      .then((response) => {
-        setLoading(false);
-        toastResponse(response, 'User created successfully', 'User could not be created', () => reset());
-      });
+    userService.create(user).then((response) => {
+      setLoading(false);
+      toastResponse(response, 'User created successfully', 'User could not be created', () => reset());
+    });
   };
 
   return (
