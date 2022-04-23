@@ -1,7 +1,7 @@
 import { formatNumber } from '@etimo-achievements/common';
 import React, { useCallback, useState } from 'react';
 import Header from '../../components/Header';
-import NewTable, { Column } from '../../components/table/NewTable';
+import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
 import { HighscoreService } from './highscore-service';
 import { HighscoreComposite } from './highscore-types';
 
@@ -42,7 +42,7 @@ const Highscores: React.FC = () => {
   return (
     <div className="w-1/2 mx-auto">
       <Header>Highscores</Header>
-      <NewTable
+      <PaginatedTable
         columns={columns}
         data={data}
         pageCount={pageCount}

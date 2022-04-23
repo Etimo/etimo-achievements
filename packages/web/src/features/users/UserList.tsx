@@ -5,7 +5,7 @@ import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import NewTable, { Column } from '../../components/table/NewTable';
+import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
 import { UserService } from './user-service';
 import UserEditModal from './UserEditModal';
 
@@ -75,7 +75,7 @@ const UserList: React.FC = () => {
   return (
     <div className="w-3/4 mx-auto">
       <Header>Users</Header>
-      <NewTable
+      <PaginatedTable
         columns={columns}
         data={data}
         fetchData={useCallback(

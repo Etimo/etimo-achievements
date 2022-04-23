@@ -31,7 +31,16 @@ type Props = {
   monitor?: any;
 };
 
-const NewTable: React.FC<Props> = ({ columns, data, loading, pageCount, fetchData, monitor, children, ...rest }) => {
+const PaginatedTable: React.FC<Props> = ({
+  columns,
+  data,
+  loading,
+  pageCount,
+  fetchData,
+  monitor,
+  children,
+  ...rest
+}) => {
   const location = useLocation();
   const [sortBy, setSortBy] = useState<string>('');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
@@ -152,4 +161,4 @@ const NewTable: React.FC<Props> = ({ columns, data, loading, pageCount, fetchDat
   );
 };
 
-export default NewTable;
+export default PaginatedTable;

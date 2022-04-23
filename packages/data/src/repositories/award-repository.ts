@@ -23,6 +23,9 @@ export class AwardRepository {
   getMany(options: PaginationOptions): Promise<IAward[]> {
     return catchErrors(async () => {
       const query = AwardModel.query().limit(options.take).offset(options.skip);
+      if (!options.orderBy.length) {
+        query.orderBy('created_at', 'desc');
+      }
       for (const [key, order] of options.orderBy) {
         query.orderBy(camelToSnakeCase(key), order);
       }
