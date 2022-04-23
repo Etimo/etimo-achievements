@@ -1,15 +1,18 @@
 import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
 import React, { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
+import useHasAccess from '../../common/hooks/use-has-access';
 import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/query-helper';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
+import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
 import { AchievementService } from './achievement-service';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
+  const hasAccess = useHasAccess();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
@@ -67,11 +70,13 @@ const AchievementList: React.FC = () => {
         title: 'Edit',
         accessor: 'edit',
         className: 'w-16',
+        hasAccess: ['update', 'achievements'],
       },
       {
         title: 'Delete',
         accessor: 'delete',
         className: 'w-16',
+        hasAccess: ['remove', 'achievements'],
       },
     ],
     []
@@ -116,13 +121,15 @@ const AchievementList: React.FC = () => {
         monitor={monitor}
       />
       {getEditId() && (
-        <AchievementsEditModal
-          achievementId={getEditId()}
-          closeModal={() => {
-            navigate(removeQueryParam(window.location, 'edit'));
-            setMonitor(uuid());
-          }}
-        />
+        <RequirePermission update="achievements">
+          <AchievementsEditModal
+            achievementId={getEditId()}
+            closeModal={() => {
+              navigate(removeQueryParam(window.location, 'edit'));
+              setMonitor(uuid());
+            }}
+          />
+        </RequirePermission>
       )}
     </div>
   );
