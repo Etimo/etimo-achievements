@@ -18,9 +18,13 @@ import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
 import useLoggedIn from '../common/hooks/use-logged-in';
 import RequirePermission from './RequirePermission';
+const version = require('../version.json');
 
 const SideMenu: React.FC = () => {
   const isLoggedIn = useLoggedIn();
+
+  const date = new Date(version.date).toISOString().split('T')[0].replace(/-/g, '');
+  const versionInfo = `${date}.${version.build_number}`;
 
   return (
     <ProSidebar>
@@ -101,6 +105,9 @@ const SideMenu: React.FC = () => {
           </MenuItem>
         )}
       </Menu>
+      <RequirePermission scope="admin">
+        <div className="absolute bottom-0 left-0 p-2 text-xs">{versionInfo}</div>
+      </RequirePermission>
     </ProSidebar>
   );
 };
