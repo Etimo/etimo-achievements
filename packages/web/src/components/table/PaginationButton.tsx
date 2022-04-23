@@ -1,7 +1,6 @@
 import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import 'react-loading-skeleton/dist/skeleton.css';
 import { Link } from 'react-router-dom';
 
 type Props = {

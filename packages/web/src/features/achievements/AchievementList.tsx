@@ -45,6 +45,7 @@ const AchievementList: React.FC = () => {
       {
         title: 'Name',
         accessor: 'name',
+        className: 'w-48',
       },
       {
         title: 'Description',
@@ -53,22 +54,27 @@ const AchievementList: React.FC = () => {
       {
         title: 'Points',
         accessor: 'points',
+        className: 'w-32',
       },
       {
         title: 'Cooldown',
         accessor: 'cooldown',
+        className: 'w-32',
       },
       {
         title: 'Repeatable',
         accessor: 'repeatable',
+        className: 'w-32',
       },
       {
         title: 'Edit',
         accessor: 'edit',
+        className: 'w-16',
       },
       {
         title: 'Delete',
         accessor: 'delete',
+        className: 'w-16',
       },
     ],
     []

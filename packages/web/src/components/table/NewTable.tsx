@@ -10,7 +10,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { SkeletonTableRow, Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
 import { queryParam } from '../../common/utils/query-helper';
 import PaginationButton from './PaginationButton';
 
@@ -18,6 +18,7 @@ export type Column = {
   title: string;
   accessor: string;
   sortType?: (a: any, b: any) => number;
+  className?: string;
   hidden?: boolean;
 };
 
@@ -49,8 +50,8 @@ const NewTable: React.FC<Props> = ({
   const [canNavigateBack, setCanNavigateBack] = useState(false);
   const [canNavigateForward, setCanNavigateForward] = useState(true);
 
-  const getPage = () => queryParam<number>(window.location, 'page', 1);
-  const getSize = () => queryParam<number>(window.location, 'size', 10);
+  const getPage = () => Math.max(queryParam<number>(window.location, 'page', 1), 1);
+  const getSize = () => Math.max(queryParam<number>(window.location, 'size', 10), 1);
 
   useEffect(() => {
     const [oldPage, oldSize, oldMonitor] = pagination;
@@ -92,21 +93,39 @@ const NewTable: React.FC<Props> = ({
           </TableHeaderRow>
         </TableHead>
         <TableBody>
-          {loading ? (
-            <SkeletonTableRow columns={columns.filter((c) => !c.hidden).length} rows={getSize()} />
-          ) : (
-            data.map((row) => {
-              return (
-                <TableRow key={uuid()}>
-                  {columns
-                    .filter((c) => !c.hidden)
-                    .map((column) => {
-                      return <TableCell key={uuid()}>{row[column.accessor]}</TableCell>;
-                    })}
-                </TableRow>
-              );
-            })
-          )}
+          {loading
+            ? Array(getSize())
+                .fill(undefined)
+                .map((row) => {
+                  return (
+                    <TableRow key={uuid()}>
+                      {columns
+                        .filter((c) => !c.hidden)
+                        .map((column) => {
+                          return (
+                            <TableCell key={uuid()} className={column.className}>
+                              &nbsp;
+                            </TableCell>
+                          );
+                        })}
+                    </TableRow>
+                  );
+                })
+            : data.map((row) => {
+                return (
+                  <TableRow key={uuid()}>
+                    {columns
+                      .filter((c) => !c.hidden)
+                      .map((column) => {
+                        return (
+                          <TableCell key={uuid()} className={column.className}>
+                            {row[column.accessor]}
+                          </TableCell>
+                        );
+                      })}
+                  </TableRow>
+                );
+              })}
         </TableBody>
       </Table>
       <div className="m-1 float-left">

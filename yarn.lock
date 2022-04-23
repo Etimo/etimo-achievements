@@ -1809,13 +1809,11 @@ __metadata:
     react-hook-form: ^7.29.0
     react-hot-loader: ^4.13.0
     react-hot-toast: ^2.2.0
-    react-loading-skeleton: ^3.1.0
     react-modal: ^3.14.4
     react-pro-sidebar: ^0.7.1
     react-redux: ^7.2.6
     react-router: ^6.2.2
     react-router-dom: ^6.2.2
-    react-table: ^7.7.0
     redux-logger: ^3.0.6
     style-loader: ^3.3.1
     tailwindcss: ^3.0.23
@@ -11315,15 +11313,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-loading-skeleton@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "react-loading-skeleton@npm:3.1.0"
-  peerDependencies:
-    react: ">=16.8.0"
-  checksum: 53d257c88e442e979fb9148ae826fc998a5a54c08a01e894395cf1ebb1e1c83e426f9c4884800e5564ba3308cf33e32d3abc75e07589ae0b48e4a2ed544fda2a
-  languageName: node
-  linkType: hard
-
 "react-modal@npm:^3.14.4":
   version: 3.14.4
   resolution: "react-modal@npm:3.14.4"
@@ -11408,15 +11397,6 @@ __metadata:
     react: ^16.3.0 || 17
     react-dom: ^16.3.0 || 17
   checksum: 335429c288c06608756d3e9b454dfb5460764ba03b14aee9327becdbd699619ab12cb963becb9e23f645a399940e54b658d52f0f54bc39215037652e47cbbc77
-  languageName: node
-  linkType: hard
-
-"react-table@npm:^7.7.0":
-  version: 7.7.0
-  resolution: "react-table@npm:7.7.0"
-  peerDependencies:
-    react: ^16.8.3 || ^17.0.0-0
-  checksum: a679edecc76d3e51311b095528395b38ac85a1ffa371716bea01559a5fdc75af9a6abb9bb907c63190c8e77da22b11f7b05065b3a45d190d8f43cb83e4366206
   languageName: node
   linkType: hard
 

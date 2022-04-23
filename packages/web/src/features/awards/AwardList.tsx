@@ -41,22 +41,27 @@ const AwardList: React.FC = () => {
       {
         title: 'Awarded To',
         accessor: 'awardedTo',
+        className: 'w-40',
       },
       {
         title: 'Points',
         accessor: 'points',
+        className: 'w-32',
       },
       {
         title: 'Date',
         accessor: 'date',
+        className: 'w-48',
       },
       {
         title: 'Awarded By',
         accessor: 'awardedBy',
+        className: 'w-40',
       },
       {
         title: 'Delete',
         accessor: 'delete',
+        className: 'w-16',
       },
     ],
     []
