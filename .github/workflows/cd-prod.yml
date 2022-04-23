@@ -14,6 +14,7 @@ defaults:
     shell: bash
 
 env:
+  DOMAIN: https://achievements-live.staging.etimo-test.live
   API_URL: https://achievements-live.staging.etimo-test.live/api
   FRONTEND_URL: https://achievements-live.staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements-live.staging.etimo-test.live/login/callback
@@ -135,6 +136,14 @@ jobs:
           to-image-name: niclaslindstedt/etimo-achievements-web
           to-tag: prod
 
+      - name: Promote migrate image
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: niclaslindstedt/etimo-achievements-migrate
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: niclaslindstedt/etimo-achievements-migrate
+          to-tag: prod
+
       - name: Tag api image with version
         if: steps.tag.outputs.tagged == 'true'
         uses: ./.github/actions/docker-promote
@@ -151,4 +160,13 @@ jobs:
           from-image-name: niclaslindstedt/etimo-achievements-web
           from-tag: ${{ steps.info.outputs.current-commit }}
           to-image-name: niclaslindstedt/etimo-achievements-web
+          to-tag: ${{ steps.tag.outputs.tag }}
+
+      - name: Tag migrate image with version
+        if: steps.tag.outputs.tagged == 'true'
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: niclaslindstedt/etimo-achievements-migrate
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: niclaslindstedt/etimo-achievements-migrate
           to-tag: ${{ steps.tag.outputs.tag }}

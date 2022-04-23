@@ -7,8 +7,6 @@ on:
         description: 'The amount of days old to delete'
         default: '7'
         required: false
-  schedule:
-    - cron: '0 0 * * *'
 
 jobs:
   clean-logs:
