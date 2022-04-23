@@ -1,11 +1,12 @@
 FROM ghcr.io/etimo/etimo-achievements/base:latest AS base
 WORKDIR /app/packages/api
 ARG COMMIT_SHA=abcdef \
+  BUILD_NUMBER=999 \
   GIT_BRANCH=fff
 COPY .docker/resources/version.json.template /tmp
 COPY --chown=1000:1000 packages/api .
 RUN export COMPILE_DATE="$(date +'%Y-%m-%d %H:%M:%S')" \
-  && envsubst '$GIT_BRANCH $COMMIT_SHA $COMPILE_DATE' < /tmp/version.json.template > ./src/resources/version/version.json
+  && envsubst '$GIT_BRANCH $BUILD_NUMBER $COMMIT_SHA $COMPILE_DATE' < /tmp/version.json.template > ./src/resources/version/version.json
 
 FROM base AS develop
 ENV PORT=3000

@@ -1,5 +1,6 @@
 {
   "branch": "$GIT_BRANCH",
+  "build_number": "$BUILD_NUMBER",
   "commit": "$COMMIT_SHA",
   "date": "$COMPILE_DATE"
 }
