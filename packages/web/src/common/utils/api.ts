@@ -159,8 +159,6 @@ class Api {
         prevLink,
         lastLink,
       };
-
-      console.log(pagination);
     }
 
     return pagination;
