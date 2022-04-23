@@ -22,7 +22,7 @@ const App = (): JSX.Element => {
 
   return (
     <React.StrictMode>
-      <div className="flex">
+      <div className="flex min-h-screen">
         <Toaster position="top-right" reverseOrder={false} />
         <div className="flex-none">
           <SideMenu />
