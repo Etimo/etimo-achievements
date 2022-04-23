@@ -23,6 +23,7 @@ defaults:
     shell: bash
 
 env:
+  DOMAIN: https://achievements-test.staging.etimo-test.live
   API_URL: https://achievements-test.staging.etimo-test.live/api
   FRONTEND_URL: https://achievements-test.staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements-test.staging.etimo-test.live/login/callback

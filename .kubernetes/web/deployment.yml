@@ -34,6 +34,8 @@ spec:
           env:
             - name: API_URL
               value: '${API_URL}'
+            - name: DOMAIN
+              value: '${DOMAIN}'
             - name: PORT
               value: '${WEB_PORT}'
           ports:
