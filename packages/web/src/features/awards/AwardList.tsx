@@ -1,13 +1,20 @@
 import { formatNumber, uuid } from '@etimo-achievements/common';
 import React, { useCallback, useState } from 'react';
+import useQuery from '../../common/hooks/use-query';
+import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
+import { addQueryParam } from '../../common/utils/query-helper';
 import { toastResponse } from '../../common/utils/toast-response';
 import { TrashButton } from '../../components/buttons';
+import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
+import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
 import { AwardService } from './award-service';
 import { AwardComposite } from './award-types';
 
 const AwardList: React.FC = () => {
+  const query = useQuery();
+  const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
@@ -15,14 +22,16 @@ const AwardList: React.FC = () => {
   const [monitor, setMonitor] = useState(uuid());
   const awardService = new AwardService();
 
-  const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setDeleting(e.currentTarget.id);
-    awardService.delete(e.currentTarget.id).then((response) => {
+  const getDeleteId = () => query.get('delete') ?? '';
+
+  const trashHandler = (awardId: string) => {
+    setDeleting(awardId);
+    awardService.delete(awardId).then((response) => {
       if (response.success) {
         setMonitor(uuid());
       }
       setDeleting(undefined);
+      removeQueryParam('delete');
       toastResponse(response, 'Award deleted successfully', 'Award could not be deleted');
     });
   };
@@ -61,7 +70,7 @@ const AwardList: React.FC = () => {
       {
         title: 'Delete',
         accessor: 'delete',
-        className: 'w-16',
+        className: 'w-16 text-center',
         hasAccess: ['remove', 'awards'],
       },
     ],
@@ -76,7 +85,14 @@ const AwardList: React.FC = () => {
       points: `${formatNumber(c.achievement.achievementPoints)} pts`,
       date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
       awardedBy: c.awardedBy.name,
-      delete: <TrashButton id={c.award.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
+      delete: (
+        <TrashButton
+          id={c.award.id}
+          link={addQueryParam(window.location, 'delete', c.award.id)}
+          loading={deleting}
+          className="w-full text-center"
+        />
+      ),
     }));
   };
 
@@ -105,6 +121,27 @@ const AwardList: React.FC = () => {
           [monitor]
         )}
       />
+      {getDeleteId() && (
+        <RequirePermission remove="awards">
+          <ConfirmModal
+            title="Confirm delete"
+            cancelLabel="No"
+            confirmLabel="Yes"
+            onCancel={() => {
+              removeQueryParam('delete');
+            }}
+            onConfirm={() => {
+              trashHandler(getDeleteId());
+            }}
+          >
+            <div className="text-center">Are you sure you want to delete this award?</div>
+            <div className="text-center pt-5 text-2xl">
+              {data.find((c) => c.id === getDeleteId())?.name} (awarded to{' '}
+              {data.find((c) => c.id === getDeleteId())?.awardedTo})
+            </div>
+          </ConfirmModal>
+        </RequirePermission>
+      )}
     </div>
   );
 };

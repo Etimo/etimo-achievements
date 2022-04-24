@@ -1,8 +1,8 @@
 import { uuid } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { useAppSelector } from '../../app/store';
-import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/query-helper';
+import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
+import { addQueryParam, queryParam } from '../../common/utils/query-helper';
 import { EditButton } from '../../components/buttons';
 import { Card, CardRow } from '../../components/cards';
 import Header from '../../components/Header';
@@ -12,7 +12,7 @@ import { profileSelector } from './user-slice';
 import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile: React.FC = () => {
-  const navigate = useNavigate();
+  const removeQueryParam = useRemoveQueryParam();
   const profile = useAppSelector(profileSelector);
   const [monitor, setMonitor] = useState(uuid());
   const userService = new UserService();
@@ -46,7 +46,7 @@ const UserProfile: React.FC = () => {
         <RequirePermission update="profile">
           <UserProfileEditModal
             closeModal={() => {
-              navigate(removeQueryParam(window.location, 'edit'));
+              removeQueryParam('edit');
               setMonitor(uuid());
             }}
           />
