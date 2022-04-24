@@ -8,8 +8,10 @@ export class AwardApi {
     return this.api.get<AwardDto>(`/awards/${id}`);
   }
 
-  public getMany(skip: number = 0, take: number = 50) {
-    return this.api.get<AwardDto[]>(`/awards?skip=${skip}&take=${take}`);
+  public getMany(skip: number = 0, take: number = 50, sort?: string, order?: string) {
+    let url = `/awards?skip=${skip}&take=${take}`;
+    if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
+    return this.api.get<AwardDto[]>(url);
   }
 
   public create(award: AwardDto) {

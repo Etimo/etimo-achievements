@@ -32,7 +32,7 @@ function generateLink(options: PaginationOptions) {
 
   // Add order by params
   for (const order of orderBy) {
-    link += `&orderBy=${order[0]},${order[1]}`;
+    link += `&orderBy=${order[0]}~${order[1]}`;
   }
 
   return link;

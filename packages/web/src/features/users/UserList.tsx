@@ -45,16 +45,19 @@ const UserList: React.FC = () => {
       {
         title: 'Name',
         accessor: 'name',
+        sortKey: 'name',
         className: 'w-40',
       },
       {
         title: 'E-mail',
         accessor: 'email',
+        sortKey: 'email',
       },
       {
         title: 'Slack Handle',
         accessor: 'slackHandle',
-        className: 'w-32',
+        sortKey: 'slackHandle',
+        className: 'w-40',
       },
       {
         title: 'Edit',
@@ -89,10 +92,10 @@ const UserList: React.FC = () => {
         columns={columns}
         data={data}
         fetchData={useCallback(
-          (input: { size: any; page: any }) => {
-            const { size, page } = input;
+          (input: { size: number; page: number; sort: string; order: string }) => {
+            const { size, page, sort, order } = input;
             setLoading(true);
-            userService.getMany((page - 1) * size, size).then((response) => {
+            userService.getMany((page - 1) * size, size, sort, order).then((response) => {
               if (response) {
                 const { data, pagination } = response;
                 setData(mapToData(data));

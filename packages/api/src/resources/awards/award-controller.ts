@@ -28,7 +28,6 @@ export class AwardController {
      *       - *skipParam
      *       - *takeParam
      *       - *orderByParam
-     *       - *pageTokenParam
      *     responses:
      *       200:
      *         description: The request was successful.

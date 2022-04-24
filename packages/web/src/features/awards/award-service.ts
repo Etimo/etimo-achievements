@@ -9,8 +9,13 @@ export class AwardService {
   private achievementService = new AchievementService();
   private userService = new UserService();
 
-  public async load(skip: number, take: number): Promise<PaginatedData<AwardComposite> | undefined> {
-    const response = await this.api.getMany(skip, take).wait();
+  public async load(
+    skip: number,
+    take: number,
+    sort?: string,
+    order?: string
+  ): Promise<PaginatedData<AwardComposite> | undefined> {
+    const response = await this.api.getMany(skip, take, sort, order).wait();
     if (response.success) {
       const awards = await response.data();
 

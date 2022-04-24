@@ -16,8 +16,8 @@ export class AchievementService {
     return response;
   }
 
-  public async getMany(skip: number, take: number) {
-    const response = await this.api.getMany(skip, take).wait();
+  public async getMany(skip: number, take: number, sort?: string, order?: string) {
+    const response = await this.api.getMany(skip, take, sort, order).wait();
     if (response.success) {
       const data = await response.data();
       this.dispatch(updateAchievements(data));

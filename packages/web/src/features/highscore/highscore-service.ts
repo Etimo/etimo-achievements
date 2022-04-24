@@ -7,8 +7,13 @@ export class HighscoreService {
   private api = new HighscoreApi();
   private userService = new UserService();
 
-  public async load(skip: number, take: number): Promise<PaginatedData<HighscoreComposite> | undefined> {
-    const response = await this.api.getMany(skip, take).wait();
+  public async load(
+    skip: number,
+    take: number,
+    sort?: string,
+    order?: string
+  ): Promise<PaginatedData<HighscoreComposite> | undefined> {
+    const response = await this.api.getMany(skip, take, sort, order).wait();
     if (response.success) {
       const highscores = await response.data();
 
