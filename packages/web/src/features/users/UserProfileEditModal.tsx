@@ -9,10 +9,11 @@ import { UserService } from './user-service';
 import { profileSelector } from './user-slice';
 
 type Props = {
-  closeModal: () => void;
+  onClose: () => void;
+  onSubmit: () => void;
 };
 
-const UserProfileEdit: React.FC<Props> = ({ closeModal }) => {
+const UserProfileEdit: React.FC<Props> = ({ onClose, onSubmit }) => {
   const {
     register,
     reset,
@@ -23,20 +24,21 @@ const UserProfileEdit: React.FC<Props> = ({ closeModal }) => {
   const profile = useAppSelector(profileSelector);
   const userService = new UserService();
 
-  const onSubmit: SubmitHandler<UserDto> = (profile) => {
+  const onSubmitForm: SubmitHandler<UserDto> = (profile) => {
     setLoading(true);
     userService.updateProfile(profile).then((response) => {
       setLoading(false);
       toastResponse(response, 'Profile edited successfully', 'Profile could not be updated', () => {
         reset();
-        closeModal();
+        onSubmit();
+        onClose();
       });
     });
   };
 
   return profile ? (
-    <Modal title="Edit Profile" showModal={true} onRequestClose={closeModal}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+    <Modal title="Edit Profile" showModal={true} onRequestClose={onClose}>
+      <Form onSubmit={handleSubmit(onSubmitForm)}>
         <FormTextInput
           label="Name"
           defaultValue={profile.name}

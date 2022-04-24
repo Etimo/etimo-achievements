@@ -44,12 +44,7 @@ const UserProfile: React.FC = () => {
       </Card>
       {getEditState() && (
         <RequirePermission update="profile">
-          <UserProfileEditModal
-            closeModal={() => {
-              removeQueryParam('edit');
-              setMonitor(uuid());
-            }}
-          />
+          <UserProfileEditModal onClose={() => removeQueryParam('edit')} onSubmit={() => setMonitor(uuid())} />
         </RequirePermission>
       )}
     </div>

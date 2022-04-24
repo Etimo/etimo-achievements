@@ -10,10 +10,11 @@ import { achievementSelector } from './achievement-slice';
 
 type Props = {
   achievementId: string;
-  closeModal: () => void;
+  onClose: () => void;
+  onSubmit: () => void;
 };
 
-const AchievementEditModal: React.FC<Props> = ({ achievementId, closeModal }) => {
+const AchievementEditModal: React.FC<Props> = ({ achievementId, onClose, onSubmit }) => {
   const {
     register,
     reset,
@@ -29,20 +30,21 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, closeModal }) =>
     setAchievement(achievements.find((a) => a.id === achievementId));
   }, [achievements]);
 
-  const onSubmit: SubmitHandler<AchievementDto> = (updatedAchievement) => {
+  const onSubmitForm: SubmitHandler<AchievementDto> = (updatedAchievement) => {
     setLoading(true);
     achievementService.update(achievementId, updatedAchievement).then((response) => {
       setLoading(false);
       toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
         reset();
-        closeModal();
+        onSubmit();
+        onClose();
       });
     });
   };
 
   return achievement ? (
-    <Modal title="Edit Achievement" showModal={true} onRequestClose={closeModal}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+    <Modal title="Edit Achievement" showModal={true} onRequestClose={onClose}>
+      <Form onSubmit={handleSubmit(onSubmitForm)}>
         <FormTextInput
           label="Name"
           defaultValue={achievement.name}

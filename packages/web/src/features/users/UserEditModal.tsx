@@ -10,10 +10,11 @@ import { usersSelector } from './user-slice';
 
 type Props = {
   userId: string;
-  closeModal: () => void;
+  onClose: () => void;
+  onSubmit: () => void;
 };
 
-const UserEditModal: React.FC<Props> = ({ userId, closeModal }) => {
+const UserEditModal: React.FC<Props> = ({ userId, onClose, onSubmit }) => {
   const {
     register,
     reset,
@@ -29,20 +30,21 @@ const UserEditModal: React.FC<Props> = ({ userId, closeModal }) => {
     setUser(users.find((u) => u.id === userId));
   }, [users]);
 
-  const onSubmit: SubmitHandler<UserDto> = (updatedUser) => {
+  const onSubmitForm: SubmitHandler<UserDto> = (updatedUser) => {
     setLoading(true);
     userService.update(userId, updatedUser).then((response) => {
       setLoading(false);
       toastResponse(response, 'User edited successfully', 'User could not be updated', () => {
         reset();
-        closeModal();
+        onSubmit();
+        onClose();
       });
     });
   };
 
   return user ? (
-    <Modal title="Edit User" showModal={true} onRequestClose={closeModal}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+    <Modal title="Edit User" showModal={true} onRequestClose={onClose}>
+      <Form onSubmit={handleSubmit(onSubmitForm)}>
         <FormTextInput
           label="Name"
           defaultValue={user.name}

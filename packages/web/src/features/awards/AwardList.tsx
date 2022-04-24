@@ -86,12 +86,7 @@ const AwardList: React.FC = () => {
       date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
       awardedBy: c.awardedBy.name,
       delete: (
-        <TrashButton
-          id={c.award.id}
-          link={addQueryParam(window.location, 'delete', c.award.id)}
-          loading={deleting}
-          className="w-full text-center"
-        />
+        <TrashButton id={c.award.id} link={addQueryParam(window.location, 'delete', c.award.id)} loading={deleting} />
       ),
     }));
   };
