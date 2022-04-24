@@ -118,10 +118,8 @@ const UserList: React.FC = () => {
         <RequirePermission update="users">
           <UserEditModal
             userId={getEditId()}
-            closeModal={() => {
-              removeQueryParam('edit');
-              setMonitor(uuid());
-            }}
+            onClose={() => removeQueryParam('edit')}
+            onSubmit={() => setMonitor(uuid())}
           />
         </RequirePermission>
       )}

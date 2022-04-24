@@ -95,15 +95,8 @@ const AchievementList: React.FC = () => {
       points: `${formatNumber(a.achievementPoints)} pts`,
       cooldown: `${formatNumber(a.cooldownMinutes)} min`,
       repeatable: 'Unsupported',
-      edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} className="w-full text-center" />,
-      delete: (
-        <TrashButton
-          id={a.id}
-          link={addQueryParam(window.location, 'delete', a.id)}
-          loading={deleting}
-          className="w-full text-center"
-        />
-      ),
+      edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
+      delete: <TrashButton id={a.id} link={addQueryParam(window.location, 'delete', a.id)} loading={deleting} />,
     }));
   };
 
@@ -136,10 +129,8 @@ const AchievementList: React.FC = () => {
         <RequirePermission update="achievements">
           <AchievementsEditModal
             achievementId={getEditId()}
-            closeModal={() => {
-              removeQueryParam('edit');
-              setMonitor(uuid());
-            }}
+            onClose={() => removeQueryParam('edit')}
+            onSubmit={() => setMonitor(uuid())}
           />
         </RequirePermission>
       )}
