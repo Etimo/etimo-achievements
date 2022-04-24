@@ -1,16 +1,23 @@
 import { UserDto, uuid } from '@etimo-achievements/common';
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
-import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/query-helper';
+import { useAppSelector } from '../../app/store';
+import useQuery from '../../common/hooks/use-query';
+import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
+import { addQueryParam } from '../../common/utils/query-helper';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
+import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
+import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
 import { UserService } from './user-service';
+import { usersSelector } from './user-slice';
 import UserEditModal from './UserEditModal';
 
 const UserList: React.FC = () => {
-  const navigate = useNavigate();
+  const query = useQuery();
+  const removeQueryParam = useRemoveQueryParam();
+  const { users } = useAppSelector(usersSelector);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
@@ -18,16 +25,17 @@ const UserList: React.FC = () => {
   const [monitor, setMonitor] = useState(uuid());
   const userService = new UserService();
 
-  const getEditId = () => queryParam<string>(window.location, 'edit', '');
+  const getEditId = () => query.get('edit') ?? '';
+  const getDeleteId = () => query.get('delete') ?? '';
 
-  const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setDeleting(e.currentTarget.id);
-    userService.delete(e.currentTarget.id).then((response) => {
+  const trashHandler = (userId: string) => {
+    setDeleting(userId);
+    userService.delete(userId).then((response) => {
       if (response.success) {
         setMonitor(uuid());
       }
       setDeleting(undefined);
+      removeQueryParam('delete');
       toastResponse(response, 'User deleted successfully', 'User could not be deleted');
     });
   };
@@ -70,7 +78,14 @@ const UserList: React.FC = () => {
       email: u.email,
       slackHandle: u.slackHandle,
       edit: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} className="w-full text-center" />,
-      delete: <TrashButton id={u.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
+      delete: (
+        <TrashButton
+          id={u.id}
+          link={addQueryParam(window.location, 'delete', u.id)}
+          loading={deleting}
+          className="w-full text-center"
+        />
+      ),
     }));
   };
 
@@ -100,13 +115,33 @@ const UserList: React.FC = () => {
         monitor={monitor}
       />
       {getEditId() && (
-        <UserEditModal
-          userId={getEditId()}
-          closeModal={() => {
-            navigate(removeQueryParam(window.location, 'edit'));
-            setMonitor(uuid());
-          }}
-        />
+        <RequirePermission update="users">
+          <UserEditModal
+            userId={getEditId()}
+            closeModal={() => {
+              removeQueryParam('edit');
+              setMonitor(uuid());
+            }}
+          />
+        </RequirePermission>
+      )}
+      {getDeleteId() && (
+        <RequirePermission remove="users">
+          <ConfirmModal
+            title="Confirm delete"
+            cancelLabel="No"
+            confirmLabel="Yes"
+            onCancel={() => {
+              removeQueryParam('delete');
+            }}
+            onConfirm={() => {
+              trashHandler(getDeleteId());
+            }}
+          >
+            <div className="text-center">Are you sure you want to delete this user?</div>
+            <div className="text-center pt-5 text-2xl">{users.find((a) => a.id === getDeleteId())?.name}</div>
+          </ConfirmModal>
+        </RequirePermission>
       )}
     </div>
   );

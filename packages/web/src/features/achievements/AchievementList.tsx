@@ -1,19 +1,23 @@
 import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
 import React, { useCallback, useState } from 'react';
-import { useNavigate } from 'react-router';
-import useHasAccess from '../../common/hooks/use-has-access';
-import { addQueryParam, queryParam, removeQueryParam } from '../../common/utils/query-helper';
+import { useAppSelector } from '../../app/store';
+import useQuery from '../../common/hooks/use-query';
+import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
+import { addQueryParam } from '../../common/utils/query-helper';
 import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
+import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
 import { AchievementService } from './achievement-service';
+import { achievementSelector } from './achievement-slice';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
-  const hasAccess = useHasAccess();
-  const navigate = useNavigate();
+  const query = useQuery();
+  const removeQueryParam = useRemoveQueryParam();
+  const { achievements } = useAppSelector(achievementSelector);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
@@ -21,16 +25,17 @@ const AchievementList: React.FC = () => {
   const [monitor, setMonitor] = useState(uuid());
   const achievementService = new AchievementService();
 
-  const getEditId = () => queryParam<string>(window.location, 'edit', '');
+  const getEditId = () => query.get('edit') ?? '';
+  const getDeleteId = () => query.get('delete') ?? '';
 
-  const trashHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    setDeleting(e.currentTarget.id);
-    achievementService.delete(e.currentTarget.id).then((response) => {
+  const trashHandler = (achievementId: string) => {
+    setDeleting(achievementId);
+    achievementService.delete(achievementId).then((response) => {
       if (response.success) {
         setMonitor(uuid());
       }
       setDeleting(undefined);
+      removeQueryParam('delete');
       toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
     });
   };
@@ -91,7 +96,14 @@ const AchievementList: React.FC = () => {
       cooldown: `${formatNumber(a.cooldownMinutes)} min`,
       repeatable: 'Unsupported',
       edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} className="w-full text-center" />,
-      delete: <TrashButton id={a.id} onClick={trashHandler} loading={deleting} className="w-full text-center" />,
+      delete: (
+        <TrashButton
+          id={a.id}
+          link={addQueryParam(window.location, 'delete', a.id)}
+          loading={deleting}
+          className="w-full text-center"
+        />
+      ),
     }));
   };
 
@@ -125,10 +137,28 @@ const AchievementList: React.FC = () => {
           <AchievementsEditModal
             achievementId={getEditId()}
             closeModal={() => {
-              navigate(removeQueryParam(window.location, 'edit'));
+              removeQueryParam('edit');
               setMonitor(uuid());
             }}
           />
+        </RequirePermission>
+      )}
+      {getDeleteId() && (
+        <RequirePermission remove="achievements">
+          <ConfirmModal
+            title="Delete achievement"
+            cancelLabel="No"
+            confirmLabel="Yes"
+            onCancel={() => {
+              removeQueryParam('delete');
+            }}
+            onConfirm={() => {
+              trashHandler(getDeleteId());
+            }}
+          >
+            <div className="text-center">Are you sure you want to delete this achievement?</div>
+            <div className="text-center pt-5 text-2xl">{achievements.find((a) => a.id === getDeleteId())?.name}</div>
+          </ConfirmModal>
         </RequirePermission>
       )}
     </div>

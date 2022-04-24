@@ -69,18 +69,16 @@ const SideMenu: React.FC = () => {
                 </RequirePermission>
               </SubMenu>
             </RequirePermission>
-            <RequirePermission read="users">
+            <RequirePermission admin="users">
               <SubMenu title="Users" icon={<FontAwesomeIcon icon={faUsers} />}>
                 <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
                   List users
                   <Link to={Routes.UserList} />
                 </MenuItem>
-                <RequirePermission create="awards">
-                  <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
-                    Create user
-                    <Link to={Routes.UserCreate} />
-                  </MenuItem>
-                </RequirePermission>
+                <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
+                  Create user
+                  <Link to={Routes.UserCreate} />
+                </MenuItem>
               </SubMenu>
             </RequirePermission>
             <RequirePermission read="highscore">
