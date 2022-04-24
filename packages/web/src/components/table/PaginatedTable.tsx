@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
 import useHasAccess, { Action, Resource } from '../../common/hooks/use-has-access';
 import useQuery from '../../common/hooks/use-query';
+import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { queryParam, replaceQueryParam } from '../../common/utils/query-helper';
 import PaginationButton from './PaginationButton';
 
@@ -48,6 +49,7 @@ const PaginatedTable: React.FC<Props> = ({
   const query = useQuery();
   const hasAccess = useHasAccess();
   const location = useLocation();
+  const removeQueryParam = useRemoveQueryParam();
   const [pagination, setPagination] = useState([1, 10, '']);
   const [canNavigateBack, setCanNavigateBack] = useState(false);
   const [canNavigateForward, setCanNavigateForward] = useState(true);
@@ -96,8 +98,17 @@ const PaginatedTable: React.FC<Props> = ({
                   <TableHeader
                     onClick={() => {
                       if (column.sortKey) {
-                        setSort(column.sortKey);
-                        setOrder(getOrder() === 'asc' ? 'desc' : 'asc');
+                        if (column.sortKey === getSort()) {
+                          if (getOrder() === 'desc') {
+                            removeQueryParam('sort');
+                            removeQueryParam('order');
+                          } else {
+                            setOrder(getOrder() === 'asc' ? 'desc' : 'asc');
+                          }
+                        } else {
+                          setSort(column.sortKey);
+                          setOrder('asc');
+                        }
                       }
                     }}
                     key={uuid()}
