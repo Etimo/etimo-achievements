@@ -20,11 +20,13 @@ const Highscores: React.FC = () => {
       {
         title: 'Achievements',
         accessor: 'achievements',
+        sortKey: 'achievements',
         className: 'w-40',
       },
       {
         title: 'Points',
         accessor: 'points',
+        sortKey: 'points',
         className: 'w-40',
       },
     ],
@@ -47,10 +49,10 @@ const Highscores: React.FC = () => {
         data={data}
         pageCount={pageCount}
         loading={loading}
-        fetchData={useCallback((input: { size: any; page: any }) => {
-          const { size, page } = input;
+        fetchData={useCallback((input: { size: number; page: number; sort: string; order: string }) => {
+          const { size, page, sort, order } = input;
           setLoading(true);
-          highscoreService.load((page - 1) * size, size).then((response) => {
+          highscoreService.load((page - 1) * size, size, sort, order).then((response) => {
             if (response) {
               const { data, pagination } = response;
               setData(mapToData(data));

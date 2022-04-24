@@ -12,8 +12,10 @@ export class UserApi {
     return this.api.get<UserDto>('/profile');
   }
 
-  public getMany(skip: number = 0, take: number = 50) {
-    return this.api.get<UserDto[]>(`/users?skip=${skip}&take=${take}`);
+  public getMany(skip: number = 0, take: number = 50, sort?: string, order?: string) {
+    let url = `/users?skip=${skip}&take=${take}`;
+    if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
+    return this.api.get<UserDto[]>(url);
   }
 
   public list(ids: string[]) {

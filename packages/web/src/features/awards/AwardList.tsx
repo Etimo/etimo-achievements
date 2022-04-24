@@ -60,6 +60,7 @@ const AwardList: React.FC = () => {
       {
         title: 'Date',
         accessor: 'date',
+        sortKey: 'createdAt',
         className: 'w-48',
       },
       {
@@ -101,10 +102,10 @@ const AwardList: React.FC = () => {
         loading={loading}
         monitor={monitor}
         fetchData={useCallback(
-          (input: { size: any; page: any }) => {
-            const { size, page } = input;
+          (input: { size: number; page: number; sort: string; order: string }) => {
+            const { size, page, sort, order } = input;
             setLoading(true);
-            awardService.load((page - 1) * size, size).then((response) => {
+            awardService.load((page - 1) * size, size, sort, order).then((response) => {
               if (response) {
                 const { data, pagination } = response;
                 setData(mapToData(data));

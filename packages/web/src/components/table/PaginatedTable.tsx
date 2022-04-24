@@ -103,7 +103,7 @@ const PaginatedTable: React.FC<Props> = ({
                             removeQueryParam('sort');
                             removeQueryParam('order');
                           } else {
-                            setOrder(getOrder() === 'asc' ? 'desc' : 'asc');
+                            setOrder('desc');
                           }
                         } else {
                           setSort(column.sortKey);
