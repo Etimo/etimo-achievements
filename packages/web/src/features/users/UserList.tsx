@@ -59,13 +59,13 @@ const UserList: React.FC = () => {
       {
         title: 'Edit',
         accessor: 'edit',
-        className: 'w-16',
+        className: 'w-16 text-center',
         hasAccess: ['update', 'users'],
       },
       {
         title: 'Delete',
         accessor: 'delete',
-        className: 'w-16',
+        className: 'w-16 text-center',
         hasAccess: ['remove', 'users'],
       },
     ],
