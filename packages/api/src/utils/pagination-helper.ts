@@ -1,20 +1,8 @@
-import { fromBase64 } from '@etimo-achievements/common';
 import { OrderByOption, PaginationOptions } from '@etimo-achievements/types';
 
 export function getPaginationOptions(req: any, max: number = 50): PaginationOptions {
   const [skip, take] = getSkipAndTake(req, max);
   const orderBy = getOrderBy(req);
-
-  const token = req.query.pageToken ? (req.query.pageToken as string) : null;
-  if (token) {
-    const pagination = JSON.parse(fromBase64(token)) as PaginationOptions;
-
-    if (req.query.skip !== undefined && req.query.take !== undefined) {
-      return { ...pagination, skip, take };
-    }
-
-    return pagination;
-  }
 
   return {
     skip,
@@ -45,7 +33,7 @@ export function getOrderBy(req: any): OrderByOption[] {
   const orderBy = req.query.orderBy ? (req.query.orderBy as string[]) : [];
 
   return orderBy.map((o) => {
-    const [key, orderStr] = o.split(',');
+    const [key, orderStr] = o.split('~');
     const order = orderStr === 'desc' ? 'desc' : 'asc';
     return [key, order];
   });

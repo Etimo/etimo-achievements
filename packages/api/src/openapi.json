@@ -904,14 +904,6 @@
                 "type": "string"
               }
             }
-          },
-          {
-            "name": "pageToken",
-            "in": "query",
-            "description": "The base64-encoded token that gives you the next page of results.",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1113,14 +1105,6 @@
               "items": {
                 "type": "string"
               }
-            }
-          },
-          {
-            "name": "pageToken",
-            "in": "query",
-            "description": "The base64-encoded token that gives you the next page of results.",
-            "schema": {
-              "type": "string"
             }
           }
         ],
@@ -1354,14 +1338,6 @@
               "items": {
                 "type": "string"
               }
-            }
-          },
-          {
-            "name": "pageToken",
-            "in": "query",
-            "description": "The base64-encoded token that gives you the next page of results.",
-            "schema": {
-              "type": "string"
             }
           }
         ],

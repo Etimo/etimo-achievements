@@ -51,20 +51,24 @@ const AchievementList: React.FC = () => {
         title: 'Name',
         accessor: 'name',
         className: 'w-48',
+        sortKey: 'name',
       },
       {
         title: 'Description',
         accessor: 'description',
+        sortKey: 'description',
       },
       {
         title: 'Points',
         accessor: 'points',
         className: 'w-32',
+        sortKey: 'achievementPoints',
       },
       {
         title: 'Cooldown',
         accessor: 'cooldown',
         className: 'w-32',
+        sortKey: 'cooldownMinutes',
       },
       {
         title: 'Repeatable',
@@ -107,10 +111,10 @@ const AchievementList: React.FC = () => {
         columns={columns}
         data={data}
         fetchData={useCallback(
-          (input: { size: any; page: any }) => {
-            const { size, page } = input;
+          (input: { size: number; page: number; sort: string; order: string }) => {
+            const { size, page, sort, order } = input;
             setLoading(true);
-            achievementService.getMany((page - 1) * size, size).then((response) => {
+            achievementService.getMany((page - 1) * size, size, sort, order).then((response) => {
               if (response) {
                 const { data, pagination } = response;
                 setData(mapToData(data));

@@ -9,16 +9,17 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
 import useHasAccess, { Action, Resource } from '../../common/hooks/use-has-access';
-import { queryParam } from '../../common/utils/query-helper';
+import useQuery from '../../common/hooks/use-query';
+import { queryParam, replaceQueryParam } from '../../common/utils/query-helper';
 import PaginationButton from './PaginationButton';
 
 export type Column = {
   title: string;
   accessor: string;
-  sortType?: (a: any, b: any) => number;
+  sortKey?: string;
   className?: string;
   hidden?: boolean;
   hasAccess?: [Action, Resource];
@@ -43,24 +44,30 @@ const PaginatedTable: React.FC<Props> = ({
   children,
   ...rest
 }) => {
+  const navigate = useNavigate();
+  const query = useQuery();
   const hasAccess = useHasAccess();
   const location = useLocation();
-  const [sortBy, setSortBy] = useState<string>('');
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [pagination, setPagination] = useState([1, 10, '']);
   const [canNavigateBack, setCanNavigateBack] = useState(false);
   const [canNavigateForward, setCanNavigateForward] = useState(true);
 
   const getPage = () => Math.max(queryParam<number>(window.location, 'page', 1), 1);
   const getSize = () => Math.min(Math.max(queryParam<number>(window.location, 'size', 10), 1), 50);
+  const getSort = () => query.get('sort') ?? '';
+  const getOrder = () => query.get('order') ?? 'asc';
+  const setSort = (key: string) => navigate(replaceQueryParam(window.location, 'sort', key));
+  const setOrder = (order: string) => navigate(replaceQueryParam(window.location, 'order', order));
 
   useEffect(() => {
-    const [oldPage, oldSize, oldMonitor] = pagination;
+    const [oldPage, oldSize, oldSort, oldOrder, oldMonitor] = pagination;
     const page = getPage();
     const size = getSize();
-    if (page !== oldPage || size !== oldSize || monitor !== oldMonitor) {
-      fetchData({ page, size });
-      setPagination([page, size, monitor]);
+    const sort = getSort();
+    const order = getOrder();
+    if (page !== oldPage || size !== oldSize || sort !== oldSort || order !== oldOrder || monitor !== oldMonitor) {
+      fetchData({ page, size, sort, order });
+      setPagination([page, size, sort, order, monitor]);
     }
   }, [location, monitor]);
 
@@ -86,14 +93,22 @@ const PaginatedTable: React.FC<Props> = ({
               (column) =>
                 !column.hidden &&
                 userHasAccess(column) && (
-                  <TableHeader key={uuid()}>
+                  <TableHeader
+                    onClick={() => {
+                      if (column.sortKey) {
+                        setSort(column.sortKey);
+                        setOrder(getOrder() === 'asc' ? 'desc' : 'asc');
+                      }
+                    }}
+                    key={uuid()}
+                  >
                     <span>{column.title}</span>
                     <span>
-                      {sortBy === column.title &&
-                        (sortDirection === 'asc' ? (
-                          <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
-                        ) : (
+                      {getSort() === column.sortKey &&
+                        (getOrder() === 'asc' ? (
                           <FontAwesomeIcon icon={faChevronUp} className="ml-2 text-slate-100" />
+                        ) : (
+                          <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
                         ))}
                     </span>
                   </TableHeader>

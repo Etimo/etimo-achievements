@@ -1,8 +1,12 @@
 import React from 'react';
 
-const TableHeader: React.FC = ({ children, ...rest }) => {
+type Props = {
+  onClick?: () => void;
+};
+
+const TableHeader: React.FC<Props> = ({ onClick, children, ...rest }) => {
   return (
-    <th className="p-3 text-slate-200" {...rest}>
+    <th className="p-3 text-slate-200" onClick={onClick} {...rest}>
       {children}
     </th>
   );
