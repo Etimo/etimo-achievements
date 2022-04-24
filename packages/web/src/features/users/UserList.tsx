@@ -77,15 +77,8 @@ const UserList: React.FC = () => {
       name: u.name,
       email: u.email,
       slackHandle: u.slackHandle,
-      edit: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} className="w-full text-center" />,
-      delete: (
-        <TrashButton
-          id={u.id}
-          link={addQueryParam(window.location, 'delete', u.id)}
-          loading={deleting}
-          className="w-full text-center"
-        />
-      ),
+      edit: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} />,
+      delete: <TrashButton id={u.id} link={addQueryParam(window.location, 'delete', u.id)} loading={deleting} />,
     }));
   };
 
