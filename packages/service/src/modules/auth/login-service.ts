@@ -29,12 +29,12 @@ export class LoginService {
       });
     }
 
-    let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile', 'r:highscore'];
+    let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile', 'r:highscore', 'r:feature'];
 
     // Administrator rights for certain users
     const isAdmin = userInfo.email === 'niclas.lindstedt@etimo.se';
     if (isAdmin) {
-      scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore'];
+      scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore', 'a:feature'];
     }
 
     const createTokenService = new CreateTokenService(this.context);

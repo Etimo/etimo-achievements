@@ -1067,6 +1067,20 @@
         ]
       }
     },
+    "/feature": {
+      "get": {
+        "summary": "Get feature flags",
+        "operationId": "getFeatures",
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Features"
+        ]
+      }
+    },
     "/highscores": {
       "get": {
         "summary": "Get a list of awards",
