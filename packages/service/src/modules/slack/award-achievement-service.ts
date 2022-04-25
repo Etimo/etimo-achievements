@@ -1,4 +1,4 @@
-import { getEnvVariable, Logger } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/common';
 import { Env, IAchievement } from '@etimo-achievements/types';
 import { PlainTextOption, View, WebClient } from '@slack/web-api';
 import { IContext } from '../..';
@@ -11,14 +11,14 @@ export class AwardSlackAchievementsService {
   }
 
   public async showModal(triggerId: string, channelId: string) {
-    const { repositories } = this.context;
+    const { repositories, logger } = this.context;
 
     const achievements = await repositories.achievement.getAll();
     const view = this.generateView(channelId, achievements);
     try {
-      const result = await this.web.views.open({ view, trigger_id: triggerId });
+      await this.web.views.open({ view, trigger_id: triggerId });
     } catch (error: any) {
-      Logger.log(error);
+      logger.error(error);
     }
   }
 

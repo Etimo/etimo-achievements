@@ -1,15 +1,14 @@
-import { INotifyService } from '@etimo-achievements/types';
-import { IContext } from '../..';
+import { INotifyService, IRequestContext } from '@etimo-achievements/types';
 import { NotifySlackService } from './notify-slack-service';
 
 export type NotifyServiceOptions = {
   channelHigh?: string;
   channelMedium?: string;
   channelLow?: string;
-} & IContext;
+} & IRequestContext;
 
 export class NotifyServiceFactory {
-  public static create(type: string, context: IContext): INotifyService {
+  public static create(type: string, context: IRequestContext): INotifyService {
     switch (type) {
       case 'slack':
         return new NotifySlackService(context);

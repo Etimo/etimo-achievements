@@ -1,4 +1,4 @@
-import { BadRequestError, Logger, UnauthorizedError } from '@etimo-achievements/common';
+import { BadRequestError, UnauthorizedError } from '@etimo-achievements/common';
 import { decryptAs } from '@etimo-achievements/security';
 import { IRefreshTokenData } from '@etimo-achievements/types';
 import { GetUserService } from '..';
@@ -10,7 +10,7 @@ export class RefreshLoginService {
   constructor(private context: IContext) {}
 
   public async refresh(refreshTokenId: string, key: string): Promise<LoginResponse> {
-    const { repositories } = this.context;
+    const { repositories, logger } = this.context;
 
     const refreshToken = await repositories.refreshToken.findById(refreshTokenId);
     if (!refreshToken) throw new UnauthorizedError('Refresh token not found');
@@ -29,7 +29,7 @@ export class RefreshLoginService {
 
     const deleted = await repositories.refreshToken.deleteInvalid();
     if (deleted) {
-      Logger.log(`Deleted ${deleted} invalid refresh tokens`);
+      logger.debug(`Deleted ${deleted} invalid refresh tokens`);
     }
 
     const createTokenService = new CreateTokenService(this.context);

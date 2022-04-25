@@ -1,6 +1,6 @@
-import { Logger } from '@etimo-achievements/common';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import { LocalStorage } from '../../common/enums/local-storage';
+import { Logger } from '../../common/logger';
 import { AuthApi } from './auth-api';
 import { authSelector, setLoggedIn, setLoggedOut, setLoggingIn, setTokenInfo, setUserInfo } from './auth-slice';
 import { AuthStorageKeys } from './auth-types';

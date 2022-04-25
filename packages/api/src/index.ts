@@ -1,4 +1,4 @@
-import { Logger } from '@etimo-achievements/common';
+import { Logger } from '@etimo-achievements/utils';
 import Server from './server';
 import { setupEnvironment } from './utils/setup-helper';
 

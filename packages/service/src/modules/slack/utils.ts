@@ -1,4 +1,4 @@
-import { Logger } from '@etimo-achievements/common';
+import { Logger } from '@etimo-achievements/utils';
 import fetch from 'node-fetch';
 
 export const openSlackView = async (view: any) => {

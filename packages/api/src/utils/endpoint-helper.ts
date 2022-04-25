@@ -1,5 +1,5 @@
-import { ForbiddenError, Logger, UnauthorizedError } from '@etimo-achievements/common';
-import { CookieName, JwtService, RefreshTokenService } from '@etimo-achievements/security';
+import { ForbiddenError, UnauthorizedError } from '@etimo-achievements/common';
+import { Logger } from '@etimo-achievements/utils';
 import { NextFunction, Request, Response } from 'express';
 import { getContext } from '.';
 
@@ -19,8 +19,9 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
   return (req: Request, res: Response, next: NextFunction) => {
     const ctx = getContext();
 
-    setJwt(req);
-    setRefreshToken(req);
+    if (!ctx.jwt) {
+      throw new UnauthorizedError('Not authenticated');
+    }
 
     if (scopes && !ctx.scopes?.some((scope) => scopeMatches(scope, scopes))) {
       Logger.log('User does not have required scopes');
@@ -48,37 +49,8 @@ function scopeMatches(userScope: string, requiredScopes: string[]) {
   }
 }
 
-function setJwt(req: Request) {
-  const ctx = getContext();
-  const token = req.signedCookies[CookieName.Jwt];
-
-  try {
-    ctx.jwt = JwtService.unlock(token);
-    ctx.scopes = ctx.jwt?.scope?.split(' ') ?? [];
-  } catch {
-    throw new UnauthorizedError('The token has expired');
-  }
-}
-
-function setRefreshToken(req: Request) {
-  const ctx = getContext();
-  const refreshToken = req.signedCookies[CookieName.RefreshToken];
-
-  if (refreshToken) {
-    try {
-      const rt = RefreshTokenService.unlock(refreshToken);
-      ctx.refreshTokenId = rt.id;
-      ctx.refreshTokenKey = rt.key;
-    } catch {
-      Logger.log('Invalid refresh token');
-    }
-  }
-}
-
 export function endpoint(endpointFn: (req: Request, res: Response) => Promise<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
-    setRefreshToken(req);
-
     endpointFn(req, res).catch((error) => next(error));
   };
 }

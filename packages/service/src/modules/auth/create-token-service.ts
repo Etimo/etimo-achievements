@@ -1,4 +1,4 @@
-import { Logger, uuid } from '@etimo-achievements/common';
+import { uuid } from '@etimo-achievements/common';
 import { encrypt, JwtService, randomPassword, RefreshTokenService } from '@etimo-achievements/security';
 import {
   IAccessToken,
@@ -42,6 +42,8 @@ export class CreateTokenService {
   }
 
   public async createAccessToken(token: JWT): Promise<IAccessToken> {
+    const { logger } = this.context;
+
     const newToken: INewAccessToken = {
       id: token.jti,
       userId: token.sub,
@@ -54,15 +56,17 @@ export class CreateTokenService {
 
     const deleted = await this.repos.accessToken.deleteInvalid();
     if (deleted) {
-      Logger.log(`Deleted ${deleted} invalid access tokens`);
+      logger.debug(`Deleted ${deleted} invalid access tokens`);
     }
 
-    Logger.log(`Stored access token for user ${newToken.userId}`);
+    logger.debug(`Stored access token for user ${newToken.userId}`);
 
     return accessToken;
   }
 
   public async createRefreshToken(token: IAccessToken, key: string): Promise<IRefreshToken> {
+    const { logger } = this.context;
+
     const refreshTokenId = uuid();
     const data: IRefreshTokenData = {
       userId: token.userId,
@@ -81,7 +85,7 @@ export class CreateTokenService {
 
     const refreshToken = await this.repos.refreshToken.create(newRefreshToken);
 
-    Logger.log(`Stored refresh token (${refreshToken.id}) for user ${data.userId}`);
+    logger.debug(`Stored refresh token (${refreshToken.id}) for user ${data.userId}`);
 
     return refreshToken;
   }

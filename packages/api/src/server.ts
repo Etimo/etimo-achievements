@@ -1,17 +1,18 @@
-import { getEnvVariable, isDevelopment, Logger } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
 import { Env } from '@etimo-achievements/types';
+import { Logger } from '@etimo-achievements/utils';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, static as serveStatic } from 'express';
 import { Server } from 'http';
 import swaggerUi from 'swagger-ui-express';
 import {
+  authMiddleware,
   contextMiddleware,
   errorMiddleware,
   loggingMiddleware,
   setContextMiddleware,
-  winstonMiddleware,
 } from './middleware';
 import {
   AchievementController,
@@ -90,20 +91,19 @@ export default class AchievementsServer {
     this.express.use(contextMiddleware());
     this.express.use(setContextMiddleware());
 
+    // Security
+    this.express.use(cookieParser(getEnvVariable(Env.COOKIE_SECRET)));
+
+    // Authentication
+    this.express.use(authMiddleware());
+
     // Logging
-    if (isDevelopment()) {
-      this.express.use(loggingMiddleware());
-    } else {
-      this.express.use(winstonMiddleware());
-    }
+    this.express.use(loggingMiddleware());
 
     // Body parsers
     this.express.use(express.json());
     this.express.use(express.text());
     this.express.use(express.urlencoded({ extended: false }));
-
-    // Security
-    this.express.use(cookieParser(getEnvVariable(Env.COOKIE_SECRET)));
 
     // Documentation
     const options = { customSiteTitle: 'EA Swagger' };

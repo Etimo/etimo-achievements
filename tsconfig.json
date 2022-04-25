@@ -15,6 +15,7 @@
     "@etimo-achievements/security/*": ["security/src/*"],
     "@etimo-achievements/service/*": ["service/src/*"],
     "@etimo-achievements/types/*": ["types/src/*"],
+    "@etimo-achievements/utils/*": ["utils/src/*"],
     "@etimo-achievements/web/*": ["web/src/*"]
   }
 }
