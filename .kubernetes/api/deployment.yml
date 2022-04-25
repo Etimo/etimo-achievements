@@ -6,7 +6,7 @@ metadata:
     app: api
     app.kubernetes.io/name: achievements-api
     app.kubernetes.io/instance: achievements-api-${DATE}-${TAG}
-    app.kubernetes.io/version: ${TAG}
+    app.kubernetes.io/version: '${TAG}'
     app.kubernetes.io/component: api
     app.kubernetes.io/part-of: achievements
   annotations:
