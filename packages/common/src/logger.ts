@@ -1,8 +1,13 @@
 import { ILogger, LoggerOptions, LoggingColor } from '@etimo-achievements/types';
 import { isProduction, isStaging } from '.';
 
+type LogContext = {
+  [key: string]: any;
+};
+
 export class Logger implements ILogger {
   private static instance?: Logger;
+  private context?: LogContext;
 
   public static log(message: string, options?: LoggerOptions) {
     if (!Logger.instance) {
@@ -18,6 +23,19 @@ export class Logger implements ILogger {
     }
 
     Logger.instance.error(error.message, { ...options, extras: [error] });
+  }
+
+  public push(key: string, value: any) {
+    if (!this.context) {
+      this.context = {};
+    }
+    this.context[key] = value;
+  }
+
+  public pop(key: string) {
+    if (this.context) {
+      delete this.context[key];
+    }
   }
 
   public trace(message: string, options?: LoggerOptions) {
@@ -50,7 +68,11 @@ export class Logger implements ILogger {
     if (options?.extras) {
       logFn(output, options.extras);
     }
-    logFn(output);
+    if (this.context) {
+      logFn(output, this.context);
+    } else {
+      logFn(output);
+    }
   }
 
   private getMessage(message: string, options?: LoggerOptions) {

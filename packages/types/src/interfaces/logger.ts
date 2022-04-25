@@ -15,6 +15,8 @@ export enum LoggingColor {
 }
 
 export interface ILogger {
+  push(key: string, value: string): void;
+  pop(key: string): void;
   trace(message: string, options?: LoggerOptions): void;
   debug(message: string, options?: LoggerOptions): void;
   info(message: string, options?: LoggerOptions): void;
