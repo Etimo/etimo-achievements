@@ -13,30 +13,37 @@ export const loggingMiddleware = () => {
     const ctx = getContext();
     const count = ctx.requestCount;
     const rid = ctx.shortRequestId;
+    const startTime = ctx.requestDate.getTime();
+    const request = `${req.method} ${req.path}`;
 
     let color = LoggingColor.Green;
-    ctx.logger.info(`[${count}] -> ${req.method} ${req.path} {${rid}} [${req.ip}]`, { color });
+    ctx.logger.info(`[${count}] -> ${request} {${rid}} [${req.ip}]`, { color: LoggingColor.Dim });
 
     const logResponse = (res: Response, message: string) => {
       color = getColor(res.statusCode);
       ctx.logger.info(message, { color });
     };
+
     const removeHandlers = () => {
       res.off('close', logClose);
       res.off('error', logError);
       res.off('finish', logFinish);
     };
+
     const logError = (error: any) => {
       removeHandlers();
-      logResponse(res, `[${count}] <- ${res.statusCode} ${error.message} {${rid}}`);
+      logResponse(res, `[${count}] <- ${request} ${res.statusCode} ${error.message} {${rid}}`);
     };
+
     const logClose = () => {
       removeHandlers();
       logResponse(res, `[${count}] X aborted {${rid}}`);
     };
+
     const logFinish = () => {
       removeHandlers();
-      logResponse(res, `[${count}] <- ${res.statusCode} {${rid}}`);
+      const elapsed = Date.now() - startTime;
+      logResponse(res, `[${count}] <- ${request} (${res.statusCode} ${res.statusMessage}) {${rid}} [${elapsed}ms]`);
     };
 
     req.on('error', logError);
