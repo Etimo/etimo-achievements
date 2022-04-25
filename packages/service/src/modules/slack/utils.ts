@@ -1,4 +1,3 @@
-import { Logger } from '@etimo-achievements/utils';
 import fetch from 'node-fetch';
 
 export const openSlackView = async (view: any) => {
@@ -9,7 +8,7 @@ export const openSlackView = async (view: any) => {
   });
 
   const content = JSON.parse((await response.json()) as string);
-  Logger.log(content);
+  console.log(content);
 
   return response;
 };

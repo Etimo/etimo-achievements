@@ -1,7 +1,6 @@
 import { getEnvVariable } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
 import { Env } from '@etimo-achievements/types';
-import { Logger } from '@etimo-achievements/utils';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, static as serveStatic } from 'express';
@@ -44,7 +43,7 @@ export default class AchievementsServer {
     this.server = this.express.listen(this.port);
     this.setupSigtermHandler();
 
-    Logger.log(`Server running at port ${this.port} serving at path ${this.root}`);
+    console.log(`Server running at port ${this.port} serving at path ${this.root}`);
 
     this.ready = true;
   }
@@ -56,13 +55,13 @@ export default class AchievementsServer {
   }
 
   private setupSigtermHandler() {
-    Logger.log('Setting up sigterm handler');
+    console.log('Setting up sigterm handler');
 
     process.on('SIGTERM', () => {
-      Logger.log('SIGTERM signal received');
+      console.log('SIGTERM signal received');
       this.server?.close(() => {
         Database.disconnect();
-        Logger.log('HTTP server closed');
+        console.log('HTTP server closed');
       });
     });
   }
@@ -72,7 +71,7 @@ export default class AchievementsServer {
   }
 
   private setupMiddleware() {
-    Logger.log('Applying middleware');
+    console.log('Applying middleware');
 
     const OpenApiValidator = require('express-openapi-validator');
     const OpenApiDocument = require('./openapi.json');
@@ -120,7 +119,7 @@ export default class AchievementsServer {
   }
 
   private setupRoutes() {
-    Logger.log('Setting up routes');
+    console.log('Setting up routes');
 
     this.express.use(this.root, new AchievementController().routes);
     this.express.use(this.root, new AuthController().routes);
@@ -133,7 +132,7 @@ export default class AchievementsServer {
   }
 
   private setupErrorHandler() {
-    Logger.log('Setting up error handling');
+    console.log('Setting up error handling');
 
     this.express.use(errorMiddleware());
   }

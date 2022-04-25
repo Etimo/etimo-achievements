@@ -1,61 +1,41 @@
-import { ILogger, LoggerOptions, LoggingColor } from '@etimo-achievements/types';
 import { isProduction, isStaging } from '@etimo-achievements/common';
+import { ILogger, IRequestContext, LoggerOptions, LoggingColor } from '@etimo-achievements/types';
 
 type LogContext = {
   [key: string]: any;
 };
 
-export class Logger implements ILogger {
-  private static instance?: Logger;
-  private context?: LogContext;
+export class DevLogger implements ILogger {
+  private meta: LogContext = {};
 
-  public static log(message: string, options?: LoggerOptions) {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
-    }
-
-    Logger.instance.info(message, options);
-  }
-
-  public static error(error: Error, options?: LoggerOptions) {
-    if (!Logger.instance) {
-      Logger.instance = new Logger();
-    }
-
-    Logger.instance.error(error.message, { ...options, extras: [error] });
-  }
+  constructor(private context: IRequestContext) {}
 
   public push(key: string, value: any) {
-    if (!this.context) {
-      this.context = {};
-    }
-    this.context[key] = value;
+    this.meta[key] = value;
   }
 
   public pop(key: string) {
-    if (this.context) {
-      delete this.context[key];
-    }
+    delete this.meta[key];
   }
 
   public trace(message: string, options?: LoggerOptions) {
-    this.output(message, LoggingColor.Dim, console.debug, options);
+    this.output(`[T] ${message}`, LoggingColor.Dim, console.debug, options);
   }
 
   public debug(message: string, options?: LoggerOptions) {
-    this.output(message, LoggingColor.Normal, console.debug, options);
+    this.output(`[D] ${message}`, LoggingColor.Normal, console.debug, options);
   }
 
   public info(message: string, options?: LoggerOptions) {
-    this.output(message, LoggingColor.Bright, console.info, options);
+    this.output(`[I] ${message}`, LoggingColor.Bright, console.info, options);
   }
 
   public warn(message: string, options?: LoggerOptions) {
-    this.output(message, LoggingColor.Yellow, console.warn, options);
+    this.output(`[WARN] ${message}`, LoggingColor.Yellow, console.warn, options);
   }
 
   public error(message: string, options?: LoggerOptions) {
-    this.output(message, LoggingColor.Red, console.error, options);
+    this.output(`[ERROR] ${message}`, LoggingColor.Red, console.error, options);
   }
 
   private output(
@@ -65,11 +45,9 @@ export class Logger implements ILogger {
     options?: LoggerOptions
   ) {
     const output = this.getMessage(message, { color: defaultColor, ...options });
-    if (options?.extras) {
-      logFn(output, options.extras);
-    }
-    if (this.context) {
-      logFn(output, this.context);
+    const meta = JSON.stringify({ ...options?.extras, ...this.context.loggingContext, ...this.meta });
+    if (meta !== '{}') {
+      logFn(output, meta);
     } else {
       logFn(output);
     }

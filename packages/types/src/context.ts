@@ -4,6 +4,7 @@ export type IRequestContext = {
   jwt?: JWT;
   logger: ILogger;
   notifier: INotifyService;
+  loggingContext: any;
   refreshTokenId?: string;
   refreshTokenKey?: string;
   requestCount: number;

@@ -8,7 +8,7 @@ import {
 } from '@etimo-achievements/data';
 import { IContext } from '@etimo-achievements/service';
 import { ILogger, INotifyService, JWT } from '@etimo-achievements/types';
-import { Logger, NotifyServiceFactory } from '@etimo-achievements/utils';
+import { DevLogger, NotifyServiceFactory } from '@etimo-achievements/utils';
 
 let count: number = 0;
 
@@ -29,7 +29,7 @@ export class Context implements IContext {
   public refreshTokenKey?: string;
 
   constructor(requestId?: string, options?: ContextOptions) {
-    this.logger = options?.logger ?? new Logger();
+    this.logger = options?.logger ?? new DevLogger(this);
     this.notifier = options?.notifier ?? NotifyServiceFactory.create('slack', this);
     this.requestId = requestId ?? uuid();
     this.requestDate = new Date();
@@ -44,6 +44,14 @@ export class Context implements IContext {
     refreshToken: new RefreshTokenRepository(this),
     user: new UserRepository(this),
   };
+
+  public get loggingContext() {
+    return {
+      requestId: this.requestId,
+      userId: this.jwt?.sub,
+      scopes: this.scopes,
+    };
+  }
 
   public setLogger(logger: ILogger) {
     this.logger = logger;

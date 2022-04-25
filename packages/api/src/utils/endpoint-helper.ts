@@ -1,5 +1,4 @@
 import { ForbiddenError, UnauthorizedError } from '@etimo-achievements/common';
-import { Logger } from '@etimo-achievements/utils';
 import { NextFunction, Request, Response } from 'express';
 import { getContext } from '.';
 
@@ -24,7 +23,7 @@ export function protectedEndpoint(endpointFn: (req: Request, res: Response) => P
     }
 
     if (scopes && !ctx.scopes?.some((scope) => scopeMatches(scope, scopes))) {
-      Logger.log('User does not have required scopes');
+      ctx.logger.warn('User does not have required scopes');
       throw new ForbiddenError('Insufficient scope');
     }
 
