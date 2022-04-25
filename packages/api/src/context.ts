@@ -1,4 +1,4 @@
-import { Logger, UnauthorizedError, uuid } from '@etimo-achievements/common';
+import { UnauthorizedError, uuid } from '@etimo-achievements/common';
 import {
   AccessTokenRepository,
   AchievementRepository,
@@ -6,8 +6,9 @@ import {
   RefreshTokenRepository,
   UserRepository,
 } from '@etimo-achievements/data';
-import { IContext, NotifyServiceFactory } from '@etimo-achievements/service';
+import { IContext } from '@etimo-achievements/service';
 import { ILogger, INotifyService, JWT } from '@etimo-achievements/types';
+import { Logger, NotifyServiceFactory } from '@etimo-achievements/utils';
 
 let count: number = 0;
 
@@ -43,6 +44,10 @@ export class Context implements IContext {
     refreshToken: new RefreshTokenRepository(this),
     user: new UserRepository(this),
   };
+
+  public setLogger(logger: ILogger) {
+    this.logger = logger;
+  }
 
   public get repositories() {
     return this._repositories;

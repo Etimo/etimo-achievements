@@ -18,6 +18,9 @@
     },
     {
       "path": "../types"
+    },
+    {
+      "path": "../utils"
     }
   ],
   "include": ["./src", "./src/**/version.json", "./src/openapi.json"]

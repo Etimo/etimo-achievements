@@ -7,16 +7,7 @@
   },
   "references": [
     {
-      "path": "../common"
-    },
-    {
-      "path": "../security"
-    },
-    {
       "path": "../types"
-    },
-    {
-      "path": "../utils"
     }
   ],
   "include": ["./src"]

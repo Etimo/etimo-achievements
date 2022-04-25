@@ -1,16 +1,16 @@
 import { ILogger, INotifyService, JWT } from '.';
 
 export type IRequestContext = {
+  jwt?: JWT;
   logger: ILogger;
   notifier: INotifyService;
-  requestId: string;
-  shortRequestId: string;
-  requestCount: number;
-  requestDate: Date;
-  timestamp: string;
-  jwt?: JWT;
-  scopes?: string[];
   refreshTokenId?: string;
   refreshTokenKey?: string;
+  requestCount: number;
+  requestDate: Date;
+  requestId: string;
+  scopes?: string[];
+  shortRequestId: string;
+  timestamp: string;
   userId: string;
 };

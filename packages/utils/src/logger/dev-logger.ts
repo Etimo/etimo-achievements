@@ -1,5 +1,5 @@
 import { ILogger, LoggerOptions, LoggingColor } from '@etimo-achievements/types';
-import { isProduction, isStaging } from '.';
+import { isProduction, isStaging } from '@etimo-achievements/common';
 
 type LogContext = {
   [key: string]: any;

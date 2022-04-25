@@ -20,7 +20,7 @@
     "@etimo-achievements/data": "^1.0.0",
     "@etimo-achievements/security": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
-    "@slack/web-api": "^6.7.1",
+    "@etimo-achievements/utils": "^1.0.0",
     "node-fetch": "^2.6.5",
     "spacetime": "^6.16.3"
   },
@@ -50,6 +50,7 @@
       "@etimo-achievements/security(.*)$": "<rootDir>/../security/src/$1",
       "@etimo-achievements/service(.*)$": "<rootDir>/../service/src/$1",
       "@etimo-achievements/types(.*)$": "<rootDir>/../types/src/$1",
+      "@etimo-achievements/utils(.*)$": "<rootDir>/../utils/src/$1",
       "@etimo-achievements/web(.*)$": "<rootDir>/../web/src/$1"
     }
   }

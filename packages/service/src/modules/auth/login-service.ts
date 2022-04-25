@@ -1,4 +1,3 @@
-import { Logger } from '@etimo-achievements/common';
 import { OAuthServiceFactory } from '@etimo-achievements/security';
 import { CreateUserService } from '..';
 import { IContext } from '../..';
@@ -9,6 +8,8 @@ export class LoginService {
   constructor(private provider: string, private context: IContext) {}
 
   public async login(code: string): Promise<LoginResponse> {
+    const { logger } = this.context;
+
     const { repositories } = this.context;
 
     // Get user from provider service
@@ -20,7 +21,7 @@ export class LoginService {
 
     // If user doesn't exist, create it
     if (!user) {
-      Logger.log(`User ${userInfo.email} is not found. Creating a new user.`);
+      logger.debug(`User ${userInfo.email} is not found. Creating a new user.`);
       const createUserService = new CreateUserService(this.context);
       user = await createUserService.create({
         name: userInfo.name,

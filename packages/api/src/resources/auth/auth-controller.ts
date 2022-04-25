@@ -1,7 +1,6 @@
 import {
   AccessTokenDto,
   getEnvVariable,
-  Logger,
   TokenValidationDto,
   UnauthorizedError,
   UserInfoDto,
@@ -205,7 +204,6 @@ export class AuthController {
 
     const domain = new URL(getEnvVariable(Env.FRONTEND_URL)).hostname;
     const deleteCookie = (name: string) => {
-      Logger.log(`Deleting cookie ${name} @ ${domain}`);
       res.cookie(name, 'deleted', {
         domain,
         httpOnly: true,
@@ -274,7 +272,6 @@ export class AuthController {
     const domain = new URL(getEnvVariable(Env.FRONTEND_URL)).hostname;
 
     const setCookie = (name: string, expiresAt: Date, data: any) => {
-      Logger.log(`Creating cookie ${name} @ ${domain} with expiration date ${expiresAt}`);
       res.cookie(name, data, {
         domain,
         httpOnly: true,

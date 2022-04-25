@@ -1,8 +1,10 @@
-import { Logger } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
+import { getContext } from '../utils';
 
 export const errorMiddleware = () => {
   return (error: Error, _req: Request, res: Response, next: NextFunction) => {
+    const { logger } = getContext();
+
     next(error);
 
     switch (error.name) {
@@ -33,7 +35,7 @@ export const errorMiddleware = () => {
 
       default:
         res.statusCode = 500;
-        Logger.log(`Unmapped error '${error.name}' occurred: ${error.message}`);
+        logger.error(`Unmapped error '${error.name}' occurred: ${error.message}`);
         return res.send({ error: 'Internal Server Error' });
     }
   };

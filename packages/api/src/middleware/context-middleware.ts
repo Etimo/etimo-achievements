@@ -1,4 +1,5 @@
-import { uuid } from '@etimo-achievements/common';
+import { isProduction, isStaging, uuid } from '@etimo-achievements/common';
+import { WinstonLogger } from '@etimo-achievements/utils';
 import { NextFunction, Request, Response } from 'express';
 import httpContext from 'express-http-context';
 import { Context } from '../context';
@@ -11,6 +12,12 @@ export const setContextMiddleware = () => {
     const requestId = req.get('X-Request-Id') ?? uuid();
 
     const context = new Context(requestId);
+
+    // Use Winston logger for cloud environments
+    if (isStaging() || isProduction()) {
+      context.setLogger(new WinstonLogger(context));
+    }
+
     httpContext.set('context', context);
     next();
   };

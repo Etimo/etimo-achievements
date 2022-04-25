@@ -1,5 +1,5 @@
-import { Logger, PaginationInfo } from '@etimo-achievements/common';
-
+import { PaginationInfo } from '@etimo-achievements/common';
+import { Logger } from '../logger';
 export type ApiResponse<T> = {
   success: boolean;
   body?: Promise<T>;

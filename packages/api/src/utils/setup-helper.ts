@@ -1,5 +1,6 @@
-import { isDevelopment, isLocal, isProduction, Logger } from '@etimo-achievements/common';
+import { isDevelopment, isLocal, isProduction } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
+import { Logger } from '@etimo-achievements/utils';
 import dotenv from 'dotenv';
 
 export function setupEnvironment(environment?: string) {

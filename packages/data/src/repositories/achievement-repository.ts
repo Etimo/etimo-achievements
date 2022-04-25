@@ -1,4 +1,4 @@
-import { camelToSnakeCase, Logger } from '@etimo-achievements/common';
+import { camelToSnakeCase } from '@etimo-achievements/common';
 import {
   IAchievement,
   INewAchievement,
@@ -52,7 +52,6 @@ export class AchievementRepository {
   }
 
   create(achievement: INewAchievement): Promise<IAchievement> {
-    Logger.log(JSON.stringify(achievement));
     return catchErrors(async () => {
       return AchievementModel.query().insert(achievement);
     });

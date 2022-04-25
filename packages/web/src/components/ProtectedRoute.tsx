@@ -1,9 +1,9 @@
-import { Logger } from '@etimo-achievements/common';
 import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Routes } from '../app/Router';
 import { LocalStorage } from '../common/enums/local-storage';
 import useLoggedIn from '../common/hooks/use-logged-in';
+import { Logger } from '../common/logger';
 
 const ProtectedRoute: React.FC = ({ children }: any) => {
   const navigate = useNavigate();

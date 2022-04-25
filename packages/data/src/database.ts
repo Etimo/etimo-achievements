@@ -1,4 +1,5 @@
-import { getEnvironment, isDevelopment, isLocal, isTest, Logger } from '@etimo-achievements/common';
+import { getEnvironment, isLocal } from '@etimo-achievements/common';
+import { Logger } from '@etimo-achievements/utils';
 import Knex from 'knex';
 import { Model } from 'objection';
 
@@ -46,7 +47,7 @@ export class Database {
     const settings = knexfile[env];
     this.knex = Knex(settings);
 
-    if (isLocal() || isDevelopment() || isTest()) {
+    if (isLocal()) {
       Logger.log(`Database connection (${env}): ${JSON.stringify(settings.connection, null, 2)}`);
     }
 
