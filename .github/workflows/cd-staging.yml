@@ -30,7 +30,7 @@ env:
   INGRESS_URL: achievements-test.staging.etimo-test.live
   NODE_ENV: staging
   PGADMIN_URL: achievements-test-pgadmin.staging.etimo-test.live
-  UNLEASH_URL: achievements-test-unleash.staging.etimo-test.live
+  UNLEASH_URL: achievements-test-unleash.staging.etimo-test.live/api
   SLACK_CHANNEL_HIGH: C03BQBQ29PH
   SLACK_CHANNEL_MEDIUM: C03BQBQ29PH
   SLACK_CHANNEL_LOW: C03BQBQ29PH
