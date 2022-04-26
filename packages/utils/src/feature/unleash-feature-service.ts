@@ -14,19 +14,21 @@ export class UnleashFeatureService implements IFeatureService {
       remoteAddress: this.context.remoteAddress,
     };
 
-    return UnleashFeatureService.getUnleash().isEnabled(feature, context);
+    return this.getUnleash().isEnabled(feature, context);
   }
 
-  private static getUnleash(): Unleash {
-    if (!this.unleash) {
-      this.unleash = initialize({
+  private getUnleash(): Unleash {
+    if (!UnleashFeatureService.unleash) {
+      const settings = {
         url: getEnvVariable(Env.UNLEASH_URL),
-        appName: 'etimo-achievements',
+        appName: 'default',
         environment: isProduction() ? 'production' : 'development',
         customHeaders: { Authorization: getEnvVariable(Env.UNLEASH_TOKEN) },
-      });
+      };
+
+      UnleashFeatureService.unleash = initialize(settings);
     }
 
-    return this.unleash;
+    return UnleashFeatureService.unleash;
   }
 }
