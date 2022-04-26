@@ -45,7 +45,7 @@ spec:
               protocol: TCP
           startupProbe:
             httpGet:
-              path: '/api'
+              path: '/health'
               port: 4242
             failureThreshold: 30
             periodSeconds: 10
