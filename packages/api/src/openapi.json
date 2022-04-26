@@ -1067,6 +1067,35 @@
         ]
       }
     },
+    "/feature/{featureName}": {
+      "get": {
+        "summary": "Get feature flag status",
+        "operationId": "getFeature",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "featureName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          }
+        },
+        "tags": [
+          "Features"
+        ]
+      }
+    },
     "/highscores": {
       "get": {
         "summary": "Get a list of awards",

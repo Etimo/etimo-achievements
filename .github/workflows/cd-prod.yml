@@ -21,6 +21,7 @@ env:
   INGRESS_URL: achievements-live.staging.etimo-test.live
   NODE_ENV: production
   PGADMIN_URL: achievements-live-pgadmin.staging.etimo-test.live
+  UNLEASH_URL: achievements-live-unleash.staging.etimo-test.live
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
@@ -38,6 +39,7 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   KUBECONFIG: ${{ secrets.KUBECONFIG }}
   SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+  UNLEASH_TOKEN: ${{ secrets.UNLEASH_TOKEN }}
   # Stored as organisation secrets
   GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
   # Pretty much static variables

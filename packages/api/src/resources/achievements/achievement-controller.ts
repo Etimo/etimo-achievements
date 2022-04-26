@@ -160,6 +160,9 @@ export class AchievementController {
     const paginationOpts = getPaginationOptions(req);
     validateOrderBy(paginationOpts.orderBy, AchievementMapper.isProperty);
 
+    const ctx = getContext();
+    ctx.logger.push('hello', 'world');
+
     const service = new GetAchievementService(getContext());
     const achievements = await service.getMany(paginationOpts);
 

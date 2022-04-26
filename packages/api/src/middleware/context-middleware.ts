@@ -9,9 +9,7 @@ export const setContextMiddleware = () => {
     httpContext.ns.bindEmitter(req);
     httpContext.ns.bindEmitter(res);
 
-    const requestId = req.get('X-Request-Id') ?? uuid();
-
-    const context = new Context(requestId);
+    const context = new Context(req);
 
     // Use Winston logger for cloud environments
     if (isStaging() || isProduction()) {

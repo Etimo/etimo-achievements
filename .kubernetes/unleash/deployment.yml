@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unleash-deployment
+  labels:
+    app: unleash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unleash
+  template:
+    metadata:
+      labels:
+        app: unleash
+    spec:
+      containers:
+        - name: achievements-unleash
+          image: unleashorg/unleash-server:latest
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '64Mi'
+            limits:
+              cpu: '200m'
+              memory: '256Mi'
+          env:
+            - name: DATABASE_HOST
+              value: '$(DB_MAIN_PRIVATE_HOST)'
+            - name: DATABASE_NAME
+              value: '$(DB_UNLEASH_NAME)'
+            - name: DATABASE_USERNAME
+              value: '$(DB_UNLEASH_USER)'
+            - name: DATABASE_PASSWORD
+              value: '$(DB_UNLEASH_PASSWORD)'
+            - name: DATABASE_SSL
+              value: 'false'
+          startupProbe:
+            httpGet:
+              path: '/'
+              port: 4242
+            failureThreshold: 30
+            periodSeconds: 10
