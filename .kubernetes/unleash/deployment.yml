@@ -24,9 +24,14 @@ spec:
             limits:
               cpu: '200m'
               memory: '256Mi'
+          envFrom:
+            - secretRef:
+                name: provisioned-secrets
+            - configMapRef:
+                name: provisioned-config
           env:
             - name: DATABASE_HOST
-              value: '$(DB_MAIN_PRIVATE_HOST)'
+              value: '$(DB_UNLEASH_PRIVATE_HOST)'
             - name: DATABASE_NAME
               value: '$(DB_UNLEASH_NAME)'
             - name: DATABASE_USERNAME
