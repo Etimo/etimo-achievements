@@ -25,12 +25,12 @@ defaults:
 env:
   DOMAIN: https://achievements-test.staging.etimo-test.live
   API_URL: https://achievements-test.staging.etimo-test.live/api
+  UNLEASH_URL: https://achievements-test.staging.etimo-test.live/unleash
   FRONTEND_URL: https://achievements-test.staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements-test.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements-test.staging.etimo-test.live
   NODE_ENV: staging
   PGADMIN_URL: achievements-test-pgadmin.staging.etimo-test.live
-  UNLEASH_URL: achievements-test-unleash.staging.etimo-test.live/api
   SLACK_CHANNEL_HIGH: C03BQBQ29PH
   SLACK_CHANNEL_MEDIUM: C03BQBQ29PH
   SLACK_CHANNEL_LOW: C03BQBQ29PH
