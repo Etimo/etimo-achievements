@@ -45,6 +45,7 @@ export function isProduction(): boolean {
 export function getEnvVariable(name: string): string {
   const value = process.env[name];
   if (!value) {
+    console.log(process.env);
     throw new ConfigurationError(`Environment variable ${name} is not defined`);
   }
   return value;

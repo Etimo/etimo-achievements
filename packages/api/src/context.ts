@@ -7,19 +7,23 @@ import {
   UserRepository,
 } from '@etimo-achievements/data';
 import { IContext } from '@etimo-achievements/service';
-import { ILogger, INotifyService, JWT } from '@etimo-achievements/types';
-import { DevLogger, NotifyServiceFactory } from '@etimo-achievements/utils';
+import { IFeatureService, ILogger, INotifyService, JWT } from '@etimo-achievements/types';
+import { DevLogger, FeatureServiceFactory, NotifyServiceFactory } from '@etimo-achievements/utils';
+import { Request } from 'express';
 
 let count: number = 0;
 
 type ContextOptions = {
   logger?: ILogger;
-  notifier: INotifyService;
+  notifier?: INotifyService;
+  feature?: IFeatureService;
 };
 
 export class Context implements IContext {
   public logger: ILogger;
   public notifier: INotifyService;
+  public feature: IFeatureService;
+  public remoteAddress: string;
   public requestId: string;
   public requestDate: Date;
   public timestamp: string;
@@ -28,10 +32,12 @@ export class Context implements IContext {
   public refreshTokenId?: string;
   public refreshTokenKey?: string;
 
-  constructor(requestId?: string, options?: ContextOptions) {
+  constructor(req: Request, options?: ContextOptions) {
     this.logger = options?.logger ?? new DevLogger(this);
     this.notifier = options?.notifier ?? NotifyServiceFactory.create('slack', this);
-    this.requestId = requestId ?? uuid();
+    this.feature = options?.feature ?? FeatureServiceFactory.create('unleash', this);
+    this.remoteAddress = req.ip;
+    this.requestId = req.get('X-Request-Id') ?? uuid();
     this.requestDate = new Date();
     this.timestamp = new Date().toTimeString().split(' ')[0];
     count++;

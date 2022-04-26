@@ -1,8 +1,8 @@
 import { getEnvVariable } from '@etimo-achievements/common';
-import { Env, INotifyService, IRequestContext } from '@etimo-achievements/types';
+import { Env, INotifyService, IRequestContext, NotifyPriority } from '@etimo-achievements/types';
 import { WebClient } from '@slack/web-api';
 
-export class NotifySlackService implements INotifyService {
+export class SlackNotifyService implements INotifyService {
   private readonly client: WebClient;
   private readonly channelHigh: string;
   private readonly channelMedium: string;
@@ -15,19 +15,21 @@ export class NotifySlackService implements INotifyService {
     this.channelLow = getEnvVariable(Env.SLACK_CHANNEL_LOW);
   }
 
-  public notify(message: string, prio: 'high' | 'medium' | 'low') {
+  public notify(message: string, prio?: NotifyPriority) {
     return this.client.chat.postMessage({
-      channel: this.getChannel(prio),
+      channel: this.getChannel(prio ?? 'low'),
       text: message,
     });
   }
 
-  private getChannel(prio: 'high' | 'medium' | 'low') {
+  private getChannel(prio: NotifyPriority) {
     switch (prio) {
       case 'high':
         return this.channelHigh;
+
       case 'medium':
         return this.channelMedium;
+
       case 'low':
         return this.channelLow;
     }

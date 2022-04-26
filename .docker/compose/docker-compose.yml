@@ -51,6 +51,7 @@ services:
       - DATABASE_USERNAME=root
       - DATABASE_PASSWORD=root
       - DATABASE_SSL=false
+      # For documentation purposes only -- these won't affect unleash credentials:
       - UNLEASH_USER=admin
       - UNLEASH_PASSWORD=unleash4all
     ports:

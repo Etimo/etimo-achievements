@@ -1067,10 +1067,25 @@
         ]
       }
     },
-    "/feature": {
+    "/feature/{featureName}": {
       "get": {
-        "summary": "Get feature flags",
-        "operationId": "getFeatures",
+        "summary": "Get feature flag status",
+        "operationId": "getFeature",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "featureName",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "The request was successful"

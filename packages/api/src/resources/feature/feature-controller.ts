@@ -1,4 +1,3 @@
-import { GetFeaturesService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import { getContext, okResponse, protectedEndpoint } from '../../utils';
 
@@ -8,24 +7,29 @@ export class FeatureController {
 
     /**
      * @openapi
-     * /feature:
+     * /feature/{featureName}:
      *   get:
-     *     summary: Get feature flags
-     *     operationId: getFeatures
+     *     summary: Get feature flag status
+     *     operationId: getFeature
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *featureNameParam
      *     responses:
      *       200: *okResponse
      *     tags:
      *       - Features
      */
-    router.get('/feature', protectedEndpoint(this.getFeature, ['r:feature']));
+    router.get('/feature/:featureName', protectedEndpoint(this.getFeature, ['r:feature']));
 
     return router;
   }
 
   private getFeature = async (req: Request, res: Response) => {
-    const service = new GetFeaturesService(getContext());
-    const features = service.get();
+    const { feature } = getContext();
 
-    return okResponse(res, features);
+    const isEnabled = await feature.isEnabled(req.params.featureName);
+
+    return okResponse(res, isEnabled);
   };
 }
