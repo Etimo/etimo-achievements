@@ -32,6 +32,8 @@ spec:
           env:
             - name: DATABASE_HOST
               value: '$(DB_UNLEASH_PRIVATE_HOST)'
+            - name: DATABASE_PORT
+              value: '$(DB_UNLEASH_PORT)'
             - name: DATABASE_NAME
               value: '$(DB_UNLEASH_NAME)'
             - name: DATABASE_USERNAME
