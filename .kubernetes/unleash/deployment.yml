@@ -4,13 +4,6 @@ metadata:
   name: unleash-deployment
   labels:
     app: unleash
-    app.kubernetes.io/name: achievements-unleash
-    app.kubernetes.io/instance: achievements-unleash-${DATE}-${TAG}
-    app.kubernetes.io/version: '${TAG}'
-    app.kubernetes.io/component: unleash
-    app.kubernetes.io/part-of: achievements
-  annotations:
-    kubernetes.io/change-cause: 'release ${RELEASE}'
 spec:
   replicas: 1
   selector:
