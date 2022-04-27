@@ -17,6 +17,7 @@ import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
 import useLoggedIn from '../common/hooks/use-logged-in';
+import Feature from '../features/feature/Feature';
 import RequirePermission from './RequirePermission';
 const version = require('../version.json');
 
@@ -30,14 +31,16 @@ const SideMenu: React.FC = () => {
     <ProSidebar>
       {isLoggedIn ? (
         <>
-          <RequirePermission read="profile">
-            <Menu iconShape="round">
-              <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
-                Profile
-                <Link to={Routes.UserProfile} />
-              </MenuItem>
-            </Menu>
-          </RequirePermission>
+          <Feature name="profile-page">
+            <RequirePermission read="profile">
+              <Menu iconShape="round">
+                <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
+                  Profile
+                  <Link to={Routes.UserProfile} />
+                </MenuItem>
+              </Menu>
+            </RequirePermission>
+          </Feature>
           <Menu iconShape="circle">
             <RequirePermission read="achievements">
               <SubMenu title="Achievements" icon={<FontAwesomeIcon icon={faStar} />}>

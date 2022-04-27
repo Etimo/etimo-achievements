@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import { useAppSelector } from '../../app/store';
-import { featureSelector } from './feature-slice';
+import React from 'react';
 import useFeatureEnabled from './hooks/use-feature-enabled';
 
 type Props = {
@@ -8,14 +6,9 @@ type Props = {
 };
 
 const Feature: React.FC<Props> = ({ name, children }) => {
-  const features = useAppSelector(featureSelector);
-  const featureEnabled = useFeatureEnabled();
+  const enabled = useFeatureEnabled(name);
 
-  useEffect(() => {
-    featureEnabled(name);
-  }, []);
-
-  return features[name] === true ? <>{children}</> : null;
+  return enabled ? <>{children}</> : null;
 };
 
 export default Feature;
