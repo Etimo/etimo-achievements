@@ -4,6 +4,13 @@ metadata:
   name: unleash-deployment
   labels:
     app: unleash
+    app.kubernetes.io/name: achievements-unleash
+    app.kubernetes.io/instance: achievements-unleash-${DATE}-${TAG}
+    app.kubernetes.io/version: '${TAG}'
+    app.kubernetes.io/component: unleash
+    app.kubernetes.io/part-of: achievements
+  annotations:
+    kubernetes.io/change-cause: 'release ${RELEASE}'
 spec:
   replicas: 1
   selector:
@@ -41,7 +48,7 @@ spec:
             - name: DATABASE_PASSWORD
               value: '$(DB_UNLEASH_PASSWORD)'
             - name: DATABASE_SSL
-              value: 'true'
+              value: '{"rejectUnauthorized":false}'
           ports:
             - containerPort: 4242
               protocol: TCP
@@ -49,5 +56,5 @@ spec:
             httpGet:
               path: '/health'
               port: 4242
-            failureThreshold: 30
+            failureThreshold: 5
             periodSeconds: 10
