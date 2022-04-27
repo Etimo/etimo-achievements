@@ -32,6 +32,8 @@ spec:
           env:
             - name: DATABASE_HOST
               value: '$(DB_UNLEASH_PRIVATE_HOST)'
+            - name: DATABASE_PORT
+              value: '$(DB_UNLEASH_PORT)'
             - name: DATABASE_NAME
               value: '$(DB_UNLEASH_NAME)'
             - name: DATABASE_USERNAME
@@ -39,7 +41,7 @@ spec:
             - name: DATABASE_PASSWORD
               value: '$(DB_UNLEASH_PASSWORD)'
             - name: DATABASE_SSL
-              value: 'false'
+              value: '{"rejectUnauthorized":false}'
           ports:
             - containerPort: 4242
               protocol: TCP
@@ -47,5 +49,5 @@ spec:
             httpGet:
               path: '/health'
               port: 4242
-            failureThreshold: 30
+            failureThreshold: 5
             periodSeconds: 10

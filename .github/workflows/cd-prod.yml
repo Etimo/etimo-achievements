@@ -16,12 +16,12 @@ defaults:
 env:
   DOMAIN: https://achievements-live.staging.etimo-test.live
   API_URL: https://achievements-live.staging.etimo-test.live/api
-  UNLEASH_URL: https://achievements-live.staging.etimo-test.live/unleash
   FRONTEND_URL: https://achievements-live.staging.etimo-test.live
   GOOGLE_REDIRECT_URI: https://achievements-live.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements-live.staging.etimo-test.live
   NODE_ENV: production
-  PGADMIN_URL: achievements-live-pgadmin.staging.etimo-test.live
+  PGADMIN_URL: achievements-pgadmin-live.staging.etimo-test.live
+  UNLEASH_URL: achievements-unleash-live.staging.etimo-test.live
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
