@@ -41,7 +41,7 @@ spec:
             - name: DATABASE_PASSWORD
               value: '$(DB_UNLEASH_PASSWORD)'
             - name: DATABASE_SSL
-              value: 'false'
+              value: 'true'
           ports:
             - containerPort: 4242
               protocol: TCP
