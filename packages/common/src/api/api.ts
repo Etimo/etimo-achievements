@@ -1,5 +1,4 @@
-import { PaginationInfo } from '@etimo-achievements/common';
-import { Logger } from '../logger';
+import { PaginationInfo } from '..';
 export type ApiResponse<T> = {
   success: boolean;
   body?: Promise<T>;
@@ -51,7 +50,7 @@ class Api {
       signal: controller.signal,
     });
 
-    Logger.log(`API call: ${method} ${this.getUrl(endpoint)}`);
+    console.debug(`API call: ${method} ${this.getUrl(endpoint)}`);
 
     return this.mapResult<T>(result, controller.abort);
   }

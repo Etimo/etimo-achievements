@@ -1,6 +1,6 @@
+import { FeatureApi } from '@etimo-achievements/common';
 import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { FeatureApi } from '../feature-api';
 import { disableFeature, enableFeature, featureSelector } from '../feature-slice';
 
 function useFeatureEnabled(feature: string) {

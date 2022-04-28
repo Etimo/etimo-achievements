@@ -1,5 +1,5 @@
-import { AccessTokenDto, TokenInfoDto, TokenValidationDto, UserInfoDto } from '@etimo-achievements/common';
-import Api from '../../common/utils/api';
+import { AccessTokenDto, TokenInfoDto, TokenValidationDto, UserInfoDto } from '..';
+import Api from './api';
 
 export class AuthApi {
   private api = new Api();

@@ -1,7 +1,6 @@
-import { AwardDto, PaginatedData, uniq } from '@etimo-achievements/common';
+import { AwardApi, AwardDto, PaginatedData, uniq } from '@etimo-achievements/common';
 import { AchievementService } from '../achievements/achievement-service';
 import { UserService } from '../users/user-service';
-import { AwardApi } from './award-api';
 import { AwardComposite } from './award-types';
 
 export class AwardService {

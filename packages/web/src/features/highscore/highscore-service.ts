@@ -1,6 +1,5 @@
-import { PaginatedData, uniq } from '@etimo-achievements/common';
+import { HighscoreApi, PaginatedData, uniq } from '@etimo-achievements/common';
 import { UserService } from '../users/user-service';
-import { HighscoreApi } from './highscore-api';
 import { HighscoreComposite } from './highscore-types';
 
 export class HighscoreService {

@@ -1,4 +1,4 @@
-import Api from '../../common/utils/api';
+import Api from './api';
 
 export class FeatureApi {
   private api = new Api();

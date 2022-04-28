@@ -1,5 +1,5 @@
-import { HighscoreDto } from '@etimo-achievements/common';
-import Api from '../../common/utils/api';
+import { HighscoreDto } from '..';
+import Api from './api';
 
 export class HighscoreApi {
   private api = new Api();
