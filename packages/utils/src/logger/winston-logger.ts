@@ -1,26 +1,19 @@
 import { ILogger, IRequestContext, LoggerOptions } from '@etimo-achievements/types';
 import winston from 'winston';
+import { ContextLogger } from './context-logger';
 
-export class WinstonLogger implements ILogger {
+export class WinstonLogger extends ContextLogger implements ILogger {
   private options: winston.LoggerOptions;
-  private meta: any = {};
   private instance: winston.Logger;
 
   constructor(private context: IRequestContext) {
+    super();
     this.options = {
       level: 'debug',
       format: winston.format.combine(winston.format.json()),
       transports: [new winston.transports.Console()],
     };
     this.instance = winston.createLogger(this.options);
-  }
-
-  public push(key: string, value: any) {
-    this.meta[key] = value;
-  }
-
-  public pop(key: string) {
-    delete this.meta[key];
   }
 
   public trace(message: string, options?: LoggerOptions) {

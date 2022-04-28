@@ -9,7 +9,7 @@ import {
 import { IContext } from '@etimo-achievements/service';
 import { IFeatureService, ILogger, INotifyService, JWT } from '@etimo-achievements/types';
 import { DevLogger, FeatureServiceFactory, NotifyServiceFactory } from '@etimo-achievements/utils';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 let count: number = 0;
 
@@ -32,7 +32,7 @@ export class Context implements IContext {
   public refreshTokenId?: string;
   public refreshTokenKey?: string;
 
-  constructor(req: Request, options?: ContextOptions) {
+  constructor(private req: Request, private res: Response, options?: ContextOptions) {
     this.logger = options?.logger ?? new DevLogger(this);
     this.notifier = options?.notifier ?? NotifyServiceFactory.create('slack', this);
     this.feature = options?.feature ?? FeatureServiceFactory.create('unleash', this);
@@ -55,8 +55,40 @@ export class Context implements IContext {
     return {
       requestId: this.requestId,
       userId: this.jwt?.sub,
+      email: this.jwt?.email,
       scopes: this.scopes,
+      request: {
+        headers: this.requestHeaders,
+        userAgent: this.req.get('user-agent'),
+        method: this.req.method,
+        httpVersion: this.req.httpVersion,
+        originalUrl: this.req.originalUrl,
+        query: this.req.query,
+        url: this.req.url,
+      },
+      response: {
+        elapsed: Date.now() - this.requestDate.getTime(),
+        headers: this.responseHeaders,
+        statusCode: this.res.statusCode,
+        statusMessage: this.res.statusMessage,
+      },
     };
+  }
+
+  // #security -- delete sensitive request headers here
+  public get requestHeaders() {
+    const headers = { ...this.req.headers };
+    delete headers['cookie'];
+    delete headers['authorization'];
+    delete headers['user-agent'];
+    return headers;
+  }
+
+  // #security -- delete sensitive response headers here
+  public get responseHeaders() {
+    const headers = { ...this.res.getHeaders() };
+    delete headers['set-cookie'];
+    return headers;
   }
 
   public setLogger(logger: ILogger) {
