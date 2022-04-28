@@ -10,7 +10,8 @@ export class GetUserService {
   }
 
   public async getMany(options: PaginationOptions): Promise<PaginatedData<IUser>> {
-    const users = await this.repos.user.getMany(options);
+    // const users = await this.repos.user.getMany(options);
+    const users = await this.repos.user.get([['names', 'asc']]);
     const count = await this.repos.user.count();
     return paginate(users, count, options);
   }

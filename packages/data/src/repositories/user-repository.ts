@@ -1,8 +1,14 @@
 import { camelToSnakeCase } from '@etimo-achievements/common';
 import { INewUser, IPartialUser, IRequestContext, IUser, PaginationOptions } from '@etimo-achievements/types';
+import { Model, ModelProps, ModelRelations } from 'objection';
 import { Database } from '..';
 import { UserModel } from '../models/user-model';
 import { catchErrors } from '../utils';
+
+type QueryOptions<T extends Model> = {
+  orderBy: [ModelProps<T>, 'asc' | 'desc'][];
+  include: ModelRelations<T>;
+};
 
 export class UserRepository {
   constructor(private context: IRequestContext) {}
@@ -13,6 +19,7 @@ export class UserRepository {
       return parseInt(result.rows[0]['count'], 10);
     });
   }
+
   getMany(options: PaginationOptions): Promise<IUser[]> {
     return catchErrors(async () => {
       const query = UserModel.query().limit(options.take).offset(options.skip);
@@ -21,6 +28,25 @@ export class UserRepository {
       }
       for (const [key, order] of options.orderBy) {
         query.orderBy(camelToSnakeCase(key), order);
+      }
+      return query;
+    });
+  }
+
+  get(options?: QueryOptions<UserModel>): Promise<UserModel[]> {
+    const { orderBy, include } = options || { orderBy: [], include: [] };
+
+    return catchErrors(async () => {
+      const query = UserModel.query();
+      if (orderBy?.length) {
+        for (const [sort, order] of orderBy) {
+          query.orderBy(sort.toString(), order);
+        }
+      }
+      if (include?.length) {
+        for (const inc of include) {
+          query.withGraphFetched(inc);
+        }
       }
       return query;
     });
