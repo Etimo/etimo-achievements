@@ -26,7 +26,7 @@ spec:
           image: niclaslindstedt/etimo-achievements-api:${COMMIT_SHA}
           resources:
             requests:
-              cpu: '100m'
+              cpu: '50m'
               memory: '64Mi'
             limits:
               cpu: '200m'
