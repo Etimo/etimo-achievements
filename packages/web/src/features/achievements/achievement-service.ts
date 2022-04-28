@@ -1,6 +1,5 @@
-import { AchievementDto } from '@etimo-achievements/common';
+import { AchievementApi, AchievementDto } from '@etimo-achievements/common';
 import { useAppDispatch } from '../../app/store';
-import { AchievementApi } from './achievement-api';
 import { addAchievement, deleteAchievement, updateAchievement, updateAchievements } from './achievement-slice';
 
 export class AchievementService {

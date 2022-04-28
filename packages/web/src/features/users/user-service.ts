@@ -1,6 +1,6 @@
 import { UserDto } from '@etimo-achievements/common';
 import { useAppDispatch, useAppSelector } from '../../app/store';
-import { UserApi } from './user-api';
+import { UserApi } from '@etimo-achievements/common/src/api/user-api';
 import { addUser, deleteUser, profileSelector, setUsers, updateUser, updateUsers, usersSelector } from './user-slice';
 
 export class UserService {

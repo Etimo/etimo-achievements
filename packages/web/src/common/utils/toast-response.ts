@@ -1,5 +1,5 @@
+import { ApiResponse } from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
-import { ApiResponse } from './api';
 
 export function toastResponse<T>(
   response: ApiResponse<T>,

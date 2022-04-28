@@ -1,5 +1,5 @@
-import { AchievementDto, uniq } from '@etimo-achievements/common';
-import Api from '../../common/utils/api';
+import { AchievementDto, uniq } from '..';
+import Api from './api';
 
 export class AchievementApi {
   private api = new Api();
