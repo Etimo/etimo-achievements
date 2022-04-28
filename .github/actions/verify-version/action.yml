@@ -60,8 +60,9 @@ runs:
             exit 0
           else
             echo "Remote version was NOT OK! ($remote_commit)"
-            exit 1
           fi
 
           sleep ${{ inputs.interval-seconds }}
         done
+
+        exit 1
