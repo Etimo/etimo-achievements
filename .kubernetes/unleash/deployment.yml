@@ -19,10 +19,10 @@ spec:
           image: unleashorg/unleash-server:latest
           resources:
             requests:
-              cpu: '100m'
+              cpu: '25m'
               memory: '64Mi'
             limits:
-              cpu: '200m'
+              cpu: '100m'
               memory: '256Mi'
           envFrom:
             - secretRef:
