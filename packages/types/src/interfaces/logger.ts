@@ -14,9 +14,12 @@ export enum LoggingColor {
   Red,
 }
 
-export interface ILogger {
+export interface IContextLogger {
   push(key: string, value: string): void;
   pop(key: string): void;
+}
+
+export interface ILogger extends IContextLogger {
   trace(message: string, options?: LoggerOptions): void;
   debug(message: string, options?: LoggerOptions): void;
   info(message: string, options?: LoggerOptions): void;

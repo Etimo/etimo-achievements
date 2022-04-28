@@ -1,21 +1,10 @@
 import { isProduction, isStaging } from '@etimo-achievements/common';
 import { ILogger, IRequestContext, LoggerOptions, LoggingColor } from '@etimo-achievements/types';
+import { ContextLogger } from './context-logger';
 
-type LogContext = {
-  [key: string]: any;
-};
-
-export class DevLogger implements ILogger {
-  private meta: LogContext = {};
-
-  constructor(private context: IRequestContext) {}
-
-  public push(key: string, value: any) {
-    this.meta[key] = value;
-  }
-
-  public pop(key: string) {
-    delete this.meta[key];
+export class DevLogger extends ContextLogger implements ILogger {
+  constructor(private context: IRequestContext) {
+    super();
   }
 
   public trace(message: string, options?: LoggerOptions) {
