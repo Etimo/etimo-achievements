@@ -29,7 +29,6 @@ env:
   GOOGLE_REDIRECT_URI: https://achievements-test.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements-test.staging.etimo-test.live
   NODE_ENV: staging
-  PGADMIN_URL: achievements-pgadmin-test.staging.etimo-test.live
   UNLEASH_URL: achievements-unleash-test.staging.etimo-test.live
   SLACK_CHANNEL_HIGH: C03BQBQ29PH
   SLACK_CHANNEL_MEDIUM: C03BQBQ29PH
@@ -37,8 +36,6 @@ env:
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
-  PGADMIN_DEFAULT_EMAIL: ${{ secrets.PGADMIN_DEFAULT_EMAIL }}
-  PGADMIN_DEFAULT_PASSWORD: ${{ secrets.PGADMIN_DEFAULT_PASSWORD }}
   GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
   GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
   JWT_EXPIRATION_SECONDS: ${{ secrets.JWT_EXPIRATION_SECONDS }}
