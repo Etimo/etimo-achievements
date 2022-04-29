@@ -1,5 +1,5 @@
 import { getEnvVariable } from '@etimo-achievements/common';
-import { Env, IAchievement, INewAward } from '@etimo-achievements/types';
+import { IAchievement, INewAward } from '@etimo-achievements/types';
 import { ChatPostMessageArguments, WebClient } from '@slack/web-api';
 import { GiveAwardService } from '..';
 import { IContext } from '../..';
@@ -8,7 +8,7 @@ export class AwardSlackAchievementsInteractService {
   private web: WebClient;
 
   constructor(private context: IContext) {
-    this.web = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
+    this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
   }
 
   public async handleInteract(payload: any) {

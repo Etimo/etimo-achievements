@@ -1,10 +1,9 @@
 import { getEnvVariable } from '@etimo-achievements/common';
-import { Env } from '@etimo-achievements/types';
 import CryptoJS from 'crypto-js';
 
 export function encrypt(data: any, key?: string): string {
   if (!key) {
-    key = getEnvVariable(Env.JWT_SECRET);
+    key = getEnvVariable('JWT_SECRET');
   }
 
   if (typeof data !== 'string') {
@@ -16,7 +15,7 @@ export function encrypt(data: any, key?: string): string {
 
 export function decrypt(encryptedData: string, key?: string): string {
   if (!key) {
-    key = getEnvVariable(Env.JWT_SECRET);
+    key = getEnvVariable('JWT_SECRET');
   }
 
   return CryptoJS.AES.decrypt(encryptedData, key!).toString(CryptoJS.enc.Utf8);

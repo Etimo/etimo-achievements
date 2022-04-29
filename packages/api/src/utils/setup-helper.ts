@@ -1,4 +1,4 @@
-import { isDevelopment, isLocal, isProduction } from '@etimo-achievements/common';
+import { getEnvVariable, isDevelopment, isLocal, isProduction } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
 import dotenv from 'dotenv';
 
@@ -10,10 +10,10 @@ export function setupEnvironment(environment?: string) {
   }
   dotenv.config({ path: `${__dirname}/../../${envFile}` });
 
-  console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
+  console.log(`NODE_ENV: ${getEnvVariable('NODE_ENV')}`);
 
   if (isLocal()) {
-    console.log(`API_KEY: ${process.env.API_KEY}`);
+    console.log(`API_KEY: ${getEnvVariable('API_KEY')}`);
     console.log('Local environment detected');
   }
   if (isDevelopment()) {

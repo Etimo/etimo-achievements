@@ -1,13 +1,15 @@
+import { getEnvVariable } from '@etimo-achievements/common';
+
 const connection = {
-  host: process.env.DB_MAIN_PRIVATE_HOST ?? '127.0.0.1',
-  port: process.env.DB_MAIN_PORT ?? 5432,
-  user: process.env.DB_MAIN_USER ?? 'root',
-  password: process.env.DB_MAIN_PASSWORD ?? 'root',
-  database: process.env.DB_MAIN_NAME ?? 'achievements_ci',
-  ssl: process.env.NODE_ENV !== 'development' ? { rejectUnauthorized: false } : false,
+  host: getEnvVariable('DB_MAIN_PRIVATE_HOST', '127.0.0.1'),
+  port: getEnvVariable('DB_MAIN_PORT', '5432'),
+  user: getEnvVariable('DB_MAIN_USER', 'root'),
+  password: getEnvVariable('DB_MAIN_PASSWORD', 'root'),
+  database: getEnvVariable('DB_MAIN_NAME', 'achievements_ci'),
+  ssl: getEnvVariable('NODE_ENV') !== 'development' ? { rejectUnauthorized: false } : false,
 };
 
-if (process.env.DEBUG === 'true') {
+if (getEnvVariable('DEBUG', 'false') === 'true') {
   console.log(connection);
 }
 
@@ -18,7 +20,7 @@ const fixedLocalhost = {
     port: 5432,
     user: 'root',
     password: 'root',
-    database: process.env.DB_MAIN_NAME ?? 'achievements',
+    database: getEnvVariable('DB_MAIN_NAME', 'achievements'),
     ssl: false,
   },
   migrations: {

@@ -1,11 +1,11 @@
 import { getEnvVariable, uuid } from '@etimo-achievements/common';
-import { Env, IUser, JWT } from '@etimo-achievements/types';
+import { IUser, JWT } from '@etimo-achievements/types';
 import jwt from 'jsonwebtoken';
 import { decrypt, encrypt } from '..';
 
 export class JwtService {
   public static create(user: IUser, scopes: string[]): JWT {
-    const expirationSeconds = +getEnvVariable(Env.JWT_EXPIRATION_SECONDS);
+    const expirationSeconds = +getEnvVariable('JWT_EXPIRATION_SECONDS');
     const token: JWT = {
       jti: uuid(),
       sub: user.id,
@@ -30,11 +30,11 @@ export class JwtService {
   }
 
   public static sign(payload: any): string {
-    return jwt.sign(payload, getEnvVariable(Env.JWT_SECRET));
+    return jwt.sign(payload, getEnvVariable('JWT_SECRET'));
   }
 
   public static verify(token: string): JWT {
-    const payload = jwt.verify(token, getEnvVariable(Env.JWT_SECRET));
+    const payload = jwt.verify(token, getEnvVariable('JWT_SECRET'));
     return payload as JWT;
   }
 }

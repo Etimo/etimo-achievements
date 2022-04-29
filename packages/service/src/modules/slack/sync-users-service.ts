@@ -1,5 +1,4 @@
 import { getEnvVariable } from '@etimo-achievements/common';
-import { Env } from '@etimo-achievements/types';
 import { WebClient } from '@slack/web-api';
 import { Member } from '@slack/web-api/dist/response/UsersListResponse';
 import { IContext } from '../..';
@@ -8,13 +7,13 @@ export class SyncSlackUsersService {
   private web: WebClient;
 
   constructor(private context: IContext) {
-    this.web = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
+    this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
   }
 
   public async syncUsers() {
     const { repositories, logger } = this.context;
 
-    const slackUsers = (await this.web.users.list({ team_id: process.env.SLACK_TEAM_ID })).members as Member[];
+    const slackUsers = (await this.web.users.list({ team_id: getEnvVariable('SLACK_TEAM_ID') })).members as Member[];
     const etimoUsers = slackUsers.filter((user) => user.profile?.email?.endsWith('@etimo.se'));
 
     for (const user of etimoUsers) {

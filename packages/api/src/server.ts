@@ -1,6 +1,5 @@
 import { getEnvVariable } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
-import { Env } from '@etimo-achievements/types';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, static as serveStatic } from 'express';
@@ -34,7 +33,7 @@ export default class AchievementsServer {
 
   constructor(port?: number) {
     this.port = port ?? 3000;
-    this.root = process.env.API_ROOT ?? '/';
+    this.root = getEnvVariable('API_ROOT', '/');
     this.express = express();
   }
 
@@ -80,7 +79,7 @@ export default class AchievementsServer {
     // CORS
     this.express.use(
       cors({
-        origin: getEnvVariable(Env.FRONTEND_URL),
+        origin: getEnvVariable('FRONTEND_URL'),
         exposedHeaders: ['Content-Range', 'Link'],
         optionsSuccessStatus: 200,
         credentials: true,
@@ -92,7 +91,7 @@ export default class AchievementsServer {
     this.express.use(setContextMiddleware());
 
     // Security
-    this.express.use(cookieParser(getEnvVariable(Env.COOKIE_SECRET)));
+    this.express.use(cookieParser(getEnvVariable('COOKIE_SECRET')));
 
     // Authentication
     this.express.use(authMiddleware());

@@ -2,7 +2,7 @@ export * from './access-token';
 export * from './achievement';
 export * from './award';
 export * from './context';
-export * from './enums';
+export * from './env-variable';
 export * from './highscore';
 export * from './interfaces';
 export * from './jwt';
