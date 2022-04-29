@@ -1,5 +1,5 @@
 import { getEnvVariable, isProduction } from '@etimo-achievements/common';
-import { Env, IFeatureService, IRequestContext } from '@etimo-achievements/types';
+import { IFeatureService, IRequestContext } from '@etimo-achievements/types';
 import { initialize, Unleash } from 'unleash-client';
 
 export class UnleashFeatureService implements IFeatureService {
@@ -20,10 +20,10 @@ export class UnleashFeatureService implements IFeatureService {
   private getUnleash(): Unleash {
     if (!UnleashFeatureService.unleash) {
       const settings = {
-        url: getEnvVariable(Env.UNLEASH_URL),
+        url: getEnvVariable('UNLEASH_URL'),
         appName: 'default',
         environment: isProduction() ? 'production' : 'development',
-        customHeaders: { Authorization: getEnvVariable(Env.UNLEASH_TOKEN) },
+        customHeaders: { Authorization: getEnvVariable('UNLEASH_TOKEN') },
       };
 
       UnleashFeatureService.unleash = initialize(settings);

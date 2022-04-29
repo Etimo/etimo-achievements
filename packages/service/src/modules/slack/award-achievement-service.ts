@@ -1,5 +1,5 @@
 import { getEnvVariable } from '@etimo-achievements/common';
-import { Env, IAchievement } from '@etimo-achievements/types';
+import { IAchievement } from '@etimo-achievements/types';
 import { PlainTextOption, View, WebClient } from '@slack/web-api';
 import { IContext } from '../..';
 
@@ -7,7 +7,7 @@ export class AwardSlackAchievementsService {
   private web: WebClient;
 
   constructor(private context: IContext) {
-    this.web = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
+    this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
   }
 
   public async showModal(triggerId: string, channelId: string) {

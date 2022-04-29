@@ -1,5 +1,5 @@
 import { getEnvVariable } from '@etimo-achievements/common';
-import { Env, INotifyService, IRequestContext, NotifyPriority } from '@etimo-achievements/types';
+import { INotifyService, IRequestContext, NotifyPriority } from '@etimo-achievements/types';
 import { WebClient } from '@slack/web-api';
 
 export class SlackNotifyService implements INotifyService {
@@ -9,10 +9,10 @@ export class SlackNotifyService implements INotifyService {
   private readonly channelLow: string;
 
   constructor(_context: IRequestContext) {
-    this.client = new WebClient(getEnvVariable(Env.SLACK_TOKEN));
-    this.channelHigh = getEnvVariable(Env.SLACK_CHANNEL_HIGH);
-    this.channelMedium = getEnvVariable(Env.SLACK_CHANNEL_MEDIUM);
-    this.channelLow = getEnvVariable(Env.SLACK_CHANNEL_LOW);
+    this.client = new WebClient(getEnvVariable('SLACK_TOKEN'));
+    this.channelHigh = getEnvVariable('SLACK_CHANNEL_HIGH');
+    this.channelMedium = getEnvVariable('SLACK_CHANNEL_MEDIUM');
+    this.channelLow = getEnvVariable('SLACK_CHANNEL_LOW');
   }
 
   public notify(message: string, prio?: NotifyPriority) {

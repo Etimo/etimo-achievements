@@ -7,7 +7,6 @@ import {
 } from '@etimo-achievements/common';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
-import { Env } from '@etimo-achievements/types';
 import { Request, Response, Router } from 'express';
 import { endpoint, getContext, okResponse, protectedEndpoint, redirectResponse } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';
@@ -202,7 +201,7 @@ export class AuthController {
       await service.logout(jwt, refreshTokenId);
     }
 
-    const domain = new URL(getEnvVariable(Env.FRONTEND_URL)).hostname;
+    const domain = new URL(getEnvVariable('FRONTEND_URL')).hostname;
     const deleteCookie = (name: string) => {
       res.cookie(name, 'deleted', {
         domain,
@@ -269,7 +268,7 @@ export class AuthController {
   };
 
   private setCookies(res: Response, dto: AccessTokenDto, loginResponse: LoginResponse) {
-    const domain = new URL(getEnvVariable(Env.FRONTEND_URL)).hostname;
+    const domain = new URL(getEnvVariable('FRONTEND_URL')).hostname;
 
     const setCookie = (name: string, expiresAt: Date, data: any) => {
       res.cookie(name, data, {

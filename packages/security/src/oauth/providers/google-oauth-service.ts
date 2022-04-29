@@ -1,3 +1,4 @@
+import { getEnvVariable } from '@etimo-achievements/common';
 import { OAuth2Client } from 'google-auth-library';
 import fetch from 'node-fetch';
 import { IOAuthService, UserInfo } from '..';
@@ -6,9 +7,9 @@ export class GoogleOAuthService implements IOAuthService {
   private readonly oauth2Client: OAuth2Client;
 
   constructor() {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const redirectUri = process.env.GOOGLE_REDIRECT_URI;
+    const clientId = getEnvVariable('GOOGLE_CLIENT_ID');
+    const clientSecret = getEnvVariable('GOOGLE_CLIENT_SECRET');
+    const redirectUri = getEnvVariable('GOOGLE_REDIRECT_URI');
     this.oauth2Client = new OAuth2Client(clientId, clientSecret, redirectUri);
   }
 

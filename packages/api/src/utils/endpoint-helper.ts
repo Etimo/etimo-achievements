@@ -1,10 +1,10 @@
-import { ForbiddenError, UnauthorizedError } from '@etimo-achievements/common';
+import { ForbiddenError, getEnvVariable, UnauthorizedError } from '@etimo-achievements/common';
 import { NextFunction, Request, Response } from 'express';
 import { getContext } from '.';
 
 export function apiKeyEndpoint(endpointFn: (req: Request, res: Response) => Promise<any>) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const apiKey = process.env.API_KEY;
+    const apiKey = getEnvVariable('API_KEY');
 
     if (req.query['apiKey'] !== apiKey) {
       throw new UnauthorizedError('Invalid API key');

@@ -1,3 +1,4 @@
+import { EnvVariable } from '@etimo-achievements/types';
 import { ConfigurationError } from '.';
 
 export enum Environment {
@@ -42,10 +43,14 @@ export function isProduction(): boolean {
   return getEnvironment() === Environment.Production;
 }
 
-export function getEnvVariable(name: string): string {
+export function getEnvVariable(name: EnvVariable, defaultValue?: string): string {
   const value = process.env[name];
   if (!value) {
-    console.log(process.env);
+    if (defaultValue) {
+      console.debug(`Requested non-existant env variable ${name}, using default value: ${defaultValue}`);
+      return defaultValue;
+    }
+
     throw new ConfigurationError(`Environment variable ${name} is not defined`);
   }
   return value;
