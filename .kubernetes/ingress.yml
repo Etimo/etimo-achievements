@@ -25,10 +25,3 @@ spec:
                 name: api-service
                 port:
                   number: 80
-          - pathType: Prefix
-            path: '/unleash/'
-            backend:
-              service:
-                name: unleash-service
-                port:
-                  number: 80
