@@ -1,4 +1,4 @@
-import { getEnvVariable } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import supertest, { Test } from 'supertest';
 
 const hook = (app: any, method = 'post') => {

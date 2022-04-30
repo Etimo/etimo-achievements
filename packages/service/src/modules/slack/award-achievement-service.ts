@@ -1,5 +1,5 @@
-import { getEnvVariable } from '@etimo-achievements/common';
 import { IAchievement } from '@etimo-achievements/types';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { PlainTextOption, View, WebClient } from '@slack/web-api';
 import { IContext } from '../..';
 

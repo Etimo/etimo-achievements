@@ -1,4 +1,4 @@
-import { getEnvVariable, PaginationInfo } from '..';
+import { PaginationInfo } from '..';
 export type ApiResponse<T> = {
   success: boolean;
   body?: Promise<T>;
@@ -19,7 +19,7 @@ class Api {
   private baseUrl: string;
 
   constructor(baseUrl?: string) {
-    this.baseUrl = baseUrl ?? getEnvVariable('API_URL', 'http://localhost:3000');
+    this.baseUrl = baseUrl ?? process?.env?.API_URL ?? 'http://localhost:3000';
   }
 
   public get<T>(endpoint: string): ApiResult<T> {

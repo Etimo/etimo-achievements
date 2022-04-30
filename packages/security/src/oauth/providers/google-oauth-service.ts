@@ -1,4 +1,4 @@
-import { getEnvVariable } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { OAuth2Client } from 'google-auth-library';
 import fetch from 'node-fetch';
 import { IOAuthService, UserInfo } from '..';

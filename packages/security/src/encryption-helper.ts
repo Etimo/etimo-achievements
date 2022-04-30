@@ -1,4 +1,4 @@
-import { getEnvVariable } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import CryptoJS from 'crypto-js';
 
 export function encrypt(data: any, key?: string): string {

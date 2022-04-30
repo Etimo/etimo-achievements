@@ -1,6 +1,7 @@
-import { getEnvVariable, isProduction } from '@etimo-achievements/common';
+import { isProduction } from '@etimo-achievements/common';
 import { IFeatureService, IRequestContext } from '@etimo-achievements/types';
 import { initialize, Unleash } from 'unleash-client';
+import { getEnvVariable } from '..';
 
 export class UnleashFeatureService implements IFeatureService {
   private static unleash?: Unleash;

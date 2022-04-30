@@ -1,4 +1,4 @@
-import { getEnvVariable } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import fetch from 'node-fetch';
 
 export const openSlackView = async (view: any) => {

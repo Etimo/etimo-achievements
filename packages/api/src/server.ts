@@ -1,5 +1,5 @@
-import { getEnvVariable } from '@etimo-achievements/common';
 import { Database } from '@etimo-achievements/data';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { Application, static as serveStatic } from 'express';
