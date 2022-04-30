@@ -1,5 +1,5 @@
-import { formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useCallback, useState } from 'react';
+import { deleteAward, formatNumber, uuid } from '@etimo-achievements/common';
+import React, { useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
@@ -8,9 +8,9 @@ import { TrashButton } from '../../components/buttons';
 import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
-import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
-import { AwardService } from './award-service';
+import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { AwardComposite } from './award-types';
+import { getManyAwards } from './award-utils';
 
 const AwardList: React.FC = () => {
   const query = useQuery();
@@ -20,20 +20,43 @@ const AwardList: React.FC = () => {
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
-  const awardService = new AwardService();
 
   const getDeleteId = () => query.get('delete') ?? '';
 
-  const trashHandler = (awardId: string) => {
+  const fetchData = async (input: PaginationRequestInput) => {
+    setLoading(true);
+    const response = await getManyAwards(input);
+    if (response) {
+      const { data, pagination } = response;
+      setData(mapToData(data));
+      setPageCount(pagination.totalPages ?? 0);
+    }
+    setLoading(false);
+  };
+
+  const mapToData = (composites: AwardComposite[]): any[] => {
+    return composites.map((c) => ({
+      id: c.award.id,
+      name: c.achievement.name,
+      awardedTo: c.awardedTo.name,
+      points: `${formatNumber(c.achievement.achievementPoints)} pts`,
+      date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
+      awardedBy: c.awardedBy.name,
+      delete: (
+        <TrashButton id={c.award.id} link={addQueryParam(window.location, 'delete', c.award.id)} loading={deleting} />
+      ),
+    }));
+  };
+
+  const trashHandler = async (awardId: string) => {
     setDeleting(awardId);
-    awardService.delete(awardId).then((response) => {
-      if (response.success) {
-        setMonitor(uuid());
-      }
-      setDeleting(undefined);
-      removeQueryParam('delete');
-      toastResponse(response, 'Award deleted successfully', 'Award could not be deleted');
-    });
+    const response = await deleteAward(awardId).wait();
+    if (response.success) {
+      setMonitor(uuid());
+    }
+    setDeleting(undefined);
+    removeQueryParam('delete');
+    toastResponse(response, 'Award deleted successfully', 'Award could not be deleted');
   };
 
   const columns = React.useMemo(
@@ -78,20 +101,6 @@ const AwardList: React.FC = () => {
     []
   );
 
-  const mapToData = (composites: AwardComposite[]): any[] => {
-    return composites.map((c) => ({
-      id: c.award.id,
-      name: c.achievement.name,
-      awardedTo: c.awardedTo.name,
-      points: `${formatNumber(c.achievement.achievementPoints)} pts`,
-      date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
-      awardedBy: c.awardedBy.name,
-      delete: (
-        <TrashButton id={c.award.id} link={addQueryParam(window.location, 'delete', c.award.id)} loading={deleting} />
-      ),
-    }));
-  };
-
   return (
     <div className="w-3/4 mx-auto">
       <Header>Awards</Header>
@@ -101,21 +110,7 @@ const AwardList: React.FC = () => {
         pageCount={pageCount}
         loading={loading}
         monitor={monitor}
-        fetchData={useCallback(
-          (input: { size: number; page: number; sort: string; order: string }) => {
-            const { size, page, sort, order } = input;
-            setLoading(true);
-            awardService.load((page - 1) * size, size, sort, order).then((response) => {
-              if (response) {
-                const { data, pagination } = response;
-                setData(mapToData(data));
-                setPageCount(pagination.totalPages ?? 0);
-              }
-              setLoading(false);
-            });
-          },
-          [monitor]
-        )}
+        fetchData={fetchData}
       />
       {getDeleteId() && (
         <RequirePermission remove="awards">

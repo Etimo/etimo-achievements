@@ -7,7 +7,7 @@ export const getAchievement = (id: string) => {
   return api.get<AchievementDto>(`/achievements/${id}`);
 };
 
-export const getManyAchievements = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
+export const getAchievements = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
   let url = `/achievements?skip=${skip}&take=${take}`;
   if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
   return api.get<AchievementDto[]>(url);

@@ -1,36 +1,25 @@
-import { AchievementDto, AwardDto, getManyAchievements, sort } from '@etimo-achievements/common';
+import { AchievementDto, AwardDto, sort, UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
-import { UserService } from '../users/user-service';
-import { usersSelector } from '../users/user-slice';
-import { AwardService } from './award-service';
+import { getAllAchievements } from '../achievements/achievement-utils';
+import { getAllUsers } from '../users/user-utils';
+import { giveAward } from './award-utils';
 
 const AwardGive: React.FC = () => {
   const { handleSubmit } = useForm<AwardDto>();
   const [loading, setLoading] = useState(false);
-  const { users } = useAppSelector(usersSelector);
   const [userId, setUserId] = useState<string>();
-  const [achievements, setAchievements] = useState<AchievementDto[]>([]);
+  const [users, setUsers] = useState<UserDto[]>();
+  const [achievements, setAchievements] = useState<AchievementDto[]>();
   const [achievementId, setAchievementId] = useState<string>();
-  const awardService = new AwardService();
-  const userService = new UserService();
 
   useEffect(() => {
-    getManyAchievements()
-      .wait()
-      .then((response) => {
-        if (response.success) {
-          response.data().then((data) => {
-            setAchievements(data);
-          });
-        }
-      });
-    userService.load();
+    getAllAchievements().then(setAchievements);
+    getAllUsers().then(setUsers);
   }, []);
 
   const resetForm = () => {
@@ -38,16 +27,15 @@ const AwardGive: React.FC = () => {
     setAchievementId('');
   };
 
-  const onSubmit: SubmitHandler<AwardDto> = () => {
+  const onSubmit: SubmitHandler<AwardDto> = async () => {
     setLoading(true);
     if (!userId || !achievementId) {
       setLoading(false);
       return toast.error('Please select an achievement and a user');
     }
-    awardService.create(userId, achievementId).then((response) => {
-      setLoading(false);
-      toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
-    });
+    const response = await giveAward(userId, achievementId);
+    setLoading(false);
+    toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
   };
 
   return (
@@ -57,14 +45,14 @@ const AwardGive: React.FC = () => {
         <FormSelect
           label="Achievement"
           text="Select an achievement"
-          options={sort(achievements, 'name').map((a) => ({ value: a.id, label: a.name }))}
+          options={sort(achievements ?? [], 'name').map((a) => ({ value: a.id, label: a.name }))}
           bindValue={achievementId}
           onChange={setAchievementId}
         />
         <FormSelect
           label="User"
           text="Select a user"
-          options={sort(users, 'name').map((a) => ({ value: a.id, label: a.name }))}
+          options={sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name }))}
           bindValue={userId}
           onChange={setUserId}
         />

@@ -1,10 +1,9 @@
-import { UserDto } from '@etimo-achievements/common';
+import { createUser, UserDto } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
-import { UserService } from './user-service';
 
 const UserCreate: React.FC = () => {
   const {
@@ -14,14 +13,12 @@ const UserCreate: React.FC = () => {
     formState: { errors },
   } = useForm<UserDto>();
   const [loading, setLoading] = useState(false);
-  const userService = new UserService();
 
-  const onSubmit: SubmitHandler<UserDto> = (user) => {
+  const onSubmit: SubmitHandler<UserDto> = async (user) => {
     setLoading(true);
-    userService.create(user).then((response) => {
-      setLoading(false);
-      toastResponse(response, 'User created successfully', 'User could not be created', () => reset());
-    });
+    const response = await createUser(user).wait();
+    toastResponse(response, 'User created successfully', 'User could not be created', () => reset());
+    setLoading(false);
   };
 
   return (

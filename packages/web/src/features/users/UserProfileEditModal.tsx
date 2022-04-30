@@ -1,12 +1,10 @@
-import { UserDto } from '@etimo-achievements/common';
-import React, { useState } from 'react';
+import { updateProfile, UserDto } from '@etimo-achievements/common';
+import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { UserService } from './user-service';
-import { profileSelector } from './user-slice';
+import { getMyUser } from './user-utils';
 
 type Props = {
   onClose: () => void;
@@ -21,19 +19,21 @@ const UserProfileEdit: React.FC<Props> = ({ onClose, onSubmit }) => {
     formState: { errors },
   } = useForm<UserDto>();
   const [loading, setLoading] = useState(false);
-  const profile = useAppSelector(profileSelector);
-  const userService = new UserService();
+  const [profile, setProfile] = useState<UserDto>();
 
-  const onSubmitForm: SubmitHandler<UserDto> = (profile) => {
+  useEffect(() => {
+    getMyUser().then(setProfile);
+  }, []);
+
+  const onSubmitForm: SubmitHandler<UserDto> = async (profile) => {
     setLoading(true);
-    userService.updateProfile(profile).then((response) => {
-      setLoading(false);
-      toastResponse(response, 'Profile edited successfully', 'Profile could not be updated', () => {
-        reset();
-        onSubmit();
-        onClose();
-      });
+    const response = await updateProfile(profile).wait();
+    toastResponse(response, 'Profile edited successfully', 'Profile could not be updated', () => {
+      reset();
+      onSubmit();
+      onClose();
     });
+    setLoading(false);
   };
 
   return profile ? (

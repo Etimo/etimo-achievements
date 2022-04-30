@@ -1,10 +1,8 @@
-import { HighscoreApi, PaginatedData, uniq } from '@etimo-achievements/common';
-import { UserService } from '../users/user-service';
+import { HighscoreApi, listUsers, PaginatedData, uniq } from '@etimo-achievements/common';
 import { HighscoreComposite } from './highscore-types';
 
 export class HighscoreService {
   private api = new HighscoreApi();
-  private userService = new UserService();
 
   public async load(
     skip: number,
@@ -17,7 +15,7 @@ export class HighscoreService {
       const highscores = await response.data();
 
       const userIds = uniq(highscores.map((a) => a.userId));
-      const users = await this.userService.list(userIds);
+      const users = await (await listUsers(userIds).wait()).data();
 
       const composites: HighscoreComposite[] = [];
       for (const highscore of highscores) {

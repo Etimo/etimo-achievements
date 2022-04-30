@@ -9,9 +9,9 @@ import { EditButton, TrashButton } from '../../components/buttons';
 import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
-import PaginatedTable, { Column, FetchPaginatedDataInput } from '../../components/table/PaginatedTable';
+import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { achievementSelector } from './achievement-slice';
-import { getPaginatedAchievements } from './achievement-utils';
+import { getManyAchievements } from './achievement-utils';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
@@ -27,20 +27,9 @@ const AchievementList: React.FC = () => {
   const getEditId = () => query.get('edit') ?? '';
   const getDeleteId = () => query.get('delete') ?? '';
 
-  const trashHandler = async (achievementId: string) => {
-    setDeleting(achievementId);
-    const response = await deleteAchievement(achievementId).wait();
-    if (response.success) {
-      setMonitor(uuid());
-    }
-    setDeleting(undefined);
-    removeQueryParam('delete');
-    toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
-  };
-
-  const fetchData = async (input: FetchPaginatedDataInput) => {
+  const fetchData = async (input: PaginationRequestInput) => {
     setLoading(true);
-    const response = await getPaginatedAchievements(input);
+    const response = await getManyAchievements(input);
     if (response) {
       const { data, pagination } = response;
       setData(mapToData(data));
@@ -60,6 +49,17 @@ const AchievementList: React.FC = () => {
       edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
       delete: <TrashButton id={a.id} link={addQueryParam(window.location, 'delete', a.id)} loading={deleting} />,
     }));
+  };
+
+  const trashHandler = async (achievementId: string) => {
+    setDeleting(achievementId);
+    const response = await deleteAchievement(achievementId).wait();
+    if (response.success) {
+      setMonitor(uuid());
+    }
+    setDeleting(undefined);
+    removeQueryParam('delete');
+    toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
   };
 
   const columns = React.useMemo(

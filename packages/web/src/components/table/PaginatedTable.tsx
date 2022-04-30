@@ -26,7 +26,7 @@ export type Column = {
   hasAccess?: [Action, Resource];
 };
 
-export type FetchPaginatedDataInput = {
+export type PaginationRequestInput = {
   size: number;
   page: number;
   sort?: string;
