@@ -1740,6 +1740,7 @@ __metadata:
   dependencies:
     "@etimo-achievements/common": ^1.0.0
     "@etimo-achievements/types": ^1.0.0
+    "@etimo-achievements/utils": ^1.0.0
     "@types/bcrypt": ^5.0.0
     "@types/crypto-js": ^4.1.1
     "@types/jest": ^27.0.2
