@@ -26,6 +26,13 @@ export type Column = {
   hasAccess?: [Action, Resource];
 };
 
+export type FetchPaginatedDataInput = {
+  size: number;
+  page: number;
+  sort?: string;
+  order?: string;
+};
+
 type Props = {
   columns: Column[];
   data: any[];

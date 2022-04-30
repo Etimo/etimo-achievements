@@ -1,11 +1,9 @@
-import { AwardApi, AwardDto, PaginatedData, uniq } from '@etimo-achievements/common';
-import { AchievementService } from '../achievements/achievement-service';
+import { AwardApi, AwardDto, listAchievements, PaginatedData, uniq } from '@etimo-achievements/common';
 import { UserService } from '../users/user-service';
 import { AwardComposite } from './award-types';
 
 export class AwardService {
   private api = new AwardApi();
-  private achievementService = new AchievementService();
   private userService = new UserService();
 
   public async load(
@@ -19,7 +17,9 @@ export class AwardService {
       const awards = await response.data();
 
       const achievementIds = uniq(awards.map((a) => a.achievementId));
-      const achievementPromise = this.achievementService.list(achievementIds);
+      const achievementPromise = listAchievements(achievementIds)
+        .wait()
+        .then((response) => response.data());
 
       const userIds = uniq([...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)]);
       const usersPromise = this.userService.list(userIds);

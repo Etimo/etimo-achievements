@@ -1,5 +1,5 @@
-import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useCallback, useState } from 'react';
+import { AchievementDto, deleteAchievement, formatNumber, uuid } from '@etimo-achievements/common';
+import React, { useState } from 'react';
 import { useAppSelector } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
@@ -9,9 +9,9 @@ import { EditButton, TrashButton } from '../../components/buttons';
 import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
-import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
-import { AchievementService } from './achievement-service';
+import PaginatedTable, { Column, FetchPaginatedDataInput } from '../../components/table/PaginatedTable';
 import { achievementSelector } from './achievement-slice';
+import { getPaginatedAchievements } from './achievement-utils';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
@@ -23,21 +23,43 @@ const AchievementList: React.FC = () => {
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
-  const achievementService = new AchievementService();
 
   const getEditId = () => query.get('edit') ?? '';
   const getDeleteId = () => query.get('delete') ?? '';
 
-  const trashHandler = (achievementId: string) => {
+  const trashHandler = async (achievementId: string) => {
     setDeleting(achievementId);
-    achievementService.delete(achievementId).then((response) => {
-      if (response.success) {
-        setMonitor(uuid());
-      }
-      setDeleting(undefined);
-      removeQueryParam('delete');
-      toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
-    });
+    const response = await deleteAchievement(achievementId).wait();
+    if (response.success) {
+      setMonitor(uuid());
+    }
+    setDeleting(undefined);
+    removeQueryParam('delete');
+    toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
+  };
+
+  const fetchData = async (input: FetchPaginatedDataInput) => {
+    setLoading(true);
+    const response = await getPaginatedAchievements(input);
+    if (response) {
+      const { data, pagination } = response;
+      setData(mapToData(data));
+      setPageCount(pagination.totalPages ?? 0);
+    }
+    setLoading(false);
+  };
+
+  const mapToData = (achievements: AchievementDto[]): any[] => {
+    return achievements.map((a) => ({
+      id: a.id,
+      name: a.name,
+      description: a.description,
+      points: `${formatNumber(a.achievementPoints)} pts`,
+      cooldown: `${formatNumber(a.cooldownMinutes)} min`,
+      repeatable: 'Unsupported',
+      edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
+      delete: <TrashButton id={a.id} link={addQueryParam(window.location, 'delete', a.id)} loading={deleting} />,
+    }));
   };
 
   const columns = React.useMemo(
@@ -91,40 +113,13 @@ const AchievementList: React.FC = () => {
     []
   );
 
-  const mapToData = (achievements: AchievementDto[]): any[] => {
-    return achievements.map((a) => ({
-      id: a.id,
-      name: a.name,
-      description: a.description,
-      points: `${formatNumber(a.achievementPoints)} pts`,
-      cooldown: `${formatNumber(a.cooldownMinutes)} min`,
-      repeatable: 'Unsupported',
-      edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
-      delete: <TrashButton id={a.id} link={addQueryParam(window.location, 'delete', a.id)} loading={deleting} />,
-    }));
-  };
-
   return (
     <div className="w-3/4 mx-auto">
       <Header>Achievements</Header>
       <PaginatedTable
         columns={columns}
         data={data}
-        fetchData={useCallback(
-          (input: { size: number; page: number; sort: string; order: string }) => {
-            const { size, page, sort, order } = input;
-            setLoading(true);
-            achievementService.getMany((page - 1) * size, size, sort, order).then((response) => {
-              if (response) {
-                const { data, pagination } = response;
-                setData(mapToData(data));
-                setPageCount(pagination.totalPages ?? 0);
-              }
-              setLoading(false);
-            });
-          },
-          [monitor]
-        )}
+        fetchData={fetchData}
         loading={loading}
         pageCount={pageCount}
         monitor={monitor}

@@ -1,4 +1,4 @@
-import { AwardDto, sort } from '@etimo-achievements/common';
+import { AchievementDto, AwardDto, getManyAchievements, sort } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -6,8 +6,6 @@ import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
-import { AchievementService } from '../achievements/achievement-service';
-import { achievementSelector } from '../achievements/achievement-slice';
 import { UserService } from '../users/user-service';
 import { usersSelector } from '../users/user-slice';
 import { AwardService } from './award-service';
@@ -15,16 +13,23 @@ import { AwardService } from './award-service';
 const AwardGive: React.FC = () => {
   const { handleSubmit } = useForm<AwardDto>();
   const [loading, setLoading] = useState(false);
-  const { achievements } = useAppSelector(achievementSelector);
   const { users } = useAppSelector(usersSelector);
   const [userId, setUserId] = useState<string>();
+  const [achievements, setAchievements] = useState<AchievementDto[]>([]);
   const [achievementId, setAchievementId] = useState<string>();
   const awardService = new AwardService();
   const userService = new UserService();
-  const achievementService = new AchievementService();
 
   useEffect(() => {
-    achievementService.load();
+    getManyAchievements()
+      .wait()
+      .then((response) => {
+        if (response.success) {
+          response.data().then((data) => {
+            setAchievements(data);
+          });
+        }
+      });
     userService.load();
   }, []);
 
