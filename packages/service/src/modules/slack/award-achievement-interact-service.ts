@@ -1,5 +1,5 @@
-import { getEnvVariable } from '@etimo-achievements/common';
 import { IAchievement, INewAward } from '@etimo-achievements/types';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { ChatPostMessageArguments, WebClient } from '@slack/web-api';
 import { GiveAwardService } from '..';
 import { IContext } from '../..';

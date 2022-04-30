@@ -1,4 +1,5 @@
-import { ForbiddenError, getEnvVariable, UnauthorizedError } from '@etimo-achievements/common';
+import { ForbiddenError, UnauthorizedError } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { NextFunction, Request, Response } from 'express';
 import { getContext } from '.';
 

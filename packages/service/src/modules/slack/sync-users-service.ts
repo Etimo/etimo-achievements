@@ -1,4 +1,4 @@
-import { getEnvVariable } from '@etimo-achievements/common';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { WebClient } from '@slack/web-api';
 import { Member } from '@slack/web-api/dist/response/UsersListResponse';
 import { IContext } from '../..';

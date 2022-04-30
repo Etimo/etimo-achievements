@@ -16,6 +16,7 @@
     "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
+    "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "@slack/web-api": "^6.7.1",
     "unleash-client": "^3.13.3",

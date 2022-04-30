@@ -1,5 +1,6 @@
-import { getEnvVariable, uuid } from '@etimo-achievements/common';
+import { uuid } from '@etimo-achievements/common';
 import { IUser, JWT } from '@etimo-achievements/types';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import jwt from 'jsonwebtoken';
 import { decrypt, encrypt } from '..';
 

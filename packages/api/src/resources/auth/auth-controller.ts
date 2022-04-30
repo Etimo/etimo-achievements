@@ -1,12 +1,7 @@
-import {
-  AccessTokenDto,
-  getEnvVariable,
-  TokenValidationDto,
-  UnauthorizedError,
-  UserInfoDto,
-} from '@etimo-achievements/common';
+import { AccessTokenDto, TokenValidationDto, UnauthorizedError, UserInfoDto } from '@etimo-achievements/common';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
 import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { Request, Response, Router } from 'express';
 import { endpoint, getContext, okResponse, protectedEndpoint, redirectResponse } from '../../utils';
 import { AccessTokenMapper } from './access-token-mapper';

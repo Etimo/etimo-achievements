@@ -1,6 +1,6 @@
-import { getEnvVariable } from '@etimo-achievements/common';
 import { INotifyService, IRequestContext, NotifyPriority } from '@etimo-achievements/types';
 import { WebClient } from '@slack/web-api';
+import { getEnvVariable } from '..';
 
 export class SlackNotifyService implements INotifyService {
   private readonly client: WebClient;
