@@ -1,11 +1,14 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
-const Login = (): JSX.Element => {
+const Login = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
-    window.location.href = process.env.API_URL + '/auth/login/google';
-  });
+    navigate(process.env.API_URL + '/auth/login/google');
+  }, []);
 
-  return <></>;
+  return null;
 };
 
 export default Login;

@@ -1,10 +1,9 @@
-import { authUserInfo } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import { useLocation } from 'react-router';
 import SideMenu from '../components/SideMenu';
-import { setLoggedIn, setLoggingIn, setUserInfo } from '../features/auth/auth-slice';
-import { refreshToken } from '../features/auth/auth-utils';
+import { setLoggedIn, setLoggingIn, setTokenInfo, setUserInfo } from '../features/auth/auth-slice';
+import { getTokenInfo, getUserInfo, refreshToken, validateToken } from '../features/auth/auth-utils';
 import Router, { Routes } from './Router';
 import { useAppDispatch } from './store';
 
@@ -14,6 +13,7 @@ const App = (): JSX.Element => {
   const [expiresIn, setExpiresIn] = useState<number>();
 
   const refresh = async () => {
+    dispatch(setLoggingIn());
     const token = await refreshToken();
     if (token) {
       setExpiresIn(token.expires_in);
@@ -25,12 +25,18 @@ const App = (): JSX.Element => {
 
   // Refresh token when loading page
   useEffect(() => {
-    dispatch(setLoggingIn());
     refresh().then(async (success) => {
       if (success) {
-        const userInfo = await authUserInfo().data();
-        if (userInfo) {
-          dispatch(setUserInfo(userInfo));
+        const isValid = await validateToken();
+        if (isValid) {
+          const userInfo = await getUserInfo();
+          if (userInfo) {
+            dispatch(setUserInfo(userInfo));
+          }
+          const tokenInfo = await getTokenInfo();
+          if (tokenInfo) {
+            dispatch(setTokenInfo(tokenInfo));
+          }
         }
       }
     });
