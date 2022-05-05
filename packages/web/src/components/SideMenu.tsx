@@ -16,19 +16,17 @@ import { Menu, MenuItem, ProSidebar, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
-import useLoggedIn from '../common/hooks/use-logged-in';
+import { isLoggedIn } from '../features/auth/auth-utils';
 import RequirePermission from './RequirePermission';
 const version = require('../version.json');
 
 const SideMenu: React.FC = () => {
-  const isLoggedIn = useLoggedIn();
-
   const date = new Date(version.date).toISOString().split('T')[0].replace(/-/g, '');
   const versionInfo = `${date}.${version.build_number}`;
 
   return (
     <ProSidebar>
-      {isLoggedIn ? (
+      {isLoggedIn() ? (
         <>
           <RequirePermission read="profile">
             <Menu iconShape="round">
@@ -91,7 +89,7 @@ const SideMenu: React.FC = () => {
         </>
       ) : null}
       <Menu iconShape="square">
-        {isLoggedIn ? (
+        {isLoggedIn() ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
             <Link to={Routes.Logout} />

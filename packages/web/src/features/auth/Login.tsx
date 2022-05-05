@@ -1,11 +1,10 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { setLoggingIn } from './auth-utils';
 
 const Login = () => {
-  const navigate = useNavigate();
-
   useEffect(() => {
-    navigate(process.env.API_URL + '/auth/login/google');
+    setLoggingIn();
+    window.location.href = process.env.API_URL + '/auth/login/google';
   }, []);
 
   return null;

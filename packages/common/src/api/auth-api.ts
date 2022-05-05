@@ -8,7 +8,7 @@ export const authLogout = () => {
 };
 
 export const authCallback = (provider: string, code: string) => {
-  return api.get(`/auth/callback/${provider}?code=${code}`);
+  return api.get<AccessTokenDto>(`/auth/callback/${provider}?code=${code}`);
 };
 
 export const authValidate = () => {

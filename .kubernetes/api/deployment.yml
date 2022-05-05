@@ -69,6 +69,8 @@ spec:
               value: '${SLACK_CHANNEL_LOW}'
             - name: UNLEASH_URL
               value: '${UNLEASH_URL}'
+            - name: LOG_HEADERS
+              value: '${LOG_HEADERS}'
           ports:
             - containerPort: ${API_PORT}
               protocol: TCP

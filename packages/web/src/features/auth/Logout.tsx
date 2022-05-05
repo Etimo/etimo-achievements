@@ -3,8 +3,8 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../app/Router';
 import { useAppDispatch } from '../../app/store';
-import { LocalStorage } from '../../common/enums/local-storage';
 import { setLoggedOut } from './auth-slice';
+import { getRedirectUrl, setRedirectUrl } from './auth-utils';
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -22,10 +22,10 @@ const Logout = () => {
           and then set the redirectUrl again in local storage, to allow
           the user to be redirected properly after getting his/her token.
         */
-        const redirectUrl = localStorage.getItem(LocalStorage.RedirectUrl);
+        const redirectUrl = getRedirectUrl();
         localStorage.clear();
         if (redirectUrl) {
-          localStorage.setItem(LocalStorage.RedirectUrl, redirectUrl);
+          setRedirectUrl(redirectUrl);
         }
 
         dispatch(setLoggedOut());

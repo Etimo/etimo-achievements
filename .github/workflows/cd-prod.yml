@@ -21,6 +21,7 @@ env:
   INGRESS_URL: achievements-live.staging.etimo-test.live
   NODE_ENV: production
   UNLEASH_URL: achievements-unleash-live.staging.etimo-test.live
+  LOG_HEADERS: true
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}

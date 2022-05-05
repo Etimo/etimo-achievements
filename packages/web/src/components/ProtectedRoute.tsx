@@ -2,15 +2,14 @@ import React, { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { Routes } from '../app/Router';
 import { LocalStorage } from '../common/enums/local-storage';
-import useLoggedIn from '../common/hooks/use-logged-in';
 import { Logger } from '../common/logger';
+import { isLoggedIn } from '../features/auth/auth-utils';
 
 const ProtectedRoute: React.FC = ({ children }: any) => {
   const navigate = useNavigate();
-  const loggedIn = useLoggedIn();
 
   useEffect(() => {
-    if (!loggedIn) {
+    if (!isLoggedIn()) {
       Logger.log('Redirecting to login page');
 
       // Set redirect url to the current page. We will use this to redirect user after login

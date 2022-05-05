@@ -1,33 +1,34 @@
-import { authCallback } from '@etimo-achievements/common';
-import React, { useEffect } from 'react';
-import toast from 'react-hot-toast';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../app/Router';
-import { LocalStorage } from '../../common/enums/local-storage';
+import { useAppDispatch } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
+import { setLoggedIn } from './auth-slice';
+import { getRedirectUrl, loginCallback, setRedirectUrl } from './auth-utils';
 
-const LoginCallback = (): JSX.Element => {
+const LoginCallback = () => {
   const navigate = useNavigate();
   const query = useQuery();
+  const dispatch = useAppDispatch();
 
   const getCode = () => query.get('code') ?? '';
 
   const login = async (code: string) => {
-    const response = await authCallback('google', code).wait();
-    if (response.success) {
+    if (await loginCallback(code)) {
+      dispatch(setLoggedIn());
+
       // Fetch the redirect url from local storage
-      const redirectUrl = localStorage.getItem(LocalStorage.RedirectUrl);
+      const redirectUrl = getRedirectUrl();
       if (redirectUrl) {
         navigate(redirectUrl);
 
         // Clear the redirect url since we don't need it anymore
-        localStorage.removeItem(LocalStorage.RedirectUrl);
+        setRedirectUrl();
       } else {
         navigate(Routes.UserProfile);
       }
     } else {
       navigate(Routes.Home);
-      toast.error('Could not login: ' + (await response.errorMessage));
     }
   };
 
@@ -37,7 +38,7 @@ const LoginCallback = (): JSX.Element => {
     }
   }, [getCode()]);
 
-  return <></>;
+  return null;
 };
 
 export default LoginCallback;

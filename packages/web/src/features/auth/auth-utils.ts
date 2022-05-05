@@ -1,6 +1,29 @@
-import { authIntrospect, authLogout, authRefresh, authUserInfo, authValidate } from '@etimo-achievements/common';
+import {
+  authCallback,
+  authIntrospect,
+  authLogout,
+  authRefresh,
+  authUserInfo,
+  authValidate,
+} from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
+import { LocalStorage } from '../../common/enums/local-storage';
 import { AuthStorageKeys } from './auth-types';
+
+export const loginCallback = async (code: string) => {
+  const response = await authCallback('google', code).wait();
+  if (response.success) {
+    const token = await response.data();
+    localStorage.setItem(AuthStorageKeys.ExpiresAt, (Date.now() + token.expires_in * 1000).toString());
+    localStorage.removeItem(AuthStorageKeys.LoggingIn);
+    return true;
+  } else {
+    localStorage.removeItem(AuthStorageKeys.ExpiresAt);
+    localStorage.removeItem(AuthStorageKeys.LoggingIn);
+    toast.error('Could not get token: ' + (await response.errorMessage));
+    return false;
+  }
+};
 
 export const refreshToken = async () => {
   const refreshRes = await authRefresh().wait();
@@ -8,6 +31,7 @@ export const refreshToken = async () => {
     const data = await refreshRes.data();
     return data;
   } else {
+    localStorage.removeItem(AuthStorageKeys.ExpiresAt);
     toast.error('Could not refresh token: ' + (await refreshRes.errorMessage));
     await authLogout().wait();
   }
@@ -51,7 +75,41 @@ export const isAuthenticated = () => {
   return false;
 };
 
-export const getExpiresIn = () => {
+export const setLoggingIn = () => {
+  localStorage.setItem(AuthStorageKeys.LoggingIn, Date.now().toString());
+};
+
+export const isLoggingIn = () => {
+  const loggingIn = localStorage.getItem(AuthStorageKeys.LoggingIn);
+  if (loggingIn) {
+    return +loggingIn > Date.now() - 60 * 1000;
+  }
+
+  return false;
+};
+
+export const isLoggedIn = () => {
+  const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+  if (expiresAt) {
+    return +expiresAt > Date.now();
+  }
+
+  return false;
+};
+
+export const getLoginExpiresIn = () => {
   const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
   return expiresAt ? +expiresAt - Date.now() - 2000 : 0;
+};
+
+export const getRedirectUrl = () => {
+  return localStorage.getItem(LocalStorage.RedirectUrl);
+};
+
+export const setRedirectUrl = (url?: string) => {
+  if (!url) {
+    localStorage.removeItem(LocalStorage.RedirectUrl);
+  } else {
+    localStorage.setItem(LocalStorage.RedirectUrl, url);
+  }
 };
