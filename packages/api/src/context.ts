@@ -52,6 +52,10 @@ export class Context implements IContext {
   };
 
   public get loggingContext() {
+    if (getEnvVariable('LOG_CONTEXT') !== 'true') {
+      return {};
+    }
+
     const context: any = {
       requestId: this.requestId,
       userId: this.jwt?.sub,
