@@ -16,15 +16,16 @@ import { Menu, MenuItem, ProSidebar, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
-import useLogin from '../features/auth/hooks/use-login-hook';
+import { useAppSelector } from '../app/store';
+import { authSelector } from '../features/auth/auth-slice';
 import RequirePermission from './RequirePermission';
 const version = require('../version.json');
 
 const SideMenu: React.FC = () => {
-  const isLoggedIn = useLogin();
+  const { isLoggedIn } = useAppSelector(authSelector);
 
   const date = new Date(version.date).toISOString().split('T')[0].replace(/-/g, '');
-  const versionInfo = `${date}.${version.build_number}`;
+  const versionInfo = `${date}.${version.build_number}.${isLoggedIn}`;
 
   return (
     <ProSidebar>

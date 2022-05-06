@@ -1,37 +1,45 @@
 import { uuid } from '@etimo-achievements/common';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { authSelector, setAccessToken, setTokenInfo, setUserInfo, setValidated } from '../auth-slice';
-import { getTokenInfo, getUserInfo, isLoggedIn, isLoggingIn, refreshToken, validateToken } from '../auth-utils';
+import {
+  authSelector,
+  setAccessToken,
+  setAuthenticating,
+  setLoggedIn,
+  setTokenInfo,
+  setUserInfo,
+  setValidated,
+} from '../auth-slice';
+import { getTokenInfo, getUserInfo, isLoggingIn, refreshToken, validateToken } from '../auth-utils';
 
 const useLogin = () => {
   const dispatch = useAppDispatch();
-  const { isValidated, hasAccessToken, hasTokenInfo, expiresIn } = useAppSelector(authSelector);
-  const [loggedIn, setLoggedIn] = useState<boolean>(false);
-  const [loggingIn, setLoggingIn] = useState<boolean>(false);
+  const { isLoggedIn, isAuthenticating, isValidated, hasAccessToken, hasTokenInfo, expiresIn, hasUserInfo } =
+    useAppSelector(authSelector);
   const [shouldRefresh, setShouldRefresh] = useState<string>();
 
-  // Initial state -- are we logged in? This will check local storage.
+  /**
+   * Initial state -- are we logging in? This will check local storage.
+   * The reason for this is because the state is lost when we navigate
+   * to login at Google, so we need to persist the login state.
+   */
   useEffect(() => {
-    setLoggedIn(isLoggedIn());
-    setLoggingIn(isLoggingIn());
+    dispatch(setAuthenticating(isLoggingIn()));
   }, []);
 
   // Validate token after getting access token
   useEffect(() => {
-    if (loggedIn || loggingIn || !hasAccessToken) return;
+    if (isLoggedIn || isAuthenticating || !hasAccessToken) return;
 
-    console.log('Validating token...');
     validateToken().then(async (valid) => {
       if (valid) dispatch(setValidated());
     });
   }, [hasAccessToken]);
 
-  // Get token info after token validation
+  // Get token info & access info after token validation
   useEffect(() => {
-    if (loggedIn || loggingIn || !isValidated) return;
+    if (isLoggedIn || isAuthenticating || !isValidated) return;
 
-    console.log('Getting token info...');
     getTokenInfo().then(async (tokenInfo) => {
       if (tokenInfo) {
         dispatch(setTokenInfo(tokenInfo));
@@ -39,31 +47,31 @@ const useLogin = () => {
     });
   }, [isValidated]);
 
-  // Get user info after token info is set
+  // Get access info after we get token info
   useEffect(() => {
-    if (loggedIn || loggingIn || !hasTokenInfo) return;
+    if (isLoggedIn || isAuthenticating || !hasTokenInfo) return;
 
-    console.log('Getting user info...');
     getUserInfo().then(async (userInfo) => {
       if (userInfo) {
         dispatch(setUserInfo(userInfo));
+        dispatch(setLoggedIn());
       }
     });
   }, [hasTokenInfo]);
 
+  // Set refresh token timer when we know when it expires
   useEffect(() => {
-    if (!expiresIn) return;
+    if (!expiresIn || expiresIn <= 0) return;
 
-    console.log('Setting refresh token timer...');
     const timer = setTimeout(() => setShouldRefresh(uuid()), expiresIn);
 
     return () => timer && clearTimeout(timer);
   }, [expiresIn]);
 
+  // Refresh token when refresh token trigger is fired
   useEffect(() => {
     if (!shouldRefresh) return;
 
-    console.log('Refreshing token...');
     refreshToken().then(async (token) => {
       if (token) {
         dispatch(setAccessToken(token));
@@ -71,7 +79,7 @@ const useLogin = () => {
     });
   }, [shouldRefresh]);
 
-  return loggedIn;
+  return isLoggedIn;
 };
 
 export default useLogin;
