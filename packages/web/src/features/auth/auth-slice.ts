@@ -46,7 +46,6 @@ const authSlice = createSlice({
       state.accessToken = action.payload;
       state.expiresIn = action.payload.expires_in * 1000;
       state.hasAccessToken = true;
-      state.isAuthenticating = false;
     },
     setTokenInfo: (state: AuthState, action: { payload: TokenInfoDto }) => {
       state.tokenInfo = action.payload;

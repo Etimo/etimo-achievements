@@ -6,6 +6,7 @@ import {
   setAccessToken,
   setAuthenticating,
   setLoggedIn,
+  setLoggedOut,
   setTokenInfo,
   setUserInfo,
   setValidated,
@@ -33,6 +34,7 @@ const useLogin = () => {
 
     validateToken().then(async (valid) => {
       if (valid) dispatch(setValidated());
+      else dispatch(setLoggedOut());
     });
   }, [hasAccessToken]);
 
