@@ -12,16 +12,14 @@ import { AuthStorageKeys } from './auth-types';
 
 export const loginCallback = async (code: string) => {
   const response = await authCallback('google', code).wait();
+  localStorage.removeItem(AuthStorageKeys.LoggingIn);
   if (response.success) {
     const token = await response.data();
     localStorage.setItem(AuthStorageKeys.ExpiresAt, (Date.now() + token.expires_in * 1000).toString());
-    localStorage.removeItem(AuthStorageKeys.LoggingIn);
-    return true;
+    return token;
   } else {
     localStorage.removeItem(AuthStorageKeys.ExpiresAt);
-    localStorage.removeItem(AuthStorageKeys.LoggingIn);
     toast.error('Could not get token: ' + (await response.errorMessage));
-    return false;
   }
 };
 
@@ -65,17 +63,7 @@ export const getUserInfo = async () => {
   }
 };
 
-export const isAuthenticated = () => {
-  const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
-  if (expiresAt) {
-    const isAuthed = +expiresAt > Date.now();
-    return isAuthed;
-  }
-
-  return false;
-};
-
-export const setLoggingIn = () => {
+export const storeLoggingIn = () => {
   localStorage.setItem(AuthStorageKeys.LoggingIn, Date.now().toString());
 };
 
@@ -106,7 +94,7 @@ export const getRedirectUrl = () => {
   return localStorage.getItem(LocalStorage.RedirectUrl);
 };
 
-export const setRedirectUrl = (url?: string) => {
+export const storeRedirectUrl = (url?: string) => {
   if (!url) {
     localStorage.removeItem(LocalStorage.RedirectUrl);
   } else {

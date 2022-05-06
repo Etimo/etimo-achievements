@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../app/Router';
 import { useAppDispatch } from '../../app/store';
 import { setLoggedOut } from './auth-slice';
-import { getRedirectUrl, setRedirectUrl } from './auth-utils';
+import { getRedirectUrl, storeRedirectUrl } from './auth-utils';
 
 const Logout = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const Logout = () => {
         const redirectUrl = getRedirectUrl();
         localStorage.clear();
         if (redirectUrl) {
-          setRedirectUrl(redirectUrl);
+          storeRedirectUrl(redirectUrl);
         }
 
         dispatch(setLoggedOut());

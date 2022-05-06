@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../app/Router';
 import { useAppDispatch } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
-import { setLoggedIn } from './auth-slice';
-import { getRedirectUrl, loginCallback, setRedirectUrl } from './auth-utils';
+import { setAccessToken } from './auth-slice';
+import { getRedirectUrl, loginCallback, storeRedirectUrl } from './auth-utils';
 
 const LoginCallback = () => {
   const navigate = useNavigate();
@@ -14,8 +14,9 @@ const LoginCallback = () => {
   const getCode = () => query.get('code') ?? '';
 
   const login = async (code: string) => {
-    if (await loginCallback(code)) {
-      dispatch(setLoggedIn());
+    const token = await loginCallback(code);
+    if (token) {
+      dispatch(setAccessToken(token));
 
       // Fetch the redirect url from local storage
       const redirectUrl = getRedirectUrl();
@@ -23,7 +24,7 @@ const LoginCallback = () => {
         navigate(redirectUrl);
 
         // Clear the redirect url since we don't need it anymore
-        setRedirectUrl();
+        storeRedirectUrl();
       } else {
         navigate(Routes.UserProfile);
       }
