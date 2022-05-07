@@ -1,15 +1,14 @@
 import { authLogout } from '@etimo-achievements/common';
-import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/store';
-import { authSelector, setAccessToken, setLoginState, setTokenInfo, setUserInfo } from '../auth-slice';
-import { getTokenInfo, getUserInfo, isLoggedIn, refreshToken, validateToken } from '../auth-utils';
+import React, { useEffect } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/store';
+import { authSelector, setAccessToken, setLoginState, setTokenInfo, setUserInfo } from './auth-slice';
+import { getTokenInfo, getUserInfo, isLoggedIn, refreshToken, validateToken } from './auth-utils';
 
-const useLogin = () => {
+const LoginSupport: React.FC = ({ children }) => {
   const dispatch = useAppDispatch();
   const { loginState, expiresIn, userInfo, tokenInfo } = useAppSelector(authSelector);
 
   useEffect(() => {
-    console.log('first load', loginState);
     if (isLoggedIn()) {
       dispatch(setLoginState('logged-in'));
     }
@@ -98,7 +97,7 @@ const useLogin = () => {
     return () => timer && clearTimeout(timer);
   }, [loginState]);
 
-  return loginState === 'logged-in';
+  return <>{children}</>;
 };
 
-export default useLogin;
+export default LoginSupport;

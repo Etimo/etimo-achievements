@@ -1,6 +1,7 @@
 import { AccessTokenDto, TokenInfoDto, UserInfoDto } from '@etimo-achievements/common';
 
 export type LoginState =
+  | 'unknown'
   | 'logged-out'
   | 'failed-login'
   | 'got-accesstoken'
