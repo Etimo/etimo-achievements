@@ -1,41 +1,21 @@
 import { AccessTokenDto, TokenInfoDto, UserInfoDto } from '@etimo-achievements/common';
 import { createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../app/reducers';
-import { AuthState } from './auth-types';
+import { AuthState, LoginState } from './auth-types';
 
 const initialState: AuthState = {
-  isLoggedIn: false,
-  isAuthenticating: false,
-  isValidated: false,
-  hasAccessToken: false,
-  hasTokenInfo: false,
-  hasUserInfo: false,
+  loginState: 'logged-out',
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setAuthenticating: (state: AuthState, action: { payload: boolean }) => {
-      state.isAuthenticating = action.payload;
-    },
-    setLoggingIn: (state: AuthState) => {
-      state.isAuthenticating = true;
-    },
-    setLoggedIn: (state: AuthState) => {
-      state.isAuthenticating = false;
-      state.isLoggedIn = true;
-    },
-    setValidated: (state: AuthState) => {
-      state.isValidated = true;
+    setLoginState: (state: AuthState, action: { payload: LoginState }) => {
+      state.loginState = action.payload;
     },
     setLoggedOut: (state: AuthState) => {
-      state.isLoggedIn = false;
-      state.isAuthenticating = false;
-      state.isValidated = false;
-      state.hasAccessToken = false;
-      state.hasTokenInfo = false;
-      state.hasUserInfo = false;
+      state.loginState = 'logged-out';
       state.expiresIn = 0;
       state.userId = undefined;
       state.accessToken = undefined;
@@ -45,30 +25,18 @@ const authSlice = createSlice({
     setAccessToken: (state: AuthState, action: { payload: AccessTokenDto }) => {
       state.accessToken = action.payload;
       state.expiresIn = action.payload.expires_in * 1000;
-      state.hasAccessToken = true;
     },
     setTokenInfo: (state: AuthState, action: { payload: TokenInfoDto }) => {
       state.tokenInfo = action.payload;
-      state.hasTokenInfo = true;
     },
     setUserInfo: (state: AuthState, action: { payload: UserInfoDto }) => {
       state.userInfo = action.payload;
       state.userId = action.payload.id;
-      state.hasUserInfo = true;
     },
   },
 });
 
-export const {
-  setAuthenticating,
-  setLoggingIn,
-  setLoggedIn,
-  setValidated,
-  setLoggedOut,
-  setAccessToken,
-  setUserInfo,
-  setTokenInfo,
-} = authSlice.actions;
+export const { setLoginState, setLoggedOut, setAccessToken, setUserInfo, setTokenInfo } = authSlice.actions;
 
 export const userIdSelector = (state: RootState) => state.auth.userId;
 export const authSelector = (state: RootState) => state.auth;

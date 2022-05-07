@@ -22,14 +22,16 @@ import RequirePermission from './RequirePermission';
 const version = require('../version.json');
 
 const SideMenu: React.FC = () => {
-  const { isLoggedIn } = useAppSelector(authSelector);
+  const { loginState } = useAppSelector(authSelector);
 
   const date = new Date(version.date).toISOString().split('T')[0].replace(/-/g, '');
-  const versionInfo = `${date}.${version.build_number}.${isLoggedIn}`;
+  const versionInfo = `${date}.${version.build_number}.${loginState}`;
+
+  const loggedIn = () => loginState === 'logged-in';
 
   return (
     <ProSidebar>
-      {isLoggedIn ? (
+      {loggedIn() ? (
         <>
           <RequirePermission read="profile">
             <Menu iconShape="round">
@@ -92,7 +94,7 @@ const SideMenu: React.FC = () => {
         </>
       ) : null}
       <Menu iconShape="square">
-        {isLoggedIn ? (
+        {loggedIn() ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
             <Link to={Routes.Logout} />

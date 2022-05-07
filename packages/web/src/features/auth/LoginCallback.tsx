@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Routes } from '../../app/Router';
 import { useAppDispatch } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
-import { setAccessToken } from './auth-slice';
+import { setAccessToken, setLoginState } from './auth-slice';
 import { getRedirectUrl, loginCallback, storeRedirectUrl } from './auth-utils';
 
 const LoginCallback = () => {
@@ -17,6 +17,7 @@ const LoginCallback = () => {
     const token = await loginCallback(code);
     if (token) {
       dispatch(setAccessToken(token));
+      dispatch(setLoginState('got-accesstoken'));
 
       // Fetch the redirect url from local storage
       const redirectUrl = getRedirectUrl();

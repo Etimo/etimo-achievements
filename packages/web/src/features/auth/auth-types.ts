@@ -1,12 +1,17 @@
 import { AccessTokenDto, TokenInfoDto, UserInfoDto } from '@etimo-achievements/common';
 
+export type LoginState =
+  | 'logged-out'
+  | 'failed-login'
+  | 'got-accesstoken'
+  | 'validated-accesstoken'
+  | 'got-userinfo'
+  | 'got-tokeninfo'
+  | 'should-refresh-token'
+  | 'logged-in';
+
 export interface AuthState {
-  isLoggedIn: boolean;
-  isAuthenticating: boolean;
-  isValidated: boolean;
-  hasAccessToken: boolean;
-  hasTokenInfo: boolean;
-  hasUserInfo: boolean;
+  loginState: LoginState;
   expiresIn?: number;
   userId?: string;
   accessToken?: AccessTokenDto;

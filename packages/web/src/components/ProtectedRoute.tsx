@@ -8,10 +8,10 @@ import { authSelector } from '../features/auth/auth-slice';
 
 const ProtectedRoute: React.FC = ({ children }: any) => {
   const navigate = useNavigate();
-  const { isLoggedIn } = useAppSelector(authSelector);
+  const { loginState } = useAppSelector(authSelector);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (loginState === 'logged-out') {
       Logger.log('Redirecting to login page');
 
       // Set redirect url to the current page. We will use this to redirect user after login
