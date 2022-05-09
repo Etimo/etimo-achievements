@@ -32,7 +32,7 @@ const Authentication: React.FC = ({ children }) => {
     const token = await loginCallback(code);
     if (token) {
       dispatch(setAccessToken(token));
-      dispatch(setLoginState('got-accesstoken'));
+      dispatch(setLoginState('should-validate'));
     } else {
       dispatch(setLoginState('failed-login'));
     }
@@ -41,27 +41,29 @@ const Authentication: React.FC = ({ children }) => {
   const runValidateAccessToken = async () => {
     const valid = await validateToken();
     if (valid) {
-      dispatch(setLoginState('validated-accesstoken'));
+      dispatch(setLoginState('logged-in'));
     } else {
       dispatch(setLoginState('failed-login'));
     }
   };
 
   const runGetTokenInfo = async () => {
-    const info = tokenInfo ?? (await getTokenInfo());
+    if (tokenInfo) return;
+
+    const info = await getTokenInfo();
     if (info) {
       dispatch(setTokenInfo(info));
-      dispatch(setLoginState('got-tokeninfo'));
     } else {
       dispatch(setLoginState('failed-login'));
     }
   };
 
   const runGetUserInfo = async () => {
-    const info = userInfo ?? (await getUserInfo());
+    if (userInfo) return;
+
+    const info = await getUserInfo();
     if (info) {
       dispatch(setUserInfo(info));
-      dispatch(setLoginState('logged-in'));
     } else {
       dispatch(setLoginState('failed-login'));
     }
@@ -71,7 +73,7 @@ const Authentication: React.FC = ({ children }) => {
     const token = await refreshToken();
     if (token) {
       dispatch(setAccessToken(token));
-      dispatch(setLoginState('got-accesstoken'));
+      dispatch(setLoginState('should-validate'));
     } else {
       dispatch(setLoginState('failed-login'));
     }
@@ -93,20 +95,13 @@ const Authentication: React.FC = ({ children }) => {
         runLoginCallback();
         break;
 
-      case 'got-accesstoken':
+      case 'should-validate':
         runValidateAccessToken();
         break;
 
-      case 'validated-accesstoken':
-        runGetTokenInfo();
-        break;
-
-      case 'got-tokeninfo':
-        runGetUserInfo();
-        break;
-
       case 'logged-in':
-        console.log('Logged in!');
+        runGetTokenInfo();
+        runGetUserInfo();
         break;
 
       case 'should-refresh-token':
@@ -154,7 +149,7 @@ const Authentication: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (isLoggedIn()) {
-      dispatch(setLoginState('got-accesstoken'));
+      dispatch(setLoginState('should-validate'));
     }
   }, []);
 

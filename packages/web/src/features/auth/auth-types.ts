@@ -6,10 +6,7 @@ export type LoginState =
   | 'should-login'
   | 'failed-login'
   | 'got-code'
-  | 'got-accesstoken'
-  | 'validated-accesstoken'
-  | 'got-userinfo'
-  | 'got-tokeninfo'
+  | 'should-validate'
   | 'should-refresh-token'
   | 'logged-in'
   | 'should-logout';
