@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import { fromBase64 } from '@etimo-achievements/common';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router';
 import { Routes } from '../../app/Router';
@@ -9,6 +10,7 @@ import {
   getTokenInfo,
   getUserInfo,
   isLoggedIn,
+  login,
   loginCallback,
   logout,
   refreshToken,
@@ -20,27 +22,8 @@ const Authentication: React.FC = ({ children }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const query = useQuery();
-  const { loginState, expiresIn, userInfo, tokenInfo } = useAppSelector(authSelector);
-
-  useEffect(() => {
-    if (location.pathname === Routes.Login) {
-      dispatch(setLoginState('should-login'));
-    } else if (location.pathname === Routes.LoginCallback && query.get('code')) {
-      dispatch(setLoginState('got-code'));
-    } else if (location.pathname === Routes.Logout) {
-      dispatch(setLoginState('should-logout'));
-    }
-  }, [location]);
-
-  useEffect(() => {
-    if (isLoggedIn()) {
-      dispatch(setLoginState('got-accesstoken'));
-    }
-  }, []);
-
-  const runLogin = async () => {
-    window.location.href = process.env.API_URL + '/auth/login/google';
-  };
+  const { loginState, expiresAt, userInfo, tokenInfo } = useAppSelector(authSelector);
+  const [redirectUrl, setRedirectUrl] = useState<string>();
 
   const runLoginCallback = async () => {
     const code = query.get('code');
@@ -78,49 +61,32 @@ const Authentication: React.FC = ({ children }) => {
     const info = userInfo ?? (await getUserInfo());
     if (info) {
       dispatch(setUserInfo(info));
-      dispatch(setLoginState('got-userinfo'));
+      dispatch(setLoginState('logged-in'));
     } else {
       dispatch(setLoginState('failed-login'));
     }
   };
 
-  const runLoggedIn = async () => {
-    navigate(Routes.UserProfile);
-    dispatch(setLoginState('logged-in'));
-  };
-
   const runRefreshToken = async () => {
     const token = await refreshToken();
     if (token) {
-      dispatch(setLoginState('got-accesstoken'));
       dispatch(setAccessToken(token));
+      dispatch(setLoginState('got-accesstoken'));
     } else {
       dispatch(setLoginState('failed-login'));
     }
   };
 
   const runLogout = async () => {
-    console.log('Logging out');
     await logout();
     navigate(Routes.Home);
     dispatch(setLoginState('logged-out'));
   };
 
-  const doStartRefreshTokenTimer = () => {
-    const timeout = expiresIn ? expiresIn - 2000 : 0;
-
-    const timer = setTimeout(() => {
-      if (!expiresIn || expiresIn <= 0) return;
-      dispatch(setLoginState('should-refresh-token'));
-    }, timeout);
-
-    return timer;
-  };
-
   useEffect(() => {
     switch (loginState) {
       case 'should-login':
-        runLogin();
+        login();
         break;
 
       case 'got-code':
@@ -139,8 +105,8 @@ const Authentication: React.FC = ({ children }) => {
         runGetUserInfo();
         break;
 
-      case 'got-userinfo':
-        runLoggedIn();
+      case 'logged-in':
+        console.log('Logged in!');
         break;
 
       case 'should-refresh-token':
@@ -155,9 +121,42 @@ const Authentication: React.FC = ({ children }) => {
   }, [loginState]);
 
   useEffect(() => {
-    const timer = doStartRefreshTokenTimer();
-    return () => clearTimeout(timer);
-  }, [expiresIn]);
+    if (expiresAt) {
+      const timer = setTimeout(() => dispatch(setLoginState('should-refresh-token')), expiresAt - Date.now());
+      return () => clearTimeout(timer);
+    }
+  }, [expiresAt]);
+
+  useEffect(() => {
+    if (location.pathname === Routes.Login && !isLoggedIn()) {
+      dispatch(setLoginState('should-login'));
+    } else if (location.pathname === Routes.LoginCallback && query.get('code')) {
+      dispatch(setLoginState('got-code'));
+
+      const state = query.get('state');
+      if (state) {
+        const { redirectUrl } = JSON.parse(fromBase64(state));
+        if (redirectUrl) {
+          setRedirectUrl(redirectUrl);
+        }
+      }
+    } else if (location.pathname === Routes.Logout) {
+      dispatch(setLoginState('should-logout'));
+    }
+  }, [location]);
+
+  useEffect(() => {
+    if (redirectUrl && loginState === 'logged-in') {
+      navigate(redirectUrl);
+      setRedirectUrl(undefined);
+    }
+  }, [redirectUrl, loginState]);
+
+  useEffect(() => {
+    if (isLoggedIn()) {
+      dispatch(setLoginState('got-accesstoken'));
+    }
+  }, []);
 
   return <>{children}</>;
 };

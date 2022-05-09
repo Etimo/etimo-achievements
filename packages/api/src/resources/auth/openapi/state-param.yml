@@ -1,0 +1,6 @@
+x-template: &stateParam
+  name: state
+  in: query
+  description: The state to return to the client after authentication.
+  schema:
+    type: string

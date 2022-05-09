@@ -2,9 +2,9 @@ import { useAppSelector } from '../../../app/store';
 import { authSelector } from '../auth-slice';
 
 const useLoggedIn = () => {
-  const { loginState } = useAppSelector(authSelector);
+  const { loginState, authenticated } = useAppSelector(authSelector);
 
-  return loginState === 'logged-in';
+  return loginState !== 'logged-out' && authenticated;
 };
 
 export default useLoggedIn;

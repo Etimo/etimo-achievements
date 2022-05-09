@@ -7,17 +7,17 @@ import Router from './Router';
 const App = (): JSX.Element => {
   return (
     <React.StrictMode>
-      <Authentication>
-        <div className="flex min-h-screen">
-          <Toaster position="top-right" reverseOrder={false} />
-          <div className="flex-none">
-            <SideMenu />
-          </div>
-          <div className="p-4 w-full mx-auto">
-            <Router />
-          </div>
+      <div className="flex min-h-screen">
+        <Toaster position="top-right" reverseOrder={false} />
+        <div className="flex-none">
+          <SideMenu />
         </div>
-      </Authentication>
+        <div className="p-4 w-full mx-auto">
+          <Authentication>
+            <Router />
+          </Authentication>
+        </div>
+      </div>
     </React.StrictMode>
   );
 };

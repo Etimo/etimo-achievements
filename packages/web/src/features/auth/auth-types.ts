@@ -15,8 +15,9 @@ export type LoginState =
   | 'should-logout';
 
 export interface AuthState {
+  authenticated: boolean;
   loginState: LoginState;
-  expiresIn?: number;
+  expiresAt?: number;
   userId?: string;
   accessToken?: AccessTokenDto;
   userInfo?: UserInfoDto;

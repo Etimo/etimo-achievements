@@ -5,10 +5,16 @@ import {
   authRefresh,
   authUserInfo,
   authValidate,
+  toBase64,
 } from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
 import { LocalStorage } from '../../common/enums/local-storage';
 import { AuthStorageKeys } from './auth-types';
+
+export const login = async () => {
+  const redirectUrl = window.location.pathname + window.location.search;
+  window.location.href = process.env.API_URL + '/auth/login/google?state=' + toBase64(JSON.stringify({ redirectUrl }));
+};
 
 export const loginCallback = async (code: string) => {
   const response = await authCallback('google', code).wait();
@@ -29,9 +35,8 @@ export const refreshToken = async () => {
     const data = await refreshRes.data();
     return data;
   } else {
-    localStorage.removeItem(AuthStorageKeys.ExpiresAt);
     toast.error('Could not refresh token: ' + (await refreshRes.errorMessage));
-    await authLogout().wait();
+    await logout();
   }
 };
 

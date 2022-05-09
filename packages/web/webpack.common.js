@@ -1,5 +1,6 @@
 const HtmlPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
@@ -27,6 +28,11 @@ module.exports = {
     publicPath: '/',
   },
   plugins: [
+    // Work around for Buffer is undefined:
+    // https://github.com/webpack/changelog-v5/issues/10
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+    }),
     new CopyPlugin({
       patterns: [{ from: './assets', to: './assets' }],
     }),
@@ -35,4 +41,11 @@ module.exports = {
       assetPath: '/assets',
     }),
   ],
+  resolve: {
+    extensions: ['.ts', '.js', '.tsx', '.jsx'],
+    fallback: {
+      stream: require.resolve('stream-browserify'),
+      buffer: require.resolve('buffer'),
+    },
+  },
 };

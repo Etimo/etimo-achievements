@@ -4,6 +4,7 @@ import { RootState } from '../../app/reducers';
 import { AuthState, LoginState } from './auth-types';
 
 const initialState: AuthState = {
+  authenticated: false,
   loginState: 'logged-out',
 };
 
@@ -13,10 +14,21 @@ const authSlice = createSlice({
   reducers: {
     setLoginState: (state: AuthState, action: { payload: LoginState }) => {
       state.loginState = action.payload;
+
+      switch (action.payload) {
+        case 'logged-in':
+          state.authenticated = true;
+          break;
+
+        case 'logged-out':
+          state.authenticated = false;
+          break;
+      }
     },
     setLoggedOut: (state: AuthState) => {
+      state.authenticated = false;
       state.loginState = 'logged-out';
-      state.expiresIn = 0;
+      state.expiresAt = 0;
       state.userId = undefined;
       state.accessToken = undefined;
       state.userInfo = undefined;
@@ -24,7 +36,7 @@ const authSlice = createSlice({
     },
     setAccessToken: (state: AuthState, action: { payload: AccessTokenDto }) => {
       state.accessToken = action.payload;
-      state.expiresIn = action.payload.expires_in * 1000;
+      state.expiresAt = Date.now() + action.payload.expires_in * 1000;
     },
     setTokenInfo: (state: AuthState, action: { payload: TokenInfoDto }) => {
       state.tokenInfo = action.payload;
