@@ -3,13 +3,16 @@ import { AccessTokenDto, TokenInfoDto, UserInfoDto } from '@etimo-achievements/c
 export type LoginState =
   | 'unknown'
   | 'logged-out'
+  | 'should-login'
   | 'failed-login'
+  | 'got-code'
   | 'got-accesstoken'
   | 'validated-accesstoken'
   | 'got-userinfo'
   | 'got-tokeninfo'
   | 'should-refresh-token'
-  | 'logged-in';
+  | 'logged-in'
+  | 'should-logout';
 
 export interface AuthState {
   loginState: LoginState;

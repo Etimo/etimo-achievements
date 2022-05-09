@@ -63,17 +63,12 @@ export const getUserInfo = async () => {
   }
 };
 
-export const storeLoggingIn = () => {
-  localStorage.setItem(AuthStorageKeys.LoggingIn, Date.now().toString());
-};
-
-export const isLoggingIn = () => {
-  const loggingIn = localStorage.getItem(AuthStorageKeys.LoggingIn);
-  if (loggingIn) {
-    return +loggingIn > Date.now() - 60 * 1000;
+export const logout = async () => {
+  const response = await authLogout().wait();
+  if (!response.success) {
+    toast.error('Could not logout: ' + (await response.errorMessage));
   }
-
-  return false;
+  localStorage.removeItem(AuthStorageKeys.ExpiresAt);
 };
 
 export const isLoggedIn = () => {

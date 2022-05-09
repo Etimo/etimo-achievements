@@ -1,16 +1,7 @@
-import { useEffect } from 'react';
-import { useAppDispatch } from '../../app/store';
-import { storeLoggingIn } from './auth-utils';
+import React from 'react';
 
 const Login = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    storeLoggingIn();
-    window.location.href = process.env.API_URL + '/auth/login/google';
-  }, []);
-
-  return null;
+  return <div>Logging in</div>;
 };
 
 export default Login;

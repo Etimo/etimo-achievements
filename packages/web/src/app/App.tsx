@@ -1,13 +1,13 @@
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import SideMenu from '../components/SideMenu';
-import LoginSupport from '../features/auth/LoginSupport';
+import Authentication from '../features/auth/Authentication';
 import Router from './Router';
 
 const App = (): JSX.Element => {
   return (
     <React.StrictMode>
-      <LoginSupport>
+      <Authentication>
         <div className="flex min-h-screen">
           <Toaster position="top-right" reverseOrder={false} />
           <div className="flex-none">
@@ -17,7 +17,7 @@ const App = (): JSX.Element => {
             <Router />
           </div>
         </div>
-      </LoginSupport>
+      </Authentication>
     </React.StrictMode>
   );
 };
