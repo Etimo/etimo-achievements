@@ -1,23 +1,19 @@
-import { AchievementDto, deleteAchievement, formatNumber, uuid } from '@etimo-achievements/common';
+import { AchievementDto, formatNumber, uuid } from '@etimo-achievements/common';
 import React, { useState } from 'react';
-import { useAppSelector } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
-import { toastResponse } from '../../common/utils/toast-response';
 import { EditButton, TrashButton } from '../../components/buttons';
-import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
-import { achievementSelector } from './achievement-slice';
 import { getManyAchievements } from './achievement-utils';
+import AchievementDeleteModal from './AchievementDeleteModal';
 import AchievementsEditModal from './AchievementEditModal';
 
 const AchievementList: React.FC = () => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
-  const { achievements } = useAppSelector(achievementSelector);
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
   const [data, setData] = React.useState<any[]>([]);
@@ -49,17 +45,6 @@ const AchievementList: React.FC = () => {
       edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
       delete: <TrashButton id={a.id} link={addQueryParam(window.location, 'delete', a.id)} loading={deleting} />,
     }));
-  };
-
-  const trashHandler = async (achievementId: string) => {
-    setDeleting(achievementId);
-    const response = await deleteAchievement(achievementId).wait();
-    if (response.success) {
-      setMonitor(uuid());
-    }
-    setDeleting(undefined);
-    removeQueryParam('delete');
-    toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');
   };
 
   const columns = React.useMemo(
@@ -134,22 +119,11 @@ const AchievementList: React.FC = () => {
         </RequirePermission>
       )}
       {getDeleteId() && (
-        <RequirePermission remove="achievements">
-          <ConfirmModal
-            title="Delete achievement"
-            cancelLabel="No"
-            confirmLabel="Yes"
-            onCancel={() => {
-              removeQueryParam('delete');
-            }}
-            onConfirm={() => {
-              trashHandler(getDeleteId());
-            }}
-          >
-            <div className="text-center">Are you sure you want to delete this achievement?</div>
-            <div className="text-center pt-5 text-2xl">{achievements.find((a) => a.id === getDeleteId())?.name}</div>
-          </ConfirmModal>
-        </RequirePermission>
+        <AchievementDeleteModal
+          achievementId={getDeleteId()}
+          onClose={() => removeQueryParam('delete')}
+          onSubmit={() => setMonitor(uuid())}
+        />
       )}
     </div>
   );

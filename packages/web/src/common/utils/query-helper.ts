@@ -1,4 +1,6 @@
-export function queryParam<T>(location: Location, property: string, defaultValue: T): T {
+type LocationHref = { href: string };
+
+export function queryParam<T>(location: LocationHref, property: string, defaultValue: T): T {
   const url = new URL(location.href);
   const strValue = url.searchParams.get(property);
 
@@ -8,19 +10,19 @@ export function queryParam<T>(location: Location, property: string, defaultValue
   return (strValue as unknown as T) ?? defaultValue;
 }
 
-export function addQueryParam(location: Location, property: string, value: string): string {
+export function addQueryParam(location: LocationHref, property: string, value: string): string {
   const url = new URL(location.href);
   url.searchParams.append(property, value);
   return url.pathname + url.search;
 }
 
-export function removeQueryParam(location: Location, property: string): string {
+export function removeQueryParam(location: LocationHref, property: string): string {
   const url = new URL(location.href);
   url.searchParams.delete(property);
   return url.pathname + url.search;
 }
 
-export function replaceQueryParam(location: Location, property: string, value: string): string {
+export function replaceQueryParam(location: LocationHref, property: string, value: string): string {
   const url = new URL(location.href);
   url.searchParams.delete(property);
   url.searchParams.append(property, value);
