@@ -10,5 +10,6 @@ export interface AuthState {
 }
 
 export enum AuthStorageKeys {
-  ExpiresAt = 'expiresAt',
+  JWTExpiresAt = 'jwt-expires-at',
+  RTExpiresAt = 'rt-expires-at',
 }

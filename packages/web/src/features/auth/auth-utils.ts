@@ -19,10 +19,11 @@ export const loginCallback = async (code: string) => {
   const response = await authCallback('google', code).wait();
   if (response.success) {
     const token = await response.data();
-    localStorage.setItem(AuthStorageKeys.ExpiresAt, (Date.now() + token.expires_in * 1000).toString());
+    localStorage.setItem(AuthStorageKeys.JWTExpiresAt, (Date.now() + token.expires_in * 1000).toString());
+    localStorage.setItem(AuthStorageKeys.RTExpiresAt, (Date.now() + token.rt_expires_in * 1000).toString());
     return token;
   } else {
-    localStorage.removeItem(AuthStorageKeys.ExpiresAt);
+    localStorage.removeItem(AuthStorageKeys.JWTExpiresAt);
     toast.error('Could not get token: ' + (await response.errorMessage));
   }
 };
@@ -30,8 +31,10 @@ export const loginCallback = async (code: string) => {
 export const refreshToken = async () => {
   const refreshRes = await authRefresh().wait();
   if (refreshRes.success) {
-    const data = await refreshRes.data();
-    return data;
+    const token = await refreshRes.data();
+    localStorage.setItem(AuthStorageKeys.JWTExpiresAt, (Date.now() + token.expires_in * 1000).toString());
+    localStorage.setItem(AuthStorageKeys.RTExpiresAt, (Date.now() + token.rt_expires_in * 1000).toString());
+    return token;
   } else {
     toast.error('Could not refresh token: ' + (await refreshRes.errorMessage));
     await logout();
@@ -71,11 +74,21 @@ export const logout = async () => {
   if (!response.success) {
     toast.error('Could not logout: ' + (await response.errorMessage));
   }
-  localStorage.removeItem(AuthStorageKeys.ExpiresAt);
+  localStorage.removeItem(AuthStorageKeys.JWTExpiresAt);
+  localStorage.removeItem(AuthStorageKeys.RTExpiresAt);
 };
 
 export const isLoggedIn = () => {
-  const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
+  const expiresAt = localStorage.getItem(AuthStorageKeys.JWTExpiresAt);
+  if (expiresAt) {
+    return +expiresAt > Date.now();
+  }
+
+  return false;
+};
+
+export const canRefreshToken = () => {
+  const expiresAt = localStorage.getItem(AuthStorageKeys.RTExpiresAt);
   if (expiresAt) {
     return +expiresAt > Date.now();
   }

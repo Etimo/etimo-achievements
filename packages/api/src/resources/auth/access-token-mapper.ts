@@ -4,10 +4,13 @@ import { JWT } from '@etimo-achievements/types';
 
 export class AccessTokenMapper {
   public static toAccessTokenDto(loginResponse: LoginResponse): AccessTokenDto {
+    const rtExpiresIn = Math.floor((loginResponse.refreshTokenExpiresAt.getTime() - Date.now()) / 1000);
+
     return {
       access_token: loginResponse.signedToken,
       token_type: 'bearer',
       expires_in: loginResponse.expiresIn,
+      rt_expires_in: rtExpiresIn,
       refresh_token: loginResponse.refreshToken,
       scopes: loginResponse.scopes,
     };
