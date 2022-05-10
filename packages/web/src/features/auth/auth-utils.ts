@@ -18,7 +18,6 @@ export const login = async (currentUrl?: string) => {
 
 export const loginCallback = async (code: string) => {
   const response = await authCallback('google', code).wait();
-  localStorage.removeItem(AuthStorageKeys.LoggingIn);
   if (response.success) {
     const token = await response.data();
     localStorage.setItem(AuthStorageKeys.ExpiresAt, (Date.now() + token.expires_in * 1000).toString());

@@ -2,7 +2,6 @@ import { AccessTokenDto, TokenInfoDto, UserInfoDto } from '@etimo-achievements/c
 
 export interface AuthState {
   authenticated: boolean;
-  authenticating: boolean;
   expiresAt?: number;
   userId?: string;
   accessToken?: AccessTokenDto;
@@ -11,6 +10,5 @@ export interface AuthState {
 }
 
 export enum AuthStorageKeys {
-  LoggingIn = 'loggingIn',
   ExpiresAt = 'expiresAt',
 }
