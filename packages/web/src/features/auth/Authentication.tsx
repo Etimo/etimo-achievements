@@ -52,11 +52,11 @@ const Authentication: React.FC = ({ children }) => {
   useEffect(() => {
     // If we're on the login page, and we haven't stored login state, we're trying to login.
     if (location.pathname === Routes.Login) {
+      const redirectUrl = getRedirectUrl();
+      if (redirectUrl) setRedirectUrl(redirectUrl);
       if (!isLoggedIn()) {
         setLoginState('login');
       }
-      const redirectUrl = getRedirectUrl();
-      if (redirectUrl) setRedirectUrl(redirectUrl);
     }
 
     // If we're on the login callback page, and we have a code, we're at the 'got-code' state.

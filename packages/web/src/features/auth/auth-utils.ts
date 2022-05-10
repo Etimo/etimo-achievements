@@ -8,7 +8,6 @@ import {
   toBase64,
 } from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
-import { LocalStorage } from '../../common/enums/local-storage';
 import { AuthStorageKeys } from './auth-types';
 
 export const login = async (currentUrl?: string) => {
@@ -82,21 +81,4 @@ export const isLoggedIn = () => {
   }
 
   return false;
-};
-
-export const getLoginExpiresIn = () => {
-  const expiresAt = localStorage.getItem(AuthStorageKeys.ExpiresAt);
-  return expiresAt ? +expiresAt - Date.now() - 2000 : 0;
-};
-
-export const getRedirectUrl = () => {
-  return localStorage.getItem(LocalStorage.RedirectUrl);
-};
-
-export const storeRedirectUrl = (url?: string) => {
-  if (!url) {
-    localStorage.removeItem(LocalStorage.RedirectUrl);
-  } else {
-    localStorage.setItem(LocalStorage.RedirectUrl, url);
-  }
 };
