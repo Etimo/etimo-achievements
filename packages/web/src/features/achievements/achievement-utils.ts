@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
 
 export const getAllAchievements = async () => {
-  const response = await getAchievements().wait();
+  const response = await getAchievements();
   if (response.success) {
     return response.data();
   } else {
@@ -13,7 +13,7 @@ export const getAllAchievements = async () => {
 
 export const getManyAchievements = async (input: PaginationRequestInput) => {
   const { size, page, sort, order } = input;
-  const response = await getAchievements((page - 1) * size, size, sort, order).wait();
+  const response = await getAchievements((page - 1) * size, size, sort, order);
   if (response.success) {
     const data = await response.data();
     return { pagination: response.pagination!, data };
@@ -23,7 +23,7 @@ export const getManyAchievements = async (input: PaginationRequestInput) => {
 };
 
 export const getSingleAchievement = async (id: string) => {
-  const response = await getAchievement(id).wait();
+  const response = await getAchievement(id);
   if (response.success) {
     const data = await response.data();
     return data;

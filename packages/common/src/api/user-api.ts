@@ -1,24 +1,26 @@
 import { uniq, UserDto } from '..';
 import Api from './api';
+import AuthorizedApi from './authorized-api';
 
 const api = new Api();
+const authorizedApi = new AuthorizedApi();
 
 export const getUser = (id: string) => {
-  return api.get<UserDto>(`/users/${id}`);
+  return authorizedApi.get<UserDto>(`/users/${id}`);
 };
 
 export const getProfile = () => {
-  return api.get<UserDto>('/profile');
+  return authorizedApi.get<UserDto>('/profile');
 };
 
 export const getUsers = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
   let url = `/users?skip=${skip}&take=${take}`;
   if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
-  return api.get<UserDto[]>(url);
+  return authorizedApi.get<UserDto[]>(url);
 };
 
 export const listUsers = (ids: string[]) => {
-  return api.post<UserDto[]>('/users/list', uniq(ids.filter((i) => !!i)));
+  return authorizedApi.post<UserDto[]>('/users/list', uniq(ids.filter((i) => !!i)));
 };
 
 export const createUser = (user: UserDto) => {

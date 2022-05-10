@@ -39,12 +39,10 @@ const Authentication: React.FC = ({ children }) => {
   const [loginState, setLoginState] = useState<LoginState>();
 
   /**
-   * If local storage indicates we might be logged in or we can refresh token, set that state.
+   * If local storage indicates we can refresh token, set that state.
    */
   useEffect(() => {
-    if (isLoggedIn()) {
-      setLoginState('maybe-logged-in');
-    } else if (canRefreshToken()) {
+    if (canRefreshToken()) {
       setLoginState('token-expired');
     }
   }, []);

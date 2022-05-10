@@ -1,12 +1,10 @@
 import { HighscoreDto } from '..';
-import Api from './api';
+import AuthorizedApi from './authorized-api';
 
-export class HighscoreApi {
-  private api = new Api();
+const authorizedApi = new AuthorizedApi();
 
-  public getMany(skip: number = 0, take: number = 50, sort?: string, order?: string) {
-    let url = `/highscores?skip=${skip}&take=${take}`;
-    if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
-    return this.api.get<HighscoreDto[]>(url);
-  }
-}
+export const getManyHighscores = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
+  let url = `/highscores?skip=${skip}&take=${take}`;
+  if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
+  return authorizedApi.get<HighscoreDto[]>(url);
+};
