@@ -38,7 +38,7 @@ const Authentication: React.FC = ({ children }) => {
   const [loginState, setLoginState] = useState<LoginState>();
 
   /**
-   * If we think we're logged in, validate it.
+   * If we think we're logged in, validate our login cookie.
    */
   useEffect(() => {
     if (isLoggedIn()) {
