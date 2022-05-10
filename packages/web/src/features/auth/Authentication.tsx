@@ -215,6 +215,7 @@ const Authentication: React.FC = ({ children }) => {
 
   /**
    * Return the redirect url from the query parameters.
+   * @return {string}
    */
   const getRedirectUrl = () => {
     const state = query.get('state');
