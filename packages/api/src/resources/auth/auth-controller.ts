@@ -19,6 +19,7 @@ export class AuthController {
      *     security: []
      *     parameters:
      *       - *providerParam
+     *       - *stateParam
      *     responses:
      *       301:
      *         description: Redirection to OAuth2 service.
@@ -169,7 +170,12 @@ export class AuthController {
   private login = async (req: Request, res: Response) => {
     const { provider } = req.params;
     const service = OAuthServiceFactory.create(provider);
-    const url = service.getAuthUrl();
+    let url = service.getAuthUrl();
+
+    // Re-add state to URL
+    if (req.query.state) {
+      url += `&state=${req.query.state}`;
+    }
 
     return redirectResponse(res, url);
   };

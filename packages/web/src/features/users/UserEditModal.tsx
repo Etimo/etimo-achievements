@@ -1,12 +1,11 @@
-import { UserDto } from '@etimo-achievements/common';
+import { updateUser, UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { UserService } from './user-service';
-import { usersSelector } from './user-slice';
+import RequirePermission from '../../components/RequirePermission';
+import { getSingleUser } from './user-utils';
 
 type Props = {
   userId: string;
@@ -22,50 +21,49 @@ const UserEditModal: React.FC<Props> = ({ userId, onClose, onSubmit }) => {
     formState: { errors },
   } = useForm<UserDto>();
   const [loading, setLoading] = useState(false);
-  const { users } = useAppSelector(usersSelector);
   const [user, setUser] = useState<UserDto>();
-  const userService = new UserService();
 
   useEffect(() => {
-    setUser(users.find((u) => u.id === userId));
-  }, [users]);
+    getSingleUser(userId).then(setUser);
+  }, []);
 
-  const onSubmitForm: SubmitHandler<UserDto> = (updatedUser) => {
+  const onSubmitForm: SubmitHandler<UserDto> = async (updatedUser) => {
     setLoading(true);
-    userService.update(userId, updatedUser).then((response) => {
-      setLoading(false);
-      toastResponse(response, 'User edited successfully', 'User could not be updated', () => {
-        reset();
-        onSubmit();
-        onClose();
-      });
+    const response = await updateUser(userId, updatedUser).wait();
+    toastResponse(response, 'User edited successfully', 'User could not be updated', () => {
+      reset();
+      onSubmit();
+      setTimeout(onClose, 1);
     });
+    setLoading(false);
   };
 
   return user ? (
-    <Modal title="Edit User" showModal={true} onRequestClose={onClose}>
-      <Form onSubmit={handleSubmit(onSubmitForm)}>
-        <FormTextInput
-          label="Name"
-          defaultValue={user.name}
-          register={register('name', { required: true, maxLength: 255 })}
-          error={errors.name}
-        />
-        <FormTextInput
-          label="E-mail"
-          defaultValue={user.email}
-          register={register('email', { required: true, maxLength: 255 })}
-          error={errors.email}
-        />
-        <FormTextInput
-          label="Slack handle"
-          defaultValue={user.slackHandle}
-          register={register('slackHandle', { required: true, maxLength: 255 })}
-          error={errors.slackHandle}
-        />
-        <FormSubmitButton label="Update" loading={loading} />
-      </Form>
-    </Modal>
+    <RequirePermission update="users">
+      <Modal title="Edit User" showModal={true} onRequestClose={onClose}>
+        <Form onSubmit={handleSubmit(onSubmitForm)}>
+          <FormTextInput
+            label="Name"
+            defaultValue={user.name}
+            register={register('name', { required: true, maxLength: 255 })}
+            error={errors.name}
+          />
+          <FormTextInput
+            label="E-mail"
+            defaultValue={user.email}
+            register={register('email', { required: true, maxLength: 255 })}
+            error={errors.email}
+          />
+          <FormTextInput
+            label="Slack handle"
+            defaultValue={user.slackHandle}
+            register={register('slackHandle', { required: true, maxLength: 255 })}
+            error={errors.slackHandle}
+          />
+          <FormSubmitButton label="Update" loading={loading} />
+        </Form>
+      </Modal>
+    </RequirePermission>
   ) : null;
 };
 

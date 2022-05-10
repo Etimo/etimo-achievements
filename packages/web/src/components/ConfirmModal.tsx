@@ -1,16 +1,26 @@
 import React from 'react';
 import { Card } from './cards';
 import Modal from './Modal';
+import Spinner from './Spinner';
 
 type Props = {
   title: string;
+  loading?: boolean;
   confirmLabel?: string;
   cancelLabel?: string;
   onCancel: () => void;
   onConfirm: () => void;
 };
 
-const ConfirmModal: React.FC<Props> = ({ title, confirmLabel, cancelLabel, onCancel, onConfirm, children }) => {
+const ConfirmModal: React.FC<Props> = ({
+  title,
+  loading,
+  confirmLabel,
+  cancelLabel,
+  onCancel,
+  onConfirm,
+  children,
+}) => {
   return (
     <Modal title={title} showModal={true} onRequestClose={onCancel}>
       <Card>
@@ -31,6 +41,7 @@ const ConfirmModal: React.FC<Props> = ({ title, confirmLabel, cancelLabel, onCan
               className="shadow w-4/5 bg-slate-500 hover:bg-slate-600 hover:cursor-pointer focus:shadow-outline focus:outline-none text-white font-bold py-2 rounded"
               onClick={onConfirm}
             >
+              <Spinner loading={loading} />
               {confirmLabel || 'Confirm'}
             </button>
           </div>

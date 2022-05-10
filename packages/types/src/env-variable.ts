@@ -15,6 +15,8 @@ export type EnvVariable =
   | 'GOOGLE_REDIRECT_URI'
   | 'JWT_EXPIRATION_SECONDS'
   | 'JWT_SECRET'
+  | 'LOG_HEADERS'
+  | 'LOG_CONTEXT'
   | 'NODE_ENV'
   | 'PORT'
   | 'SLACK_CHANNEL_HIGH'

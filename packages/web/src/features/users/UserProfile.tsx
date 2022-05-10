@@ -1,26 +1,23 @@
-import { uuid } from '@etimo-achievements/common';
+import { UserDto, uuid } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../app/store';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam, queryParam } from '../../common/utils/query-helper';
 import { EditButton } from '../../components/buttons';
 import { Card, CardRow } from '../../components/cards';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
-import { UserService } from './user-service';
-import { profileSelector } from './user-slice';
+import { getMyUser } from './user-utils';
 import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile: React.FC = () => {
   const removeQueryParam = useRemoveQueryParam();
-  const profile = useAppSelector(profileSelector);
   const [monitor, setMonitor] = useState(uuid());
-  const userService = new UserService();
+  const [profile, setProfile] = useState<UserDto>();
 
   const getEditState = () => queryParam<string>(window.location, 'edit', '');
 
   useEffect(() => {
-    userService.getProfile();
+    getMyUser().then(setProfile);
   }, [monitor]);
 
   if (!profile) return null;

@@ -1,11 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-const Login = (): JSX.Element => {
-  useEffect(() => {
-    window.location.href = process.env.API_URL + '/auth/login/google';
-  });
-
-  return <></>;
+const Login = () => {
+  return <div>Logging in</div>;
 };
 
 export default Login;

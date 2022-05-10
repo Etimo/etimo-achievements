@@ -16,19 +16,21 @@ import { Menu, MenuItem, ProSidebar, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
-import useLoggedIn from '../common/hooks/use-logged-in';
+import useLoggedIn from '../features/auth/hooks/use-logged-in';
+import useLoginState from '../features/auth/hooks/use-login-state';
 import RequirePermission from './RequirePermission';
 const version = require('../version.json');
 
 const SideMenu: React.FC = () => {
-  const isLoggedIn = useLoggedIn();
+  const loggedIn = useLoggedIn();
+  const loginState = useLoginState();
 
   const date = new Date(version.date).toISOString().split('T')[0].replace(/-/g, '');
   const versionInfo = `${date}.${version.build_number}`;
 
   return (
     <ProSidebar>
-      {isLoggedIn ? (
+      {loggedIn ? (
         <>
           <RequirePermission read="profile">
             <Menu iconShape="round">
@@ -91,7 +93,7 @@ const SideMenu: React.FC = () => {
         </>
       ) : null}
       <Menu iconShape="square">
-        {isLoggedIn ? (
+        {loggedIn ? (
           <MenuItem icon={<FontAwesomeIcon icon={faSignOut} />}>
             Log out
             <Link to={Routes.Logout} />
@@ -99,7 +101,7 @@ const SideMenu: React.FC = () => {
         ) : (
           <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
             Sign in with Google
-            <Link to={Routes.Login} />
+            <Link to={Routes.Login + '?state=' + loginState} />
           </MenuItem>
         )}
       </Menu>

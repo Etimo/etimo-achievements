@@ -1,17 +1,7 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthService } from './auth-service';
+import React from 'react';
 
-const Logout = (): JSX.Element => {
-  const navigate = useNavigate();
-  const authService = new AuthService();
-
-  useEffect(() => {
-    authService.logout();
-    navigate('/');
-  });
-
-  return <></>;
+const Logout = () => {
+  return <div>Logging out</div>;
 };
 
 export default Logout;

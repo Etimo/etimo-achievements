@@ -1,15 +1,33 @@
 import { formatNumber } from '@etimo-achievements/common';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import Header from '../../components/Header';
-import PaginatedTable, { Column } from '../../components/table/PaginatedTable';
-import { HighscoreService } from './highscore-service';
+import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { HighscoreComposite } from './highscore-types';
+import { getHighscores } from './highscore-utils';
 
 const Highscores: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = React.useState<any[]>([]);
   const [pageCount, setPageCount] = useState(0);
-  const highscoreService = new HighscoreService();
+
+  const fetchData = async (input: PaginationRequestInput) => {
+    setLoading(true);
+    const response = await getHighscores(input);
+    if (response) {
+      const { data, pagination } = response;
+      setData(mapToData(data));
+      setPageCount(pagination.totalPages ?? 0);
+    }
+    setLoading(false);
+  };
+
+  const mapToData = (composites: HighscoreComposite[]): any[] => {
+    return composites.map((h) => ({
+      name: h.user.name,
+      achievements: formatNumber(h.achievements),
+      points: `${formatNumber(h.points)} pts`,
+    }));
+  };
 
   const columns = React.useMemo(
     (): Column[] => [
@@ -33,35 +51,10 @@ const Highscores: React.FC = () => {
     []
   );
 
-  const mapToData = (composites: HighscoreComposite[]): any[] => {
-    return composites.map((h) => ({
-      name: h.user.name,
-      achievements: formatNumber(h.achievements),
-      points: `${formatNumber(h.points)} pts`,
-    }));
-  };
-
   return (
     <div className="w-1/2 mx-auto">
       <Header>Highscores</Header>
-      <PaginatedTable
-        columns={columns}
-        data={data}
-        pageCount={pageCount}
-        loading={loading}
-        fetchData={useCallback((input: { size: number; page: number; sort: string; order: string }) => {
-          const { size, page, sort, order } = input;
-          setLoading(true);
-          highscoreService.load((page - 1) * size, size, sort, order).then((response) => {
-            if (response) {
-              const { data, pagination } = response;
-              setData(mapToData(data));
-              setPageCount(pagination.totalPages ?? 0);
-            }
-            setLoading(false);
-          });
-        }, [])}
-      />
+      <PaginatedTable columns={columns} data={data} pageCount={pageCount} loading={loading} fetchData={fetchData} />
     </div>
   );
 };

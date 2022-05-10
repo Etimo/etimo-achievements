@@ -1,30 +1,28 @@
 import { AccessTokenDto, TokenInfoDto, TokenValidationDto, UserInfoDto } from '..';
 import Api from './api';
 
-export class AuthApi {
-  private api = new Api();
+const api = new Api();
 
-  public logout() {
-    return this.api.get('/auth/logout');
-  }
+export const authLogout = () => {
+  return api.get('/auth/logout');
+};
 
-  public callback(provider: string, code: string) {
-    return this.api.get(`/auth/callback/${provider}?code=${code}`);
-  }
+export const authCallback = (provider: string, code: string) => {
+  return api.get<AccessTokenDto>(`/auth/callback/${provider}?code=${code}`);
+};
 
-  public validate() {
-    return this.api.get<TokenValidationDto>('/auth/validate');
-  }
+export const authValidate = () => {
+  return api.get<TokenValidationDto>('/auth/validate');
+};
 
-  public refresh() {
-    return this.api.get<AccessTokenDto>('/auth/refresh');
-  }
+export const authRefresh = () => {
+  return api.get<AccessTokenDto>('/auth/refresh');
+};
 
-  public userInfo() {
-    return this.api.get<UserInfoDto>('/auth/userinfo');
-  }
+export const authUserInfo = () => {
+  return api.get<UserInfoDto>('/auth/userinfo');
+};
 
-  public introspect() {
-    return this.api.get<TokenInfoDto>('/auth/introspect');
-  }
-}
+export const authIntrospect = () => {
+  return api.get<TokenInfoDto>('/auth/introspect');
+};

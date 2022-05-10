@@ -1,10 +1,9 @@
-import { AchievementDto } from '@etimo-achievements/common';
+import { AchievementDto, createAchievement } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
-import { AchievementService } from './achievement-service';
 
 const AchievementCreate: React.FC = () => {
   const {
@@ -14,14 +13,12 @@ const AchievementCreate: React.FC = () => {
     formState: { errors },
   } = useForm<AchievementDto>();
   const [loading, setLoading] = useState(false);
-  const achievementService = new AchievementService();
 
-  const onSubmit: SubmitHandler<AchievementDto> = (achievement) => {
+  const onSubmit: SubmitHandler<AchievementDto> = async (achievement) => {
     setLoading(true);
-    achievementService.create(achievement).then((response) => {
-      setLoading(false);
-      toastResponse(response, 'Achievement created successfully', 'Achievement could not be created', () => reset());
-    });
+    const response = await createAchievement(achievement).wait();
+    setLoading(false);
+    toastResponse(response, 'Achievement created successfully', 'Achievement could not be created', () => reset());
   };
 
   return (

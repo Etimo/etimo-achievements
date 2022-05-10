@@ -1,12 +1,10 @@
-import { AchievementDto } from '@etimo-achievements/common';
+import { AchievementDto, updateAchievement } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { AchievementService } from './achievement-service';
-import { achievementSelector } from './achievement-slice';
+import { getSingleAchievement } from './achievement-utils';
 
 type Props = {
   achievementId: string;
@@ -22,23 +20,20 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, onClose, onSubmi
     formState: { errors },
   } = useForm<AchievementDto>();
   const [loading, setLoading] = useState(false);
-  const { achievements } = useAppSelector(achievementSelector);
   const [achievement, setAchievement] = useState<AchievementDto>();
-  const achievementService = new AchievementService();
 
   useEffect(() => {
-    setAchievement(achievements.find((a) => a.id === achievementId));
-  }, [achievements]);
+    getSingleAchievement(achievementId).then(setAchievement);
+  }, []);
 
-  const onSubmitForm: SubmitHandler<AchievementDto> = (updatedAchievement) => {
+  const onSubmitForm: SubmitHandler<AchievementDto> = async (updatedAchievement) => {
     setLoading(true);
-    achievementService.update(achievementId, updatedAchievement).then((response) => {
-      setLoading(false);
-      toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
-        reset();
-        onSubmit();
-        onClose();
-      });
+    const response = await updateAchievement(achievementId, updatedAchievement).wait();
+    setLoading(false);
+    toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
+      reset();
+      onSubmit();
+      setTimeout(onClose, 1);
     });
   };
 

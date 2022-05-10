@@ -1,40 +1,38 @@
 import { uniq, UserDto } from '..';
 import Api from './api';
 
-export class UserApi {
-  private api = new Api();
+const api = new Api();
 
-  public get(id: string) {
-    return this.api.get<UserDto>(`/users/${id}`);
-  }
+export const getUser = (id: string) => {
+  return api.get<UserDto>(`/users/${id}`);
+};
 
-  public getProfile() {
-    return this.api.get<UserDto>('/profile');
-  }
+export const getProfile = () => {
+  return api.get<UserDto>('/profile');
+};
 
-  public getMany(skip: number = 0, take: number = 50, sort?: string, order?: string) {
-    let url = `/users?skip=${skip}&take=${take}`;
-    if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
-    return this.api.get<UserDto[]>(url);
-  }
+export const getUsers = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
+  let url = `/users?skip=${skip}&take=${take}`;
+  if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
+  return api.get<UserDto[]>(url);
+};
 
-  public list(ids: string[]) {
-    return this.api.post<UserDto[]>('/users/list', uniq(ids.filter((i) => !!i)));
-  }
+export const listUsers = (ids: string[]) => {
+  return api.post<UserDto[]>('/users/list', uniq(ids.filter((i) => !!i)));
+};
 
-  public create(user: UserDto) {
-    return this.api.post<{ userId: string }>('/users', user);
-  }
+export const createUser = (user: UserDto) => {
+  return api.post<{ userId: string }>('/users', user);
+};
 
-  public update(id: string, user: UserDto) {
-    return this.api.put<{ userId: string }>(`/users/${id}`, user);
-  }
+export const updateUser = (id: string, user: UserDto) => {
+  return api.put<{ userId: string }>(`/users/${id}`, user);
+};
 
-  public updateProfile(user: UserDto) {
-    return this.api.put<{ userId: string }>('/profile', user);
-  }
+export const updateProfile = (user: UserDto) => {
+  return api.put<{ userId: string }>('/profile', user);
+};
 
-  public delete(id: string) {
-    return this.api.delete<{ userId: string }>(`/users/${id}`);
-  }
-}
+export const deleteUser = (id: string) => {
+  return api.delete<{ userId: string }>(`/users/${id}`);
+};

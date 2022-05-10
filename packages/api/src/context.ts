@@ -8,7 +8,7 @@ import {
 } from '@etimo-achievements/data';
 import { IContext } from '@etimo-achievements/service';
 import { IFeatureService, ILogger, INotifyService, JWT } from '@etimo-achievements/types';
-import { DevLogger, FeatureServiceFactory, NotifyServiceFactory } from '@etimo-achievements/utils';
+import { DevLogger, FeatureServiceFactory, getEnvVariable, NotifyServiceFactory } from '@etimo-achievements/utils';
 import { Request, Response } from 'express';
 
 let count: number = 0;
@@ -52,13 +52,16 @@ export class Context implements IContext {
   };
 
   public get loggingContext() {
-    return {
+    if (getEnvVariable('LOG_CONTEXT') !== 'true') {
+      return {};
+    }
+
+    const context: any = {
       requestId: this.requestId,
       userId: this.jwt?.sub,
       email: this.jwt?.email,
       scopes: this.scopes,
       request: {
-        headers: this.requestHeaders,
         userAgent: this.req.get('user-agent'),
         method: this.req.method,
         httpVersion: this.req.httpVersion,
@@ -68,11 +71,17 @@ export class Context implements IContext {
       },
       response: {
         elapsed: Date.now() - this.requestDate.getTime(),
-        headers: this.responseHeaders,
         statusCode: this.res.statusCode,
         statusMessage: this.res.statusMessage,
       },
     };
+
+    if (getEnvVariable('LOG_HEADERS') === 'true') {
+      context.request.headers = this.requestHeaders;
+      context.response.headers = this.responseHeaders;
+    }
+
+    return context;
   }
 
   // #security -- delete sensitive request headers here

@@ -11,6 +11,7 @@ export type ApiResponse<T> = {
 };
 
 type ApiResult<T> = {
+  data: () => Promise<T | undefined>;
   wait: () => Promise<ApiResponse<T>>;
   abort: () => void;
 };
@@ -110,6 +111,10 @@ class Api {
     });
 
     return {
+      data: async () => {
+        const response = await responsePromise;
+        if (response.success) return response.data();
+      },
       wait: async () => await responsePromise,
       abort,
     };

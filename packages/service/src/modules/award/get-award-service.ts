@@ -12,4 +12,10 @@ export class GetAwardService {
     const count = await repositories.award.count();
     return paginate(awards, count, options);
   }
+
+  public async get(awardId: string): Promise<IAward> {
+    const { repositories } = this.context;
+
+    return repositories.award.findById(awardId);
+  }
 }

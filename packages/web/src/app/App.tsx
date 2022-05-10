@@ -1,25 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Toaster } from 'react-hot-toast';
-import { useLocation } from 'react-router';
 import SideMenu from '../components/SideMenu';
-import { AuthService } from '../features/auth/auth-service';
-import Router, { Routes } from './Router';
+import Authentication from '../features/auth/Authentication';
+import Router from './Router';
 
 const App = (): JSX.Element => {
-  const location = useLocation();
-  const authService = new AuthService();
-
-  useEffect(() => {
-    // If the user is not currently logging in, refresh the token.
-    if (location.pathname !== Routes.LoginCallback) {
-      authService.initialize().then((success) => {
-        if (success) {
-          authService.getInfo();
-        }
-      });
-    }
-  }, []);
-
   return (
     <React.StrictMode>
       <div className="flex min-h-screen">
@@ -28,7 +13,9 @@ const App = (): JSX.Element => {
           <SideMenu />
         </div>
         <div className="p-4 w-full mx-auto">
-          <Router />
+          <Authentication>
+            <Router />
+          </Authentication>
         </div>
       </div>
     </React.StrictMode>
