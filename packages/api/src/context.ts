@@ -61,6 +61,14 @@ export class Context implements IContext {
       userId: this.jwt?.sub,
       email: this.jwt?.email,
       scopes: this.scopes,
+      request: {
+        userAgent: this.req.get('user-agent'),
+        method: this.req.method,
+        httpVersion: this.req.httpVersion,
+        originalUrl: this.req.originalUrl,
+        query: this.req.query,
+        url: this.req.url,
+      },
       response: {
         elapsed: Date.now() - this.requestDate.getTime(),
         statusCode: this.res.statusCode,
