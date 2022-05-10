@@ -1,4 +1,5 @@
 import { LoggingColor } from '@etimo-achievements/types';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { NextFunction, Request, Response } from 'express';
 import { getContext } from '../utils';
 
@@ -17,7 +18,10 @@ export const loggingMiddleware = () => {
     const request = `${req.method} ${req.path}`;
 
     let color = LoggingColor.Green;
-    ctx.logger.info(`[${count}] -> ${request} {${rid}} [${req.ip}]`, { color: LoggingColor.Dim });
+
+    if (getEnvVariable('LOG_REQUESTS') === 'true') {
+      ctx.logger.info(`[${count}] -> ${request} {${rid}} [${req.ip}]`, { color: LoggingColor.Dim });
+    }
 
     const logResponse = (res: Response, message: string) => {
       color = getColor(res.statusCode);

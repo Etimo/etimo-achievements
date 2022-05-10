@@ -35,6 +35,7 @@ env:
   SLACK_CHANNEL_LOW: C03BQBQ29PH
   LOG_HEADERS: true
   LOG_CONTEXT: true
+  LOG_REQUESTS: false
   # Stored as environment secrets
   API_KEY: ${{ secrets.API_KEY }}
   COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
