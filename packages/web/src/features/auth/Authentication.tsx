@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
 import { authSelector, setAccessToken, setLoggedIn, setLoggedOut, setTokenInfo, setUserInfo } from './auth-slice';
 import {
+  canRefreshToken,
   getTokenInfo,
   getUserInfo,
   isLoggedIn,
@@ -38,11 +39,13 @@ const Authentication: React.FC = ({ children }) => {
   const [loginState, setLoginState] = useState<LoginState>();
 
   /**
-   * If local storage indicates we might be logged in, set that state.
+   * If local storage indicates we might be logged in or we can refresh token, set that state.
    */
   useEffect(() => {
     if (isLoggedIn()) {
       setLoginState('maybe-logged-in');
+    } else if (canRefreshToken()) {
+      setLoginState('token-expired');
     }
   }, []);
 

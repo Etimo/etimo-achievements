@@ -20,6 +20,10 @@
  *           type: integer
  *           description: In how many seconds the token will expire.
  *           example: 3600
+ *         rt_expires_in:
+ *           type: integer
+ *           description: In how many seconds the refresh token will expire.
+ *           example: 2592000
  *         refresh_token:
  *           type: string
  *           description: The refresh token that can be used to get a new access token.
@@ -35,6 +39,7 @@ export type AccessTokenDto = {
   access_token: string;
   token_type: 'bearer';
   expires_in: number;
+  rt_expires_in: number;
   refresh_token?: string;
   scopes: string[];
 };
