@@ -24,7 +24,7 @@ const UserDeleteModal: React.FC<Props> = ({ userId, onClose, onSubmit }) => {
     const response = await deleteUser(userId).wait();
     if (response.success) {
       onSubmit();
-      onClose();
+      setTimeout(onClose, 1);
     }
     setLoading(false);
     toastResponse(response, 'User deleted successfully', 'User could not be deleted');

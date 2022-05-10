@@ -24,7 +24,7 @@ const AchievementDeleteModal: React.FC<Props> = ({ achievementId, onClose, onSub
     const response = await deleteAchievement(achievementId).wait();
     if (response.success) {
       onSubmit();
-      onClose();
+      setTimeout(onClose, 1);
     }
     setLoading(false);
     toastResponse(response, 'Achievement deleted successfully', 'Achievement could not be deleted');

@@ -1,10 +1,41 @@
-import { AwardDto, createAward, getAwards, listAchievements, listUsers, uniq } from '@etimo-achievements/common';
+import {
+  AwardDto,
+  createAward,
+  getAchievement,
+  getAward,
+  getAwards,
+  getUser,
+  listAchievements,
+  listUsers,
+  uniq,
+} from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { AwardComposite } from './award-types';
 
 export const giveAward = (userId: string, achievementId: string) => {
   return createAward({ userId, achievementId } as AwardDto).wait();
+};
+
+export const getSingleAward = async (awardId: string) => {
+  const response = await getAward(awardId).wait();
+  if (response.success) {
+    const award = await response.data();
+    const achievementPromise = getAchievement(award.achievementId).data();
+    const awardedToPromise = getUser(award.userId).data();
+    const awardedByPromise = getUser(award.awardedByUserId).data();
+
+    await Promise.allSettled([achievementPromise, awardedToPromise, awardedByPromise]);
+    const achievement = await achievementPromise;
+    const awardedTo = await awardedToPromise;
+    const awardedBy = await awardedByPromise;
+
+    if (achievement && awardedTo && awardedBy) {
+      return { award, achievement, awardedTo, awardedBy };
+    }
+  } else {
+    toast.error('Could not get award: ' + (await response.errorMessage));
+  }
 };
 
 export const getManyAwards = async (input: PaginationRequestInput) => {

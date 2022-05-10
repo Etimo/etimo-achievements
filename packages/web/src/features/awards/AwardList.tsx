@@ -1,16 +1,14 @@
-import { deleteAward, formatNumber, uuid } from '@etimo-achievements/common';
+import { formatNumber, uuid } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
-import { toastResponse } from '../../common/utils/toast-response';
 import { TrashButton } from '../../components/buttons';
-import ConfirmModal from '../../components/ConfirmModal';
 import Header from '../../components/Header';
-import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { AwardComposite } from './award-types';
 import { getManyAwards } from './award-utils';
+import AwardDeleteModal from './AwardDeleteModal';
 
 const AwardList: React.FC = () => {
   const query = useQuery();
@@ -46,17 +44,6 @@ const AwardList: React.FC = () => {
         <TrashButton id={c.award.id} link={addQueryParam(window.location, 'delete', c.award.id)} loading={deleting} />
       ),
     }));
-  };
-
-  const trashHandler = async (awardId: string) => {
-    setDeleting(awardId);
-    const response = await deleteAward(awardId).wait();
-    if (response.success) {
-      setMonitor(uuid());
-    }
-    setDeleting(undefined);
-    removeQueryParam('delete');
-    toastResponse(response, 'Award deleted successfully', 'Award could not be deleted');
   };
 
   const columns = React.useMemo(
@@ -113,25 +100,11 @@ const AwardList: React.FC = () => {
         fetchData={fetchData}
       />
       {getDeleteId() && (
-        <RequirePermission remove="awards">
-          <ConfirmModal
-            title="Confirm delete"
-            cancelLabel="No"
-            confirmLabel="Yes"
-            onCancel={() => {
-              removeQueryParam('delete');
-            }}
-            onConfirm={() => {
-              trashHandler(getDeleteId());
-            }}
-          >
-            <div className="text-center">Are you sure you want to delete this award?</div>
-            <div className="text-center pt-5 text-2xl">
-              {data.find((c) => c.id === getDeleteId())?.name} (awarded to{' '}
-              {data.find((c) => c.id === getDeleteId())?.awardedTo})
-            </div>
-          </ConfirmModal>
-        </RequirePermission>
+        <AwardDeleteModal
+          awardId={getDeleteId()}
+          onClose={() => removeQueryParam('delete')}
+          onSubmit={() => setMonitor(uuid())}
+        />
       )}
     </div>
   );

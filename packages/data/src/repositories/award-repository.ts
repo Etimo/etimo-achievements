@@ -33,6 +33,12 @@ export class AwardRepository {
     });
   }
 
+  findById(awardId: string): Promise<IAward> {
+    return catchErrors(async () => {
+      return AwardModel.query().findById(awardId);
+    });
+  }
+
   findLatest(userId: string, achievementId: string): Promise<IAward | undefined> {
     return catchErrors(async () => {
       return AwardModel.query().orderBy('created_at', 'desc').findOne({

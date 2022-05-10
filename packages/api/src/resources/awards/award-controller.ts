@@ -1,13 +1,6 @@
 import { DeleteAwardService, GetAwardService, GiveAwardService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import {
-  createdResponse,
-  getContext,
-  notImplementedResponse,
-  okResponse,
-  paginatedResponse,
-  protectedEndpoint,
-} from '../../utils';
+import { createdResponse, getContext, okResponse, paginatedResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { validateOrderBy } from '../../utils/validation-helper';
 import { AwardMapper } from './award-mapper';
@@ -117,8 +110,14 @@ export class AwardController {
     return paginatedResponse(res, '/awards', awards, AwardMapper.toAwardDto);
   };
 
-  private getAward = async (_req: Request, res: Response) => {
-    return notImplementedResponse(res);
+  private getAward = async (req: Request, res: Response) => {
+    const awardId = req.params.awardId;
+
+    const service = new GetAwardService(getContext());
+    const award = await service.get(awardId);
+    const dto = AwardMapper.toAwardDto(award);
+
+    return okResponse(res, dto);
   };
 
   private createAward = async (req: Request, res: Response) => {

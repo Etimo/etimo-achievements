@@ -33,7 +33,7 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, onClose, onSubmi
     toastResponse(response, 'Achievement edited successfully', 'Achievement could not be updated', () => {
       reset();
       onSubmit();
-      onClose();
+      setTimeout(onClose, 1);
     });
   };
 

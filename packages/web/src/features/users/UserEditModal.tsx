@@ -33,7 +33,7 @@ const UserEditModal: React.FC<Props> = ({ userId, onClose, onSubmit }) => {
     toastResponse(response, 'User edited successfully', 'User could not be updated', () => {
       reset();
       onSubmit();
-      onClose();
+      setTimeout(onClose, 1);
     });
     setLoading(false);
   };
