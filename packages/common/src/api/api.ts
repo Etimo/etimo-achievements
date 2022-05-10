@@ -1,4 +1,5 @@
 import { PaginationInfo } from '..';
+
 export type ApiResponse<T> = {
   success: boolean;
   body?: Promise<T>;
@@ -10,7 +11,7 @@ export type ApiResponse<T> = {
   errorMessage?: Promise<string>;
 };
 
-type ApiResult<T> = {
+export type ApiResult<T> = {
   data: () => Promise<T | undefined>;
   wait: () => Promise<ApiResponse<T>>;
   abort: () => void;

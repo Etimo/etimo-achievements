@@ -1,9 +1,7 @@
-import Api from './api';
+import AuthorizedApi from './authorized-api';
 
-export class FeatureApi {
-  private api = new Api();
+const authorizedApi = new AuthorizedApi();
 
-  public get(featureName: string) {
-    return this.api.get<boolean>(`/feature/${featureName}`);
-  }
-}
+export const getFeature = (featureName: string) => {
+  return authorizedApi.get<boolean>(`/feature/${featureName}`);
+};
