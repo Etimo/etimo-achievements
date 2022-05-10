@@ -1,3 +1,4 @@
+import { toBase64 } from '@etimo-achievements/common';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import {
   faAward,
@@ -14,7 +15,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Menu, MenuItem, ProSidebar, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Routes } from '../app/Router';
 import { useAppSelector } from '../app/store';
 import { authSelector } from '../features/auth/auth-slice';
@@ -22,6 +23,7 @@ import RequirePermission from './RequirePermission';
 const version = require('../version.json');
 
 const SideMenu: React.FC = () => {
+  const location = useLocation();
   const { authenticated } = useAppSelector(authSelector);
 
   const date = new Date(version.date).toISOString().split('T')[0].replace(/-/g, '');
@@ -100,7 +102,13 @@ const SideMenu: React.FC = () => {
         ) : (
           <MenuItem icon={<FontAwesomeIcon icon={faGoogle} />}>
             Sign in with Google
-            <Link to={Routes.Login} />
+            <Link
+              to={
+                Routes.Login +
+                '?state=' +
+                toBase64(JSON.stringify({ redirectUrl: location.pathname + location.search }))
+              }
+            />
           </MenuItem>
         )}
       </Menu>

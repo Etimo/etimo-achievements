@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { Routes } from '../../app/Router';
 import { useAppDispatch, useAppSelector } from '../../app/store';
 import useQuery from '../../common/hooks/use-query';
-import { authSelector, setAccessToken, setLoginState, setTokenInfo, setUserInfo } from './auth-slice';
+import { authSelector, setAccessToken, setLoggedIn, setLoggedOut, setTokenInfo, setUserInfo } from './auth-slice';
 import {
   getTokenInfo,
   getUserInfo,
@@ -17,129 +17,53 @@ import {
   validateToken,
 } from './auth-utils';
 
+type LoginState =
+  | 'logged-out'
+  | 'login'
+  | 'failed-login'
+  | 'got-code'
+  | 'got-token'
+  | 'token-expired'
+  | 'maybe-logged-in'
+  | 'logged-in'
+  | 'logout';
+
 const Authentication: React.FC = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const query = useQuery();
-  const { loginState, expiresAt, userInfo, tokenInfo } = useAppSelector(authSelector);
+  const { expiresAt, userInfo, tokenInfo } = useAppSelector(authSelector);
   const [redirectUrl, setRedirectUrl] = useState<string>();
+  const [loginState, setLoginState] = useState<LoginState>();
 
-  const runLoginCallback = async () => {
-    const code = query.get('code');
-    if (!code) return toast.error('No authorization code found in query parameters');
-
-    const token = await loginCallback(code);
-    if (token) {
-      dispatch(setAccessToken(token));
-      dispatch(setLoginState('should-validate'));
-    } else {
-      dispatch(setLoginState('failed-login'));
-    }
-  };
-
-  const runValidateAccessToken = async () => {
-    const valid = await validateToken();
-    if (valid) {
-      dispatch(setLoginState('logged-in'));
-    } else {
-      dispatch(setLoginState('failed-login'));
-    }
-  };
-
-  const runGetTokenInfo = async () => {
-    if (tokenInfo) return;
-
-    const info = await getTokenInfo();
-    if (info) {
-      dispatch(setTokenInfo(info));
-    } else {
-      dispatch(setLoginState('failed-login'));
-    }
-  };
-
-  const runGetUserInfo = async () => {
-    if (userInfo) return;
-
-    const info = await getUserInfo();
-    if (info) {
-      dispatch(setUserInfo(info));
-    } else {
-      dispatch(setLoginState('failed-login'));
-    }
-  };
-
-  const runRefreshToken = async () => {
-    const token = await refreshToken();
-    if (token) {
-      dispatch(setAccessToken(token));
-      dispatch(setLoginState('should-validate'));
-    } else {
-      dispatch(setLoginState('failed-login'));
-    }
-  };
-
-  const runLogout = async () => {
-    await logout();
-    navigate(Routes.Home);
-    dispatch(setLoginState('logged-out'));
-  };
-
+  /**
+   * Use the path to determine what auth state we're in when loading the page.
+   */
   useEffect(() => {
-    switch (loginState) {
-      case 'should-login':
-        login();
-        break;
-
-      case 'got-code':
-        runLoginCallback();
-        break;
-
-      case 'should-validate':
-        runValidateAccessToken();
-        break;
-
-      case 'logged-in':
-        runGetTokenInfo();
-        runGetUserInfo();
-        break;
-
-      case 'should-refresh-token':
-        runRefreshToken();
-        break;
-
-      case 'should-logout':
-      case 'failed-login':
-        runLogout();
-        break;
-    }
-  }, [loginState]);
-
-  useEffect(() => {
-    if (expiresAt) {
-      const timer = setTimeout(() => dispatch(setLoginState('should-refresh-token')), expiresAt - Date.now());
-      return () => clearTimeout(timer);
-    }
-  }, [expiresAt]);
-
-  useEffect(() => {
+    // If we're on the login page, and we haven't stored login state, we're trying to login.
     if (location.pathname === Routes.Login && !isLoggedIn()) {
-      dispatch(setLoginState('should-login'));
-    } else if (location.pathname === Routes.LoginCallback && query.get('code')) {
-      dispatch(setLoginState('got-code'));
+      setLoginState('login');
+      const redirectUrl = getRedirectUrl();
+      if (redirectUrl) setRedirectUrl(redirectUrl);
+    }
 
-      const state = query.get('state');
-      if (state) {
-        const { redirectUrl } = JSON.parse(fromBase64(state));
-        if (redirectUrl) {
-          setRedirectUrl(redirectUrl);
-        }
-      }
-    } else if (location.pathname === Routes.Logout) {
-      dispatch(setLoginState('should-logout'));
+    // If we're on the login callback page, and we have a code, we're at the 'got-code' state.
+    else if (location.pathname === Routes.LoginCallback && query.get('code')) {
+      setLoginState('got-code');
+      const redirectUrl = getRedirectUrl();
+      if (redirectUrl) setRedirectUrl(redirectUrl);
+    }
+
+    // If we're on the logout page, we're trying to logout.
+    else if (location.pathname === Routes.Logout) {
+      setLoginState('logout');
     }
   }, [location]);
 
+  /**
+   * When the redirect url is set, and we're marked as logged in, we are free to redirect.
+   */
   useEffect(() => {
     if (redirectUrl && loginState === 'logged-in') {
       navigate(redirectUrl);
@@ -147,11 +71,156 @@ const Authentication: React.FC = ({ children }) => {
     }
   }, [redirectUrl, loginState]);
 
+  /**
+   * If we think we're logged in, validate it.
+   */
   useEffect(() => {
     if (isLoggedIn()) {
-      dispatch(setLoginState('should-validate'));
+      setLoginState('maybe-logged-in');
     }
   }, []);
+
+  /**
+   * Handle the different states of the login process.
+   */
+  useEffect(() => {
+    switch (loginState) {
+      // We're trying to login.
+      case 'login':
+        login(redirectUrl);
+        break;
+
+      // We got an authorization code from query parameters.
+      case 'got-code':
+        runLoginCallback();
+        break;
+
+      // We got an access token, or think we have.
+      case 'got-token':
+      case 'maybe-logged-in':
+        runValidateAccessToken();
+        break;
+
+      // We've validated the access token, and we're logged in.
+      case 'logged-in':
+        dispatch(setLoggedIn());
+        runGetTokenInfo();
+        runGetUserInfo();
+        break;
+
+      // The token has expired and needs to be refreshed.
+      case 'token-expired':
+        runRefreshToken();
+        break;
+
+      // We're trying to logout, or the login process failed.
+      case 'logout':
+      case 'failed-login':
+        runLogout();
+        break;
+    }
+  }, [loginState]);
+
+  /**
+   * When the token expiration date changes, update the expiration timer to the new expiration date.
+   */
+  useEffect(() => {
+    if (expiresAt) {
+      const timeout = Math.max(10000, expiresAt - Date.now() - 120 * 1000); // At least wait 10 seconds.
+      const timer = setTimeout(() => setLoginState('token-expired'), timeout);
+      return () => clearTimeout(timer);
+    }
+  }, [expiresAt]);
+
+  /**
+   * Get token by calling the login callback api endpoint with the authorization code.
+   */
+  const runLoginCallback = async () => {
+    const code = query.get('code');
+    if (!code) return toast.error('No authorization code found in query parameters');
+
+    const token = await loginCallback(code);
+    if (token) {
+      dispatch(setAccessToken(token));
+      setLoginState('got-token');
+    } else {
+      setLoginState('failed-login');
+    }
+  };
+
+  /**
+   * Validate the token by calling the validate endpoint.
+   */
+  const runValidateAccessToken = async () => {
+    const valid = await validateToken();
+    if (valid) {
+      setLoginState('logged-in');
+    } else {
+      setLoginState('failed-login');
+    }
+  };
+
+  /**
+   * Get token info by calling the token info endpoint.
+   */
+  const runGetTokenInfo = async () => {
+    if (tokenInfo) return;
+
+    const info = await getTokenInfo();
+    if (info) {
+      dispatch(setTokenInfo(info));
+    } else {
+      setLoginState('failed-login');
+    }
+  };
+
+  /**
+   * Get user info by calling the user info endpoint.
+   */
+  const runGetUserInfo = async () => {
+    if (userInfo) return;
+
+    const info = await getUserInfo();
+    if (info) {
+      dispatch(setUserInfo(info));
+    } else {
+      setLoginState('failed-login');
+    }
+  };
+
+  /**
+   * Refresh the token by calling the refresh endpoint.
+   */
+  const runRefreshToken = async () => {
+    const token = await refreshToken();
+    if (token) {
+      dispatch(setAccessToken(token));
+      setLoginState('got-token');
+    } else {
+      setLoginState('failed-login');
+    }
+  };
+
+  /**
+   * Logout by calling the logout endpoint.
+   */
+  const runLogout = async () => {
+    await logout();
+    navigate(Routes.Home);
+    setLoginState('logged-out');
+    dispatch(setLoggedOut());
+  };
+
+  /**
+   * Return the redirect url from the query parameters.
+   */
+  const getRedirectUrl = () => {
+    const state = query.get('state');
+    if (state) {
+      const { redirectUrl } = JSON.parse(fromBase64(state));
+      return redirectUrl;
+    }
+  };
 
   return <>{children}</>;
 };

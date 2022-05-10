@@ -6,9 +6,6 @@ const path = require('path');
 module.exports = {
   entry: path.resolve(__dirname, './src/app/index.tsx'),
   target: 'web',
-  resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
-  },
   module: {
     rules: [
       {
@@ -42,7 +39,7 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.ts', '.js', '.tsx', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js'],
     fallback: {
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer'),

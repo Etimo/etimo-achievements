@@ -11,8 +11,8 @@ import toast from 'react-hot-toast';
 import { LocalStorage } from '../../common/enums/local-storage';
 import { AuthStorageKeys } from './auth-types';
 
-export const login = async () => {
-  const redirectUrl = window.location.pathname + window.location.search;
+export const login = async (currentUrl?: string) => {
+  const redirectUrl = currentUrl ?? window.location.pathname + window.location.search;
   window.location.href = process.env.API_URL + '/auth/login/google?state=' + toBase64(JSON.stringify({ redirectUrl }));
 };
 
