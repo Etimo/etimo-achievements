@@ -1,19 +1,25 @@
 import React, { useEffect } from 'react';
-import { Outlet } from 'react-router';
-import { login } from '../features/auth/auth-utils';
+import { Outlet, useNavigate } from 'react-router';
+import { Routes } from '../app/Router';
 import useLoggedIn from '../features/auth/hooks/use-logged-in';
-import Login from '../features/auth/Login';
+import useLoginState from '../features/auth/hooks/use-login-state';
 
-const ProtectedRoute: React.FC = ({ children }: any) => {
+const ProtectedRoute = () => {
+  const loginState = useLoginState();
   const loggedIn = useLoggedIn();
+  const navigate = useNavigate();
+
+  if (loggedIn) {
+    return <Outlet />;
+  }
 
   useEffect(() => {
     if (!loggedIn) {
-      login();
+      navigate(Routes.Login + '?state=' + loginState);
     }
-  }, [loggedIn]);
+  }, []);
 
-  return loggedIn ? <Outlet /> : <Login />;
+  return null;
 };
 
 export default ProtectedRoute;

@@ -5,17 +5,23 @@ import { AuthState } from './auth-types';
 
 const initialState: AuthState = {
   authenticated: false,
+  authenticating: false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
+    setLoggingIn: (state: AuthState) => {
+      state.authenticating = true;
+    },
     setLoggedIn: (state: AuthState) => {
       state.authenticated = true;
+      state.authenticating = false;
     },
     setLoggedOut: (state: AuthState) => {
       state.authenticated = false;
+      state.authenticating = false;
       state.expiresAt = 0;
       state.userId = undefined;
       state.accessToken = undefined;

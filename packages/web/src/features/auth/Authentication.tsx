@@ -38,12 +38,23 @@ const Authentication: React.FC = ({ children }) => {
   const [loginState, setLoginState] = useState<LoginState>();
 
   /**
+   * If we think we're logged in, validate it.
+   */
+  useEffect(() => {
+    if (isLoggedIn()) {
+      setLoginState('maybe-logged-in');
+    }
+  }, []);
+
+  /**
    * Use the path to determine what auth state we're in when loading the page.
    */
   useEffect(() => {
     // If we're on the login page, and we haven't stored login state, we're trying to login.
-    if (location.pathname === Routes.Login && !isLoggedIn()) {
-      setLoginState('login');
+    if (location.pathname === Routes.Login) {
+      if (!isLoggedIn()) {
+        setLoginState('login');
+      }
       const redirectUrl = getRedirectUrl();
       if (redirectUrl) setRedirectUrl(redirectUrl);
     }
@@ -70,15 +81,6 @@ const Authentication: React.FC = ({ children }) => {
       setRedirectUrl(undefined);
     }
   }, [redirectUrl, loginState]);
-
-  /**
-   * If we think we're logged in, validate it.
-   */
-  useEffect(() => {
-    if (isLoggedIn()) {
-      setLoginState('maybe-logged-in');
-    }
-  }, []);
 
   /**
    * Handle the different states of the login process.
