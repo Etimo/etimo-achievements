@@ -178,3 +178,11 @@ jobs:
           from-tag: ${{ steps.info.outputs.current-commit }}
           to-image-name: niclaslindstedt/etimo-achievements-web
           to-tag: staging
+
+      - name: Promote migrate image
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: niclaslindstedt/etimo-achievements-migrate
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: niclaslindstedt/etimo-achievements-migrate
+          to-tag: staging
