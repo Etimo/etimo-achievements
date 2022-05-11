@@ -24,21 +24,20 @@ inputs:
     description: If the database should be seeded
     default: false
 
-defaults:
-  run:
-    shell: bash
-    working-directory: packages/data
-
 runs:
   using: composite
   steps:
     - name: Install dependencies
+      shell: bash
       run: yarn install
 
     - name: Build packages
+      shell: bash
       run: npm run compile-test
 
     - name: Migrate & seed database
+      working-directory: packages/data
+      shell: bash
       env:
         DB_MAIN_NAME: ${{ inputs.database }}
         DB_MAIN_PRIVATE_HOST: ${{ inputs.hostname }}
