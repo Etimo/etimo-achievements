@@ -17,7 +17,7 @@ FROM develop AS build
 RUN npm run compile
 RUN yarn workspaces focus --all --production
 
-FROM node:14-alpine AS production
+FROM node:16-alpine AS production
 ENV PORT=3000
 WORKDIR /app
 COPY --chown=1000:1000 --from=build /app/packages/api/dist .
