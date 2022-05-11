@@ -72,8 +72,6 @@ jobs:
   test:
     name: 'Run tests'
     runs-on: ubuntu-latest
-    container:
-      image: node:16
     env:
       NODE_ENV: development
       DB_MAIN_PRIVATE_HOST: postgres
@@ -99,6 +97,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
 
       - name: Install dependencies
         run: yarn install --immutable
