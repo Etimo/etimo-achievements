@@ -101,9 +101,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: yarn install --immutable
-
       - name: Migrate & seed database
         uses: ./.github/actions/migrate-database
         with:
@@ -113,6 +110,9 @@ jobs:
           username: ${{ env.DB_MAIN_USER }}
           password: ${{ env.DB_MAIN_PASSWORD }}
           environment: ${{ env.NODE_ENV }}
+
+      - name: Install dependencies
+        run: yarn install --immutable
 
       - name: Run unit tests
         run: npm run test
