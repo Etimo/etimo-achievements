@@ -73,7 +73,8 @@ jobs:
     name: 'Run tests'
     runs-on: ubuntu-latest
     container:
-      image: node:14
+      image: node:16
+      options: --user 1001
     env:
       NODE_ENV: development
       DB_MAIN_PRIVATE_HOST: postgres
