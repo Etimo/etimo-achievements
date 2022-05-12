@@ -17,6 +17,15 @@ module.exports = merge(common, {
       safe: './.env.defaults',
     }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.[tj]sx?$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+      },
+    ],
+  },
   devServer: {
     hot: true,
     port: process.env.PORT,
