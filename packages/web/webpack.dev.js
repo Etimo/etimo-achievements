@@ -7,7 +7,7 @@ require('dotenv').config();
 
 module.exports = merge(common, {
   mode: 'development',
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new Dotenv({
@@ -21,5 +21,8 @@ module.exports = merge(common, {
     hot: true,
     port: process.env.PORT,
     historyApiFallback: true,
+    devMiddleware: {
+      writeToDisk: true,
+    },
   },
 });

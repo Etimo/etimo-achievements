@@ -5,6 +5,7 @@ const path = require('path');
 
 module.exports = {
   entry: path.resolve(__dirname, './src/app/index.tsx'),
+  context: path.resolve(__dirname, './src'),
   target: 'web',
   module: {
     rules: [
@@ -30,9 +31,7 @@ module.exports = {
     new webpack.ProvidePlugin({
       Buffer: ['buffer', 'Buffer'],
     }),
-    new CopyPlugin({
-      patterns: [{ from: './assets', to: './assets' }],
-    }),
+    new CopyPlugin({ patterns: [{ from: path.resolve(__dirname, './assets'), to: './assets' }] }),
     new HtmlPlugin({
       template: path.join(__dirname, 'src', 'app', 'index.html'),
       assetPath: '/assets',
