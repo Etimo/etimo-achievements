@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "bin": "node ../../scripts/run-module-bin.js",
-    "bootstrap": "npm run install-deps && npm run postinstall && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
+    "bootstrap": "npm run install-deps && husky install && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
     "build": "npm run script build",
     "clean": "npm run script clean",
     "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
@@ -40,7 +40,6 @@
     "migration-revert": "cd packages/data && npm run migration-revert",
     "nodemon": "npm run dc up -- -d --build nodemon",
     "peek": "node ./scripts/peek-version.js",
-    "postinstall": "husky install",
     "prettier": "prettier --write .",
     "reset": "npm run clear && yarn install && npm run docker-rebuild && npm run compile",
     "restart": "docker stop $(docker ps -aq --filter 'label=com.etimo-achievements.monitored') && npm run build && npm run start",
