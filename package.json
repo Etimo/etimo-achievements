@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "bin": "node ../../scripts/run-module-bin.js",
-    "bootstrap": "npm run install-deps && husky install && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
+    "bootstrap": "npm run update && husky install && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
     "build": "npm run script build",
     "clean": "npm run script clean",
     "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
@@ -32,7 +32,6 @@
     "generate-jest": "node ./scripts/update-jest-config.js",
     "generate-openapi": "cd packages/api && npm run openapi",
     "generate-references": "node ./scripts/update-references.js",
-    "install-deps": "node ./scripts/install-dependencies.js && npm run update",
     "install-extensions": "node ./scripts/install-vscode-extensions.js",
     "lint": "eslint --config .eslintrc.json --fix packages/**/*.ts",
     "migration-apply": "cd packages/data && npm run migration-apply",

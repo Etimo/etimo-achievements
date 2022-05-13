@@ -16,7 +16,7 @@ If this is your first time running this project, bootstrap it by running:
 npm run bootstrap
 ```
 
-This will install local and global dependencies and create a new database.
+This will install dependencies, generate default configuration files, build the project and create a new database.
 
 ## Developing
 
