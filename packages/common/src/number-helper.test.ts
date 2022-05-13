@@ -1,4 +1,4 @@
-const { isNumber } = require('./number-helper');
+import { isNumber } from './number-helper';
 
 describe('isNumber', () => {
   test('should return true on a number', () => {

@@ -25,7 +25,7 @@ function updateRootPaths(namespace) {
   const tsConfigPath = `${getRootDirectory()}/tsconfig.json`;
   const tsConfig = loadFileAsObject(tsConfigPath);
   const paths = Object.fromEntries(dependencies.map((k) => [`${namespace}/${k}/*`, [`${k}/src/*`]]));
-  tsConfig.paths = paths;
+  tsConfig.compilerOptions.paths = paths;
   fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2) + '\n');
   console.log('<root> tsconfig.json updated');
 }

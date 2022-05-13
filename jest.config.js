@@ -1,4 +1,8 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+import { loadFileAsObject } from './scripts/utils/file-helper.js';
 import { getPackageDirectory, getPackageNames } from './scripts/utils/path-helper.js';
+
+const tsconfig = loadFileAsObject('tsconfig.json');
 
 /**
  *  Run `npm run generate-jest` to export this config to the packages' configurations.
@@ -16,6 +20,10 @@ const defaultConfig = {
     babelConfig: true,
   },
 
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, { prefix: '<rootDir>/' }),
+  modulePathIgnorePatterns: ['d.ts$'],
+
+  /*
   moduleNameMapper: {
     ...packageNames.reduce(
       (acc, name) => ({
@@ -24,7 +32,7 @@ const defaultConfig = {
       }),
       {}
     ),
-  },
+  },*/
 };
 
 // Add node specific settings here
@@ -36,3 +44,5 @@ export const nodeConfig = {
 export const frontendConfig = {
   ...defaultConfig,
 };
+
+export default defaultConfig;
