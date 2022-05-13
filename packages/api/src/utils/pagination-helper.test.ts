@@ -1,4 +1,4 @@
-const { getSkipAndTake } = require('./pagination-helper');
+import { getSkipAndTake } from './pagination-helper';
 
 describe('getSkipAndTake', () => {
   test('should parse skip from query', () => {

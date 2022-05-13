@@ -6,7 +6,8 @@
     "packages/*"
   ],
   "scripts": {
-    "bootstrap": "npm run install-deps && npm run postinstall && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
+    "bin": "node ../../scripts/run-module-bin.js",
+    "bootstrap": "npm run install-deps && husky install && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
     "build": "npm run script build",
     "clean": "npm run script clean",
     "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
@@ -39,7 +40,6 @@
     "migration-revert": "cd packages/data && npm run migration-revert",
     "nodemon": "npm run dc up -- -d --build nodemon",
     "peek": "node ./scripts/peek-version.js",
-    "postinstall": "npx husky install",
     "prettier": "prettier --write .",
     "reset": "npm run clear && yarn install && npm run docker-rebuild && npm run compile",
     "restart": "docker stop $(docker ps -aq --filter 'label=com.etimo-achievements.monitored') && npm run build && npm run start",
@@ -49,7 +49,7 @@
     "start": "npm run dc up -- -d --build && npm run dc logs -- --tail 100 -f",
     "start-api": "cd packages/api && npm run dev",
     "start-fresh": "yarn install && npm run build && npm run generate && npm run docker-rebuild && npm run db-reset-force && npm run start",
-    "start-host": "npm run dc stop api web nodemon && npx concurrently \"npm run start-api\" \"npm run start-web\" \"nodemon\"",
+    "start-host": "npm run dc stop api web nodemon && concurrently \"npm run start-api\" \"npm run start-web\" \"nodemon\"",
     "start-prod": "npm run dc-prod up -- -d --remove-orphans",
     "start-web": "cd packages/web && npm run dev",
     "support": "npm run db && npm run unleash && npm run nodemon",
@@ -79,6 +79,7 @@
     "prettier": "^2.4.1",
     "spacetime": "^6.16.3",
     "syncpack": "^6.2.0",
+    "ts-jest": "^28.0.2",
     "typescript": "^4.5.5"
   },
   "lint-staged": {

@@ -7,16 +7,17 @@
   "main": "dist/main.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "bin": "node ../../scripts/run-module-bin.js",
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "npx webpack-cli build --config ./webpack.dev.js",
-    "compile-prod": "npx webpack-cli build --config ./webpack.prod.js",
-    "compile-test": "tsc --build",
+    "compile": "npm run bin webpack-cli build -- --config ./webpack.dev.js",
+    "compile-prod": "npm run bin webpack-cli build -- --config ./webpack.prod.js",
+    "compile-test": "npm run bin tsc -- --build",
     "dev": "npm run start",
-    "start": "npx webpack-cli serve --config ./webpack.dev.js",
-    "test": "exit 0; jest --testMatch '**/src/**/*.test.ts'",
-    "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'"
+    "start": "npm run bin webpack-cli serve -- --config ./webpack.dev.js",
+    "test": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.test.ts'",
+    "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts'"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
@@ -89,14 +90,17 @@
       "babelConfig": true
     },
     "moduleNameMapper": {
-      "@etimo-achievements/api(.*)$": "<rootDir>/../api/src/$1",
-      "@etimo-achievements/common(.*)$": "<rootDir>/../common/src/$1",
-      "@etimo-achievements/data(.*)$": "<rootDir>/../data/src/$1",
-      "@etimo-achievements/security(.*)$": "<rootDir>/../security/src/$1",
-      "@etimo-achievements/service(.*)$": "<rootDir>/../service/src/$1",
-      "@etimo-achievements/types(.*)$": "<rootDir>/../types/src/$1",
-      "@etimo-achievements/utils(.*)$": "<rootDir>/../utils/src/$1",
-      "@etimo-achievements/web(.*)$": "<rootDir>/../web/src/$1"
-    }
+      "^@etimo\\-achievements/api/(.*)$": "<rootDir>/api/src/$1",
+      "^@etimo\\-achievements/common/(.*)$": "<rootDir>/common/src/$1",
+      "^@etimo\\-achievements/data/(.*)$": "<rootDir>/data/src/$1",
+      "^@etimo\\-achievements/security/(.*)$": "<rootDir>/security/src/$1",
+      "^@etimo\\-achievements/service/(.*)$": "<rootDir>/service/src/$1",
+      "^@etimo\\-achievements/types/(.*)$": "<rootDir>/types/src/$1",
+      "^@etimo\\-achievements/utils/(.*)$": "<rootDir>/utils/src/$1",
+      "^@etimo\\-achievements/web/(.*)$": "<rootDir>/web/src/$1"
+    },
+    "modulePathIgnorePatterns": [
+      "d.ts$"
+    ]
   }
 }

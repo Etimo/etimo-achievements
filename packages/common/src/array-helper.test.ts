@@ -1,4 +1,4 @@
-const { sort } = require('./array-helper');
+import { sort } from './array-helper';
 
 describe('sort', () => {
   test('should sort strings', () => {
