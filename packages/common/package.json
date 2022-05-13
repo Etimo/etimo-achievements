@@ -7,14 +7,15 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "bin": "node ../../scripts/run-module-bin.js",
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "tsc --project tsconfig.build.json",
-    "compile-test": "tsc --build",
-    "start": "ts-node src/index.ts",
-    "test-integration": "exit 0; jest --testMatch '**/src/**/*.spec.ts'",
-    "test": "jest --testMatch '**/src/**/*.test.ts'"
+    "compile": "npm run bin tsc -- --project tsconfig.build.json",
+    "compile-test": "npm run bin tsc -- --build",
+    "start": "npm run bin ts-node -- src/index.ts",
+    "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts'",
+    "test": "npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/types": "^1.0.0",
