@@ -15,7 +15,7 @@ export default function runPostgresCommand(command) {
       process.env.POSTGRES_SERVICE_NAME,
       'psql',
       '-U',
-      process.env.POSTGRES_USERNAME,
+      process.env.POSTGRES_USER,
       '-c',
       command,
     ],
