@@ -5,17 +5,32 @@ import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
 import { TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
+import PaginatedTable, {
+  Column,
+  PaginatedTableData,
+  PaginatedTableDataEntry,
+  PaginationRequestInput,
+} from '../../components/table/PaginatedTable';
 import { AwardComposite } from './award-types';
 import { getManyAwards } from './award-utils';
 import AwardDeleteModal from './AwardDeleteModal';
+
+interface AwardData extends PaginatedTableData {
+  id: PaginatedTableDataEntry<string>;
+  name: PaginatedTableDataEntry<string>;
+  awardedTo: PaginatedTableDataEntry<string>;
+  points: PaginatedTableDataEntry<string>;
+  date: PaginatedTableDataEntry<string>;
+  awardedBy: PaginatedTableDataEntry<string>;
+  delete: PaginatedTableDataEntry<React.ReactNode>;
+}
 
 const AwardList: React.FC = () => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<AwardData[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
 
@@ -32,18 +47,32 @@ const AwardList: React.FC = () => {
     setLoading(false);
   };
 
-  const mapToData = (composites: AwardComposite[]): any[] => {
+  const mapToData = (composites: AwardComposite[]): AwardData[] => {
     return composites.map((c) => ({
-      id: c.award.id,
-      name: c.achievement.name,
-      description: c.achievement.description,
-      awardedTo: c.awardedTo.name,
-      points: `${formatNumber(c.achievement.achievementPoints)} pts`,
-      date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
-      awardedBy: c.awardedBy.name,
-      delete: (
-        <TrashButton id={c.award.id} link={addQueryParam(window.location, 'delete', c.award.id)} loading={deleting} />
-      ),
+      id: {
+        value: c.award.id,
+      },
+      name: {
+        value: c.achievement.name,
+        tooltip: c.achievement.description,
+      },
+      awardedTo: {
+        value: c.awardedTo.name,
+      },
+      points: {
+        value: `${formatNumber(c.achievement.achievementPoints)} pts`,
+      },
+      date: {
+        value: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
+      },
+      awardedBy: {
+        value: c.awardedBy.name,
+      },
+      delete: {
+        value: (
+          <TrashButton id={c.award.id} link={addQueryParam(window.location, 'delete', c.award.id)} loading={deleting} />
+        ),
+      },
     }));
   };
 
@@ -57,10 +86,6 @@ const AwardList: React.FC = () => {
       {
         title: 'Name',
         accessor: 'name',
-      },
-      {
-        title: 'Description',
-        accessor: 'description',
       },
       {
         title: 'Awarded To',
