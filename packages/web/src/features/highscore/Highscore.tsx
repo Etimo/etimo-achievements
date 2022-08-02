@@ -1,13 +1,24 @@
 import { formatNumber } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import Header from '../../components/Header';
-import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
+import PaginatedTable, {
+  Column,
+  PaginatedTableData,
+  PaginatedTableDataEntry,
+  PaginationRequestInput,
+} from '../../components/table/PaginatedTable';
 import { HighscoreComposite } from './highscore-types';
 import { getHighscores } from './highscore-utils';
 
+interface HighscoreData extends PaginatedTableData {
+  name: PaginatedTableDataEntry<string>;
+  achievements: PaginatedTableDataEntry<string>;
+  points: PaginatedTableDataEntry<string>;
+}
+
 const Highscores: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<HighscoreData[]>([]);
   const [pageCount, setPageCount] = useState(0);
 
   const fetchData = async (input: PaginationRequestInput) => {
@@ -21,11 +32,17 @@ const Highscores: React.FC = () => {
     setLoading(false);
   };
 
-  const mapToData = (composites: HighscoreComposite[]): any[] => {
+  const mapToData = (composites: HighscoreComposite[]): HighscoreData[] => {
     return composites.map((h) => ({
-      name: h.user.name,
-      achievements: formatNumber(h.achievements),
-      points: `${formatNumber(h.points)} pts`,
+      name: {
+        value: h.user.name,
+      },
+      achievements: {
+        value: formatNumber(h.achievements),
+      },
+      points: {
+        value: `${formatNumber(h.points)} pts`,
+      },
     }));
   };
 
