@@ -2,13 +2,28 @@ import { formatNumber } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import Header from '../../components/Header';
 import { NameAvatarUserCell } from '../../components/table';
-import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
+import PaginatedTable, {
+  Column,
+  PaginatedTableData,
+  PaginatedTableDataEntry,
+  PaginationRequestInput,
+} from '../../components/table/PaginatedTable';
 import { HighscoreComposite } from './highscore-types';
 import { getHighscores } from './highscore-utils';
 
+interface HighscoreData extends PaginatedTableData {
+  rank: PaginatedTableDataEntry<string>;
+  name: PaginatedTableDataEntry<string>;
+  achievements: PaginatedTableDataEntry<string>;
+  points: PaginatedTableDataEntry<string>;
+  kickback: PaginatedTableDataEntry<string>;
+  totalPoints: PaginatedTableDataEntry<string>;
+  pointsPerAchievement: PaginatedTableDataEntry<string>;
+}
+
 const Highscores: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<HighscoreData[]>([]);
   const [pageCount, setPageCount] = useState(0);
 
   const fetchData = async (input: PaginationRequestInput) => {
@@ -27,13 +42,27 @@ const Highscores: React.FC = () => {
     const totalRanks = [...new Set(composites.map((c) => c.points))].sort((a, b) => (a < b ? 1 : -1));
 
     return composites.map((h, i) => ({
-      rank: totalRanks.indexOf(h.points) + 1, // index of the user's score in the list is the rank of the user
-      name: <NameAvatarUserCell image={h.user.image} name={h.user.name} />,
-      achievements: formatNumber(h.achievements),
-      points: `${formatNumber(h.points)} pts`,
-      kickback: `${formatNumber(h.kickback)} pts`,
-      totalPoints: `${formatNumber(h.totalPoints)} pts`,
-      pointsPerAchievement: `${formatNumber(h.pointsPerAchievement)} pts`,
+      rank: {
+        value: totalRanks.indexOf(h.points) + 1, // index of the user's score in the list is the rank of the user
+      },
+      name: {
+        value: <NameAvatarUserCell image={h.user.image} name={h.user.name} />,
+      },
+      achievements: {
+        value: formatNumber(h.achievements),
+      },
+      points: {
+        value: `${formatNumber(h.points)} pts`,
+      },
+      kickback: {
+        value: `${formatNumber(h.kickback)} pts`,
+      },
+      totalPoints: {
+        value: `${formatNumber(h.totalPoints)} pts`,
+      },
+      pointsPerAchievement: {
+        value: `${formatNumber(h.pointsPerAchievement)} pts`,
+      },
     }));
   };
 

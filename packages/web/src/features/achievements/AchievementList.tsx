@@ -6,17 +6,33 @@ import { addQueryParam } from '../../common/utils/query-helper';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
-import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
+import PaginatedTable, {
+  Column,
+  PaginatedTableData,
+  PaginatedTableDataEntry,
+  PaginationRequestInput,
+} from '../../components/table/PaginatedTable';
 import { getManyAchievements } from './achievement-utils';
 import AchievementDeleteModal from './AchievementDeleteModal';
 import AchievementsEditModal from './AchievementEditModal';
+
+interface AchievementData extends PaginatedTableData {
+  id: PaginatedTableDataEntry<string>;
+  name: PaginatedTableDataEntry<string>;
+  description: PaginatedTableDataEntry<string>;
+  points: PaginatedTableDataEntry<string>;
+  cooldown: PaginatedTableDataEntry<string>;
+  repeatable: PaginatedTableDataEntry<string>;
+  edit: PaginatedTableDataEntry<React.ReactNode>;
+  delete: PaginatedTableDataEntry<React.ReactNode>;
+}
 
 const AchievementList: React.FC = () => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<AchievementData[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
 
@@ -34,16 +50,32 @@ const AchievementList: React.FC = () => {
     setLoading(false);
   };
 
-  const mapToData = (achievements: AchievementDto[]): any[] => {
+  const mapToData = (achievements: AchievementDto[]): AchievementData[] => {
     return achievements.map((a) => ({
-      id: a.id,
-      name: a.name,
-      description: a.description,
-      points: `${formatNumber(a.achievementPoints)} pts`,
-      cooldown: `${formatNumber(a.cooldownMinutes)} min`,
-      repeatable: 'Unsupported',
-      edit: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
-      delete: <TrashButton id={a.id} link={addQueryParam(window.location, 'delete', a.id)} loading={deleting} />,
+      id: {
+        value: a.id,
+      },
+      name: {
+        value: a.name,
+      },
+      description: {
+        value: a.description,
+      },
+      points: {
+        value: `${formatNumber(a.achievementPoints)} pts`,
+      },
+      cooldown: {
+        value: `${formatNumber(a.cooldownMinutes)} min`,
+      },
+      repeatable: {
+        value: 'Unsupported',
+      },
+      edit: {
+        value: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
+      },
+      delete: {
+        value: <TrashButton id={a.id} link={addQueryParam(window.location, 'delete', a.id)} loading={deleting} />,
+      },
     }));
   };
 
