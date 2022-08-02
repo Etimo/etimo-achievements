@@ -36,6 +36,7 @@ const AwardList: React.FC = () => {
     return composites.map((c) => ({
       id: c.award.id,
       name: c.achievement.name,
+      description: c.achievement.description,
       awardedTo: c.awardedTo.name,
       points: `${formatNumber(c.achievement.achievementPoints)} pts`,
       date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
@@ -56,6 +57,10 @@ const AwardList: React.FC = () => {
       {
         title: 'Name',
         accessor: 'name',
+      },
+      {
+        title: 'Description',
+        accessor: 'description',
       },
       {
         title: 'Awarded To',
