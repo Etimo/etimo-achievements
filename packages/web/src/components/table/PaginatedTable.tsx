@@ -33,9 +33,19 @@ export type PaginationRequestInput = {
   order?: string;
 };
 
+export type PaginatedTableDataEntry<T> = {
+  value: T;
+  /** Text to render when hover on cell */
+  tooltip?: string;
+};
+
+export type PaginatedTableData = {
+  [key: string]: PaginatedTableDataEntry<any>;
+};
+
 type Props = {
   columns: Column[];
-  data: any[];
+  data: PaginatedTableData[];
   loading: boolean;
   pageCount: number;
   fetchData: any;
@@ -160,8 +170,8 @@ const PaginatedTable: React.FC<Props> = ({
                       .filter((c) => !c.hidden && userHasAccess(c))
                       .map((column) => {
                         return (
-                          <TableCell key={uuid()} className={column.className}>
-                            {row[column.accessor]}
+                          <TableCell key={uuid()} className={column.className} tooltip={row[column.accessor].tooltip}>
+                            {row[column.accessor].value}
                           </TableCell>
                         );
                       })}
