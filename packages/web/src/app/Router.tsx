@@ -12,6 +12,7 @@ import Highscores from '../features/highscore/Highscore';
 import UserCreate from '../features/users/UserCreate';
 import UserList from '../features/users/UserList';
 import UserProfile from '../features/users/UserProfile';
+import UserSlackSync from '../features/users/UserSlackSync';
 import Home from '../pages/Home';
 
 export enum Routes {
@@ -26,6 +27,7 @@ export enum Routes {
   UserProfile = '/profile',
   UserList = '/users/list',
   UserCreate = '/users/create',
+  UserSlackSync = '/users/slack-sync',
   Highscores = '/highscores',
 }
 
@@ -45,6 +47,7 @@ const Router = (): JSX.Element => {
         <Route path={Routes.UserProfile} element={<UserProfile />} />
         <Route path={Routes.UserList} element={<UserList />} />
         <Route path={Routes.UserCreate} element={<UserCreate />} />
+        <Route path={Routes.UserSlackSync} element={<UserSlackSync />} />
         <Route path={Routes.Highscores} element={<Highscores />} />
       </Route>
     </ReactRoutes>

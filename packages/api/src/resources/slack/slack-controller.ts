@@ -5,7 +5,7 @@ import {
   SyncSlackUsersService,
 } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { apiKeyEndpoint, getContext } from '../../utils';
+import { apiKeyEndpoint, getContext, protectedEndpoint } from '../../utils';
 
 export class SlackController {
   public get routes(): Router {
@@ -88,16 +88,17 @@ export class SlackController {
      *   post:
      *     summary: Sync slack users with the database
      *     security:
-     *       - ApiKeyParameter: []
+     *       - jwtCookie: []
      *     responses:
      *       200:
-     *         description: Users was synced.
+     *         description: Users were synced.
      *       400: *badRequestResponse
      *       401: *unauthorizedResponse
      *     tags:
      *       - Slack
      */
-    router.post('/slack/sync-users', apiKeyEndpoint(this.syncUsers));
+    // TODO: Also allow an api key? Needs a new middleware
+    router.post('/slack/sync-users', protectedEndpoint(this.syncUsers, ['r:users'])); // read for now, should maybe be update
 
     return router;
   }

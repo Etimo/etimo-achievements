@@ -346,8 +346,7 @@
         },
         "required": [
           "name",
-          "email",
-          "slackHandle"
+          "email"
         ]
       }
     }
@@ -1344,12 +1343,12 @@
         "summary": "Sync slack users with the database",
         "security": [
           {
-            "ApiKeyParameter": []
+            "jwtCookie": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Users was synced."
+            "description": "Users were synced."
           },
           "400": {
             "description": "The request was invalid and could/would not be processed."

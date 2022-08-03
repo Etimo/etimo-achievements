@@ -28,7 +28,6 @@
  *       required:
  *         - name
  *         - email
- *         - slackHandle
  */
 export interface UserDto {
   id: string;
