@@ -45,7 +45,11 @@ const AwardGive: React.FC = () => {
         <FormSelect
           label="Achievement"
           text="Select an achievement"
-          options={sort(achievements ?? [], 'name').map((a) => ({ value: a.id, label: a.name }))}
+          options={sort(achievements ?? [], 'name').map((a) => ({
+            value: a.id,
+            label: a.name,
+            subtitle: a.description,
+          }))}
           bindValue={achievementId}
           onChange={setAchievementId}
         />
