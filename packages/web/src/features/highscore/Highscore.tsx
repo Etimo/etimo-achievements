@@ -44,7 +44,7 @@ const Highscores: React.FC = () => {
         className: 'w-40',
       },
       {
-        title: 'Achievement Points',
+        title: 'Achievement points',
         accessor: 'points',
         sortKey: 'points',
         className: 'w-40',

@@ -29,7 +29,13 @@ export class GetHighscoreService {
       const userAchievements = userAwards.map((a) =>
         achievements.find((achievement) => achievement.id === a.achievementId)
       );
-      const awardsGiven = awards.filter((a) => a.awardedByUserId === user.id);
+      // Get awards the user has given
+      const awardsGiven = awards.filter(
+        (a) =>
+          a.awardedByUserId === user.id &&
+          // Exclude self given awards
+          a.userId !== user.id
+      );
       const givenAchievements = awardsGiven.map((a) =>
         achievements.find((achievement) => achievement.id === a.achievementId)
       );
