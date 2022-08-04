@@ -1,4 +1,3 @@
-// import { Tooltip } from '@mui/material';
 import { Tooltip } from '@mantine/core';
 import React from 'react';
 import { mergeClasses } from '../../common/utils/merge-classes';
