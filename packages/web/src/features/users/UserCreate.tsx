@@ -35,7 +35,6 @@ const UserCreate: React.FC = () => {
           register={register('email', { required: true, maxLength: 255 })}
           error={errors.email}
         />
-        <div className="md:flex justify-center mb-5">Slack handle is automatically fetched from Slack</div>
         <FormSubmitButton label="Create" loading={loading} />
       </Form>
     </div>

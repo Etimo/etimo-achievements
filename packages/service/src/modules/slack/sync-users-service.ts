@@ -1,3 +1,4 @@
+import { BadRequestError } from '@etimo-achievements/common';
 import { getEnvVariable } from '@etimo-achievements/utils';
 import { WebClient } from '@slack/web-api';
 import { Member } from '@slack/web-api/dist/response/UsersListResponse';
@@ -22,17 +23,17 @@ export class SyncSlackUsersService {
   }
 
   /**
-   * Updates a user's slack handle, if the user is found. Otherwise does nothing.
-   * @param {String} name name of user
-   * @param {String} email email of user
-   * @param {String} slackHandle user's slack handle
+   * Updates a user's slack handle
+   * @param {string} name name of user
+   * @param {string} email email of user
+   * @param {string} slackHandle user's slack handle
    */
   private async updateSlackHandle(name: string, email: string, slackHandle: string) {
     const { repositories, logger } = this.context;
 
     const foundUser = await repositories.user.findByEmail(email);
     if (!foundUser) {
-      return;
+      throw new BadRequestError('User not found');
     }
 
     logger.debug(`Updating user ${name}'s Slack handle`);
@@ -40,7 +41,7 @@ export class SyncSlackUsersService {
   }
 
   /**
-   * Sync many users in database with slack. Update their slack handle.
+   * Sync all users in database with slack.
    */
   public async syncUsers() {
     const slackUsers = await this.slackUsers();
@@ -52,14 +53,14 @@ export class SyncSlackUsersService {
   }
 
   /**
-   * Sync one user in database with slack. Update user's slack handle.
-   * @param {String} email email of user to sync
+   * Sync one user in database with slack.
+   * @param {string} email of user to sync
    */
   public async syncUser(email: string) {
     const slackUsers = await this.slackUsers();
     const etimoUser = slackUsers.find((u) => u.profile?.email === email);
     if (!etimoUser) {
-      return;
+      throw new BadRequestError('User not found');
     }
 
     this.updateSlackHandle(etimoUser.profile?.real_name!, etimoUser.profile?.email!, etimoUser.id!);

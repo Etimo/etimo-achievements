@@ -97,8 +97,7 @@ export class SlackController {
      *     tags:
      *       - Slack
      */
-    // TODO: Also allow an api key? Needs a new middleware
-    router.post('/slack/sync-users', protectedEndpoint(this.syncUsers, ['r:users'])); // read for now, should maybe be update
+    router.post('/slack/sync-users', protectedEndpoint(this.syncUsers, ['u:users']));
 
     return router;
   }
