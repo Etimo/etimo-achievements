@@ -26,6 +26,8 @@ const Highscores: React.FC = () => {
       name: h.user.name,
       achievements: formatNumber(h.achievements),
       points: `${formatNumber(h.points)} pts`,
+      kickback: `${formatNumber(h.kickback)} pts`,
+      totalPoints: `${formatNumber(h.totalPoints)} pts`,
     }));
   };
 
@@ -42,9 +44,21 @@ const Highscores: React.FC = () => {
         className: 'w-40',
       },
       {
-        title: 'Points',
+        title: 'Achievement Points',
         accessor: 'points',
         sortKey: 'points',
+        className: 'w-40',
+      },
+      {
+        title: 'Kickback points',
+        accessor: 'kickback',
+        sortKey: 'kickback',
+        className: 'w-40',
+      },
+      {
+        title: 'Total points',
+        accessor: 'totalPoints',
+        sortKey: 'totalPoints',
         className: 'w-40',
       },
     ],

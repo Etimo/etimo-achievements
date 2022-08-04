@@ -2,6 +2,12 @@ import { paginate, PaginatedData, sort, uniq } from '@etimo-achievements/common'
 import { IHighscore, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
+/**
+ * Percent kickback, value between 0 and 1
+ */
+const KICKBACK = 0.1;
+const MAXIMUM_KICKBACK_POINTS = 50;
+
 export class GetHighscoreService {
   constructor(private context: IContext) {}
 
@@ -23,17 +29,29 @@ export class GetHighscoreService {
       const userAchievements = userAwards.map((a) =>
         achievements.find((achievement) => achievement.id === a.achievementId)
       );
-      if (userAchievements.length) {
+      const awardsGiven = awards.filter((a) => a.awardedByUserId === user.id);
+      const givenAchievements = awardsGiven.map((a) =>
+        achievements.find((achievement) => achievement.id === a.achievementId)
+      );
+
+      if (userAchievements.length || awardsGiven.length) {
+        const points = userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0;
+        const kickback = givenAchievements.reduce(
+          (sum, a) => sum + Math.min((a?.achievementPoints ?? 0) * KICKBACK, MAXIMUM_KICKBACK_POINTS),
+          0
+        );
         const userHighscore: IHighscore = {
           userId: user.id,
           achievements: userAchievements.length,
-          points: userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0,
+          points,
+          kickback,
+          totalPoints: kickback + points,
         };
         highscores.push(userHighscore);
       }
     }
 
-    let orderBy = 'points';
+    let orderBy = 'totalPoints';
     let order: 'asc' | 'desc' = 'desc';
     if (options.orderBy?.length) {
       [orderBy, order] = options.orderBy[0];

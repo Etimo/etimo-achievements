@@ -8,4 +8,6 @@ export type HighscoreComposite = {
   user: UserDto;
   achievements: number;
   points: number;
+  kickback: number;
+  totalPoints: number;
 };

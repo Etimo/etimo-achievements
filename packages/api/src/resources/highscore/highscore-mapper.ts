@@ -7,6 +7,8 @@ export class HighscoreMapper {
       userId: award.userId,
       achievements: award.achievements,
       points: award.points,
+      kickback: award.kickback,
+      totalPoints: award.totalPoints,
     };
   }
 
