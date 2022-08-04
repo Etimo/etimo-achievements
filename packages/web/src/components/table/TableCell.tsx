@@ -1,4 +1,5 @@
-import { Tooltip } from '@mui/material';
+// import { Tooltip } from '@mui/material';
+import { Tooltip } from '@mantine/core';
 import React from 'react';
 import { mergeClasses } from '../../common/utils/merge-classes';
 
@@ -8,18 +9,17 @@ type Props = {
 };
 
 const TableCell: React.FC<Props> = ({ className, children, tooltip, ...rest }) => {
-  const content = (
+  return (
     <td className={mergeClasses('p-3 border border-slate-300', className)} {...rest}>
-      {children}
+      {tooltip ? (
+        <Tooltip label={tooltip} withArrow>
+          <span>{children}</span>
+        </Tooltip>
+      ) : (
+        children
+      )}
     </td>
   );
-
-  // Wrap cell in tooltip
-  if (tooltip) {
-    return <Tooltip title={tooltip}>{content}</Tooltip>;
-  }
-
-  return content;
 };
 
 export default TableCell;
