@@ -54,11 +54,11 @@ const AwardList: React.FC = () => {
         value: c.award.id,
       },
       name: {
-        value: <NameAvatarUserCell name={c.awardedTo.name} image={c.awardedTo.image} />,
+        value: c.achievement.name,
         tooltip: c.achievement.description,
       },
       awardedTo: {
-        value: c.awardedTo.name,
+        value: <NameAvatarUserCell name={c.awardedTo.name} image={c.awardedTo.image} />,
       },
       points: {
         value: `${formatNumber(c.achievement.achievementPoints)} pts`,

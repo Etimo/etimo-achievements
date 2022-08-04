@@ -23,7 +23,16 @@ type Props = {
   filter?: (option: FilterOptionOption<Option>, inputValue: string) => boolean;
 };
 
-const FormSelect: React.FC<Props> = ({ label, text, bindValue, onChange, options, type = 'single-line', filter }) => {
+const FormSelect: React.FC<Props> = ({
+  label,
+  text,
+  bindValue,
+  onChange,
+  options,
+  type = 'single-line',
+  filter,
+  children,
+}) => {
   return (
     <CardRow label={label}>
       <div className="w-full">
@@ -60,6 +69,7 @@ const FormSelect: React.FC<Props> = ({ label, text, bindValue, onChange, options
           </div>
         </div>
       </div>
+      {children}
     </CardRow>
   );
 };
