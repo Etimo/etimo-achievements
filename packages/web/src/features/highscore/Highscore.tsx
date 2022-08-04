@@ -22,7 +22,11 @@ const Highscores: React.FC = () => {
   };
 
   const mapToData = (composites: HighscoreComposite[]): any[] => {
-    return composites.map((h) => ({
+    // Sorted list (desc) of unique scores
+    const totalRanks = [...new Set(composites.map((c) => c.points))].sort((a, b) => (a < b ? 1 : -1));
+
+    return composites.map((h, i) => ({
+      rank: totalRanks.indexOf(h.points) + 1, // index of the user's score in the list is the rank of the user
       name: h.user.name,
       achievements: formatNumber(h.achievements),
       points: `${formatNumber(h.points)} pts`,
@@ -31,6 +35,11 @@ const Highscores: React.FC = () => {
 
   const columns = React.useMemo(
     (): Column[] => [
+      {
+        title: 'Rank',
+        accessor: 'rank',
+        sortKey: 'points', // rank is based on score
+      },
       {
         title: 'Name',
         accessor: 'name',
