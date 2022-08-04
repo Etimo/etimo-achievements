@@ -20,6 +20,7 @@ export class UserModel extends BaseModel implements IUser {
         slackHandle: { type: 'string', maxLength: 64 },
         createdAt: { type: 'timestamp' },
         updatedAt: { type: 'timestamp' },
+        role: { type: 'string' },
       },
     };
   }
@@ -35,4 +36,5 @@ export class UserModel extends BaseModel implements IUser {
   slackHandle!: string | undefined;
   createdAt!: Date;
   updatedAt!: Date;
+  role!: string;
 }

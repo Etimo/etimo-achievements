@@ -1,7 +1,9 @@
 import { OAuthServiceFactory } from '@etimo-achievements/security';
+import { Role } from '@etimo-achievements/types';
 import { CreateUserService } from '..';
 import { IContext } from '../..';
 import { CreateTokenService } from './create-token-service';
+import { roleToScope } from './roles';
 import { LoginResponse } from './types/login-response';
 
 export class LoginService {
@@ -26,16 +28,11 @@ export class LoginService {
       user = await createUserService.create({
         name: userInfo.name,
         email: userInfo.email,
+        role: 'user',
       });
     }
 
-    let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile', 'r:highscore', 'r:feature'];
-
-    // Administrator rights for certain users
-    const isAdmin = userInfo.email === 'niclas.lindstedt@etimo.se';
-    if (isAdmin) {
-      scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore', 'a:feature'];
-    }
+    const scopes = roleToScope(user.role as Role);
 
     const createTokenService = new CreateTokenService(this.context);
     return createTokenService.create(user, scopes);

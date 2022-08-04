@@ -24,6 +24,7 @@ export class SyncSlackUsersService {
           email: user.profile?.email!,
           slackHandle: user.id!,
           name: user.profile?.real_name!,
+          role: 'user', // Will be removed when merged with slack tagging branch
         });
       } else {
         logger.debug(`Updating user ${user.profile?.real_name}`);

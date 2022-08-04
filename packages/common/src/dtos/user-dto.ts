@@ -20,6 +20,10 @@
  *           type: string
  *           description: The @slack handle of the user
  *           example: '@niclas'
+ *         role:
+ *           type: string
+ *           description: The role of the user
+ *           example: 'moderator'
  *       required:
  *         - name
  *         - email
@@ -30,4 +34,5 @@ export interface UserDto {
   name: string;
   email: string;
   slackHandle?: string;
+  role: string;
 }

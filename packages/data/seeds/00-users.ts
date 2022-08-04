@@ -11,12 +11,14 @@ export async function seed(knex: Knex): Promise<void> {
       name: 'admin',
       email: 'admin@etimo.se',
       slack_handle: '@admin',
+      role: 'admin',
     },
     {
       id: 'b158d926-9ef6-42a5-9059-f810a6d1c980',
       name: 'user',
       email: 'user@etimo.se',
       slack_handle: '@user',
+      role: 'user',
     },
   ]);
 }
