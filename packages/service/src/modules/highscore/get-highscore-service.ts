@@ -17,7 +17,7 @@ export class GetHighscoreService {
 
     const awards = await repositories.award.getAll();
 
-    const userIds = uniq(awards.map((a) => a.userId));
+    const userIds = uniq([...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)]);
     const users = await repositories.user.getManyByIds(userIds);
 
     const achievementIds = uniq(awards.map((a) => a.achievementId));
@@ -40,7 +40,7 @@ export class GetHighscoreService {
         achievements.find((achievement) => achievement.id === a.achievementId)
       );
 
-      if (userAchievements.length || awardsGiven.length) {
+      if (userAchievements.length || givenAchievements.length) {
         const points = userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0;
         const kickback = givenAchievements.reduce(
           (sum, a) => sum + Math.min((a?.achievementPoints ?? 0) * KICKBACK, MAXIMUM_KICKBACK_POINTS),
