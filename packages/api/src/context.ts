@@ -4,6 +4,7 @@ import {
   AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
+  BadgeRepository,
   ClientRepository,
   Database,
   getRepositories,
@@ -55,6 +56,7 @@ export class Context implements IContext {
     user: new UserRepository(),
     achievementFavorite: new AchievementFavoriteRepository(),
     client: new ClientRepository(),
+    badge: new BadgeRepository(this),
   };
 
   public async transactionRepositories(): Promise<IContext['repositories'] & { commit: () => void }> {

@@ -318,6 +318,33 @@
           "achievementId"
         ]
       },
+      "Badge": {
+        "title": "Badge",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the badge",
+            "maxLength": 255,
+            "example": "Åre 2022"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of when the badge should be awarded",
+            "maxLength": 255,
+            "example": "Åk med Etimo till Åre"
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ]
+      },
       "Highscore": {
         "title": "Highscore",
         "type": "object",
@@ -1352,6 +1379,125 @@
         },
         "tags": [
           "Awards"
+        ]
+      }
+    },
+    "/badges": {
+      "post": {
+        "summary": "Create a badge",
+        "operationId": "createBadge",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Badge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The badge was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetAchievementById": {
+                "operationId": "getBadge",
+                "parameters": {
+                  "achievementId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badges"
+        ]
+      },
+      "get": {
+        "summary": "Get a list of badges",
+        "operationId": "getBadges",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Badge"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badges"
         ]
       }
     },

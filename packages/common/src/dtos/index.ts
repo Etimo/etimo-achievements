@@ -2,6 +2,7 @@ export * from './access-token-dto';
 export * from './achievement-dto';
 export * from './achievement-favorite-dto';
 export * from './award-dto';
+export * from './badge-dto';
 export * from './highscore-dto';
 export * from './paginated-data';
 export * from './pagination-info';
