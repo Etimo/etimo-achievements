@@ -41,12 +41,31 @@ export class LoginService {
       await new UpdateUserService(this.context).update({ ...user, image });
     }
 
-    let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile', 'r:highscore', 'r:feature', 'r:badges'];
+    let scopes = [
+      'cru:achievements',
+      'cru:awards',
+      'r:users',
+      'ru:profile',
+      'r:highscore',
+      'r:feature',
+      'r:badges',
+      'cru:badge-awards',
+    ];
 
     // Administrator rights for certain users
     const isAdmin = userInfo.email === 'niclas.lindstedt@etimo.se' || userInfo.email === 'axel.elmarsson@etimo.se';
     if (isAdmin) {
-      scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore', 'a:feature', 'a:badges'];
+      scopes = [
+        'admin',
+        'a:achievements',
+        'a:awards',
+        'a:users',
+        'a:profile',
+        'a:highscore',
+        'a:feature',
+        'a:badges',
+        'a:badge-awards',
+      ];
     }
 
     const createUserTokenService = new CreateUserTokenService(this.context);

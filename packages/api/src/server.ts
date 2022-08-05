@@ -21,6 +21,7 @@ import {
   UserController,
   VersionController,
 } from './resources';
+import { BadgeAwardController } from './resources/badge-award';
 import { FeatureController } from './resources/feature/feature-controller';
 import { HighscoreController } from './resources/highscore';
 import { ProbeController } from './resources/probes';
@@ -132,6 +133,7 @@ export default class AchievementsServer {
     this.express.use(this.root, new UserController().routes);
     this.express.use(this.root, new VersionController().routes);
     this.express.use(this.root, new BadgeController().routes);
+    this.express.use(this.root, new BadgeAwardController().routes);
   }
 
   private setupErrorHandler() {

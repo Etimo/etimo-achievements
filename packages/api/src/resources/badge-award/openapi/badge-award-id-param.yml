@@ -1,0 +1,7 @@
+x-template: &badgeAwardIdParam
+  name: awardId
+  in: path
+  required: true
+  schema:
+    type: string
+    format: uuid
