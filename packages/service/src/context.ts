@@ -3,6 +3,7 @@ import {
   AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
+  BadgeRepository,
   ClientRepository,
   RefreshTokenRepository,
   UserRepository,
@@ -17,6 +18,7 @@ type Repositories = {
   refreshToken: RefreshTokenRepository;
   achievementFavorite: AchievementFavoriteRepository;
   client: ClientRepository;
+  badge: BadgeRepository;
 };
 
 export type IContext = {
