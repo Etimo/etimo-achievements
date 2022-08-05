@@ -1,5 +1,5 @@
 import { camelToSnakeCase } from '@etimo-achievements/common';
-import { IBadgeAward, INewAward, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
+import { IBadgeAward, INewBadgeAward, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
 import { Database } from '..';
 import { BadgeAwardModel } from '../models/badge-award-model';
 import { catchErrors } from '../utils';
@@ -39,6 +39,12 @@ export class BadgeAwardRepository {
     });
   }
 
+  findHasOne(userId: string, badgeId: string): Promise<IBadgeAward | undefined> {
+    return catchErrors(async () => {
+      return BadgeAwardModel.query().findOne({ user_id: userId, badge_id: badgeId });
+    });
+  }
+
   findLatest(userId: string, badgeId: string): Promise<IBadgeAward | undefined> {
     return catchErrors(async () => {
       return BadgeAwardModel.query().orderBy('created_at', 'desc').findOne({
@@ -48,7 +54,7 @@ export class BadgeAwardRepository {
     });
   }
 
-  create(award: INewAward): Promise<IBadgeAward> {
+  create(award: INewBadgeAward): Promise<IBadgeAward> {
     return catchErrors(async () => {
       return BadgeAwardModel.query().insert(award);
     });
