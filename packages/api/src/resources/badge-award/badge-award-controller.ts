@@ -1,6 +1,8 @@
 import { NotImplementedError } from '@etimo-achievements/common';
+import { DeleteBadgeAwardService, GiveBadgeService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { protectedEndpoint } from '../../utils';
+import { createdResponse, getContext, okResponse, protectedEndpoint } from '../../utils';
+import { BadgeAwardMapper } from './badge-award-mapper';
 
 export class BadgeAwardController {
   public get routes(): Router {
@@ -106,10 +108,22 @@ export class BadgeAwardController {
   }
 
   private async deleteAward(req: Request, res: Response) {
-    throw new NotImplementedError('');
+    const badgeAwardId = req.params.badgeAwardId;
+
+    const service = new DeleteBadgeAwardService(getContext());
+    await service.delete(badgeAwardId);
+
+    return okResponse(res);
   }
 
   private async giveBadge(req: Request, res: Response) {
-    throw new NotImplementedError('');
+    const payload = req.body;
+    const { userId } = getContext();
+
+    const service = new GiveBadgeService(getContext());
+    const input = BadgeAwardMapper.toNewAward({ ...payload, awardedByUserId: userId });
+    const { id } = await service.give(input);
+
+    return createdResponse(res, '/badge-awards', { id });
   }
 }
