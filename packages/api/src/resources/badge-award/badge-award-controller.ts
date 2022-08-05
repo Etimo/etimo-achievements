@@ -1,7 +1,14 @@
-import { NotImplementedError } from '@etimo-achievements/common';
-import { DeleteBadgeAwardService, GiveBadgeService } from '@etimo-achievements/service';
+import { DeleteBadgeAwardService, GetBadgeAwardService, GiveBadgeService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, getContext, okResponse, protectedEndpoint } from '../../utils';
+import {
+  createdResponse,
+  getContext,
+  getPaginationOptions,
+  okResponse,
+  paginatedResponse,
+  protectedEndpoint,
+} from '../../utils';
+import { validateOrderBy } from '../../utils/validation-helper';
 import { BadgeAwardMapper } from './badge-award-mapper';
 
 export class BadgeAwardController {
@@ -57,7 +64,7 @@ export class BadgeAwardController {
 
     /**
      * @openapi
-     * /badge-awards/{awardId}:
+     * /badge-awards/{badgeAwardId}:
      *   get:
      *     summary: Get a single badge award
      *     operationId: getBadgeAward
@@ -75,11 +82,11 @@ export class BadgeAwardController {
      *     tags:
      *       - Badge Awards
      */
-    router.get('/awards/:awardId', protectedEndpoint(this.getAward, ['r:badge-awards']));
+    router.get('/badge-awards/:badgeAwardId', protectedEndpoint(this.getAward, ['r:badge-awards']));
 
     /**
      * @openapi
-     * /badge-awards/{awardId}:
+     * /badge-awards/{badgeAwardId}:
      *   delete:
      *     summary: Delete a badge award
      *     operationId: deleteBadgeAward
@@ -94,17 +101,29 @@ export class BadgeAwardController {
      *     tags:
      *       - Badge Awards
      */
-    router.delete('/awards/:awardId', protectedEndpoint(this.deleteAward, ['d:awards']));
+    router.delete('/badge-awards/:badgeAwardId', protectedEndpoint(this.deleteAward, ['d:awards']));
 
     return router;
   }
 
   private async getAwards(req: Request, res: Response) {
-    throw new NotImplementedError('');
+    const paginationOpts = getPaginationOptions(req);
+    validateOrderBy(paginationOpts.orderBy, BadgeAwardMapper.isProperty);
+
+    const service = new GetBadgeAwardService(getContext());
+    const awards = await service.getMany(paginationOpts);
+
+    return paginatedResponse(res, '/badge-awards', awards, BadgeAwardMapper.toAwardDto);
   }
 
   private async getAward(req: Request, res: Response) {
-    throw new NotImplementedError('');
+    const badgeAwardId = req.params.badgeAwardId;
+
+    const service = new GetBadgeAwardService(getContext());
+    const award = await service.get(badgeAwardId);
+    const dto = BadgeAwardMapper.toAwardDto(award);
+
+    return okResponse(res, dto);
   }
 
   private async deleteAward(req: Request, res: Response) {
