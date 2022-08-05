@@ -32,6 +32,8 @@ export enum Routes {
   UserCreate = '/users/create',
   UserSlackSync = '/users/slack-sync',
   Highscores = '/highscores',
+  BadgeGive = '/badges/give',
+  BadgeCreate = '/badges/create',
 }
 
 const Router = (): JSX.Element => {

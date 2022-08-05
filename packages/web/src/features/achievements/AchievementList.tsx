@@ -149,7 +149,7 @@ const AchievementList: React.FC = () => {
 
   return (
     <div className="w-3/4 mx-auto">
-      <Header>Achievements</Header>
+      <Header>All Achievements</Header>
       <PaginatedTable
         columns={columns}
         data={mappedData}

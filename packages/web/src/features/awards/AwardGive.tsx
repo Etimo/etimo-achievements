@@ -61,7 +61,7 @@ const AwardGive: React.FC = () => {
 
   return (
     <div className="w-1/3 mx-auto">
-      <Header>Give Award</Header>
+      <Header>Give Achievement</Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormSelectRow
           label="Achievement"
