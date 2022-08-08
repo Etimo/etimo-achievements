@@ -87,7 +87,7 @@ const SideMenu: React.FC = () => {
               <RequirePermission read="badges">
                 <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
                   List all badges
-                  <Link to={''} />
+                  <Link to={Routes.BadgeList} />
                 </MenuItem>
               </RequirePermission>
               <RequirePermission read="badge-awards">

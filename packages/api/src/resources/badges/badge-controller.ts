@@ -1,10 +1,16 @@
-import { CreateBadgeService, GetBadgeService } from '@etimo-achievements/service';
+import {
+  CreateBadgeService,
+  DeleteBadgeService,
+  GetBadgeService,
+  UpdateBadgeService,
+} from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import {
   badRequestResponse,
   createdResponse,
   getContext,
   getPaginationOptions,
+  noContentResponse,
   okResponse,
   paginatedResponse,
   protectedEndpoint,
@@ -85,6 +91,28 @@ export class BadgeController {
 
     /**
      * @openapi
+     * /badges/{badgeId}:
+     *   put:
+     *     summary: Update a badge
+     *     operationId: updateBadge
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *badgeIdParam
+     *     requestBody:
+     *       required: true
+     *       content: *badgeContent
+     *     responses:
+     *       204: *noContentResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Badges
+     */
+    router.put('/badges/:badgeId', protectedEndpoint(this.updateBadge, ['u:badges']));
+
+    /**
+     * @openapi
      * /badges/list:
      *   post:
      *     summary: Get many badges by list of ids
@@ -105,6 +133,25 @@ export class BadgeController {
      *       - Badges
      */
     router.post('/badges/list', protectedEndpoint(this.listBadges, ['r:badges']));
+
+    /**
+     * @openapi
+     * /badges/{badgeId}:
+     *   delete:
+     *     summary: Delete a badge
+     *     operationId: deleteBadge
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *badgeIdParam
+     *     responses:
+     *       200: *okResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Badges
+     */
+    router.delete('/badges/:badgeId', protectedEndpoint(this.deleteBadge, ['d:badges']));
 
     return router;
   }
@@ -150,5 +197,24 @@ export class BadgeController {
     const dtos = badges.map(BadgeMapper.toBadgeDto);
 
     return okResponse(res, dtos);
+  };
+
+  private updateBadge = async (req: Request, res: Response) => {
+    const badgeId = req.params.badgeId;
+    const body = req.body;
+    const input = BadgeMapper.toBadgeDto(body);
+    const service = new UpdateBadgeService(getContext());
+    await service.update({ ...input, id: badgeId });
+
+    return noContentResponse(res);
+  };
+
+  private deleteBadge = async (req: Request, res: Response) => {
+    const badgeId = req.params.badgeId;
+
+    const service = new DeleteBadgeService(getContext());
+    await service.delete(badgeId);
+
+    return okResponse(res);
   };
 }

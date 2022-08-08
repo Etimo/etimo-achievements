@@ -1,16 +1,17 @@
-import { uuid } from '@etimo-achievements/common';
+import { BadgeDto, uuid } from '@etimo-achievements/common';
 import React, { useMemo, useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
-import { TrashButton } from '../../components/buttons';
+import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
+import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
-import { BadgeAwardComposite } from './badge-award-types';
-import { getManyBadgeAwards } from './badge-award-utils';
-import BadgeAwardDeleteModal from './BadgeAwardDeleteModal';
+import { getManyBadges } from './badge-utils';
+import BadgeDeleteModal from './BadgeDeleteModal';
+import BadgeEditModal from './BadgeEditModal';
 
-const BadgeAwardsList: React.FC = () => {
+const BadgeList: React.FC = () => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [data, setData] = useState<any[]>([]);
@@ -19,11 +20,12 @@ const BadgeAwardsList: React.FC = () => {
   const [monitor, setMonitor] = useState<string>(uuid());
   const [deleting, setDeleting] = useState<string>();
 
+  const getEditId = () => query.get('edit') ?? '';
   const getDeleteId = () => query.get('delete') ?? '';
 
   const fetchData = async (input: PaginationRequestInput) => {
     setLoading(true);
-    const response = await getManyBadgeAwards(input);
+    const response = await getManyBadges(input);
     if (response) {
       const { data, pagination } = response;
       setData(mapToData(data));
@@ -32,19 +34,13 @@ const BadgeAwardsList: React.FC = () => {
     setLoading(false);
   };
 
-  const mapToData = (composites: BadgeAwardComposite[]): any[] => {
-    return composites.map((c) => ({
-      id: c.badgeAward.id,
-      name: c.badge.name,
-      awardedTo: c.awardedTo.name,
-      date: new Date(c.badgeAward.createdAt ?? 0).toLocaleString('sv-SE'),
-      delete: (
-        <TrashButton
-          id={c.badgeAward.id}
-          link={addQueryParam(window.location, 'delete', c.badgeAward.id)}
-          loading={deleting}
-        />
-      ),
+  const mapToData = (badges: BadgeDto[]): any[] => {
+    return badges.map((b) => ({
+      id: b.id,
+      name: b.name,
+      description: b.description,
+      edit: <EditButton id={b.id} link={addQueryParam(window.location, 'edit', b.id)} />,
+      delete: <TrashButton id={b.id} link={addQueryParam(window.location, 'delete', b.id)} loading={deleting} />,
     }));
   };
 
@@ -60,21 +56,21 @@ const BadgeAwardsList: React.FC = () => {
         accessor: 'name',
       },
       {
-        title: 'Awarded To',
-        accessor: 'awardedTo',
+        title: 'Description',
+        accessor: 'description',
         className: 'w-40',
       },
       {
-        title: 'Date',
-        accessor: 'date',
-        sortKey: 'createdAt',
-        className: 'w-48',
+        title: 'Edit',
+        accessor: 'edit',
+        className: 'w-16 text-center',
+        hasAccess: ['update', 'badges'],
       },
       {
         title: 'Delete',
         accessor: 'delete',
-        hasAccess: ['remove', 'badge-awards'],
         className: 'w-16 text-center',
+        hasAccess: ['remove', 'badges'],
       },
     ],
     []
@@ -82,7 +78,7 @@ const BadgeAwardsList: React.FC = () => {
 
   return (
     <div className="w-3/4 mx-auto">
-      <Header>Given Badges</Header>
+      <Header>All Badges</Header>
       <PaginatedTable
         columns={columns}
         data={data}
@@ -91,9 +87,18 @@ const BadgeAwardsList: React.FC = () => {
         monitor={monitor}
         fetchData={fetchData}
       />
+      {getEditId() && (
+        <RequirePermission update="badges">
+          <BadgeEditModal
+            badgeId={getEditId()}
+            onClose={() => removeQueryParam('edit')}
+            onSubmit={() => setMonitor(uuid())}
+          />
+        </RequirePermission>
+      )}
       {getDeleteId() && (
-        <BadgeAwardDeleteModal
-          awardId={getDeleteId()}
+        <BadgeDeleteModal
+          badgeId={getDeleteId()}
           onClose={() => removeQueryParam('delete')}
           onSubmit={() => setMonitor(uuid())}
         />
@@ -102,4 +107,4 @@ const BadgeAwardsList: React.FC = () => {
   );
 };
 
-export default BadgeAwardsList;
+export default BadgeList;

@@ -5,8 +5,9 @@ import toast from 'react-hot-toast';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
+import { getAllBadges } from '../badges/badge-utils';
 import { getAllUsers } from '../users/user-utils';
-import { getAllBadges, giveBadge } from './badge-award-utils';
+import { giveBadge } from './badge-award-utils';
 
 const BadgeAwardGive: React.FC = () => {
   const { handleSubmit } = useForm<BadgeAwardDto>();
