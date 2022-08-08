@@ -9,6 +9,7 @@ import LoginCallback from '../features/auth/LoginCallback';
 import Logout from '../features/auth/Logout';
 import AwardGive from '../features/awards/AwardGive';
 import AwardList from '../features/awards/AwardList';
+import BadgeAwardsList from '../features/badge-awards/BadgeAwardsList';
 import Highscores from '../features/highscore/Highscore';
 import MyProfile from '../features/user-profile/MyProfile';
 import UserProfile from '../features/user-profile/UserProfile';
@@ -34,6 +35,7 @@ export enum Routes {
   Highscores = '/highscores',
   BadgeGive = '/badges/give',
   BadgeCreate = '/badges/create',
+  BadgeAwardsList = '/badges/list',
 }
 
 const Router = (): JSX.Element => {
@@ -55,11 +57,10 @@ const Router = (): JSX.Element => {
         <Route path={Routes.UserCreate} element={<UserCreate />} />
         <Route path={Routes.UserSlackSync} element={<UserSlackSync />} />
         <Route path={Routes.Highscores} element={<Highscores />} />
+        <Route path={Routes.BadgeAwardsList} element={<BadgeAwardsList />} />
         {/* Should be put last */}
         <Route path="*" element={<NotFound />} />
       </Route>
     </ReactRoutes>
   );
 };
-
-export default Router;

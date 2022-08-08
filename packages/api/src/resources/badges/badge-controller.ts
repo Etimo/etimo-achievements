@@ -1,6 +1,14 @@
 import { CreateBadgeService, GetBadgeService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, getContext, getPaginationOptions, paginatedResponse, protectedEndpoint } from '../../utils';
+import {
+  badRequestResponse,
+  createdResponse,
+  getContext,
+  getPaginationOptions,
+  okResponse,
+  paginatedResponse,
+  protectedEndpoint,
+} from '../../utils';
 import { validateOrderBy } from '../../utils/validation-helper';
 import { BadgeMapper } from './badge-mapper';
 
@@ -8,7 +16,6 @@ export class BadgeController {
   public get routes(): Router {
     const router = Router();
 
-    // TODO: tests
     /**
      * @openapi
      * /badges:
@@ -32,7 +39,6 @@ export class BadgeController {
      */
     router.post('/badges', protectedEndpoint(this.createBadge, ['c:badges']));
 
-    // TODO: tests
     /**
      * @openapi
      * /badges:
@@ -55,6 +61,51 @@ export class BadgeController {
      */
     router.get('/badges', protectedEndpoint(this.getBadges, ['r:badges']));
 
+    /**
+     * @openapi
+     * /badges/{badgeId}:
+     *   get:
+     *     summary: Get a single badge
+     *     operationId: getBadge
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *badgeIdParam
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *badgeContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
+     *     tags:
+     *       - Badges
+     */
+    router.get('/badges/:badgeId', protectedEndpoint(this.getBadge, ['r:badges']));
+
+    /**
+     * @openapi
+     * /badges/list:
+     *   post:
+     *     summary: Get many badges by list of ids
+     *     operationId: listBadges
+     *     security:
+     *       - jwtCookie: []
+     *     requestBody:
+     *       required: true
+     *       content: *idListObject
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *badgesContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *       404: *notFoundResponse
+     *     tags:
+     *       - Badges
+     */
+    router.post('/badges/list', protectedEndpoint(this.listBadges, ['r:badges']));
+
     return router;
   }
 
@@ -67,6 +118,16 @@ export class BadgeController {
     return createdResponse(res, '/badges', { id: badge.id });
   };
 
+  private getBadge = async (req: Request, res: Response) => {
+    const badgeId = req.params.badgeId;
+
+    const service = new GetBadgeService(getContext());
+    const badge = await service.get(badgeId);
+    const dto = BadgeMapper.toBadgeDto(badge);
+
+    return okResponse(res, dto);
+  };
+
   private getBadges = async (req: Request, res: Response) => {
     const paginationOpts = getPaginationOptions(req);
     validateOrderBy(paginationOpts.orderBy, BadgeMapper.isProperty);
@@ -75,5 +136,19 @@ export class BadgeController {
     const badges = await service.getMany(paginationOpts);
 
     return paginatedResponse(res, '/badges', badges, BadgeMapper.toBadgeDto);
+  };
+
+  private listBadges = async (req: Request, res: Response) => {
+    const payload = req.body as string[];
+
+    if (payload.length > 100) {
+      return badRequestResponse(res, 'Too many ids');
+    }
+
+    const service = new GetBadgeService(getContext());
+    const badges = await service.getManyByIds(payload);
+    const dtos = badges.map(BadgeMapper.toBadgeDto);
+
+    return okResponse(res, dtos);
   };
 }
