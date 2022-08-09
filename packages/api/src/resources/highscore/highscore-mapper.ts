@@ -8,6 +8,7 @@ export class HighscoreMapper {
       achievements: award.achievements,
       points: award.points,
       kickback: award.kickback,
+      pointsPerAchievement: award.pointsPerAchievement,
       totalPoints: award.totalPoints,
     };
   }

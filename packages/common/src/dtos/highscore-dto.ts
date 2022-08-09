@@ -23,6 +23,10 @@
  *           type: integer
  *           description: How many kickback achievement points have been awarded to the user
  *           example: 1200
+ *         pointsPerAchievement:
+ *           type: integer
+ *           description: Total score divided by amount of achievements
+ *           example: 528
  *         totalPoints:
  *           type: integer
  *           description: Total points
@@ -33,5 +37,6 @@ export interface HighscoreDto {
   achievements: number;
   points: number;
   kickback: number;
+  pointsPerAchievement: number;
   totalPoints: number;
 }

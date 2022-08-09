@@ -46,12 +46,17 @@ export class GetHighscoreService {
           (sum, a) => sum + Math.min((a?.achievementPoints ?? 0) * KICKBACK, MAXIMUM_KICKBACK_POINTS),
           0
         );
+
+        const totalPoints = kickback + points;
+        const pointsPerAchievement = totalPoints / (userAchievements.length || 1);
+
         const userHighscore: IHighscore = {
           userId: user.id,
           achievements: userAchievements.length,
           points,
           kickback,
-          totalPoints: kickback + points,
+          pointsPerAchievement,
+          totalPoints,
         };
         highscores.push(userHighscore);
       }
