@@ -1,9 +1,13 @@
 import {
+  CreateAchievementFavoriteService,
   CreateAchievementService,
+  DeleteAchievementFavoriteService,
   DeleteAchievementService,
+  GetAchievementFavoriteService,
   GetAchievementService,
   UpdateAchievementService,
 } from '@etimo-achievements/service';
+import { IAchievementFavorite } from '@etimo-achievements/types';
 import { Request, Response, Router } from 'express';
 import {
   badRequestResponse,
@@ -16,6 +20,7 @@ import {
 } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { validateOrderBy } from '../../utils/validation-helper';
+import { AchievementFavoriteMapper } from '../achievement-favorite/achievement-favorite-mapper';
 import { AchievementMapper } from './achievement-mapper';
 
 export class AchievementController {
@@ -66,6 +71,66 @@ export class AchievementController {
      *       - Achievements
      */
     router.post('/achievements/list', protectedEndpoint(this.listAchievements, ['r:achievements']));
+
+    /**
+     * @openapi
+     * /achievements/favorites:
+     *   get:
+     *     summary: Get user's favorite achievements
+     *     operationId: getFavoriteAchievement
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *skipParam
+     *       - *takeParam
+     *       - *orderByParam
+     *     responses:
+     *       200: *okResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Achievements
+     */
+    router.get('/achievements/favorites', protectedEndpoint(this.getFavorites, ['r:achievements']));
+
+    /**
+     * @openapi
+     * /achievements/favorites:
+     *   post:
+     *     summary: Add an achievement to your favorites
+     *     operationId: createFavoriteAchievement
+     *     security:
+     *       - jwtCookie: []
+     *     requestBody:
+     *       required: true
+     *       content: *achievementFavoriteContent
+     *     responses:
+     *       200: *okResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Achievements
+     */
+    router.post('/achievements/favorites', protectedEndpoint(this.createFavorite, ['r:achievements']));
+
+    /**
+     * @openapi
+     * /achievements/favorites/{achievementId}:
+     *   delete:
+     *     summary: Remove an achievement from favorites
+     *     operationId: removeFavoriteAchievement
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *achievementIdParam
+     *     responses:
+     *       200: *okResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Achievements
+     */
+    router.delete('/achievements/favorites/:achievementId', protectedEndpoint(this.removeFavorite, ['r:achievements']));
 
     /**
      * @openapi
@@ -216,6 +281,40 @@ export class AchievementController {
 
     const service = new DeleteAchievementService(getContext());
     await service.delete(achievementId);
+
+    return okResponse(res);
+  };
+
+  private getFavorites = async (req: Request, res: Response) => {
+    const { userId } = getContext();
+
+    const service = new GetAchievementFavoriteService(getContext());
+    const result = await service.getMany(userId);
+    const dtos = result.map(AchievementFavoriteMapper.toAchievementFavoriteDto);
+
+    return okResponse(res, dtos);
+  };
+
+  private createFavorite = async (req: Request, res: Response) => {
+    const { userId } = getContext();
+    const payload = req.body;
+
+    const input = AchievementFavoriteMapper.toAchievementFavoriteDto({
+      achievementId: payload.achievementId,
+      userId,
+    } as IAchievementFavorite);
+
+    const service = new CreateAchievementFavoriteService(getContext());
+    const favorite = await service.create(input);
+
+    return createdResponse(res, '/achievements', favorite);
+  };
+
+  private removeFavorite = async (req: Request, res: Response) => {
+    const achievementId = req.params.achievementId;
+    const { userId } = getContext();
+    const service = new DeleteAchievementFavoriteService(getContext());
+    await service.delete(achievementId, userId);
 
     return okResponse(res);
   };
