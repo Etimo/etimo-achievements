@@ -1,10 +1,13 @@
 import {
   AwardDto,
   createAward,
+  createFavorite,
+  deleteFavorite,
   getAchievement,
   getAchievements,
   getAward,
   getAwards,
+  getFavorites,
   getUser,
   listAchievements,
   listUsers,
@@ -12,7 +15,31 @@ import {
 } from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
-import { AwardComposite } from './award-types';
+import { AwardComposite, FavoriteComposite } from './award-types';
+
+export const getAchievementFavorites = async (): Promise<FavoriteComposite[]> => {
+  const response = await getFavorites();
+  if (response.success) {
+    const favorites = await response.data();
+    const achievementPromise = (await getAchievements()).data();
+    await Promise.allSettled([achievementPromise]);
+
+    const achievements = await achievementPromise;
+
+    return favorites.map((f) => achievements.find((a) => a.id === f.achievementId)!);
+  } else {
+    toast.error('Could not get favorite achievements: ' + (await response.errorMessage));
+    return [];
+  }
+};
+
+export const addAchievementFavorite = (achievementId: string) => {
+  return createFavorite(achievementId).wait();
+};
+
+export const removeAchievementFavorite = (achievementId: string) => {
+  return deleteFavorite(achievementId).wait();
+};
 
 export const getAllAchievementsSortedByMostUsed = async () => {
   const response = await getAchievements();

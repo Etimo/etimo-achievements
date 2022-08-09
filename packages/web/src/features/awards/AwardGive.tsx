@@ -3,10 +3,18 @@ import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { toastResponse } from '../../common/utils/toast-response';
+import { FavoriteButton } from '../../components/buttons';
 import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
 import { getAllUsers } from '../users/user-utils';
-import { getAllAchievementsSortedByMostUsed, giveAward } from './award-utils';
+import { FavoriteComposite } from './award-types';
+import {
+  addAchievementFavorite,
+  getAchievementFavorites,
+  getAllAchievementsSortedByMostUsed,
+  giveAward,
+  removeAchievementFavorite,
+} from './award-utils';
 
 const AwardGive: React.FC = () => {
   const { handleSubmit } = useForm<AwardDto>();
@@ -14,16 +22,35 @@ const AwardGive: React.FC = () => {
   const [userId, setUserId] = useState<string>();
   const [users, setUsers] = useState<UserDto[]>();
   const [achievements, setAchievements] = useState<AchievementDto[]>();
+  const [favorites, setFavorites] = useState<FavoriteComposite[]>([]);
+  const [favoriteLoading, setFavoriteLoading] = useState<boolean>(false);
   const [achievementId, setAchievementId] = useState<string>();
 
   useEffect(() => {
     getAllAchievementsSortedByMostUsed().then(setAchievements);
+    getAchievementFavorites().then(setFavorites);
     getAllUsers().then(setUsers);
   }, []);
 
   const resetForm = () => {
     setUserId('');
     setAchievementId('');
+  };
+
+  const toggleFavorite = () => {
+    if (!achievementId || favoriteLoading) return;
+
+    setFavoriteLoading(true);
+
+    if (favorites.find((f) => f.id === achievementId)) {
+      removeAchievementFavorite(achievementId);
+      setFavorites(favorites.filter((f) => f.id !== achievementId));
+    } else {
+      addAchievementFavorite(achievementId);
+      setFavorites([...favorites, achievements?.find((a) => a.id === achievementId)!]);
+    }
+
+    setFavoriteLoading(false);
   };
 
   const onSubmit: SubmitHandler<AwardDto> = async () => {
@@ -51,8 +78,15 @@ const AwardGive: React.FC = () => {
           }))}
           bindValue={achievementId}
           onChange={setAchievementId}
-          type="multiline"
-        />
+        >
+          <FavoriteButton
+            title="Add as favorite"
+            state={favorites.find((f) => f.id === achievementId) ? 'filled' : 'outlined'}
+            onClick={toggleFavorite}
+            disabled={!achievementId}
+            className="mx-2"
+          />
+        </FormSelect>
         <FormSelect
           label="User"
           text="Select a user"
