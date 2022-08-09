@@ -2187,6 +2187,7 @@ __metadata:
     "@etimo-achievements/types": ^1.0.0
     "@fortawesome/fontawesome-svg-core": ^6.1.1
     "@fortawesome/free-brands-svg-icons": ^6.1.1
+    "@fortawesome/free-regular-svg-icons": ^6.1.2
     "@fortawesome/free-solid-svg-icons": ^6.1.1
     "@fortawesome/react-fontawesome": ^0.1.18
     "@reduxjs/toolkit": ^1.8.0
@@ -2235,6 +2236,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/fontawesome-common-types@npm:6.1.2":
+  version: 6.1.2
+  resolution: "@fortawesome/fontawesome-common-types@npm:6.1.2"
+  checksum: 16ba97f73256adef5cd680a027e6dbd3e76f34ba9227f7bd9e8c372cb4f337c7ccbf41f35dcfbc22b11320bbb579d01daccf1aa7ae47df5d0b17260c0097bb30
+  languageName: node
+  linkType: hard
+
 "@fortawesome/fontawesome-svg-core@npm:^6.1.1":
   version: 6.1.1
   resolution: "@fortawesome/fontawesome-svg-core@npm:6.1.1"
@@ -2250,6 +2258,15 @@ __metadata:
   dependencies:
     "@fortawesome/fontawesome-common-types": 6.1.1
   checksum: a878cc764ec74f1d0fe8cf8e6c4e7dd4bf829f614b741a39416b155adb23c37e70f7e077d76b301a269a7f7b28cdcc3af9191460986aa470b31c40d04ee7d59d
+  languageName: node
+  linkType: hard
+
+"@fortawesome/free-regular-svg-icons@npm:^6.1.2":
+  version: 6.1.2
+  resolution: "@fortawesome/free-regular-svg-icons@npm:6.1.2"
+  dependencies:
+    "@fortawesome/fontawesome-common-types": 6.1.2
+  checksum: 1485773e16a019fd4af0053ab7e7f51558fe016dcfd8b975d5fc14069dd494d0c345477c1ceddc0356634a53add780761242aa4b20fc5ce616274aa7808bff39
   languageName: node
   linkType: hard
 
