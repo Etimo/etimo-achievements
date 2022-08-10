@@ -1,0 +1,4 @@
+x-template: &achievementFavoriteContent
+  application/json:
+    schema:
+      $ref: '#/components/schemas/AchievementFavorite'

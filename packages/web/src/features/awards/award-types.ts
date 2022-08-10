@@ -10,3 +10,5 @@ export type AwardComposite = {
   awardedBy: UserDto;
   achievement: AchievementDto;
 };
+
+export type FavoriteComposite = AchievementDto;

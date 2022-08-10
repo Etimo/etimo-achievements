@@ -1,4 +1,5 @@
 export * from './achievement-api';
+export * from './achievement-favorite';
 export { ApiResponse } from './api';
 export * from './auth-api';
 export * from './award-api';

@@ -1,6 +1,7 @@
 import { UnauthorizedError, uuid } from '@etimo-achievements/common';
 import {
   AccessTokenRepository,
+  AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
   RefreshTokenRepository,
@@ -49,6 +50,7 @@ export class Context implements IContext {
     award: new AwardRepository(this),
     refreshToken: new RefreshTokenRepository(this),
     user: new UserRepository(this),
+    achievementFavorite: new AchievementFavoriteRepository(this),
   };
 
   public get loggingContext() {

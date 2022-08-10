@@ -1,5 +1,6 @@
 import {
   AccessTokenRepository,
+  AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
   RefreshTokenRepository,
@@ -14,5 +15,6 @@ export type IContext = {
     achievement: AchievementRepository;
     award: AwardRepository;
     refreshToken: RefreshTokenRepository;
+    achievementFavorite: AchievementFavoriteRepository;
   };
 } & IRequestContext;
