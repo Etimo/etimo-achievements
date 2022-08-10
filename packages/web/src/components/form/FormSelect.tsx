@@ -1,16 +1,29 @@
 import React from 'react';
 import Select from 'react-select';
+import { FilterOptionOption } from 'react-select/dist/declarations/src/filters';
+import Avatar from '../Avatar';
 import CardRow from '../cards/CardRow';
+
+type Option = {
+  value: string;
+  label: string;
+  subtitle?: string;
+  image?: string;
+};
 
 type Props = {
   label: string;
   text?: string;
   bindValue: any;
   onChange: (value: any) => void;
-  options?: { value: string; label: string; subtitle?: string }[];
+  options: Option[];
+  /** Affects how options are formatted */
+  type?: 'multiline-image' | 'multiline' | 'single-line' | 'singleline-image';
+  /** Custom filter function */
+  filter?: (option: FilterOptionOption<Option>, inputValue: string) => boolean;
 };
 
-const FormSelect: React.FC<Props> = ({ label, text, bindValue, onChange, options }) => {
+const FormSelect: React.FC<Props> = ({ label, text, bindValue, onChange, options, type = 'single-line', filter }) => {
   return (
     <CardRow label={label}>
       <div className="w-full">
@@ -20,15 +33,20 @@ const FormSelect: React.FC<Props> = ({ label, text, bindValue, onChange, options
             className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             options={options}
             noOptionsMessage={() => 'No achievements'}
+            filterOption={
+              filter ??
+              ((option, query) =>
+                option.label.toLowerCase().includes(query.toLowerCase().trim()) ||
+                (option.data.subtitle ?? '').toLowerCase().includes(query.toLowerCase().trim()))
+            }
             components={{
               DropdownIndicator: undefined,
               Option: ({ data, setValue }) => {
                 return (
                   <MultilineOption
-                    value={data.value}
-                    title={data.label}
-                    subtitle={data.subtitle}
+                    option={data}
                     onClick={(value: string) => setValue({ value, label: data.label }, 'select-option')}
+                    type={type}
                   />
                 );
               },
@@ -47,17 +65,22 @@ const FormSelect: React.FC<Props> = ({ label, text, bindValue, onChange, options
 };
 
 interface MultilineOptionProps {
-  value: string;
-  title: string;
-  subtitle?: string;
+  option: Option;
   onClick: (value: string) => void;
+  type: Props['type'];
 }
 
-const MultilineOption = ({ value, title, subtitle, onClick }: MultilineOptionProps) => {
+const MultilineOption = ({ option, onClick, type }: MultilineOptionProps) => {
+  const { label, value, image, subtitle } = option;
   return (
-    <div className="hover:bg-blue-300 py-1 px-2 cursor-pointer" onClick={() => onClick(value)}>
-      <div className="font-medium">{title}</div>
-      <div className="text-xs text-gray-500 font-thin">{subtitle}</div>
+    <div className="flex flex-column items-center p-2 hover:bg-slate-100 cursor-pointer" onClick={() => onClick(value)}>
+      {(type === 'multiline-image' || type === 'singleline-image') && <Avatar src={image} size={40} />}
+      <div className="py-1 px-2">
+        <div className="font-medium">{label}</div>
+        {(type === 'multiline' || type === 'multiline-image') && (
+          <div className="text-xs text-gray-500 font-thin">{subtitle}</div>
+        )}
+      </div>
     </div>
   );
 };
