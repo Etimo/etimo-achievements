@@ -44,7 +44,7 @@ export class LoginService {
     let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile', 'r:highscore', 'r:feature'];
 
     // Administrator rights for certain users
-    const isAdmin = userInfo.email === 'axel.elmarsson@etimo.se';
+    const isAdmin = userInfo.email === 'niclas.lindstedt@etimo.se' || userInfo.email === 'axel.elmarsson@etimo.se';
     if (isAdmin) {
       scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore', 'a:feature'];
     }
