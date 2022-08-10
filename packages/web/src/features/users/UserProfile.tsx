@@ -2,6 +2,7 @@ import { UserDto, uuid } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam, queryParam } from '../../common/utils/query-helper';
+import Avatar from '../../components/Avatar';
 import { EditButton } from '../../components/buttons';
 import { Card, CardRow } from '../../components/cards';
 import Header from '../../components/Header';
@@ -26,6 +27,9 @@ const UserProfile: React.FC = () => {
     <div className="w-1/3 mx-auto">
       <Header>Profile</Header>
       <Card>
+        <div className="flex justify-center mb-10">
+          <Avatar src={profile.image} size={100} />
+        </div>
         <CardRow label="Name">
           {profile.name}
           <RequirePermission update="profile">

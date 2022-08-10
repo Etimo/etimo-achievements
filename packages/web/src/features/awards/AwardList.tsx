@@ -5,6 +5,7 @@ import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
 import { TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
+import { NameAvatarUserCell } from '../../components/table';
 import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { AwardComposite } from './award-types';
 import { getManyAwards } from './award-utils';
@@ -37,10 +38,10 @@ const AwardList: React.FC = () => {
       id: c.award.id,
       name: c.achievement.name,
       description: c.achievement.description,
-      awardedTo: c.awardedTo.name,
+      awardedTo: <NameAvatarUserCell name={c.awardedTo.name} image={c.awardedTo.image} />,
       points: `${formatNumber(c.achievement.achievementPoints)} pts`,
       date: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
-      awardedBy: c.awardedBy.name,
+      awardedBy: <NameAvatarUserCell name={c.awardedBy.name} image={c.awardedBy.image} />,
       delete: (
         <TrashButton id={c.award.id} link={addQueryParam(window.location, 'delete', c.award.id)} loading={deleting} />
       ),
