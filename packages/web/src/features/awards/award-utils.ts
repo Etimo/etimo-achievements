@@ -2,6 +2,7 @@ import {
   AwardDto,
   createAward,
   getAchievement,
+  getAchievements,
   getAward,
   getAwards,
   getUser,
@@ -12,6 +13,45 @@ import {
 import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { AwardComposite } from './award-types';
+
+export const getAllAchievementsSortedByMostUsed = async () => {
+  const response = await getAchievements();
+  if (response.success) {
+    const achievements = await response.data();
+    const awardsPromise = (await getAwards()).data();
+
+    await Promise.allSettled([awardsPromise]);
+    const awards = await awardsPromise;
+
+    const achievementFrequency = awards.reduce((result: Record<string, number>, award: AwardDto) => {
+      if (result[award.achievementId]) {
+        return {
+          ...result,
+          [award.achievementId]: result[award.achievementId] + 1,
+        };
+      } else {
+        // init
+        return {
+          ...result,
+          [award.achievementId]: 1,
+        };
+      }
+    }, {} as Record<string, number>);
+
+    const topAchievementIds = Object.entries(achievementFrequency)
+      .sort((a, b) => (a[1] < b[1] ? 1 : -1))
+      .slice(0, 5)
+      .map((a) => a[0]);
+
+    const topAchievements = topAchievementIds.map((t) => achievements.find((a) => a.id === t)!);
+    const otherAchievements = achievements.filter((a) => !topAchievementIds.includes(a.id));
+
+    const totalOrder = [...topAchievements, ...otherAchievements];
+    return totalOrder;
+  } else {
+    toast.error('Could not get awards: ' + (await response.errorMessage));
+  }
+};
 
 export const giveAward = (userId: string, achievementId: string) => {
   return createAward({ userId, achievementId } as AwardDto).wait();

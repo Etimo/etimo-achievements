@@ -5,9 +5,8 @@ import toast from 'react-hot-toast';
 import { toastResponse } from '../../common/utils/toast-response';
 import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
-import { getAllAchievements } from '../achievements/achievement-utils';
 import { getAllUsers } from '../users/user-utils';
-import { giveAward } from './award-utils';
+import { getAllAchievementsSortedByMostUsed, giveAward } from './award-utils';
 
 const AwardGive: React.FC = () => {
   const { handleSubmit } = useForm<AwardDto>();
@@ -18,7 +17,7 @@ const AwardGive: React.FC = () => {
   const [achievementId, setAchievementId] = useState<string>();
 
   useEffect(() => {
-    getAllAchievements().then(setAchievements);
+    getAllAchievementsSortedByMostUsed().then(setAchievements);
     getAllUsers().then(setUsers);
   }, []);
 
@@ -45,7 +44,7 @@ const AwardGive: React.FC = () => {
         <FormSelect
           label="Achievement"
           text="Select an achievement"
-          options={sort(achievements ?? [], 'name').map((a) => ({
+          options={(achievements ?? []).map((a) => ({
             value: a.id,
             label: a.name,
             subtitle: a.description,
