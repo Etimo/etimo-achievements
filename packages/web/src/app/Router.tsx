@@ -12,6 +12,7 @@ import Highscores from '../features/highscore/Highscore';
 import UserCreate from '../features/users/UserCreate';
 import UserList from '../features/users/UserList';
 import UserProfile from '../features/users/UserProfile';
+import UserSettings from '../features/users/UserSettings';
 import UserSlackSync from '../features/users/UserSlackSync';
 import Home from '../pages/Home';
 
@@ -24,7 +25,8 @@ export enum Routes {
   Login = '/login',
   LoginCallback = '/login/callback',
   Logout = '/logout',
-  UserProfile = '/profile',
+  UserSettings = '/profile',
+  UserProfile = '/profile/:id',
   UserList = '/users/list',
   UserCreate = '/users/create',
   UserSlackSync = '/users/slack-sync',
@@ -44,6 +46,7 @@ const Router = (): JSX.Element => {
         <Route path={Routes.AchievementCreate} element={<AchievementCreate />} />
         <Route path={Routes.AwardList} element={<AwardList />} />
         <Route path={Routes.AwardGive} element={<AwardGive />} />
+        <Route path={Routes.UserSettings} element={<UserSettings />} />
         <Route path={Routes.UserProfile} element={<UserProfile />} />
         <Route path={Routes.UserList} element={<UserList />} />
         <Route path={Routes.UserCreate} element={<UserCreate />} />

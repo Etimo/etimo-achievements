@@ -58,7 +58,7 @@ const AwardList: React.FC = () => {
         tooltip: c.achievement.description,
       },
       awardedTo: {
-        value: <NameAvatarUserCell name={c.awardedTo.name} image={c.awardedTo.image} />,
+        value: <NameAvatarUserCell user={c.awardedTo} />,
       },
       points: {
         value: `${formatNumber(c.achievement.achievementPoints)} pts`,
@@ -67,7 +67,7 @@ const AwardList: React.FC = () => {
         value: new Date(c.award.createdAt ?? 0).toLocaleString('sv-SE'),
       },
       awardedBy: {
-        value: <NameAvatarUserCell name={c.awardedBy.name} image={c.awardedBy.image} />,
+        value: <NameAvatarUserCell user={c.awardedBy} />,
       },
       delete: {
         value: (

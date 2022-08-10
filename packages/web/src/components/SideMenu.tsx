@@ -36,7 +36,7 @@ const SideMenu: React.FC = () => {
             <Menu iconShape="round">
               <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
                 Profile
-                <Link to={Routes.UserProfile} />
+                <Link to={Routes.UserSettings} />
               </MenuItem>
             </Menu>
           </RequirePermission>

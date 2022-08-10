@@ -46,7 +46,7 @@ const Highscores: React.FC = () => {
         value: totalRanks.indexOf(h.points) + 1, // index of the user's score in the list is the rank of the user
       },
       name: {
-        value: <NameAvatarUserCell image={h.user.image} name={h.user.name} />,
+        value: <NameAvatarUserCell user={h.user} />,
       },
       achievements: {
         value: formatNumber(h.achievements),
