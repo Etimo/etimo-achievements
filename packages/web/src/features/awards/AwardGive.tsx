@@ -76,8 +76,8 @@ const AwardGive: React.FC = () => {
             label: a.name,
             subtitle: a.description,
           }))}
-          bindValue={achievementId}
-          onChange={setAchievementId}
+          value={achievementId}
+          onChange={(value) => setAchievementId(value)}
           type="multiline"
         >
           <FavoriteButton
@@ -92,8 +92,8 @@ const AwardGive: React.FC = () => {
           label="User"
           text="Select a user"
           options={sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name, image: a.image }))}
-          bindValue={userId}
-          onChange={setUserId}
+          value={userId}
+          onChange={(value) => setUserId(value)}
           type="singleline-image"
         />
         <FormSubmitButton label="Give" loading={loading} />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
 import { FilterOptionOption } from 'react-select/dist/declarations/src/filters';
 import Avatar from '../Avatar';
@@ -14,7 +14,7 @@ type Option = {
 type Props = {
   label: string;
   text?: string;
-  bindValue: any;
+  value: string | undefined;
   onChange: (value: any) => void;
   options: Option[];
   /** Affects how options are formatted */
@@ -26,18 +26,24 @@ type Props = {
 const FormSelect: React.FC<Props> = ({
   label,
   text,
-  bindValue,
+  value,
   onChange,
   options,
   type = 'single-line',
   filter,
   children,
 }) => {
+  const [open, setOpen] = useState(false);
+
   return (
     <CardRow label={label}>
       <div className="w-full">
         <div className="relative">
           <Select
+            menuIsOpen={open}
+            onMenuOpen={() => setOpen(true)}
+            onMenuClose={() => setOpen(false)}
+            value={options.find((o) => o.value === value)}
             placeholder={text}
             className="block appearance-none w-full bg-white border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
             options={options}
@@ -50,11 +56,14 @@ const FormSelect: React.FC<Props> = ({
             }
             components={{
               DropdownIndicator: undefined,
-              Option: ({ data, setValue }) => {
+              Option: ({ data, isSelected }) => {
                 return (
                   <MultilineOption
                     option={data}
-                    onClick={(value: string) => setValue({ value, label: data.label }, 'select-option')}
+                    onClick={(value) => {
+                      isSelected ? onChange('') : onChange(value);
+                      setOpen(false);
+                    }}
                     type={type}
                   />
                 );
