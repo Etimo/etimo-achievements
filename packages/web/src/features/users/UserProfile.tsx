@@ -30,8 +30,7 @@ const UserProfile: React.FC = () => {
         <div className="flex justify-center mb-10">
           <Avatar src={profile.image} size={100} />
         </div>
-        <CardRow label="Name">
-          {profile.name}
+        <div className="relative">
           <RequirePermission update="profile">
             <EditButton
               id={profile.id}
@@ -39,7 +38,8 @@ const UserProfile: React.FC = () => {
               className="float-right px-0 mx-0"
             />
           </RequirePermission>
-        </CardRow>
+        </div>
+        <CardRow label="Name">{profile.name}</CardRow>
         <CardRow label="E-mail">{profile.email}</CardRow>
         <CardRow label="Slack handle">{profile.slackHandle}</CardRow>
       </Card>

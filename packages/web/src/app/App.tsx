@@ -1,3 +1,4 @@
+import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import SideMenu from '../components/SideMenu';
@@ -13,9 +14,17 @@ const App = (): JSX.Element => {
           <SideMenu />
         </div>
         <div className="p-4 w-full mx-auto">
-          <Authentication>
-            <Router />
-          </Authentication>
+          <MantineProvider
+            withGlobalStyles
+            theme={{
+              fontFamily: 'Segoe UI, sans-serif',
+              fontFamilyMonospace: 'Segoe UI, sans-serif',
+            }}
+          >
+            <Authentication>
+              <Router />
+            </Authentication>
+          </MantineProvider>
         </div>
       </div>
     </React.StrictMode>
