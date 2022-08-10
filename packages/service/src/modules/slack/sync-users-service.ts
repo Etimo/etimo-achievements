@@ -10,6 +10,13 @@ export class SyncSlackUsersService {
     this.web = new WebClient(getEnvVariable('SLACK_TOKEN'));
   }
 
+  public async getUserSlackHandle(email: string) {
+    const response = await this.web.users.lookupByEmail({ email });
+    if (response.ok) {
+      return response.user?.id;
+    } else return '';
+  }
+
   public async syncUsers() {
     const { repositories, logger } = this.context;
 
@@ -24,6 +31,7 @@ export class SyncSlackUsersService {
           email: user.profile?.email!,
           slackHandle: user.id!,
           name: user.profile?.real_name!,
+          image: '',
         });
       } else {
         logger.debug(`Updating user ${user.profile?.real_name}`);

@@ -20,6 +20,11 @@
  *           type: string
  *           description: The @slack handle of the user
  *           example: '@niclas'
+ *         image:
+ *           type: string
+ *           description: The url to the user's image
+ *           example: 'https://lh3.googleusercontent.com/a/AItbvmmjI2iBhkmtsdRhooDvMuW25VgaZGBA5avYuM9h'
+ *           readOnly: true
  *       required:
  *         - name
  *         - email
@@ -30,4 +35,5 @@ export interface UserDto {
   name: string;
   email: string;
   slackHandle?: string;
+  image: string;
 }
