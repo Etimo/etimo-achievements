@@ -78,6 +78,7 @@ const AwardGive: React.FC = () => {
           }))}
           bindValue={achievementId}
           onChange={setAchievementId}
+          type="multiline"
         >
           <FavoriteButton
             title="Add as favorite"
