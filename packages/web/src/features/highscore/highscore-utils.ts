@@ -24,6 +24,7 @@ export const getHighscores = async (
           points: highscore.points,
           kickback: highscore.kickback,
           totalPoints: highscore.totalPoints,
+          pointsPerAchievement: highscore.pointsPerAchievement,
         });
       }
     }

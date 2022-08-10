@@ -33,6 +33,7 @@ const Highscores: React.FC = () => {
       points: `${formatNumber(h.points)} pts`,
       kickback: `${formatNumber(h.kickback)} pts`,
       totalPoints: `${formatNumber(h.totalPoints)} pts`,
+      pointsPerAchievement: `${formatNumber(h.pointsPerAchievement)} pts`,
     }));
   };
 
@@ -71,12 +72,18 @@ const Highscores: React.FC = () => {
         sortKey: 'totalPoints',
         className: 'w-40',
       },
+      {
+        title: 'Points per achievement',
+        accessor: 'pointsPerAchievement',
+        sortKey: 'pointsPerAchievement',
+        className: 'w-40',
+      },
     ],
     []
   );
 
   return (
-    <div className="w-1/2 mx-auto">
+    <div className="w-2/3 mx-auto">
       <Header>Highscores</Header>
       <PaginatedTable columns={columns} data={data} pageCount={pageCount} loading={loading} fetchData={fetchData} />
     </div>
