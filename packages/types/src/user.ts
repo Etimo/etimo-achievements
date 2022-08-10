@@ -3,6 +3,7 @@ export interface IUser {
   name: string;
   email: string;
   slackHandle?: string;
+  image: string;
 }
 
 export type INewUser = Omit<IUser, 'id'>;

@@ -1,6 +1,7 @@
 import { formatNumber } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import Header from '../../components/Header';
+import { NameAvatarUserCell } from '../../components/table';
 import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { HighscoreComposite } from './highscore-types';
 import { getHighscores } from './highscore-utils';
@@ -27,7 +28,7 @@ const Highscores: React.FC = () => {
 
     return composites.map((h, i) => ({
       rank: totalRanks.indexOf(h.points) + 1, // index of the user's score in the list is the rank of the user
-      name: h.user.name,
+      name: <NameAvatarUserCell image={h.user.image} name={h.user.name} />,
       achievements: formatNumber(h.achievements),
       points: `${formatNumber(h.points)} pts`,
       kickback: `${formatNumber(h.kickback)} pts`,

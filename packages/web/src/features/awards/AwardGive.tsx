@@ -52,13 +52,15 @@ const AwardGive: React.FC = () => {
           }))}
           bindValue={achievementId}
           onChange={setAchievementId}
+          type="multiline"
         />
         <FormSelect
           label="User"
           text="Select a user"
-          options={sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name }))}
+          options={sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name, image: a.image }))}
           bindValue={userId}
           onChange={setUserId}
+          type="singleline-image"
         />
         <FormSubmitButton label="Give" loading={loading} />
       </Form>

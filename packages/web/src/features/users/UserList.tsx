@@ -5,6 +5,7 @@ import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
+import { NameAvatarUserCell } from '../../components/table';
 import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { getManyUsers } from './user-utils';
 import UserDeleteModal from './UserDeleteModal';
@@ -35,7 +36,7 @@ const UserList: React.FC = () => {
 
   const mapToData = (users: UserDto[]): any[] => {
     return users.map((u) => ({
-      name: u.name,
+      name: <NameAvatarUserCell image={u.image} name={u.name} />,
       email: u.email,
       slackHandle: u.slackHandle,
       edit: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} />,
