@@ -36,9 +36,10 @@ export class GiveAwardService {
     }
 
     notifier.notify(
-      `*${awardedTo.name}* was awarded *${achievement.name}* (${formatNumber(achievement.achievementPoints)} pts) by ${
-        awardedBy.name
-      }`,
+      // https://api.slack.com/reference/surfaces/formatting#mentioning-users
+      `${awardedTo.slackHandle ? `<@${awardedTo.slackHandle}>` : `*${awardedTo.name}*`} was awarded *${
+        achievement.name
+      }* (${formatNumber(achievement.achievementPoints)} pts) by ${awardedBy.name}`,
       'medium'
     );
 

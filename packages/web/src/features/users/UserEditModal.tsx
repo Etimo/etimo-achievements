@@ -54,12 +54,6 @@ const UserEditModal: React.FC<Props> = ({ userId, onClose, onSubmit }) => {
             register={register('email', { required: true, maxLength: 255 })}
             error={errors.email}
           />
-          <FormTextInput
-            label="Slack handle"
-            defaultValue={user.slackHandle}
-            register={register('slackHandle', { required: true, maxLength: 255 })}
-            error={errors.slackHandle}
-          />
           <FormSubmitButton label="Update" loading={loading} />
         </Form>
       </Modal>

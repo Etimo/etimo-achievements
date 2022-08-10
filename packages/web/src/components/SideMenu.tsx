@@ -1,4 +1,4 @@
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle, faSlack } from '@fortawesome/free-brands-svg-icons';
 import {
   faAward,
   faHandSparkles,
@@ -75,6 +75,12 @@ const SideMenu: React.FC = () => {
                   List users
                   <Link to={Routes.UserList} />
                 </MenuItem>
+                <RequirePermission update="users">
+                  <MenuItem icon={<FontAwesomeIcon icon={faSlack} />}>
+                    Manual Slack Sync
+                    <Link to={Routes.UserSlackSync} />
+                  </MenuItem>
+                </RequirePermission>
                 <RequirePermission create="users">
                   <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
                     Create user

@@ -1,3 +1,4 @@
+import { BadRequestError } from '@etimo-achievements/common';
 import { getEnvVariable } from '@etimo-achievements/utils';
 import { WebClient } from '@slack/web-api';
 import { Member } from '@slack/web-api/dist/response/UsersListResponse';
@@ -17,26 +18,51 @@ export class SyncSlackUsersService {
     } else return '';
   }
 
-  public async syncUsers() {
+  private async slackUsers() {
+    return (await this.web.users.list({ team_id: getEnvVariable('SLACK_TEAM_ID') })).members as Member[];
+  }
+
+  /**
+   * Updates a user's slack handle
+   * @param {string} name name of user
+   * @param {string} email email of user
+   * @param {string} slackHandle user's slack handle
+   */
+  private async updateSlackHandle(name: string, email: string, slackHandle: string) {
     const { repositories, logger } = this.context;
 
-    const slackUsers = (await this.web.users.list({ team_id: getEnvVariable('SLACK_TEAM_ID') })).members as Member[];
+    const foundUser = await repositories.user.findByEmail(email);
+    if (!foundUser) {
+      throw new BadRequestError('User not found');
+    }
+
+    logger.debug(`Updating user ${name}'s Slack handle`);
+    await repositories.user.update({ id: foundUser.id, slackHandle: slackHandle });
+  }
+
+  /**
+   * Sync all users in database with slack.
+   */
+  public async syncUsers() {
+    const slackUsers = await this.slackUsers();
     const etimoUsers = slackUsers.filter((user) => user.profile?.email?.endsWith('@etimo.se'));
 
     for (const user of etimoUsers) {
-      const foundUser = await repositories.user.findByEmail(user.profile?.email!);
-      if (!foundUser) {
-        logger.debug(`Creating user ${user.profile?.real_name}`);
-        await repositories.user.create({
-          email: user.profile?.email!,
-          slackHandle: user.id!,
-          name: user.profile?.real_name!,
-          image: '',
-        });
-      } else {
-        logger.debug(`Updating user ${user.profile?.real_name}`);
-        await repositories.user.update({ id: foundUser.id, slackHandle: user.id, name: user.profile?.real_name });
-      }
+      this.updateSlackHandle(user.profile?.real_name!, user.profile?.email!, user.id!);
     }
+  }
+
+  /**
+   * Sync one user in database with slack.
+   * @param {string} email of user to sync
+   */
+  public async syncUser(email: string) {
+    const slackUsers = await this.slackUsers();
+    const etimoUser = slackUsers.find((u) => u.profile?.email === email);
+    if (!etimoUser) {
+      throw new BadRequestError('User not found');
+    }
+
+    this.updateSlackHandle(etimoUser.profile?.real_name!, etimoUser.profile?.email!, etimoUser.id!);
   }
 }

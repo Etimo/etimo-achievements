@@ -1,4 +1,10 @@
-import { CreateUserService, DeleteUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
+import {
+  CreateUserService,
+  DeleteUserService,
+  GetUserService,
+  SyncSlackUsersService,
+  UpdateUserService,
+} from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import {
   badRequestResponse,
@@ -240,6 +246,8 @@ export class UserController {
     const service = new CreateUserService(getContext());
     const input = UserMapper.toUser(payload);
     const user = await service.create(input);
+    const slackService = new SyncSlackUsersService(getContext());
+    await slackService.syncUser(user.email);
 
     return createdResponse(res, '/users', user);
   };
@@ -251,6 +259,8 @@ export class UserController {
     const service = new UpdateUserService(getContext());
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
+    const slackService = new SyncSlackUsersService(getContext());
+    await slackService.syncUser(payload.email);
 
     return noContentResponse(res);
   };
@@ -262,6 +272,8 @@ export class UserController {
     const service = new UpdateUserService(getContext());
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
+    const slackService = new SyncSlackUsersService(getContext());
+    await slackService.syncUser(payload.email);
 
     return noContentResponse(res);
   };
