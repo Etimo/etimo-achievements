@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { toastResponse } from '../../common/utils/toast-response';
-import { FavoriteButton } from '../../components/buttons';
+import { FavoriteButtonWithTooltip as FavoriteButton } from '../../components/buttons/FavoriteButton';
 import { Form, FormSelect, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
 import { getAllUsers } from '../users/user-utils';
@@ -97,7 +97,8 @@ const AwardGive: React.FC = () => {
           nothingFound="No achievements"
         >
           <FavoriteButton
-            title="Add as favorite"
+            tooltipLabel="Add as favorite"
+            tooltipDisabled={!achievementId}
             state={favorites.find((f) => f.id === achievementId) ? 'filled' : 'outlined'}
             onClick={toggleFavorite}
             disabled={!achievementId}
