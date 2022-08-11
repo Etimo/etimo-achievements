@@ -8,6 +8,7 @@ import {
   faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
@@ -24,6 +25,7 @@ export type Column = {
   className?: string;
   hidden?: boolean;
   hasAccess?: [Action, Resource];
+  tooltip?: string | React.ReactNode;
 };
 
 export type PaginationRequestInput = {
@@ -130,15 +132,19 @@ const PaginatedTable: React.FC<Props> = ({
                     }}
                     key={uuid()}
                   >
-                    <span>{column.title}</span>
-                    <span>
-                      {getSort() === column.sortKey &&
-                        (getOrder() === 'asc' ? (
-                          <FontAwesomeIcon icon={faChevronUp} className="ml-2 text-slate-100" />
-                        ) : (
-                          <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
-                        ))}
-                    </span>
+                    <Tooltip label={column.tooltip} disabled={!column.tooltip}>
+                      <span>
+                        <span>{column.title}</span>
+                        <span>
+                          {getSort() === column.sortKey &&
+                            (getOrder() === 'asc' ? (
+                              <FontAwesomeIcon icon={faChevronUp} className="ml-2 text-slate-100" />
+                            ) : (
+                              <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
+                            ))}
+                        </span>
+                      </span>
+                    </Tooltip>
                   </TableHeader>
                 )
             )}

@@ -88,24 +88,33 @@ const Highscores: React.FC = () => {
         accessor: 'points',
         sortKey: 'points',
         className: 'w-40',
+        tooltip: 'Points awarded from achievements',
       },
       {
         title: 'Kickback points',
         accessor: 'kickback',
         sortKey: 'kickback',
         className: 'w-40',
+        tooltip: (
+          <span>
+            <div>Points received for giving achievements.</div>
+            <div>10% of achievement score, capped at 50 points</div>
+          </span>
+        ),
       },
       {
         title: 'Total points',
         accessor: 'totalPoints',
         sortKey: 'totalPoints',
         className: 'w-40',
+        tooltip: 'Achievement points + kickback points',
       },
       {
         title: 'Points per achievement',
         accessor: 'pointsPerAchievement',
         sortKey: 'pointsPerAchievement',
         className: 'w-40',
+        tooltip: 'Total points / #achievements',
       },
     ],
     []
