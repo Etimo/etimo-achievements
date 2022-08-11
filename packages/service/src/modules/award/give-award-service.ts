@@ -1,5 +1,6 @@
 import { BadRequestError, formatNumber, minutesSince } from '@etimo-achievements/common';
 import { IAward, INewAward } from '@etimo-achievements/types';
+import { GetHighscoreService } from '..';
 import { IContext } from '../../context';
 
 export class GiveAwardService {
@@ -35,13 +36,21 @@ export class GiveAwardService {
       throw new BadRequestError('Awarded user or awarded by user does not exist');
     }
 
-    notifier.notify(
-      // https://api.slack.com/reference/surfaces/formatting#mentioning-users
-      `${awardedTo.slackHandle ? `<@${awardedTo.slackHandle}>` : `*${awardedTo.name}*`} was awarded *${
-        achievement.name
-      }* (${formatNumber(achievement.achievementPoints)} pts) by ${awardedBy.name}`,
-      'medium'
-    );
+    const highscoreService = new GetHighscoreService(this.context);
+    const kickback = highscoreService.getKickback(achievement.achievementPoints);
+
+    // https://api.slack.com/reference/surfaces/formatting#mentioning-users
+    let slackMessage = `${
+      awardedTo.slackHandle ? `<@${awardedTo.slackHandle}>` : `*${awardedTo.name}*`
+    } was awarded :medal: *${achievement.name}* (${formatNumber(achievement.achievementPoints)} pts) by ${
+      awardedBy.name
+    }`;
+
+    if (awardedTo.id !== awardedBy.id) {
+      slackMessage += ` :foot: ${formatNumber(kickback)} pts`;
+    }
+
+    notifier.notify(slackMessage, 'medium');
 
     return await repositories.award.create(award);
   }
