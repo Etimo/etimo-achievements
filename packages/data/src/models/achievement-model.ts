@@ -37,4 +37,5 @@ export class AchievementModel extends BaseModel implements IAchievement {
   cooldownMinutes!: number;
   createdAt!: Date;
   updatedAt!: Date;
+  sharable!: boolean;
 }
