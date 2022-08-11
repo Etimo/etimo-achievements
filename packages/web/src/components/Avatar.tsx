@@ -29,6 +29,8 @@ const Avatar: React.FC<Props> = ({ src, size = 50 }) => {
   ) : (
     <img
       src={`${src}=s100-c`}
+      // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-crossorigin
+      crossOrigin="anonymous"
       style={{ maxWidth: `${size}px`, maxHeight: `${size}px`, borderRadius: '50%' }}
       onError={() => setError(true)}
     />

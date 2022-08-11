@@ -39,6 +39,7 @@ env:
   DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
   KUBECONFIG: ${{ secrets.KUBECONFIG }}
   SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+  SLACK_TEAM_ID: ${{ secrets.SLACK_TEAM_ID }}
   UNLEASH_TOKEN: ${{ secrets.UNLEASH_TOKEN }}
   # Stored as organisation secrets
   GH_PACKAGES_TOKEN: ${{ secrets.GH_PACKAGES_TOKEN }}
