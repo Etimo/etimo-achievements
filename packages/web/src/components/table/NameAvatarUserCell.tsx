@@ -11,7 +11,7 @@ const NameAvatarUserCell: React.FC<{ user: UserDto }> = ({ user }) => {
       <Avatar src={image} size={25} />
       &nbsp;
       <span className="whitespace-nowrap">
-        <Link to={Routes.UserProfile.replace(':id', id)} className="font-medium">
+        <Link to={Routes.UserProfile.replace(':id', id)} className="font-medium hover:underline">
           {name}
         </Link>
       </span>

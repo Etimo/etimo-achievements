@@ -1,6 +1,7 @@
 import { UserDto, uuid } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { useAppSelector } from '../../app/store';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam, queryParam } from '../../common/utils/query-helper';
 import Avatar from '../../components/Avatar';
@@ -9,8 +10,10 @@ import { Card } from '../../components/cards';
 import Header from '../../components/Header';
 import PageSpinner from '../../components/PageSpinner';
 import RequirePermission from '../../components/RequirePermission';
-import { getSingleUser } from './user-utils';
-import UserProfileEditModal from './UserProfileEditModal';
+import { userIdSelector } from '../auth/auth-slice';
+import { getSingleUser } from '../users/user-utils';
+import UserProfileEditModal from '../users/UserProfileEditModal';
+import UserAwardList from './compositions/AwardList';
 
 const UserProfile = () => {
   const removeQueryParam = useRemoveQueryParam();
@@ -18,6 +21,8 @@ const UserProfile = () => {
   const [loading, setLoading] = useState(true);
   const [monitor, setMonitor] = useState<string>(uuid());
   const [user, setUser] = useState<UserDto | undefined>(undefined);
+
+  const authenticatedUserId = useAppSelector(userIdSelector);
 
   const getEditState = () => queryParam<string>(window.location, 'edit', '');
 
@@ -37,31 +42,34 @@ const UserProfile = () => {
 
   return (
     <div className="w-2/3 mx-auto">
-      <Card className="flex flex-col ">
+      <Card className="flex flex-col">
         <div className="w-full flex justify-center p-5 relative">
-          <div className="absolute top-0 right-0">
-            <RequirePermission update="profile">
-              <EditButton
-                id={user?.id}
-                link={addQueryParam(window.location, 'edit', 'true')}
-                className="float-right px-0 mx-0"
-              />
-            </RequirePermission>
-          </div>
+          {authenticatedUserId === id && (
+            <div className="absolute top-0 right-0">
+              <RequirePermission update="profile">
+                <EditButton
+                  id={authenticatedUserId}
+                  link={addQueryParam(window.location, 'edit', 'true')}
+                  className="float-right px-0 mx-0"
+                />
+              </RequirePermission>
+            </div>
+          )}
           <div className="flex items-center">
             <Avatar src={user?.image} size={100} />
             <Header className="pb-0 mx-5">{user?.name}</Header>
           </div>
         </div>
-        <div className="flex justify-start">
+        <div className="flex items-start flex-col last:w-full pb-6">
           <Header>Achievements</Header>
+          <UserAwardList userId={id!} />
         </div>
-        <div className="flex justify-start">
+        {/* <div className="flex justify-start">
           <Header>Badges</Header>
         </div>
         <div className="flex justify-start">
           <Header>Trophies</Header>
-        </div>
+        </div> */}
         {getEditState() && (
           <RequirePermission update="profile">
             <UserProfileEditModal onClose={() => removeQueryParam('edit')} onSubmit={() => setMonitor(uuid())} />

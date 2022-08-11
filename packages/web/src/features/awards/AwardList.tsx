@@ -48,7 +48,7 @@ const AwardList: React.FC = () => {
     setLoading(false);
   };
 
-  const mapToData = (composites: AwardComposite[]): any[] => {
+  const mapToData = (composites: AwardComposite[]): AwardData[] => {
     return composites.map((c) => ({
       id: {
         value: c.award.id,
