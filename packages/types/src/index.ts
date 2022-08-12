@@ -9,4 +9,5 @@ export * from './interfaces';
 export * from './jwt';
 export * from './pagination-options';
 export * from './refresh-token';
+export * from './season';
 export * from './user';

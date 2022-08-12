@@ -23,6 +23,7 @@ import {
 import { FeatureController } from './resources/feature/feature-controller';
 import { HighscoreController } from './resources/highscore';
 import { ProbeController } from './resources/probes';
+import { SeasonController } from './resources/seasons';
 
 export default class AchievementsServer {
   private port: number;
@@ -130,6 +131,7 @@ export default class AchievementsServer {
     this.express.use(this.root, new SlackController().routes);
     this.express.use(this.root, new UserController().routes);
     this.express.use(this.root, new VersionController().routes);
+    this.express.use(this.root, new SeasonController().routes);
   }
 
   private setupErrorHandler() {

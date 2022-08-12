@@ -336,6 +336,47 @@
           }
         }
       },
+      "Season": {
+        "title": "Season",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the season",
+            "maxLength": 255,
+            "example": "August 2022"
+          },
+          "description": {
+            "type": "string",
+            "description": "The description of the achievement",
+            "maxLength": 255
+          },
+          "periodStart": {
+            "type": "string",
+            "description": "When the season starts",
+            "format": "date-time"
+          },
+          "periodEnd": {
+            "type": "string",
+            "description": "When the season ends",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "name",
+          "periodStart",
+          "periodEnd"
+        ]
+      },
       "User": {
         "title": "User",
         "type": "object",
@@ -1367,6 +1408,70 @@
         },
         "tags": [
           "Probes"
+        ]
+      }
+    },
+    "/seasons": {
+      "get": {
+        "summary": "Get a list of seasons",
+        "operationId": "getSeasons",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Season"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
         ]
       }
     },
