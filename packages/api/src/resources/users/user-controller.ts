@@ -247,7 +247,9 @@ export class UserController {
     const input = UserMapper.toUser(payload);
     const user = await service.create(input);
     const slackService = new SyncSlackUsersService(getContext());
-    await slackService.syncUser(user.email);
+    try {
+      await slackService.syncUser(user.email);
+    } catch (err) {} // Do not crash if fail, we can sync later
 
     return createdResponse(res, '/users', user);
   };
@@ -260,7 +262,9 @@ export class UserController {
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
     const slackService = new SyncSlackUsersService(getContext());
-    await slackService.syncUser(payload.email);
+    try {
+      await slackService.syncUser(payload.email);
+    } catch (err) {} // Do not crash if fail, we can sync later
 
     return noContentResponse(res);
   };
@@ -273,7 +277,9 @@ export class UserController {
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
     const slackService = new SyncSlackUsersService(getContext());
-    await slackService.syncUser(payload.email);
+    try {
+      await slackService.syncUser(payload.email);
+    } catch (err) {} // Do not crash if fail, we can sync later
 
     return noContentResponse(res);
   };
