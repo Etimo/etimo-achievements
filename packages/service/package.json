@@ -14,7 +14,7 @@
     "compile": "npm run bin tsc -- --project tsconfig.build.json",
     "compile-test": "npm run bin tsc -- --build",
     "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",
-    "test": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
+    "test": "npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",

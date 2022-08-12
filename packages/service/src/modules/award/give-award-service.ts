@@ -50,7 +50,9 @@ export class GiveAwardService {
       slackMessage += ` :foot: ${formatNumber(kickback)} pts`;
     }
 
-    notifier.notify(slackMessage, 'medium');
+    try {
+      notifier.notify(slackMessage, 'medium');
+    } catch (err) {}
 
     return await repositories.award.create(award);
   }
