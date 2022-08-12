@@ -9,6 +9,7 @@ export class SeasonMapper {
       description: season.description,
       periodEnd: season.periodEnd,
       periodStart: season.periodEnd,
+      updatedAt: season.updatedAt,
     };
   }
 
@@ -19,6 +20,7 @@ export class SeasonMapper {
       description: seasonDto.description,
       periodStart: seasonDto.periodStart,
       periodEnd: seasonDto.periodEnd,
+      updatedAt: seasonDto.updatedAt,
     };
   }
 
