@@ -4,6 +4,7 @@ import {
   AchievementRepository,
   AwardRepository,
   RefreshTokenRepository,
+  SeasonRepository,
   UserRepository,
 } from '@etimo-achievements/data';
 import { IRequestContext } from '@etimo-achievements/types';
@@ -16,5 +17,6 @@ export type IContext = {
     award: AwardRepository;
     refreshToken: RefreshTokenRepository;
     achievementFavorite: AchievementFavoriteRepository;
+    season: SeasonRepository;
   };
 } & IRequestContext;

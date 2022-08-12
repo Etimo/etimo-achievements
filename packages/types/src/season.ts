@@ -2,8 +2,8 @@ export interface ISeason {
   id: string;
   name: string;
   description: string;
-  seasonStart: string;
-  seasonEnd: string;
+  periodStart: Date;
+  periodEnd: Date;
 }
 
 export type INewSeason = Omit<ISeason, 'id'>;

@@ -1,5 +1,15 @@
+import { CreateSeasonService, GetSeasonService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { notImplementedResponse, protectedEndpoint } from '../../utils';
+import {
+  createdResponse,
+  getContext,
+  getPaginationOptions,
+  notImplementedResponse,
+  paginatedResponse,
+  protectedEndpoint,
+} from '../../utils';
+import { validateOrderBy } from '../../utils/validation-helper';
+import { SeasonMapper } from './season-mapper';
 
 export class SeasonController {
   public get routes(): Router {
@@ -159,7 +169,14 @@ export class SeasonController {
   }
 
   private createSeason = async (req: Request, res: Response) => {
-    return notImplementedResponse(res);
+    const payload = req.body;
+
+    const input = SeasonMapper.toNewSeason(payload);
+    const service = new CreateSeasonService(getContext());
+
+    const { id } = await service.create(input);
+
+    return createdResponse(res, '/seasons', { id });
   };
 
   private updateSeason = async (req: Request, res: Response) => {
@@ -171,7 +188,12 @@ export class SeasonController {
   };
 
   private getSeasons = async (req: Request, res: Response) => {
-    return notImplementedResponse(res);
+    const paginationOpts = getPaginationOptions(req);
+    validateOrderBy(paginationOpts.orderBy, SeasonMapper.isProperty);
+    const service = new GetSeasonService(getContext());
+    const seasons = await service.getMany(paginationOpts);
+
+    return paginatedResponse(res, '/seasons', seasons, SeasonMapper.toSeasonDto);
   };
 
   private getSeason = async (req: Request, res: Response) => {
@@ -179,7 +201,12 @@ export class SeasonController {
   };
 
   private getCurrentSeasons = async (req: Request, res: Response) => {
-    return notImplementedResponse(res);
+    const paginationOpts = getPaginationOptions(req);
+    validateOrderBy(paginationOpts.orderBy, SeasonMapper.isProperty);
+    const service = new GetSeasonService(getContext());
+    const seasons = await service.getCurrent(paginationOpts);
+
+    return paginatedResponse(res, '/seasons', seasons, SeasonMapper.toSeasonDto);
   };
 
   private refetchSeasonData = async (req: Request, res: Response) => {

@@ -5,6 +5,7 @@ import {
   AchievementRepository,
   AwardRepository,
   RefreshTokenRepository,
+  SeasonRepository,
   UserRepository,
 } from '@etimo-achievements/data';
 import { IContext } from '@etimo-achievements/service';
@@ -51,6 +52,7 @@ export class Context implements IContext {
     refreshToken: new RefreshTokenRepository(this),
     user: new UserRepository(this),
     achievementFavorite: new AchievementFavoriteRepository(this),
+    season: new SeasonRepository(this),
   };
 
   public get loggingContext() {

@@ -14,6 +14,16 @@ export class SeasonRepository {
     });
   }
 
+  async countCurrent(): Promise<number> {
+    return catchErrors(async () => {
+      const timestamp = new Date().toISOString();
+      const result = await Database.knex.raw(
+        `select count(*) from seasons where period_end > \'${timestamp}\' and  period_start < \'${timestamp}\'`
+      );
+      return parseInt(result.rows[0]['count'], 10);
+    });
+  }
+
   getAll(): Promise<ISeason[]> {
     return catchErrors(async () => {
       return SeasonModel.query();
@@ -24,7 +34,25 @@ export class SeasonRepository {
     return catchErrors(async () => {
       const query = SeasonModel.query().limit(options.take).offset(options.skip);
       if (!options.orderBy.length) {
-        query.orderBy('name', 'asc');
+        query.orderBy('period_end', 'desc');
+      }
+      for (const [key, order] of options.orderBy) {
+        query.orderBy(camelToSnakeCase(key), order);
+      }
+      return query;
+    });
+  }
+
+  getManyCurrent(options: PaginationOptions): Promise<ISeason[]> {
+    return catchErrors(async () => {
+      const timestamp = new Date().toISOString();
+      const query = SeasonModel.query()
+        .limit(options.take)
+        .offset(options.skip)
+        .where('period_end', '>', timestamp)
+        .andWhere('period_start', '<', timestamp);
+      if (!options.orderBy.length) {
+        query.orderBy('period_end', 'desc');
       }
       for (const [key, order] of options.orderBy) {
         query.orderBy(camelToSnakeCase(key), order);

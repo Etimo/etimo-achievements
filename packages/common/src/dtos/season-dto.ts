@@ -28,6 +28,7 @@
  *         updatedAt:
  *           type: string
  *           format: date-time
+ *           readOnly: true
  *       required:
  *         - name
  *         - periodStart
@@ -37,7 +38,7 @@ export interface SeasonDto {
   id: string;
   name: string;
   description: string;
-  periodStart: string;
-  periodEnd: string;
+  periodStart: Date;
+  periodEnd: Date;
   updatedAt?: Date;
 }
