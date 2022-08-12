@@ -33,6 +33,7 @@ export class SyncSlackUsersService {
 
     const foundUser = await repositories.user.findByEmail(email);
     if (!foundUser) {
+      logger.error(`User ${name} not found in database. No action.`);
       throw new BadRequestError('User not found');
     }
 
@@ -48,7 +49,9 @@ export class SyncSlackUsersService {
     const etimoUsers = slackUsers.filter((user) => user.profile?.email?.endsWith('@etimo.se'));
 
     for (const user of etimoUsers) {
-      this.updateSlackHandle(user.profile?.real_name!, user.profile?.email!, user.id!);
+      try {
+        await this.updateSlackHandle(user.profile?.real_name!, user.profile?.email!, user.id!);
+      } catch (err) {} // Do not crash when a user from slack is not in db
     }
   }
 
@@ -57,12 +60,16 @@ export class SyncSlackUsersService {
    * @param {string} email of user to sync
    */
   public async syncUser(email: string) {
+    const { logger } = this.context;
     const slackUsers = await this.slackUsers();
     const etimoUser = slackUsers.find((u) => u.profile?.email === email);
     if (!etimoUser) {
+      logger.error(`User ${email} not found in database.`);
       throw new BadRequestError('User not found');
     }
 
-    this.updateSlackHandle(etimoUser.profile?.real_name!, etimoUser.profile?.email!, etimoUser.id!);
+    try {
+      await this.updateSlackHandle(etimoUser.profile?.real_name!, etimoUser.profile?.email!, etimoUser.id!);
+    } catch (err) {} // Do not crash when a user from slack is not in db
   }
 }
