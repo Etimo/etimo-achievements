@@ -1,5 +1,5 @@
 import { AchievementDto, AwardDto, sort, UserDto } from '@etimo-achievements/common';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { toastResponse } from '../../common/utils/toast-response';
@@ -47,7 +47,7 @@ const AwardGive: React.FC = () => {
       setFavorites(favorites.filter((f) => f.id !== achievementId));
     } else {
       addAchievementFavorite(achievementId);
-      setFavorites([...favorites, achievements?.find((a) => a.id === achievementId)!]);
+      setFavorites(sort([...favorites, achievements?.find((a) => a.id === achievementId)!], 'name', 'asc'));
     }
 
     setFavoriteLoading(false);
@@ -64,6 +64,25 @@ const AwardGive: React.FC = () => {
     toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
   };
 
+  const options = useMemo(() => {
+    return [
+      ...(favorites ?? []).map((f) => ({
+        label: f.name,
+        value: f.id,
+        subtitle: f.description,
+        group: 'Favorites',
+      })),
+      ...(achievements ?? [])
+        .filter((a) => !favorites.find((f) => f.id === a.id))
+        .map((a) => ({
+          label: a.name,
+          value: a.id,
+          subtitle: a.description,
+          group: 'All achievements',
+        })),
+    ];
+  }, [favorites, achievements]);
+
   return (
     <div className="w-1/3 mx-auto">
       <Header>Give Award</Header>
@@ -71,14 +90,11 @@ const AwardGive: React.FC = () => {
         <FormSelect
           label="Achievement"
           text="Select an achievement"
-          options={(achievements ?? []).map((a) => ({
-            value: a.id,
-            label: a.name,
-            subtitle: a.description,
-          }))}
+          options={options}
           value={achievementId}
           onChange={(value) => setAchievementId(value)}
           type="multiline"
+          nothingFound="No achievements"
         >
           <FavoriteButton
             title="Add as favorite"
@@ -95,6 +111,7 @@ const AwardGive: React.FC = () => {
           value={userId}
           onChange={(value) => setUserId(value)}
           type="singleline-image"
+          nothingFound="No users"
         />
         <FormSubmitButton label="Give" loading={loading} />
       </Form>
