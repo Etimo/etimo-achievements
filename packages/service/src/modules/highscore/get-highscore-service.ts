@@ -11,6 +11,10 @@ const MAXIMUM_KICKBACK_POINTS = 50;
 export class GetHighscoreService {
   constructor(private context: IContext) {}
 
+  public getKickback(pts: number) {
+    return Math.floor(Math.min(KICKBACK * pts, MAXIMUM_KICKBACK_POINTS));
+  }
+
   public async get(options: PaginationOptions): Promise<PaginatedData<IHighscore>> {
     const { repositories } = this.context;
     const { skip, take } = options;
@@ -42,10 +46,7 @@ export class GetHighscoreService {
 
       if (userAchievements.length || givenAchievements.length) {
         const points = userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0;
-        const kickback = givenAchievements.reduce(
-          (sum, a) => sum + Math.min((a?.achievementPoints ?? 0) * KICKBACK, MAXIMUM_KICKBACK_POINTS),
-          0
-        );
+        const kickback = givenAchievements.reduce((sum, a) => sum + this.getKickback(a?.achievementPoints ?? 0), 0);
 
         const totalPoints = kickback + points;
         const pointsPerAchievement = totalPoints / (userAchievements.length || 1);
