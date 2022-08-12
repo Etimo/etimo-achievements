@@ -1190,7 +1190,7 @@
               "GetAwardById": {
                 "operationId": "getAward",
                 "parameters": {
-                  "userId": "$response.body#/id"
+                  "awardId": "$response.body#/id"
                 }
               }
             }
@@ -1465,6 +1465,283 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      },
+      "post": {
+        "summary": "Create a season",
+        "operationId": "createSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Season"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetAwardById": {
+                "operationId": "getSeason",
+                "parameters": {
+                  "seasonId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      }
+    },
+    "/seasons/current": {
+      "get": {
+        "summary": "Get a list of current seasons",
+        "operationId": "getCurrentSeasons",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Season"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      }
+    },
+    "/seasons/{seasonId}": {
+      "get": {
+        "summary": "Get a single season",
+        "operationId": "getSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Season"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      },
+      "post": {
+        "summary": "Update season data cache",
+        "operationId": "refetchSeasonSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The request was successful."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      },
+      "put": {
+        "summary": "Update a season",
+        "operationId": "updateSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Season"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a season",
+        "operationId": "deleteSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
           },
           "401": {
             "description": "The request was unauthorized."
