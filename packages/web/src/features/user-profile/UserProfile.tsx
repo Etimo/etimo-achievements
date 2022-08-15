@@ -4,16 +4,16 @@ import { useParams } from 'react-router';
 import { useAppSelector } from '../../app/store';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam, queryParam } from '../../common/utils/query-helper';
+import NotFound from '../../components/404/NotFound';
 import Avatar from '../../components/Avatar';
 import AwardListComponent from '../../components/AwardList/AwardList';
 import { EditButton } from '../../components/buttons';
 import { Card } from '../../components/cards';
 import Header from '../../components/Header';
-import PageSpinner from '../../components/PageSpinner';
 import RequirePermission from '../../components/RequirePermission';
 import { userIdSelector } from '../auth/auth-slice';
 import { getSingleUser } from '../users/user-utils';
-import UserProfileEditModal from '../users/UserProfileEditModal';
+import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile = () => {
   const removeQueryParam = useRemoveQueryParam();
@@ -23,6 +23,7 @@ const UserProfile = () => {
   const [user, setUser] = useState<UserDto | undefined>(undefined);
 
   const authenticatedUserId = useAppSelector(userIdSelector);
+  const isOwnProfile = authenticatedUserId === id;
 
   const getEditState = () => queryParam<string>(window.location, 'edit', '');
 
@@ -32,19 +33,14 @@ const UserProfile = () => {
     Promise.all([getUser]).finally(() => setLoading(false));
   }, []);
 
-  if (loading) return <PageSpinner />;
-  else if (!user)
-    return (
-      <div>
-        <Header>User not found</Header>
-      </div>
-    );
+  if (loading) return null;
+  else if (!user) return <NotFound />;
 
   return (
     <div className="w-2/3 mx-auto">
       <Card className="flex flex-col">
         <div className="w-full flex justify-center p-5 relative">
-          {authenticatedUserId === id && (
+          {isOwnProfile && (
             <div className="absolute top-0 right-0">
               <RequirePermission update="profile">
                 <EditButton
@@ -57,11 +53,14 @@ const UserProfile = () => {
           )}
           <div className="flex items-center">
             <Avatar src={user?.image} size={100} />
-            <Header className="pb-0 mx-5">{user?.name}</Header>
+            <div className="flex flex-col mx-5">
+              <Header className="pb-0">{user?.name}</Header>
+              <div className="text-center">{user?.email}</div>
+            </div>
           </div>
         </div>
         <div className="flex items-start flex-col last:w-full pb-6">
-          <Header>Achievements</Header>
+          <Header>Achievement awards</Header>
           <AwardListComponent filter={(award) => award.awardedTo.id === id} />
         </div>
         {/* <div className="flex justify-start">

@@ -2,9 +2,10 @@ import { updateProfile, UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
+import { CardRow } from '../../components/cards';
 import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
-import { getMyUser } from './user-utils';
+import { getMyUser } from './utils';
 
 type Props = {
   onClose: () => void;
@@ -51,6 +52,9 @@ const UserProfileEdit: React.FC<Props> = ({ onClose, onSubmit }) => {
           register={register('email', { required: true, maxLength: 255 })}
           error={errors.email}
         />
+        <CardRow>
+          <p>Profile picture is set on your Google account</p>
+        </CardRow>
         <FormSubmitButton label="Update" loading={loading} />
       </Form>
     </Modal>
