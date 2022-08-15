@@ -13,6 +13,7 @@ import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
 import { userIdSelector } from '../auth/auth-slice';
 import { getSingleUser } from '../users/user-utils';
+import Graph from './Graph';
 import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile = () => {
@@ -65,6 +66,10 @@ const UserProfile = () => {
             filter={(award) => award.awardedTo.id === id}
             noDataText="No achievements, get to work!"
           />
+        </div>
+        <div className="flex items-start flex-col last:w-full pb-6">
+          <Header>Statistics</Header>
+          <Graph userId={user.id} />
         </div>
         {/* <div className="flex justify-start">
           <Header>Badges</Header>
