@@ -1,20 +1,17 @@
 import { formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
-import AwardListComponent from '../../components/AwardList/AwardList';
-import { TrashButton } from '../../components/buttons';
-import Header from '../../components/Header';
-import { NameAvatarUserCell } from '../../components/table';
-import {
-  Column,
+import { TrashButton } from '../buttons';
+import { Column, NameAvatarUserCell } from '../table';
+import PaginatedTable, {
   PaginatedTableData,
   PaginatedTableDataEntry,
   PaginationRequestInput,
-} from '../../components/table/PaginatedTable';
-import { AwardComposite } from './award-types';
-import { getManyAwards } from './award-utils';
+} from '../table/PaginatedTable';
+import AwardDeleteModal from './AwardDeleteModal';
+import { AwardComposite, getManyAwards } from './util';
 
 interface AwardData extends PaginatedTableData {
   id: PaginatedTableDataEntry<string>;
@@ -26,7 +23,11 @@ interface AwardData extends PaginatedTableData {
   delete: PaginatedTableDataEntry<React.ReactNode>;
 }
 
-const AwardList: React.FC = () => {
+interface Props {
+  filter?: (award: AwardComposite) => boolean;
+}
+
+const AwardList = ({ filter = () => true }: Props): JSX.Element => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
@@ -42,7 +43,7 @@ const AwardList: React.FC = () => {
     const response = await getManyAwards(input);
     if (response) {
       const { data, pagination } = response;
-      setData(mapToData(data));
+      setData(mapToData(data.filter(filter)));
       setPageCount(pagination.totalPages ?? 0);
     }
     setLoading(false);
@@ -119,11 +120,34 @@ const AwardList: React.FC = () => {
     []
   );
 
+  useEffect(() => {
+    if (data.length === 0) {
+      (async () => {
+        fetchData({ page: 1, size: 50 });
+      })();
+    }
+  }, []);
+
+  if (!loading && data.length === 0) return <>No achievements, get to work!</>;
+
   return (
-    <div className="w-3/4 mx-auto">
-      <Header>Awards</Header>
-      <AwardListComponent />
-    </div>
+    <>
+      <PaginatedTable
+        columns={columns}
+        data={data}
+        pageCount={pageCount}
+        loading={loading}
+        monitor={monitor}
+        fetchData={fetchData}
+      />
+      {getDeleteId() && (
+        <AwardDeleteModal
+          awardId={getDeleteId()}
+          onClose={() => removeQueryParam('delete')}
+          onSubmit={() => setMonitor(uuid())}
+        />
+      )}
+    </>
   );
 };
 

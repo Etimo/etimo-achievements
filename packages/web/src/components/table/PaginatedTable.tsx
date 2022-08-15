@@ -106,7 +106,7 @@ const PaginatedTable: React.FC<Props> = ({
   };
 
   return (
-    <div>
+    <div className="w-full">
       <Table {...rest}>
         <TableHead>
           <TableHeaderRow>

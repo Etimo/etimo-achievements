@@ -3,12 +3,9 @@ import {
   createAward,
   createFavorite,
   deleteFavorite,
-  getAchievement,
   getAchievements,
-  getAward,
   getAwards,
   getFavorites,
-  getUser,
   listAchievements,
   listUsers,
   uniq,
@@ -82,27 +79,6 @@ export const getAllAchievementsSortedByMostUsed = async () => {
 
 export const giveAward = (userId: string, achievementId: string) => {
   return createAward({ userId, achievementId } as AwardDto).wait();
-};
-
-export const getSingleAward = async (awardId: string): Promise<AwardComposite | undefined> => {
-  const response = await getAward(awardId);
-  if (response.success) {
-    const award = await response.data();
-    const achievementPromise = (await getAchievement(award.achievementId)).data();
-    const awardedToPromise = (await getUser(award.userId)).data();
-    const awardedByPromise = (await getUser(award.awardedByUserId)).data();
-
-    await Promise.allSettled([achievementPromise, awardedToPromise, awardedByPromise]);
-    const achievement = await achievementPromise;
-    const awardedTo = await awardedToPromise;
-    const awardedBy = await awardedByPromise;
-
-    if (achievement && awardedTo && awardedBy) {
-      return { award, achievement, awardedTo, awardedBy };
-    }
-  } else {
-    toast.error('Could not get award: ' + (await response.errorMessage));
-  }
 };
 
 export const getManyAwards = async (input: PaginationRequestInput) => {

@@ -5,6 +5,7 @@ import { useAppSelector } from '../../app/store';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam, queryParam } from '../../common/utils/query-helper';
 import Avatar from '../../components/Avatar';
+import AwardListComponent from '../../components/AwardList/AwardList';
 import { EditButton } from '../../components/buttons';
 import { Card } from '../../components/cards';
 import Header from '../../components/Header';
@@ -13,7 +14,6 @@ import RequirePermission from '../../components/RequirePermission';
 import { userIdSelector } from '../auth/auth-slice';
 import { getSingleUser } from '../users/user-utils';
 import UserProfileEditModal from '../users/UserProfileEditModal';
-import UserAwardList from './compositions/AwardList';
 
 const UserProfile = () => {
   const removeQueryParam = useRemoveQueryParam();
@@ -29,7 +29,7 @@ const UserProfile = () => {
   useEffect(() => {
     const getUser = getSingleUser(id!).then(setUser);
 
-    Promise.all([getUser]).finally(() => setTimeout(() => setLoading(false), Math.random() * 50 + 100));
+    Promise.all([getUser]).finally(() => setLoading(false));
   }, []);
 
   if (loading) return <PageSpinner />;
@@ -62,7 +62,7 @@ const UserProfile = () => {
         </div>
         <div className="flex items-start flex-col last:w-full pb-6">
           <Header>Achievements</Header>
-          <UserAwardList userId={id!} />
+          <AwardListComponent filter={(award) => award.awardedTo.id === id} />
         </div>
         {/* <div className="flex justify-start">
           <Header>Badges</Header>
