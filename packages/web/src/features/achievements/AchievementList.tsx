@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
-import { EditButton, TrashButton } from '../../components/buttons';
+import { EditButton, FavoriteButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
 import PaginatedTable, {
@@ -12,6 +12,7 @@ import PaginatedTable, {
   PaginatedTableDataEntry,
   PaginationRequestInput,
 } from '../../components/table/PaginatedTable';
+import useFavoriteAchievement from '../../hooks/use-favorite-achievement';
 import { getManyAchievements } from './achievement-utils';
 import AchievementDeleteModal from './AchievementDeleteModal';
 import AchievementsEditModal from './AchievementEditModal';
@@ -23,6 +24,7 @@ interface AchievementData extends PaginatedTableData {
   points: PaginatedTableDataEntry<string>;
   cooldown: PaginatedTableDataEntry<string>;
   repeatable: PaginatedTableDataEntry<string>;
+  favorite: PaginatedTableDataEntry<React.ReactNode>;
   edit: PaginatedTableDataEntry<React.ReactNode>;
   delete: PaginatedTableDataEntry<React.ReactNode>;
 }
@@ -32,9 +34,10 @@ const AchievementList: React.FC = () => {
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
-  const [data, setData] = React.useState<AchievementData[]>([]);
+  const [data, setData] = React.useState<AchievementDto[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
+  const { favorites, toggleFavorite } = useFavoriteAchievement(data);
 
   const getEditId = () => query.get('edit') ?? '';
   const getDeleteId = () => query.get('delete') ?? '';
@@ -44,7 +47,7 @@ const AchievementList: React.FC = () => {
     const response = await getManyAchievements(input);
     if (response) {
       const { data, pagination } = response;
-      setData(mapToData(data));
+      setData(data);
       setPageCount(pagination.totalPages ?? 0);
     }
     setLoading(false);
@@ -70,6 +73,14 @@ const AchievementList: React.FC = () => {
       repeatable: {
         value: 'Unsupported',
       },
+      favorite: {
+        value: (
+          <FavoriteButton
+            state={favorites.find((f) => f.id === a.id) ? 'filled' : 'outlined'}
+            onClick={() => toggleFavorite(a.id)}
+          />
+        ),
+      },
       edit: {
         value: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
       },
@@ -78,6 +89,8 @@ const AchievementList: React.FC = () => {
       },
     }));
   };
+
+  const mappedData = React.useMemo(() => mapToData(data), [favorites, data]);
 
   const columns = React.useMemo(
     (): Column[] => [
@@ -115,6 +128,10 @@ const AchievementList: React.FC = () => {
         className: 'w-32',
       },
       {
+        title: 'Favorite',
+        accessor: 'favorite',
+      },
+      {
         title: 'Edit',
         accessor: 'edit',
         className: 'w-16 text-center',
@@ -135,7 +152,7 @@ const AchievementList: React.FC = () => {
       <Header>Achievements</Header>
       <PaginatedTable
         columns={columns}
-        data={data}
+        data={mappedData}
         fetchData={fetchData}
         loading={loading}
         pageCount={pageCount}
