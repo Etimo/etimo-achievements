@@ -61,7 +61,10 @@ const UserProfile = () => {
         </div>
         <div className="flex items-start flex-col last:w-full pb-6">
           <Header>Achievement awards</Header>
-          <AwardListComponent filter={(award) => award.awardedTo.id === id} />
+          <AwardListComponent
+            filter={(award) => award.awardedTo.id === id}
+            noDataText="No achievements, get to work!"
+          />
         </div>
         {/* <div className="flex justify-start">
           <Header>Badges</Header>

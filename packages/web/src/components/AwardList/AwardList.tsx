@@ -25,9 +25,10 @@ interface AwardData extends PaginatedTableData {
 
 interface Props {
   filter?: (award: AwardComposite) => boolean;
+  noDataText?: string;
 }
 
-const AwardList = ({ filter = () => true }: Props): JSX.Element => {
+const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
@@ -128,7 +129,7 @@ const AwardList = ({ filter = () => true }: Props): JSX.Element => {
     }
   }, []);
 
-  if (!loading && data.length === 0) return <>No achievements, get to work!</>;
+  if (!loading && data.length === 0) return <>{noDataText ? noDataText : 'No awards'}</>;
 
   return (
     <>
