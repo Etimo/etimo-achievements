@@ -26,4 +26,5 @@ export type EnvVariable =
   | 'SLACK_TEAM_ID'
   | 'SLACK_TOKEN'
   | 'UNLEASH_TOKEN'
-  | 'UNLEASH_URL';
+  | 'UNLEASH_URL'
+  | 'NOTIFY_SLACK';
