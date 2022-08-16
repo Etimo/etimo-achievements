@@ -20,7 +20,7 @@ import { queryParam, replaceQueryParam } from '../../common/utils/query-helper';
 import PaginationButton from './PaginationButton';
 
 export type Column = {
-  title: string;
+  title: string | React.ReactNode;
   accessor: string;
   sortKey?: string;
   className?: string;

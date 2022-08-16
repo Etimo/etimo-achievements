@@ -15,19 +15,23 @@ const useFavoriteAchievement = (achievements: AchievementDto[]) => {
     getAchievementFavorites().then(setFavorites);
   }, []);
 
-  const toggleFavorite = (achievementId: string) => {
+  const toggleFavorite = async (achievementId: string) => {
     if (!achievements.find((a) => a.id === achievementId)) return;
 
     if (favorites.find((f) => f.id === achievementId)) {
-      removeAchievementFavorite(achievementId)
-        .then(() => setFavorites(favorites.filter((f) => f.id !== achievementId)))
-        .catch((err) => toast.error('Could not remove favorite achievement ' + err));
+      try {
+        await removeAchievementFavorite(achievementId);
+        setFavorites(favorites.filter((f) => f.id !== achievementId));
+      } catch (err) {
+        toast.error('Could not remove favorite achievement ' + err);
+      }
     } else {
-      addAchievementFavorite(achievementId)
-        .then(() =>
-          setFavorites(sort([...favorites, achievements.find((a) => a.id === achievementId)!], 'name', 'asc'))
-        )
-        .catch((err) => toast.error('Could not add achievement to favorites ' + err));
+      try {
+        await addAchievementFavorite(achievementId);
+        setFavorites(sort([...favorites, achievements.find((a) => a.id === achievementId)!], 'name', 'asc'));
+      } catch (err) {
+        toast.error('Could not add achievement to favorites ' + err);
+      }
     }
   };
 

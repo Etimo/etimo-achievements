@@ -100,6 +100,10 @@ const AchievementList: React.FC = () => {
         hidden: true,
       },
       {
+        title: <FavoriteButton state="filled" disabled />,
+        accessor: 'favorite',
+      },
+      {
         title: 'Name',
         accessor: 'name',
         sortKey: 'name',
@@ -126,10 +130,6 @@ const AchievementList: React.FC = () => {
         title: 'Repeatable',
         accessor: 'repeatable',
         className: 'w-32',
-      },
-      {
-        title: 'Favorite',
-        accessor: 'favorite',
       },
       {
         title: 'Edit',
