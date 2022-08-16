@@ -10,6 +10,7 @@ import Logout from '../features/auth/Logout';
 import AwardGive from '../features/awards/AwardGive';
 import AwardList from '../features/awards/AwardList';
 import Highscores from '../features/highscore/Highscore';
+import MyProfile from '../features/user-profile/MyProfile';
 import UserProfile from '../features/user-profile/UserProfile';
 import UserCreate from '../features/users/UserCreate';
 import UserList from '../features/users/UserList';
@@ -25,6 +26,7 @@ export enum Routes {
   Login = '/login',
   LoginCallback = '/login/callback',
   Logout = '/logout',
+  MyProfile = '/me',
   UserProfile = '/profile/:id',
   UserList = '/users/list',
   UserCreate = '/users/create',
@@ -45,6 +47,7 @@ const Router = (): JSX.Element => {
         <Route path={Routes.AchievementCreate} element={<AchievementCreate />} />
         <Route path={Routes.AwardList} element={<AwardList />} />
         <Route path={Routes.AwardGive} element={<AwardGive />} />
+        <Route path={Routes.MyProfile} element={<MyProfile />} />
         <Route path={Routes.UserProfile} element={<UserProfile />} />
         <Route path={Routes.UserList} element={<UserList />} />
         <Route path={Routes.UserCreate} element={<UserCreate />} />

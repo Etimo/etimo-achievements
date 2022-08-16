@@ -39,7 +39,7 @@ const SideMenu: React.FC = () => {
             <Menu iconShape="round">
               <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
                 Profile
-                <Link to={Routes.UserProfile.replace(':id', userId!)} />
+                <Link to={Routes.MyProfile} />
               </MenuItem>
             </Menu>
           </RequirePermission>
