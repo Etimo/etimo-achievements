@@ -1,0 +1,7 @@
+x-template: &queryUserIdParam
+  name: userId
+  in: query
+  description: Only return data with the value of provided userId
+  schema:
+    type: string
+    format: uuid

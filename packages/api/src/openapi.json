@@ -429,7 +429,8 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": "createdAt~desc",
             "schema": {
               "type": "array",
               "items": {
@@ -601,7 +602,8 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": "createdAt~desc",
             "schema": {
               "type": "array",
               "items": {
@@ -671,8 +673,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "description": "Only return data with this achievementId",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -707,8 +709,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "description": "Only return data with this achievementId",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -751,8 +753,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "description": "Only return data with this achievementId",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -795,8 +797,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "path",
-            "required": true,
+            "in": "query",
+            "description": "Only return data with this achievementId",
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1079,12 +1081,40 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": "createdAt~desc",
             "schema": {
               "type": "array",
               "items": {
                 "type": "string"
               }
+            }
+          },
+          {
+            "name": "achievementId",
+            "in": "query",
+            "description": "Only return data with this achievementId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "awardedByUserId",
+            "in": "query",
+            "description": "Only return awards with this awardedByUserId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Only return data with the value of provided userId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -1310,7 +1340,8 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": "createdAt~desc",
             "schema": {
               "type": "array",
               "items": {
@@ -1543,7 +1574,8 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": "createdAt~desc",
             "schema": {
               "type": "array",
               "items": {
