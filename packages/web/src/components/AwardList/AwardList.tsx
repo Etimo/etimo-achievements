@@ -33,7 +33,7 @@ const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
-  const [data, setData] = React.useState<AwardData[]>([]);
+  const [data, setData] = React.useState<AwardComposite[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
 
@@ -44,7 +44,7 @@ const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
     const response = await getManyAwards(input);
     if (response) {
       const { data, pagination } = response;
-      setData(mapToData(data.filter(filter)));
+      setData(data);
       setPageCount(pagination.totalPages ?? 0);
     }
     setLoading(false);
@@ -121,6 +121,7 @@ const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
     []
   );
 
+  // Initial fetch
   useEffect(() => {
     if (data.length === 0) {
       (async () => {
@@ -129,13 +130,15 @@ const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
     }
   }, []);
 
+  const mappedData = React.useMemo(() => mapToData(data.filter(filter)), [data, filter]);
+
   if (!loading && data.length === 0) return <>{noDataText ? noDataText : 'No awards'}</>;
 
   return (
     <>
       <PaginatedTable
         columns={columns}
-        data={data}
+        data={mappedData}
         pageCount={pageCount}
         loading={loading}
         monitor={monitor}
