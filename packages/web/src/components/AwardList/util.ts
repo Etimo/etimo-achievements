@@ -42,8 +42,8 @@ export const getSingleAward = async (awardId: string): Promise<AwardComposite | 
 };
 
 export const getManyAwards = async (input: PaginationRequestInput) => {
-  const { size, page, sort, order } = input;
-  const response = await getAwards((page - 1) * size, size, sort, order);
+  const { size, page, sort, order, filters } = input;
+  const response = await getAwards((page - 1) * size, size, sort, order, filters);
   if (response.success) {
     const awards = await response.data();
 
@@ -69,7 +69,7 @@ export const getManyAwards = async (input: PaginationRequestInput) => {
       })
       .filter((c) => !!c) as AwardComposite[];
 
-    return { pagination: response.pagination!, data: composites };
+    return { pagination: response.pagination, data: composites };
   } else {
     toast.error('Could not get awards: ' + (await response.errorMessage));
   }

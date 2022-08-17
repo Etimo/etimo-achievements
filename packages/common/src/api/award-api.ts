@@ -9,9 +9,19 @@ export const getAward = (id: string) => {
   return authorizedApi.get<AwardDto>(`/awards/${id}`);
 };
 
-export const getAwards = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
+export const getAwards = (
+  skip: number = 0,
+  take: number = 50,
+  sort?: string,
+  order?: string,
+  filters?: Record<string, any>
+) => {
   let url = `/awards?skip=${skip}&take=${take}`;
   if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
+  if (filters && Object.keys(filters).length !== 0) {
+    // TIL string + string[] = string
+    url += Object.entries(filters).map(([key, value]) => `&${key}=${value}`);
+  }
   return authorizedApi.get<AwardDto[]>(url);
 };
 

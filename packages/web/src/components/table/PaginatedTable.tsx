@@ -9,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tooltip } from '@mantine/core';
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
@@ -33,6 +34,7 @@ export type PaginationRequestInput = {
   page: number;
   sort?: string;
   order?: string;
+  filters?: Record<string, any>;
 };
 
 export type PaginatedTableDataEntry<T> = {
@@ -52,6 +54,8 @@ type Props = {
   pageCount: number;
   fetchData: any;
   monitor?: any;
+  filters?: Record<string, any>;
+  noDataText?: string;
 };
 
 const PaginatedTable: React.FC<Props> = ({
@@ -62,6 +66,8 @@ const PaginatedTable: React.FC<Props> = ({
   fetchData,
   monitor,
   children,
+  filters,
+  noDataText,
   ...rest
 }) => {
   const navigate = useNavigate();
@@ -69,7 +75,11 @@ const PaginatedTable: React.FC<Props> = ({
   const hasAccess = useHasAccess();
   const location = useLocation();
   const removeQueryParam = useRemoveQueryParam();
-  const [pagination, setPagination] = useState([1, 10, '']);
+  const [pagination, setPagination] = useState<[number, number, string, string?, string?, Record<string, any>?]>([
+    1,
+    10,
+    '',
+  ]);
   const [canNavigateBack, setCanNavigateBack] = useState(false);
   const [canNavigateForward, setCanNavigateForward] = useState(true);
 
@@ -81,16 +91,25 @@ const PaginatedTable: React.FC<Props> = ({
   const setOrder = (order: string) => navigate(replaceQueryParam(window.location, 'order', order));
 
   useEffect(() => {
-    const [oldPage, oldSize, oldSort, oldOrder, oldMonitor] = pagination;
+    const [oldPage, oldSize, oldSort, oldOrder, oldMonitor, oldFilters] = pagination;
     const page = getPage();
     const size = getSize();
     const sort = getSort();
     const order = getOrder();
-    if (page !== oldPage || size !== oldSize || sort !== oldSort || order !== oldOrder || monitor !== oldMonitor) {
-      fetchData({ page, size, sort, order });
-      setPagination([page, size, sort, order, monitor]);
+    if (
+      page !== oldPage ||
+      size !== oldSize ||
+      sort !== oldSort ||
+      order !== oldOrder ||
+      monitor !== oldMonitor ||
+      !isEqual(filters, oldFilters)
+    ) {
+      (async () => {
+        setPagination([page, size, sort, order, monitor, filters]);
+        await fetchData({ page, size, sort, order, filters });
+      })();
     }
-  }, [location, monitor]);
+  }, [location, monitor, filters]);
 
   useEffect(() => {
     const page = getPage();
@@ -104,6 +123,8 @@ const PaginatedTable: React.FC<Props> = ({
     const [action, resource] = column.hasAccess;
     return hasAccess(action, resource);
   };
+
+  if (data.length === 0 && !loading) return <div className="w-full">{noDataText ?? 'No data'}</div>;
 
   return (
     <div className="w-full">

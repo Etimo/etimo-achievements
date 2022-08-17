@@ -1,5 +1,5 @@
 import { formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
@@ -24,11 +24,11 @@ interface AwardData extends PaginatedTableData {
 }
 
 interface Props {
-  filter?: (award: AwardComposite) => boolean;
+  filters?: Record<string, any>;
   noDataText?: string;
 }
 
-const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
+const AwardList = ({ filters, noDataText }: Props): JSX.Element => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
     if (response) {
       const { data, pagination } = response;
       setData(data);
-      setPageCount(pagination.totalPages ?? 0);
+      setPageCount(pagination?.totalPages ?? 0);
     }
     setLoading(false);
   };
@@ -121,18 +121,7 @@ const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
     []
   );
 
-  // Initial fetch
-  useEffect(() => {
-    if (data.length === 0) {
-      (async () => {
-        fetchData({ page: 1, size: 50 });
-      })();
-    }
-  }, []);
-
-  const mappedData = React.useMemo(() => mapToData(data.filter(filter)), [data, filter]);
-
-  if (!loading && data.length === 0) return <>{noDataText ? noDataText : 'No awards'}</>;
+  const mappedData = React.useMemo(() => mapToData(data), [data, filters]);
 
   return (
     <>
@@ -143,6 +132,8 @@ const AwardList = ({ filter = () => true, noDataText }: Props): JSX.Element => {
         loading={loading}
         monitor={monitor}
         fetchData={fetchData}
+        filters={filters}
+        noDataText={noDataText}
       />
       {getDeleteId() && (
         <AwardDeleteModal

@@ -27,8 +27,12 @@ export function paginate<T>(data: T[], count: number, options: PaginationOptions
 }
 
 function generateLink(options: PaginationOptions) {
-  const { skip, take, orderBy } = options;
+  const { skip, take, orderBy, filters } = options;
   let link = `?skip=${skip}&take=${take}`;
+
+  if (filters && Object.keys(filters).length !== 0) {
+    link += Object.entries(filters).map(([key, value]) => `&${key}=${value}`);
+  }
 
   // Add order by params
   for (const order of orderBy) {

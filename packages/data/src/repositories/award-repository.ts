@@ -1,16 +1,23 @@
 import { camelToSnakeCase } from '@etimo-achievements/common';
 import { IAward, INewAward, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
-import { Database } from '..';
 import { AwardModel } from '../models/award-model';
 import { catchErrors } from '../utils';
 
 export class AwardRepository {
   constructor(private context: IRequestContext) {}
 
-  async count(): Promise<number> {
+  async count(where?: Record<string, any>): Promise<number> {
     return catchErrors(async () => {
-      const result = await Database.knex.raw('select count(*) from "awards"');
-      return parseInt(result.rows[0]['count'], 10);
+      const query = AwardModel.query();
+
+      if (where && Object.keys(where).length !== 0) {
+        query.where(Object.entries(where).map(([key, value]) => ({ [camelToSnakeCase(key)]: value }))[0]);
+      }
+
+      query.count();
+
+      const result = await query;
+      return parseInt((result[0] as any)['count'], 10);
     });
   }
 
@@ -34,8 +41,9 @@ export class AwardRepository {
         where['awarded_by_user_id'] = options.filters.awardedByUserId;
       }
 
-      // will have no effect if where = {}
-      query.where(where);
+      if (Object.keys(where).length !== 0) {
+        query.where(where);
+      }
 
       if (!options.orderBy.length) {
         query.orderBy('created_at', 'desc');
