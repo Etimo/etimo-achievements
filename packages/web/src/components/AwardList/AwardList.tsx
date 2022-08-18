@@ -1,9 +1,13 @@
-import { formatNumber, uuid } from '@etimo-achievements/common';
-import React, { useState } from 'react';
+import { AchievementDto, formatNumber, UserDto, uuid } from '@etimo-achievements/common';
+import React, { useEffect, useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
+import { getAllAchievements } from '../../features/achievements/achievement-utils';
+import { getAllUsers } from '../../features/users/user-utils';
+import useKeyValueStore from '../../hooks/use-key-value-store';
 import { TrashButton } from '../buttons';
+import { FormSelect } from '../form';
 import { Column, NameAvatarUserCell } from '../table';
 import PaginatedTable, {
   PaginatedTableData,
@@ -26,9 +30,20 @@ interface AwardData extends PaginatedTableData {
 interface Props {
   filters?: Record<string, any>;
   noDataText?: string;
+  filterOptions?: {
+    enableAwardedToFilter?: boolean;
+    enableAwardedByFilter?: boolean;
+    enableAchievementFilter?: boolean;
+  };
 }
 
-const AwardList = ({ filters, noDataText }: Props): JSX.Element => {
+const defaultFilterOptions: Props['filterOptions'] = {
+  enableAchievementFilter: true,
+  enableAwardedByFilter: true,
+  enableAwardedToFilter: true,
+};
+
+const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
@@ -36,6 +51,18 @@ const AwardList = ({ filters, noDataText }: Props): JSX.Element => {
   const [data, setData] = React.useState<AwardComposite[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
+  const [achievements, setAchievements] = useState<AchievementDto[]>();
+  const [users, setUsers] = useState<UserDto[]>();
+  const { entries: selectFilters, removeEntry: removeFilter, setEntry: setFilter } = useKeyValueStore();
+  const { enableAchievementFilter, enableAwardedByFilter, enableAwardedToFilter } = {
+    ...defaultFilterOptions,
+    ...filterOptions,
+  };
+
+  useEffect(() => {
+    getAllAchievements().then(setAchievements);
+    getAllUsers().then(setUsers);
+  }, []);
 
   const getDeleteId = () => query.get('delete') ?? '';
 
@@ -122,6 +149,21 @@ const AwardList = ({ filters, noDataText }: Props): JSX.Element => {
   );
 
   const mappedData = React.useMemo(() => mapToData(data), [data, filters]);
+  const mappedAchievements = React.useMemo(
+    () => (achievements ?? []).map((a) => ({ label: a.name, value: a.id, subtitle: a.description })),
+    [achievements]
+  );
+  const mappedUsers = React.useMemo(
+    () => (users ?? []).map((a) => ({ label: a.name, value: a.id, image: a.image })),
+    [users]
+  );
+
+  const onSelectFilterChange = (key: string) => (value: string | undefined) => {
+    if (!value) removeFilter(key);
+    else {
+      setFilter(key, value);
+    }
+  };
 
   return (
     <>
@@ -132,7 +174,7 @@ const AwardList = ({ filters, noDataText }: Props): JSX.Element => {
         loading={loading}
         monitor={monitor}
         fetchData={fetchData}
-        filters={filters}
+        filters={{ ...filters, ...selectFilters }}
         noDataText={noDataText}
       />
       {getDeleteId() && (
@@ -140,6 +182,36 @@ const AwardList = ({ filters, noDataText }: Props): JSX.Element => {
           awardId={getDeleteId()}
           onClose={() => removeQueryParam('delete')}
           onSubmit={() => setMonitor(uuid())}
+        />
+      )}
+      {enableAchievementFilter && (
+        <FormSelect
+          label=""
+          type="multiline"
+          onChange={onSelectFilterChange('achievementId')}
+          options={mappedAchievements}
+          value={selectFilters.achievementId ?? null}
+          text="Achievement"
+        />
+      )}
+      {enableAwardedToFilter && (
+        <FormSelect
+          label=""
+          type="singleline-image"
+          onChange={onSelectFilterChange('userId')}
+          options={mappedUsers}
+          value={selectFilters.userId ?? null}
+          text="Awarded to"
+        />
+      )}
+      {enableAwardedByFilter && (
+        <FormSelect
+          type="singleline-image"
+          label=""
+          onChange={onSelectFilterChange('awardedByUserId')}
+          options={mappedUsers}
+          value={selectFilters.awardedByUserId ?? null}
+          text="Awarded by"
         />
       )}
     </>

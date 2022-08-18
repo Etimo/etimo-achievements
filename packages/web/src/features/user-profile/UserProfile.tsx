@@ -31,7 +31,7 @@ const UserProfile = () => {
     const getUser = getSingleUser(id!).then(setUser);
 
     Promise.all([getUser]).finally(() => setLoading(false));
-  }, []);
+  }, [monitor, id]);
 
   if (loading) return null;
   else if (!user) return <NotFound />;
@@ -60,10 +60,11 @@ const UserProfile = () => {
           </div>
         </div>
         <div className="flex items-start flex-col last:w-full pb-6">
-          <Header>Achievement awards</Header>
+          <Header>Awarded achievements</Header>
           <AwardListComponent
-            filter={(award) => award.awardedTo.id === id}
-            noDataText="No achievements, get to work!"
+            filters={{ userId: user.id }}
+            noDataText="No achievements"
+            filterOptions={{ enableAwardedToFilter: false }}
           />
         </div>
         {/* <div className="flex justify-start">
