@@ -50,7 +50,7 @@ const UserList: React.FC = () => {
   const mapToData = (users: UserDto[]): any[] => {
     return users.map((u) => ({
       name: {
-        value: <NameAvatarUserCell image={u.image} name={u.name} />,
+        value: <NameAvatarUserCell user={u} />,
       },
       email: {
         value: u.email,

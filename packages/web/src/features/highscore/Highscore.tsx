@@ -46,7 +46,7 @@ const Highscores: React.FC = () => {
         value: totalRanks.indexOf(h.points) + 1, // index of the user's score in the list is the rank of the user
       },
       name: {
-        value: <NameAvatarUserCell image={h.user.image} name={h.user.name} />,
+        value: <NameAvatarUserCell user={h.user} />,
       },
       achievements: {
         value: formatNumber(h.achievements),
@@ -88,24 +88,33 @@ const Highscores: React.FC = () => {
         accessor: 'points',
         sortKey: 'points',
         className: 'w-40',
+        tooltip: 'Points awarded from achievements',
       },
       {
         title: 'Kickback points',
         accessor: 'kickback',
         sortKey: 'kickback',
         className: 'w-40',
+        tooltip: (
+          <span>
+            <div>Points received for giving achievements.</div>
+            <div>10% of achievement score, capped at 50 points</div>
+          </span>
+        ),
       },
       {
         title: 'Total points',
         accessor: 'totalPoints',
         sortKey: 'totalPoints',
         className: 'w-40',
+        tooltip: 'Achievement points + kickback points',
       },
       {
         title: 'Points per achievement',
         accessor: 'pointsPerAchievement',
         sortKey: 'pointsPerAchievement',
         className: 'w-40',
+        tooltip: 'Total points / #achievements',
       },
     ],
     []

@@ -9,7 +9,7 @@ export class GetAwardService {
     const { repositories } = this.context;
 
     const awards = await repositories.award.getMany(options);
-    const count = await repositories.award.count();
+    const count = await repositories.award.count(options.filters ?? {});
     return paginate(awards, count, options);
   }
 

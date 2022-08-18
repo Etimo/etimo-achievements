@@ -1,5 +1,6 @@
 import { BadRequestError, formatNumber, minutesSince } from '@etimo-achievements/common';
 import { IAward, INewAward } from '@etimo-achievements/types';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { GetHighscoreService } from '..';
 import { IContext } from '../../context';
 
@@ -7,7 +8,7 @@ export class GiveAwardService {
   constructor(private context: IContext) {}
 
   public async give(award: INewAward): Promise<IAward> {
-    const { repositories, notifier } = this.context;
+    const { repositories, notifier, logger } = this.context;
 
     const lastAwardPromise = repositories.award.findLatest(award.userId, award.achievementId);
     const achievementPromise = repositories.achievement.findById(award.achievementId);
@@ -50,9 +51,13 @@ export class GiveAwardService {
       slackMessage += ` :foot: ${formatNumber(kickback)} pts`;
     }
 
-    try {
-      notifier.notify(slackMessage, 'medium');
-    } catch (err) {}
+    if (getEnvVariable('NOTIFY_SLACK', 'true') === 'true') {
+      try {
+        notifier.notify(slackMessage, 'medium');
+      } catch (err) {}
+    } else {
+      logger.debug(slackMessage);
+    }
 
     return await repositories.award.create(award);
   }

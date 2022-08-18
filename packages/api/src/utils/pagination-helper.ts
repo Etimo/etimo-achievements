@@ -3,11 +3,13 @@ import { OrderByOption, PaginationOptions } from '@etimo-achievements/types';
 export function getPaginationOptions(req: any, max: number = 50): PaginationOptions {
   const [skip, take] = getSkipAndTake(req, max);
   const orderBy = getOrderBy(req);
+  const filters = getFilters(req);
 
   return {
     skip,
     take,
     orderBy,
+    filters,
   };
 }
 
@@ -37,4 +39,11 @@ export function getOrderBy(req: any): OrderByOption[] {
     const order = orderStr === 'desc' ? 'desc' : 'asc';
     return [key, order];
   });
+}
+
+export function getFilters(req: any): Record<string, any> {
+  // All keys except for skip, take and orderBy are considered filters
+  return Object.keys(req.query)
+    .filter((k) => k !== 'skip' && k !== 'take' && k !== 'orderBy')
+    .reduce((cur, key) => Object.assign(cur, { [key]: req.query[key] }), {});
 }

@@ -5,6 +5,7 @@ export * from './dtos';
 export * from './env-helper';
 export * from './errors';
 export * from './number-helper';
+export * from './object-helper';
 export * from './paginate';
 export * from './string-helper';
 export * from './uuid';

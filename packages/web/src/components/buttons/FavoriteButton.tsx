@@ -2,19 +2,18 @@ import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import { withTooltip } from '../../common/higher-order-components/with-tooltip';
 
-type Props = {
+export type FavoriteButtonProps = {
   state: 'filled' | 'outlined';
   onClick?: () => void;
   disabled?: boolean;
-  title?: string;
   className?: string;
 };
 
-const FavoriteButton: React.FC<Props> = ({ onClick, state, disabled, title, className }) => {
+const FavoriteButton = ({ onClick, state, disabled, className }: FavoriteButtonProps) => {
   return (
     <FontAwesomeIcon
-      title={title}
       onClick={onClick}
       icon={state === 'filled' ? faStar : (farStar as any)}
       size="lg"
@@ -24,4 +23,5 @@ const FavoriteButton: React.FC<Props> = ({ onClick, state, disabled, title, clas
   );
 };
 
+export const FavoriteButtonWithTooltip = withTooltip(FavoriteButton);
 export default FavoriteButton;

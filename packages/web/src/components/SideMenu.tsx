@@ -16,6 +16,8 @@ import { Menu, MenuItem, ProSidebar, SubMenu } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 import { Link } from 'react-router-dom';
 import { Routes } from '../app/Router';
+import { useAppSelector } from '../app/store';
+import { userIdSelector } from '../features/auth/auth-slice';
 import useLoggedIn from '../features/auth/hooks/use-logged-in';
 import useLoginState from '../features/auth/hooks/use-login-state';
 import RequirePermission from './RequirePermission';
@@ -24,6 +26,7 @@ const version = require('../version.json');
 const SideMenu: React.FC = () => {
   const loggedIn = useLoggedIn();
   const loginState = useLoginState();
+  const userId = useAppSelector(userIdSelector);
 
   const date = new Date(version.date).toISOString().split('T')[0].replace(/-/g, '');
   const versionInfo = `${date}.${version.build_number}`;
@@ -36,7 +39,7 @@ const SideMenu: React.FC = () => {
             <Menu iconShape="round">
               <MenuItem icon={<FontAwesomeIcon icon={faUser} />}>
                 Profile
-                <Link to={Routes.UserProfile} />
+                <Link to={Routes.MyProfile} />
               </MenuItem>
             </Menu>
           </RequirePermission>

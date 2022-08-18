@@ -1,10 +1,9 @@
 import { deleteAward } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { toastResponse } from '../../common/utils/toast-response';
-import ConfirmModal from '../../components/ConfirmModal';
-import RequirePermission from '../../components/RequirePermission';
-import { AwardComposite } from './award-types';
-import { getSingleAward } from './award-utils';
+import ConfirmModal from '../ConfirmModal';
+import RequirePermission from '../RequirePermission';
+import { AwardComposite, getSingleAward } from './util';
 
 type Props = {
   awardId: string;
