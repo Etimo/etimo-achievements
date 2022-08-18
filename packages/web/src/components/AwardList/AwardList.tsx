@@ -184,36 +184,36 @@ const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element =
           onSubmit={() => setMonitor(uuid())}
         />
       )}
-      {enableAchievementFilter && (
-        <FormSelect
-          label=""
-          type="multiline"
-          onChange={onSelectFilterChange('achievementId')}
-          options={mappedAchievements}
-          value={selectFilters.achievementId ?? null}
-          text="Achievement"
-        />
-      )}
-      {enableAwardedToFilter && (
-        <FormSelect
-          label=""
-          type="singleline-image"
-          onChange={onSelectFilterChange('userId')}
-          options={mappedUsers}
-          value={selectFilters.userId ?? null}
-          text="Awarded to"
-        />
-      )}
-      {enableAwardedByFilter && (
-        <FormSelect
-          type="singleline-image"
-          label=""
-          onChange={onSelectFilterChange('awardedByUserId')}
-          options={mappedUsers}
-          value={selectFilters.awardedByUserId ?? null}
-          text="Awarded by"
-        />
-      )}
+      Filters
+      <div className="flex flex-wrap child:p-1">
+        {enableAchievementFilter && (
+          <FormSelect
+            type="multiline"
+            onChange={onSelectFilterChange('achievementId')}
+            options={mappedAchievements}
+            value={selectFilters.achievementId ?? null}
+            text="Achievement"
+          />
+        )}
+        {enableAwardedToFilter && (
+          <FormSelect
+            type="singleline-image"
+            onChange={onSelectFilterChange('userId')}
+            options={mappedUsers}
+            value={selectFilters.userId ?? null}
+            text="Awarded to"
+          />
+        )}
+        {enableAwardedByFilter && (
+          <FormSelect
+            type="singleline-image"
+            onChange={onSelectFilterChange('awardedByUserId')}
+            options={mappedUsers}
+            value={selectFilters.awardedByUserId ?? null}
+            text="Awarded by"
+          />
+        )}
+      </div>
     </>
   );
 };

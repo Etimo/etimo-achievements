@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { toastResponse } from '../../common/utils/toast-response';
 import { FavoriteButtonWithTooltip as FavoriteButton } from '../../components/buttons/FavoriteButton';
-import { Form, FormSelect, FormSubmitButton } from '../../components/form';
+import { Form, FormSelectRow, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
 import { getAllUsers } from '../users/user-utils';
 import { FavoriteComposite } from './award-types';
@@ -87,7 +87,7 @@ const AwardGive: React.FC = () => {
     <div className="w-1/3 mx-auto">
       <Header>Give Award</Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
-        <FormSelect
+        <FormSelectRow
           label="Achievement"
           text="Select an achievement"
           options={options}
@@ -104,8 +104,8 @@ const AwardGive: React.FC = () => {
             disabled={!achievementId}
             className="mx-2"
           />
-        </FormSelect>
-        <FormSelect
+        </FormSelectRow>
+        <FormSelectRow
           label="User"
           text="Select a user"
           options={sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name, image: a.image }))}

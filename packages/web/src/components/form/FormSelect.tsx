@@ -12,7 +12,6 @@ type Option = {
 };
 
 type Props = {
-  label: string;
   text?: string;
   value: string | undefined;
   onChange: (value: any) => void;
@@ -47,7 +46,6 @@ const SelectItemComponent = forwardRef<HTMLDivElement, ItemProps>(
 );
 
 const FormSelect: React.FC<Props> = ({
-  label,
   text,
   value,
   onChange,
@@ -58,39 +56,52 @@ const FormSelect: React.FC<Props> = ({
   nothingFound,
 }) => {
   return (
-    <CardRow label={label}>
-      <div className="w-full">
-        <div className="relative">
-          <Select
-            searchable
-            allowDeselect
-            data={options.map((o) => ({ ...o, type }))}
-            nothingFound={nothingFound ?? 'No items'}
-            value={value}
-            itemComponent={SelectItemComponent}
-            onChange={onChange}
-            placeholder={text}
-            styles={{ rightSection: { pointerEvents: 'none' } }}
-            maxDropdownHeight={500}
-            filter={
-              filter ??
-              ((query, { label, subtitle }) =>
-                label?.toLowerCase().includes(query.toLowerCase().trim()) ||
-                subtitle?.toLowerCase().includes(query.toLowerCase().trim()))
-            }
-            rightSection={
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                </svg>
-              </div>
-            }
-          />
+    <Select
+      searchable
+      allowDeselect
+      data={options.map((o) => ({ ...o, type }))}
+      nothingFound={nothingFound ?? 'No items'}
+      value={value}
+      itemComponent={SelectItemComponent}
+      onChange={onChange}
+      placeholder={text}
+      styles={{ rightSection: { pointerEvents: 'none' } }}
+      maxDropdownHeight={500}
+      filter={
+        filter ??
+        ((query, { label, subtitle }) =>
+          label?.toLowerCase().includes(query.toLowerCase().trim()) ||
+          subtitle?.toLowerCase().includes(query.toLowerCase().trim()))
+      }
+      rightSection={
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+          <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+            <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+          </svg>
         </div>
-      </div>
-      {children}
-    </CardRow>
+      }
+    />
   );
 };
 
+interface WithRowProps {
+  label: string;
+}
+
+const withRow =
+  <P extends object>(Component: React.ComponentType<P>): React.FC<P & WithRowProps> =>
+  ({ children, label, ...props }) => {
+    return (
+      <CardRow label={label}>
+        <div className="w-full">
+          <div className="relative">
+            <Component {...(props as P)} />
+          </div>
+        </div>
+        {children}
+      </CardRow>
+    );
+  };
+
+export const FormSelectRow = withRow(FormSelect);
 export default FormSelect;
