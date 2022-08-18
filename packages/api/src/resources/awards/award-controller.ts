@@ -21,7 +21,7 @@ export class AwardController {
      *       - *skipParam
      *       - *takeParam
      *       - *orderByParam
-     *       - *achievementIdParam
+     *       - *queryAchievementIdParam
      *       - *awardedByUserIdParam
      *       - *queryUserIdParam
      *     responses:

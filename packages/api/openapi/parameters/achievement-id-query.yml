@@ -1,7 +1,6 @@
-x-template: &achievementIdParam
+x-template: &queryAchievementIdParam
   name: achievementId
   in: query
   description: Only return data with this achievementId
   schema:
     type: string
-    format: uuid

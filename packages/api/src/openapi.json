@@ -430,7 +430,9 @@
             "name": "orderBy",
             "in": "query",
             "description": "The order of the result set.",
-            "example": "createdAt~desc",
+            "example": [
+              "createdAt~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -603,7 +605,9 @@
             "name": "orderBy",
             "in": "query",
             "description": "The order of the result set.",
-            "example": "createdAt~desc",
+            "example": [
+              "createdAt~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -673,8 +677,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "query",
-            "description": "Only return data with this achievementId",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -709,8 +713,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "query",
-            "description": "Only return data with this achievementId",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -753,8 +757,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "query",
-            "description": "Only return data with this achievementId",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -797,8 +801,8 @@
         "parameters": [
           {
             "name": "achievementId",
-            "in": "query",
-            "description": "Only return data with this achievementId",
+            "in": "path",
+            "required": true,
             "schema": {
               "type": "string",
               "format": "uuid"
@@ -1082,7 +1086,9 @@
             "name": "orderBy",
             "in": "query",
             "description": "The order of the result set.",
-            "example": "createdAt~desc",
+            "example": [
+              "createdAt~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -1095,8 +1101,7 @@
             "in": "query",
             "description": "Only return data with this achievementId",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           },
           {
@@ -1104,8 +1109,7 @@
             "in": "query",
             "description": "Only return awards with this awardedByUserId",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           },
           {
@@ -1113,8 +1117,7 @@
             "in": "query",
             "description": "Only return data with the value of provided userId",
             "schema": {
-              "type": "string",
-              "format": "uuid"
+              "type": "string"
             }
           }
         ],
@@ -1341,7 +1344,9 @@
             "name": "orderBy",
             "in": "query",
             "description": "The order of the result set.",
-            "example": "createdAt~desc",
+            "example": [
+              "createdAt~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -1575,7 +1580,9 @@
             "name": "orderBy",
             "in": "query",
             "description": "The order of the result set.",
-            "example": "createdAt~desc",
+            "example": [
+              "createdAt~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {

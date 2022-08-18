@@ -2,7 +2,7 @@ x-template: &orderByParam
   name: orderBy
   in: query
   description: The order of the result set.
-  example: 'createdAt~desc'
+  example: ['createdAt~desc']
   schema:
     type: array
     items:
