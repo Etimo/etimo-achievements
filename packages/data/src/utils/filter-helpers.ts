@@ -1,5 +1,5 @@
 import { convertObjectKeysCamelToSnakeCase } from '@etimo-achievements/common';
-import { pick } from 'lodash';
+import { isEmpty, pick } from 'lodash';
 import Objection, { Model } from 'objection';
 
 const applyWhereFilters = <M extends Model>(
@@ -10,7 +10,7 @@ const applyWhereFilters = <M extends Model>(
   const sanitizedObj = pick(filters ?? {}, params);
   const where = convertObjectKeysCamelToSnakeCase(sanitizedObj);
 
-  if (Object.keys(where).length !== 0) query.where(where);
+  if (!isEmpty(where)) query.where(where);
 };
 
 export const applyWhereFiltersFnCreator =

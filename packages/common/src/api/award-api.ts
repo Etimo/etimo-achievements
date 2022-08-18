@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import { AwardDto } from '..';
 import Api from './api';
 import AuthorizedApi from './authorized-api';
@@ -18,8 +19,8 @@ export const getAwards = (
 ) => {
   let url = `/awards?skip=${skip}&take=${take}`;
   if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
-  if (filters && Object.keys(filters).length !== 0) {
-    url += Object.entries(filters)
+  if (!isEmpty(filters)) {
+    url += Object.entries(filters!)
       .map(([key, value]) => `&${key}=${value}`)
       .join('');
   }
