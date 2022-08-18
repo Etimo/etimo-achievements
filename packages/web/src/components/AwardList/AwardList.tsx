@@ -38,6 +38,7 @@ interface Props {
     enableAwardedByFilter?: boolean;
     enableAchievementFilter?: boolean;
   };
+  awardedToVisible?: boolean;
 }
 
 const defaultFilterOptions: Props['filterOptions'] = {
@@ -46,20 +47,7 @@ const defaultFilterOptions: Props['filterOptions'] = {
   enableAwardedToFilter: true,
 };
 
-const ClearFilters = withTooltip<{ onClick: () => void; disabled: boolean }>(
-  ({ onClick, disabled }) => {
-    return (
-      <FontAwesomeIcon
-        icon={faFilterCircleXmark}
-        className={disabled ? 'hover:cursor-not-allowed' : 'hover:cursor-pointer'}
-        onClick={onClick}
-      />
-    );
-  },
-  { className: 'flex items-center' }
-);
-
-const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element => {
+const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true }: Props): JSX.Element => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
@@ -143,6 +131,7 @@ const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element =
         title: 'Awarded To',
         accessor: 'awardedTo',
         className: 'w-40',
+        hidden: !awardedToVisible,
       },
       {
         title: 'Points',
@@ -167,7 +156,7 @@ const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element =
         hasAccess: ['remove', 'awards'],
       },
     ],
-    []
+    [awardedToVisible]
   );
 
   const mappedData = React.useMemo(() => mapToData(data), [data, filters]);
@@ -240,5 +229,18 @@ const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element =
     </>
   );
 };
+
+const ClearFilters = withTooltip<{ onClick: () => void; disabled: boolean }>(
+  ({ onClick, disabled }) => {
+    return (
+      <FontAwesomeIcon
+        icon={faFilterCircleXmark}
+        className={disabled ? 'hover:cursor-not-allowed' : 'hover:cursor-pointer'}
+        onClick={onClick}
+      />
+    );
+  },
+  { className: 'flex items-center' }
+);
 
 export default AwardList;

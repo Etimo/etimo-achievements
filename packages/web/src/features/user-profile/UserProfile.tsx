@@ -65,6 +65,7 @@ const UserProfile = () => {
             filters={{ userId: user.id }}
             noDataText="No achievements"
             filterOptions={{ enableAwardedToFilter: false }}
+            awardedToVisible={false}
           />
         </div>
         {/* <div className="flex justify-start">
