@@ -338,6 +338,11 @@
             "type": "integer",
             "description": "How many achievements the user have given other users",
             "example": 5
+          },
+          "kickbackPerAchievement": {
+            "type": "integer",
+            "description": "Total kickback divided by amount of achievements",
+            "example": 48
           }
         }
       },

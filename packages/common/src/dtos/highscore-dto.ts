@@ -35,6 +35,10 @@
  *           type: integer
  *           description: How many achievements the user have given other users
  *           example: 5
+ *         kickbackPerAchievement:
+ *           type: integer
+ *           description: Total kickback divided by amount of achievements
+ *           example: 48
  */
 export interface HighscoreDto {
   userId: string;
@@ -44,4 +48,5 @@ export interface HighscoreDto {
   pointsPerAchievement: number;
   totalPoints: number;
   givenAchievements: number;
+  kickbackPerAchievement: number;
 }

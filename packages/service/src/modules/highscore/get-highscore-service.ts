@@ -51,6 +51,7 @@ export class GetHighscoreService {
 
         const totalPoints = kickback + points;
         const pointsPerAchievement = totalPoints / (userAchievements.length || 1);
+        const kickbackPerAchievement = kickback / (givenAwards.length || 1);
 
         const userHighscore: IHighscore = {
           userId: user.id,
@@ -60,6 +61,7 @@ export class GetHighscoreService {
           pointsPerAchievement,
           totalPoints,
           givenAchievements: givenAwards.length,
+          kickbackPerAchievement,
         };
         highscores.push(userHighscore);
       }
