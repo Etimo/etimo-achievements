@@ -104,10 +104,8 @@ const PaginatedTable: React.FC<Props> = ({
       monitor !== oldMonitor ||
       !isEqual(filters, oldFilters)
     ) {
-      (async () => {
-        setPagination([page, size, sort, order, monitor, filters]);
-        await fetchData({ page, size, sort, order, filters });
-      })();
+      fetchData({ page, size, sort, order, filters });
+      setPagination([page, size, sort, order, monitor, filters]);
     }
   }, [location, monitor, filters]);
 
