@@ -1101,7 +1101,8 @@
             "in": "query",
             "description": "Only return data with this achievementId",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -1109,7 +1110,8 @@
             "in": "query",
             "description": "Only return awards with this awardedByUserId",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           },
           {
@@ -1117,7 +1119,8 @@
             "in": "query",
             "description": "Only return data with the value of provided userId",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],

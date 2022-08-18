@@ -22,7 +22,7 @@ export class AwardController {
      *       - *takeParam
      *       - *orderByParam
      *       - *queryAchievementIdParam
-     *       - *awardedByUserIdParam
+     *       - *queryAwardedByUserIdParam
      *       - *queryUserIdParam
      *     responses:
      *       200:

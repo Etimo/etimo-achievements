@@ -4,3 +4,4 @@ x-template: &queryAchievementIdParam
   description: Only return data with this achievementId
   schema:
     type: string
+    format: uuid
