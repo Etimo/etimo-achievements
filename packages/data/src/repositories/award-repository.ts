@@ -2,16 +2,23 @@ import { camelToSnakeCase } from '@etimo-achievements/common';
 import { IAward, INewAward, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
 import { AwardModel } from '../models/award-model';
 import { catchErrors } from '../utils';
+import { toWhereObject } from '../utils/filter-helpers';
 
 export class AwardRepository {
   constructor(private context: IRequestContext) {}
 
-  async count(where?: Record<string, any>): Promise<number> {
+  async count(whereOptions?: Record<string, any>): Promise<number> {
     return catchErrors(async () => {
       const query = AwardModel.query();
 
-      if (where && Object.keys(where).length !== 0) {
-        query.where(Object.entries(where).map(([key, value]) => ({ [camelToSnakeCase(key)]: value }))[0]);
+      if (whereOptions && Object.keys(whereOptions).length !== 0) {
+        const w = toWhereObject(whereOptions);
+        if (w.where) {
+          query.where(w.where);
+        }
+        if (w.whereNot) {
+          query.whereNot(w.whereNot);
+        }
       }
 
       query.count();
@@ -42,7 +49,13 @@ export class AwardRepository {
       }
 
       if (Object.keys(where).length !== 0) {
-        query.where(where);
+        const w = toWhereObject(where);
+        if (w.where) {
+          query.where(w.where);
+        }
+        if (w.whereNot) {
+          query.whereNot(w.whereNot);
+        }
       }
 
       if (!options.orderBy.length) {
