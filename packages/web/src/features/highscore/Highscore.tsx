@@ -15,6 +15,7 @@ interface HighscoreData extends PaginatedTableData {
   rank: PaginatedTableDataEntry<string>;
   name: PaginatedTableDataEntry<string>;
   achievements: PaginatedTableDataEntry<string>;
+  givenAchievements: PaginatedTableDataEntry<string>;
   points: PaginatedTableDataEntry<string>;
   kickback: PaginatedTableDataEntry<string>;
   totalPoints: PaginatedTableDataEntry<string>;
@@ -51,6 +52,9 @@ const Highscores: React.FC = () => {
       achievements: {
         value: formatNumber(h.achievements),
       },
+      givenAchievements: {
+        value: formatNumber(h.givenAchievements),
+      },
       points: {
         value: `${formatNumber(h.points)} pts`,
       },
@@ -61,7 +65,8 @@ const Highscores: React.FC = () => {
         value: `${formatNumber(h.totalPoints)} pts`,
       },
       pointsPerAchievement: {
-        value: `${formatNumber(h.pointsPerAchievement)} pts`,
+        // Two decimals
+        value: `${formatNumber(parseFloat(h.pointsPerAchievement.toFixed(2)))} pts`,
       },
     }));
   };
@@ -82,6 +87,14 @@ const Highscores: React.FC = () => {
         accessor: 'achievements',
         sortKey: 'achievements',
         className: 'w-40',
+        tooltip: 'How many achievements this user has been awarded',
+      },
+      {
+        title: 'Given achievements',
+        accessor: 'givenAchievements',
+        sortKey: 'givenAchievements',
+        className: 'w-40',
+        tooltip: 'How many achievements a user has given other users',
       },
       {
         title: 'Achievement points',

@@ -31,6 +31,10 @@
  *           type: integer
  *           description: Total points
  *           example: 13200
+ *         givenAchievements:
+ *           type: integer
+ *           description: How many achievements the user have given other users
+ *           example: 5
  */
 export interface HighscoreDto {
   userId: string;
@@ -39,4 +43,5 @@ export interface HighscoreDto {
   kickback: number;
   pointsPerAchievement: number;
   totalPoints: number;
+  givenAchievements: number;
 }

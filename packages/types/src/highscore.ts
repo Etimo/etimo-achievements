@@ -5,4 +5,5 @@ export interface IHighscore {
   kickback: number;
   pointsPerAchievement: number;
   totalPoints: number;
+  givenAchievements: number;
 }
