@@ -19,10 +19,13 @@ const useKeyValueStore = (initialValue: Record<string, string> = {}) => {
   // TODO: Add removeEntries and addEntries if needed
 
   const resetEntries = () => {
+    if (Object.keys(entries).length === 0) return;
     setEntries({});
   };
 
-  return { entries, setEntry, removeEntry, resetEntries };
+  const noEntries = Object.keys(entries).length === 0;
+
+  return { entries, setEntry, removeEntry, resetEntries, noEntries };
 };
 
 export default useKeyValueStore;

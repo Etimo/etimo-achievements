@@ -1,5 +1,8 @@
 import { AchievementDto, formatNumber, UserDto, uuid } from '@etimo-achievements/common';
+import { faFilterCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
+import { withTooltip } from '../../common/higher-order-components/with-tooltip';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
@@ -43,6 +46,19 @@ const defaultFilterOptions: Props['filterOptions'] = {
   enableAwardedToFilter: true,
 };
 
+const ClearFilters = withTooltip<{ onClick: () => void; disabled: boolean }>(
+  ({ onClick, disabled }) => {
+    return (
+      <FontAwesomeIcon
+        icon={faFilterCircleXmark}
+        className={disabled ? 'hover:cursor-not-allowed' : 'hover:cursor-pointer'}
+        onClick={onClick}
+      />
+    );
+  },
+  { className: 'flex items-center' }
+);
+
 const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
@@ -53,7 +69,13 @@ const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element =
   const [monitor, setMonitor] = useState(uuid());
   const [achievements, setAchievements] = useState<AchievementDto[]>();
   const [users, setUsers] = useState<UserDto[]>();
-  const { entries: selectFilters, removeEntry: removeFilter, setEntry: setFilter } = useKeyValueStore();
+  const {
+    entries: selectFilters,
+    removeEntry: removeFilter,
+    setEntry: setFilter,
+    resetEntries: resetFilters,
+    noEntries: noFilters,
+  } = useKeyValueStore();
   const { enableAchievementFilter, enableAwardedByFilter, enableAwardedToFilter } = {
     ...defaultFilterOptions,
     ...filterOptions,
@@ -213,6 +235,7 @@ const AwardList = ({ filters, noDataText, filterOptions }: Props): JSX.Element =
             text="Awarded by"
           />
         )}
+        <ClearFilters tooltipLabel="Clear filters" onClick={resetFilters} disabled={noFilters} />
       </div>
     </>
   );

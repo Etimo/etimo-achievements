@@ -124,8 +124,6 @@ const PaginatedTable: React.FC<Props> = ({
     return hasAccess(action, resource);
   };
 
-  if (data.length === 0 && !loading) return <div className="w-full">{noDataText ?? 'No data'}</div>;
-
   return (
     <div className="w-full">
       <Table {...rest}>
@@ -207,6 +205,9 @@ const PaginatedTable: React.FC<Props> = ({
               })}
         </TableBody>
       </Table>
+      {!loading && data.length === 0 && (
+        <div className="w-full text-center p-3 bg-slate-300">{noDataText ?? 'No data'}</div>
+      )}
       <div className="m-2 float-left">
         <PaginationButton
           icon={faAnglesLeft}
