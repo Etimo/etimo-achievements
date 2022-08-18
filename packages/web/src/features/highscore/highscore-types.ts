@@ -12,4 +12,5 @@ export type HighscoreComposite = {
   totalPoints: number;
   pointsPerAchievement: number;
   givenAchievements: number;
+  kickbackPerAchievement: number;
 };

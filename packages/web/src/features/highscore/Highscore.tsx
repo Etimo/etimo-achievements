@@ -68,6 +68,9 @@ const Highscores: React.FC = () => {
         // Two decimals
         value: `${formatNumber(parseFloat(h.pointsPerAchievement.toFixed(2)))} pts`,
       },
+      kickbackPerAchievement: {
+        value: `${formatNumber(parseFloat(h.kickbackPerAchievement.toFixed(2)))} pts`,
+      },
     }));
   };
 
@@ -128,6 +131,13 @@ const Highscores: React.FC = () => {
         sortKey: 'pointsPerAchievement',
         className: 'w-40',
         tooltip: 'Total points / #achievements',
+      },
+      {
+        title: 'Kickback per given achievement',
+        accessor: 'kickbackPerAchievement',
+        sortKey: 'kickbackPerAchievement',
+        className: 'w-40',
+        tooltip: 'Total kickback / #given achievements',
       },
     ],
     []
