@@ -1,4 +1,4 @@
-x-template: &queryAchievementIdParam
+x-template: &achievementIdQueryParam
   name: achievementId
   in: query
   description: Only return data with this achievementId

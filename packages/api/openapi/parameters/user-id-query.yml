@@ -1,4 +1,4 @@
-x-template: &queryUserIdParam
+x-template: &userIdQueryParam
   name: userId
   in: query
   description: Only return data with the value of provided userId

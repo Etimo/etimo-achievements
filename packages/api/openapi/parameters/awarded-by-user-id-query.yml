@@ -1,4 +1,4 @@
-x-template: &queryAwardedByUserIdParam
+x-template: &awardedByUserIdQueryParam
   name: awardedByUserId
   in: query
   description: Only return awards with this awardedByUserId

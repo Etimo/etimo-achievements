@@ -21,9 +21,9 @@ export class AwardController {
      *       - *skipParam
      *       - *takeParam
      *       - *orderByParam
-     *       - *queryAchievementIdParam
-     *       - *queryAwardedByUserIdParam
-     *       - *queryUserIdParam
+     *       - *achievementIdQueryParam
+     *       - *awardedByUserIdQueryParam
+     *       - *userIdQueryParam
      *     responses:
      *       200:
      *         description: The request was successful.
