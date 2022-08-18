@@ -19,8 +19,9 @@ export const getAwards = (
   let url = `/awards?skip=${skip}&take=${take}`;
   if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
   if (filters && Object.keys(filters).length !== 0) {
-    // TIL string + string[] = string
-    url += Object.entries(filters).map(([key, value]) => `&${key}=${value}`);
+    url += Object.entries(filters)
+      .map(([key, value]) => `&${key}=${value}`)
+      .join('');
   }
   return authorizedApi.get<AwardDto[]>(url);
 };

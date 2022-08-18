@@ -31,7 +31,9 @@ function generateLink(options: PaginationOptions) {
   let link = `?skip=${skip}&take=${take}`;
 
   if (filters && Object.keys(filters).length !== 0) {
-    link += Object.entries(filters).map(([key, value]) => `&${key}=${value}`);
+    link += Object.entries(filters)
+      .map(([key, value]) => `&${key}=${value}`)
+      .join('');
   }
 
   // Add order by params
