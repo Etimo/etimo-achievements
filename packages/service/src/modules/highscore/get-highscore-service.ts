@@ -30,6 +30,7 @@ export class GetHighscoreService {
     const highscores: IHighscore[] = [];
     for (const user of users) {
       const userAwards = awards.filter((a) => a.userId === user.id);
+      const givenAwards = awards.filter((a) => a.awardedByUserId === user.id);
       const userAchievements = userAwards.map((a) =>
         achievements.find((achievement) => achievement.id === a.achievementId)
       );
@@ -58,6 +59,7 @@ export class GetHighscoreService {
           kickback,
           pointsPerAchievement,
           totalPoints,
+          givenAchievements: givenAwards.length,
         };
         highscores.push(userHighscore);
       }
