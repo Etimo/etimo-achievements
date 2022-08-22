@@ -24,7 +24,7 @@ export class RefreshLoginService {
 
     await Promise.allSettled([
       repositories.refreshToken.delete(refreshTokenId),
-      repositories.accessToken.delete(data.accessTokenId),
+      repositories.accessToken.delete({ where: { id: data.accessTokenId } }),
     ]);
 
     const deleted = await repositories.refreshToken.deleteInvalid();
