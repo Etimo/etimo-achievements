@@ -1,5 +1,10 @@
 export type NotifyPriority = 'low' | 'medium' | 'high';
 
+export type NotifyServiceOptions = {
+  subtitle?: string;
+  prio?: NotifyPriority;
+};
+
 export interface INotifyService {
-  notify(message: any, subtitle?: string, prio?: NotifyPriority): Promise<any>;
+  notify(message: any, options?: NotifyServiceOptions): Promise<any>;
 }

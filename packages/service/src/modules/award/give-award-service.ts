@@ -55,7 +55,7 @@ export class GiveAwardService {
 
     if (getEnvVariable('NOTIFY_SLACK', 'true') === 'true') {
       try {
-        notifier.notify(slackMessage, description, 'medium');
+        notifier.notify(slackMessage, { subtitle: description, prio: 'medium' });
       } catch (err) {}
     } else {
       logger.debug(slackMessage);
