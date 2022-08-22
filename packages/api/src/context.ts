@@ -50,7 +50,7 @@ export class Context implements IContext {
     accessToken: new AccessTokenRepository(),
     achievement: new AchievementRepository(),
     award: new AwardRepository(),
-    refreshToken: new RefreshTokenRepository(this),
+    refreshToken: new RefreshTokenRepository(),
     user: new UserRepository(),
     achievementFavorite: new AchievementFavoriteRepository(this),
   };

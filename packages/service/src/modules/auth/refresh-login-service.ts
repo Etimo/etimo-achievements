@@ -23,7 +23,7 @@ export class RefreshLoginService {
     if (!user) throw new BadRequestError('User not found');
 
     await Promise.allSettled([
-      repositories.refreshToken.delete(refreshTokenId),
+      repositories.refreshToken.delete({ where: { id: refreshTokenId } }),
       repositories.accessToken.delete({ where: { id: data.accessTokenId } }),
     ]);
 
