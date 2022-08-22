@@ -1,4 +1,4 @@
-import { camelToSnakeCase } from '@etimo-achievements/common';
+import { camelToSnakeCase, convertObjectKeysCamelToSnakeCase } from '@etimo-achievements/common';
 import Knex, { Transaction } from 'knex';
 import Objection, { Model, ModelClass, ModelProps, OrderByDirection, PartialModelObject } from 'objection';
 import { catchErrors } from '../utils';
@@ -28,7 +28,7 @@ export function queryBuilder<M extends Model>(query: Objection.QueryBuilderType<
   skip && query.offset(skip);
   take && query.limit(take);
   if (where) {
-    const w = Object.entries(where).reduce((res, [key, value]) => ({ ...res, [camelToSnakeCase(key)]: value }), {});
+    const w = convertObjectKeysCamelToSnakeCase(where);
     query.where(w);
   }
 
@@ -50,38 +50,38 @@ export abstract class BaseRepository<M extends Model> {
 
   protected async $count(options: CountOptions<M>): Promise<number> {
     return catchErrors(async () => {
-      const result = await queryBuilder(this.model.query(), { where: options.where }).count();
+      const result = await queryBuilder(this.model.query(this.trx), { where: options.where }).count();
       return (result[0] as any)['count'];
     });
   }
 
   protected async $getAll() {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(), {}).where({}) as any;
+      return queryBuilder(this.model.query(this.trx), {}).where({}) as any;
     });
   }
 
   protected async $findById(id: string): Promise<M> {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(), {}).findById(id) as any;
+      return queryBuilder(this.model.query(this.trx), {}).findById(id) as any;
     });
   }
 
   protected async $findByIds(ids: string[], options: FindByIdOptions<M>) {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(), options).findByIds(ids) as any;
+      return queryBuilder(this.model.query(this.trx), options).findByIds(ids) as any;
     });
   }
 
   protected async $find(options: FindOptions<M>) {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(), options) as any;
+      return queryBuilder(this.model.query(this.trx), options) as any;
     });
   }
 
   protected async $create(data: CreateData<M>) {
     return catchErrors(async () => {
-      return this.model.query().insert(data) as any;
+      return this.model.query(this.trx).insert(data) as any;
     });
   }
 
@@ -100,37 +100,3 @@ export abstract class BaseRepository<M extends Model> {
     });
   }
 }
-
-// class UserRepository extends BaseRepository<UserModel> {
-//   constructor(transaction?: Knex.Transaction) {
-//     super(new UserModel(), Database.knex, transaction);
-//   }
-
-//   public $findById(id: string) {
-//     return super.$findById(id);
-//   }
-
-//   public $findByIds(ids: string[], options: FindByIdOptions<UserModel>) {
-//     return super.$findByIds(ids, options);
-//   }
-
-//   public $find(options: FindOptions<UserModel>): Promise<Objection.Model[]> {
-//     return super.$find(options);
-//   }
-
-//   public $update(data: Partial<UserModel>, options?: UpdateOptions<UserModel>) {
-//     return super.$update(data, options);
-//   }
-
-//   public $delete(options: DeleteOptions<UserModel>) {
-//     return super.$delete(options);
-//   }
-
-//   public $create(data: CreateData<UserModel>) {
-//     return super.$create(data);
-//   }
-// }
-
-// const a = new UserRepository();
-// a.$find({ where: { id: '1' } });
-// a.$update({}, { where: {} });

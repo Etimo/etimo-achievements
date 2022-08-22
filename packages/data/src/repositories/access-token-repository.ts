@@ -12,7 +12,7 @@ export class AccessTokenRepository extends BaseRepository<AccessTokenModel> {
 
   public async deleteInvalid(): Promise<number> {
     return catchErrors(async () => {
-      return this.model.query().where('expires_at', '<', new Date()).orWhere('disabled', true).delete();
+      return this.model.query(this.trx).where('expires_at', '<', new Date()).orWhere('disabled', true).delete();
     });
   }
 
