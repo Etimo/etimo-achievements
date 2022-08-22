@@ -1,5 +1,5 @@
-import { INotifyService, IRequestContext, NotifyPriority } from '@etimo-achievements/types';
-import { WebClient } from '@slack/web-api';
+import { INotifyService, IRequestContext, NotifyPriority, NotifyServiceOptions } from '@etimo-achievements/types';
+import { Block, KnownBlock, WebClient } from '@slack/web-api';
 import { getEnvVariable } from '..';
 
 export class SlackNotifyService implements INotifyService {
@@ -15,10 +15,31 @@ export class SlackNotifyService implements INotifyService {
     this.channelLow = getEnvVariable('SLACK_CHANNEL_LOW');
   }
 
-  public notify(message: string, prio?: NotifyPriority) {
+  public notify(message: any, { subtitle }: NotifyServiceOptions, prio?: NotifyPriority) {
+    const blocks = [
+      {
+        type: 'section',
+        text: {
+          type: 'mrkdwn',
+          text: message,
+        },
+      },
+    ] as (Block | KnownBlock)[];
+
+    if (subtitle)
+      blocks.push({
+        type: 'context',
+        elements: [
+          {
+            type: 'plain_text',
+            text: subtitle,
+          },
+        ],
+      });
+
     return this.client.chat.postMessage({
       channel: this.getChannel(prio ?? 'low'),
-      text: message,
+      blocks,
     });
   }
 
