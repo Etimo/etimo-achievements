@@ -25,7 +25,7 @@ export class GetHighscoreService {
     const users = await repositories.user.findByIds(userIds, {});
 
     const achievementIds = uniq(awards.map((a) => a.achievementId));
-    const achievements = await repositories.achievement.getManyByIds(achievementIds);
+    const achievements = await repositories.achievement.findByIds(achievementIds, {});
 
     const highscores: IHighscore[] = [];
     for (const user of users) {

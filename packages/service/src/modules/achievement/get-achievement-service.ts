@@ -10,14 +10,14 @@ export class GetAchievementService {
   }
 
   public async getMany(options: PaginationOptions): Promise<PaginatedData<IAchievement>> {
-    const achievements = await this.repos.achievement.getMany(options);
-    const count = await this.repos.achievement.count();
+    const achievements = await this.repos.achievement.find(options);
+    const count = await this.repos.achievement.count({});
 
     return paginate(achievements, count, options);
   }
 
   public async getManyByIds(ids: string[]): Promise<IAchievement[]> {
-    const achievements = await this.repos.achievement.getManyByIds(ids);
+    const achievements = await this.repos.achievement.findByIds(ids, {});
     return achievements;
   }
 

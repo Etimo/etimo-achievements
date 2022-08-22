@@ -48,7 +48,7 @@ export class Context implements IContext {
 
   private _repositories: IContext['repositories'] = {
     accessToken: new AccessTokenRepository(this),
-    achievement: new AchievementRepository(this),
+    achievement: new AchievementRepository(),
     award: new AwardRepository(this),
     refreshToken: new RefreshTokenRepository(this),
     user: new UserRepository(),
