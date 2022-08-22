@@ -1,7 +1,6 @@
-import { camelToSnakeCase, convertObjectKeysCamelToSnakeCase } from '@etimo-achievements/common';
 import Knex, { Transaction } from 'knex';
-import Objection, { Model, ModelClass, ModelProps, OrderByDirection, PartialModelObject } from 'objection';
-import { catchErrors } from '../utils';
+import { Model, ModelClass, ModelProps, OrderByDirection, PartialModelObject } from 'objection';
+import { catchErrors, queryBuilder } from '../utils';
 
 export function getIdFromModel<M extends Model>(modelClass: ModelClass<M>, model: any): string | string[] {
   if (Array.isArray(modelClass.idColumn)) return modelClass.idColumn.map((key) => model[key]);
@@ -22,21 +21,6 @@ export type RepositoryOptions<M extends Model> = {
   orderBy?: [ModelProps<M>, OrderByDirection][] | [string, OrderByDirection][];
   where?: PartialModel<M>;
 };
-
-export function queryBuilder<M extends Model>(query: Objection.QueryBuilderType<M>, options: RepositoryOptions<M>) {
-  const { orderBy, skip, take, where } = options;
-  skip && query.offset(skip);
-  take && query.limit(take);
-  if (where) {
-    const w = convertObjectKeysCamelToSnakeCase(where);
-    query.where(w);
-  }
-
-  orderBy &&
-    orderBy!.forEach(([key, order]) => query.orderBy(camelToSnakeCase(key as string), order as OrderByDirection));
-
-  return query;
-}
 
 export abstract class BaseRepository<M extends Model> {
   protected model: ModelClass<M>;
