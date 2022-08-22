@@ -52,7 +52,7 @@ export class Context implements IContext {
     award: new AwardRepository(),
     refreshToken: new RefreshTokenRepository(),
     user: new UserRepository(),
-    achievementFavorite: new AchievementFavoriteRepository(this),
+    achievementFavorite: new AchievementFavoriteRepository(),
   };
 
   public async transactionRepositories(): Promise<IContext['repositories'] & { commit: () => void }> {

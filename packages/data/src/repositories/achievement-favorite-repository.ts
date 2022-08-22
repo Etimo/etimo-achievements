@@ -1,25 +1,26 @@
-import { IAchievementFavorite, INewAchievementFavorite, IRequestContext } from '@etimo-achievements/types';
+import { IAchievementFavorite } from '@etimo-achievements/types';
+import Knex from 'knex';
+import { Database } from '..';
 import { AchievementFavoriteModel } from '../models/achivement-favorites-model';
 import { catchErrors } from '../utils';
+import { BaseRepository, CreateData, DeleteOptions } from './base-repository';
 
-export class AchievementFavoriteRepository {
-  constructor(private context: IRequestContext) {}
+export class AchievementFavoriteRepository extends BaseRepository<AchievementFavoriteModel> {
+  constructor(transaction?: Knex.Transaction) {
+    super(new AchievementFavoriteModel(), Database.knex, transaction);
+  }
 
-  findManyByUserId(id: string): Promise<IAchievementFavorite[]> {
+  public async findManyByUserId(id: string): Promise<IAchievementFavorite[]> {
     return catchErrors(async () => {
-      return AchievementFavoriteModel.query().where({ user_id: id });
+      return this.model.query().where({ user_id: id });
     });
   }
 
-  create(data: INewAchievementFavorite): Promise<IAchievementFavorite> {
-    return catchErrors(async () => {
-      return AchievementFavoriteModel.query().insert(data);
-    });
+  public async create(data: CreateData<AchievementFavoriteModel>): Promise<IAchievementFavorite> {
+    return super.$create(data);
   }
 
-  delete(id: string, userId: string): Promise<number> {
-    return catchErrors(async () => {
-      return AchievementFavoriteModel.query().delete().where({ achievement_id: id, user_id: userId });
-    });
+  public async delete(options: DeleteOptions<AchievementFavoriteModel>): Promise<number> {
+    return super.$delete(options);
   }
 }
