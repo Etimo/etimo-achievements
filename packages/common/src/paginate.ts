@@ -28,11 +28,11 @@ export function paginate<T>(data: T[], count: number, options: PaginationOptions
 }
 
 function generateLink(options: PaginationOptions) {
-  const { skip, take, orderBy, where } = options;
+  const { skip, take, orderBy, filters } = options;
   let link = `?skip=${skip}&take=${take}`;
 
-  if (!isEmpty(where)) {
-    link += Object.entries(where!)
+  if (!isEmpty(filters)) {
+    link += Object.entries(filters!)
       .map(([key, value]) => `&${key}=${value}`)
       .join('');
   }
