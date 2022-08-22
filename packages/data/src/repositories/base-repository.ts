@@ -27,10 +27,14 @@ export function queryBuilder<M extends Model>(query: Objection.QueryBuilderType<
   const { orderBy, skip, take, where } = options;
   skip && query.offset(skip);
   take && query.limit(take);
-  where && query.where(where);
+  if (where) {
+    const w = Object.entries(where).reduce((res, [key, value]) => ({ ...res, [camelToSnakeCase(key)]: value }), {});
+    query.where(w);
+  }
 
-  const orderByOpts = (orderBy?.length ?? 0) > 0 ? orderBy : [['created_at', 'desc']];
-  orderByOpts!.forEach(([key, order]) => query.orderBy(camelToSnakeCase(key as string), order as OrderByDirection));
+  orderBy &&
+    orderBy!.forEach(([key, order]) => query.orderBy(camelToSnakeCase(key as string), order as OrderByDirection));
+
   return query;
 }
 
@@ -46,10 +50,7 @@ export abstract class BaseRepository<M extends Model> {
 
   protected async $count(options: CountOptions<M>): Promise<number> {
     return catchErrors(async () => {
-      const result = await this.model
-        .query()
-        .count()
-        .where(options.where ?? {});
+      const result = await queryBuilder(this.model.query(), { where: options.where }).count();
       return (result[0] as any)['count'];
     });
   }
