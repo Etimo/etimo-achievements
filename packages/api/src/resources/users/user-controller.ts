@@ -63,7 +63,7 @@ export class UserController {
      *       401: *unauthorizedResponse
      *       404: *notFoundResponse
      *     tags:
-     *       - Achievements
+     *       - Users
      */
     router.post('/users/list', protectedEndpoint(this.listUsers, ['r:users']));
 
@@ -178,7 +178,7 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   delete:
-     *     summary: Delete an user
+     *     summary: Delete a user
      *     operationId: deleteUser
      *     security:
      *       - jwtCookie: []

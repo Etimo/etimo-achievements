@@ -6,6 +6,6 @@ export class DeleteAchievementFavoriteService {
   public async delete(achievementId: string, userId: string) {
     const { repositories } = this.context;
 
-    await repositories.achievementFavorite.delete(achievementId, userId);
+    await repositories.achievementFavorite.delete({ where: { achievementId, userId } });
   }
 }
