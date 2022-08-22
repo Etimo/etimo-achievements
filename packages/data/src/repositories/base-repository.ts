@@ -41,7 +41,7 @@ export function queryBuilder<M extends Model>(query: Objection.QueryBuilderType<
 export abstract class BaseRepository<M extends Model> {
   protected model: ModelClass<M>;
   protected getId = (model: Partial<M>) => getIdFromModel(this.model, model);
-  private trx?: Transaction;
+  protected trx?: Transaction;
 
   constructor(model: M, knex: Knex, transaction?: Knex.Transaction) {
     this.model = model.$modelClass.bindKnex(knex);
