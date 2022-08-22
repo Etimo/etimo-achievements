@@ -51,9 +51,11 @@ export class GiveAwardService {
       slackMessage += ` :foot: ${formatNumber(kickback)} pts`;
     }
 
+    const description = achievement.name + ': ' + achievement.description;
+
     if (getEnvVariable('NOTIFY_SLACK', 'true') === 'true') {
       try {
-        notifier.notify(slackMessage, 'medium');
+        notifier.notify(slackMessage, description, 'medium');
       } catch (err) {}
     } else {
       logger.debug(slackMessage);

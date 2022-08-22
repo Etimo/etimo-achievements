@@ -15,10 +15,27 @@ export class SlackNotifyService implements INotifyService {
     this.channelLow = getEnvVariable('SLACK_CHANNEL_LOW');
   }
 
-  public notify(message: string, prio?: NotifyPriority) {
+  public notify(message: any, subtitle: string, prio?: NotifyPriority) {
     return this.client.chat.postMessage({
       channel: this.getChannel(prio ?? 'low'),
-      text: message,
+      blocks: [
+        {
+          type: 'section',
+          text: {
+            type: 'mrkdwn',
+            text: message,
+          },
+        },
+        {
+          type: 'context',
+          elements: [
+            {
+              type: 'plain_text',
+              text: subtitle,
+            },
+          ],
+        },
+      ],
     });
   }
 
