@@ -1728,7 +1728,7 @@
           }
         },
         "tags": [
-          "Achievements"
+          "Users"
         ]
       }
     },
@@ -1822,7 +1822,7 @@
         ]
       },
       "delete": {
-        "summary": "Delete an user",
+        "summary": "Delete a user",
         "operationId": "deleteUser",
         "security": [
           {

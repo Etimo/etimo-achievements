@@ -4,6 +4,8 @@ import {
   AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
+  Database,
+  getRepositories,
   RefreshTokenRepository,
   UserRepository,
 } from '@etimo-achievements/data';
@@ -49,9 +51,17 @@ export class Context implements IContext {
     achievement: new AchievementRepository(this),
     award: new AwardRepository(this),
     refreshToken: new RefreshTokenRepository(this),
-    user: new UserRepository(this),
+    user: new UserRepository(),
     achievementFavorite: new AchievementFavoriteRepository(this),
   };
+
+  public async transactionRepositories(): Promise<IContext['repositories'] & { commit: () => void }> {
+    const trx = await Database.transaction();
+    return {
+      ...getRepositories(trx),
+      commit: trx.commit,
+    };
+  }
 
   public get loggingContext() {
     if (getEnvVariable('LOG_CONTEXT') !== 'true') {

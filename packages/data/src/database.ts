@@ -26,6 +26,10 @@ export class Database {
     }
   }
 
+  public static async transaction() {
+    return this.knex.transaction();
+  }
+
   private static getInstance(): Database {
     if (!Database.instance) {
       Database.instance = new Database();
