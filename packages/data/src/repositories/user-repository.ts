@@ -20,19 +20,19 @@ export class UserRepository extends BaseRepository<UserModel> {
 
   public async findByEmail(email: string): Promise<IUser | undefined> {
     return catchErrors(async () => {
-      return this.model.query(this.trx).findOne({ email });
+      return this.model.query().findOne({ email });
     });
   }
 
   public async findBySlackHandle(slackHandle: string): Promise<IUser | undefined> {
     return catchErrors(async () => {
-      return this.model.query(this.trx).findOne({ slackHandle });
+      return this.model.query().findOne({ slackHandle });
     });
   }
 
   public async findBySlackHandles(slackHandles: string[]): Promise<IUser[]> {
     return catchErrors(async () => {
-      return this.model.query(this.trx).whereIn('slack_handle', slackHandles);
+      return this.model.query().whereIn('slack_handle', slackHandles);
     });
   }
 

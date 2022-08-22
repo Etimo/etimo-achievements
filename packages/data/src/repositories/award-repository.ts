@@ -20,7 +20,7 @@ export class AwardRepository extends BaseRepository<AwardModel> {
 
   public async findLatest(userId: string, achievementId: string): Promise<IAward | undefined> {
     return catchErrors(async () => {
-      return this.model.query(this.trx).orderBy('created_at', 'desc').findOne({
+      return this.model.query().orderBy('created_at', 'desc').findOne({
         user_id: userId,
         achievement_id: achievementId,
       });

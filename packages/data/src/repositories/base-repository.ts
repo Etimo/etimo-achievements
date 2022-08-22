@@ -50,32 +50,32 @@ export abstract class BaseRepository<M extends Model> {
 
   protected async $count(options: CountOptions<M>): Promise<number> {
     return catchErrors(async () => {
-      const result = await queryBuilder(this.model.query(this.trx), { where: options.where }).count();
+      const result = await queryBuilder(this.model.query(), { where: options.where }).count();
       return (result[0] as any)['count'];
     });
   }
 
   protected async $getAll() {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(this.trx), {}).where({}) as any;
+      return queryBuilder(this.model.query(), {}).where({}) as any;
     });
   }
 
   protected async $findById(id: string): Promise<M> {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(this.trx), {}).findById(id) as any;
+      return queryBuilder(this.model.query(), {}).findById(id) as any;
     });
   }
 
   protected async $findByIds(ids: string[], options: FindByIdOptions<M>) {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(this.trx), options).findByIds(ids) as any;
+      return queryBuilder(this.model.query(), options).findByIds(ids) as any;
     });
   }
 
   protected async $find(options: FindOptions<M>) {
     return catchErrors(async () => {
-      return queryBuilder(this.model.query(this.trx), options) as any;
+      return queryBuilder(this.model.query(), options) as any;
     });
   }
 
