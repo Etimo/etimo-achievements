@@ -6,6 +6,6 @@ export class DeleteUserService {
   public async delete(userId: string) {
     const { repositories } = this.context;
 
-    await repositories.user.delete(userId);
+    await repositories.user.delete({ where: { id: userId } });
   }
 }

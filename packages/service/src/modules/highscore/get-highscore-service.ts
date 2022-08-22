@@ -22,7 +22,7 @@ export class GetHighscoreService {
     const awards = await repositories.award.getAll();
 
     const userIds = uniq([...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)]);
-    const users = await repositories.user.getManyByIds(userIds);
+    const users = await repositories.user.findByIds(userIds, {});
 
     const achievementIds = uniq(awards.map((a) => a.achievementId));
     const achievements = await repositories.achievement.getManyByIds(achievementIds);

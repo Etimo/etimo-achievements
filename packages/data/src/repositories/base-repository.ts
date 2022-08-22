@@ -25,7 +25,6 @@ export type RepositoryOptions<M extends Model> = {
 
 export function queryBuilder<M extends Model>(query: Objection.QueryBuilderType<M>, options: RepositoryOptions<M>) {
   const { orderBy, skip, take, where } = options;
-  console.log(options);
   skip && query.offset(skip);
   take && query.limit(take);
   where && query.where(where);
@@ -47,16 +46,10 @@ export abstract class BaseRepository<M extends Model> {
 
   protected async $count(options: CountOptions<M>): Promise<number> {
     return catchErrors(async () => {
-      // const result = await Database.knex.raw('select count(*) from users');
-      // console.log(result.rows[0]['count']);
-      // return parseInt(result.rows[0]['count'], 10);
-      // const result = await queryBuilder(this.model.query(), options).count();
-      // return parseInt((result[0] as any)['count'], 10);
       const result = await this.model
         .query()
         .count()
         .where(options.where ?? {});
-      console.log((result[0] as any)['count']);
       return (result[0] as any)['count'];
     });
   }
