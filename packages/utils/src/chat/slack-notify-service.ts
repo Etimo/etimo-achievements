@@ -15,7 +15,7 @@ export class SlackNotifyService implements INotifyService {
     this.channelLow = getEnvVariable('SLACK_CHANNEL_LOW');
   }
 
-  public notify(message: any, { subtitle }: NotifyServiceOptions, prio?: NotifyPriority) {
+  public notify(message: any, options?: NotifyServiceOptions) {
     const blocks = [
       {
         type: 'section',
@@ -26,19 +26,19 @@ export class SlackNotifyService implements INotifyService {
       },
     ] as (Block | KnownBlock)[];
 
-    if (subtitle)
+    if (options?.subtitle)
       blocks.push({
         type: 'context',
         elements: [
           {
             type: 'plain_text',
-            text: subtitle,
+            text: options.subtitle,
           },
         ],
       });
 
     return this.client.chat.postMessage({
-      channel: this.getChannel(prio ?? 'low'),
+      channel: this.getChannel(options?.prio ?? 'low'),
       blocks,
     });
   }
