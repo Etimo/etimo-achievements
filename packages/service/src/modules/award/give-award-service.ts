@@ -1,7 +1,6 @@
-import { BadRequestError, formatNumber, minutesSince } from '@etimo-achievements/common';
+import { BadRequestError, formatNumber, getKickback, minutesSince } from '@etimo-achievements/common';
 import { IAward, INewAward } from '@etimo-achievements/types';
 import { getEnvVariable } from '@etimo-achievements/utils';
-import { GetHighscoreService } from '..';
 import { IContext } from '../../context';
 
 export class GiveAwardService {
@@ -37,8 +36,7 @@ export class GiveAwardService {
       throw new BadRequestError('Awarded user or awarded by user does not exist');
     }
 
-    const highscoreService = new GetHighscoreService(this.context);
-    const kickback = highscoreService.getKickback(achievement.achievementPoints);
+    const kickback = getKickback(achievement.achievementPoints);
 
     // https://api.slack.com/reference/surfaces/formatting#mentioning-users
     let slackMessage = `${

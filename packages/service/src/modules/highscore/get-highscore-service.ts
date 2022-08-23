@@ -1,19 +1,13 @@
-import { paginate, PaginatedData, sort, uniq } from '@etimo-achievements/common';
+import { getKickback, paginate, PaginatedData, sort, uniq } from '@etimo-achievements/common';
 import { IHighscore, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 /**
  * Percent kickback, value between 0 and 1
  */
-const KICKBACK = 0.1;
-const MAXIMUM_KICKBACK_POINTS = 50;
 
 export class GetHighscoreService {
   constructor(private context: IContext) {}
-
-  public getKickback(pts: number) {
-    return Math.floor(Math.min(KICKBACK * pts, MAXIMUM_KICKBACK_POINTS));
-  }
 
   public async get(options: PaginationOptions): Promise<PaginatedData<IHighscore>> {
     const { repositories } = this.context;
@@ -47,7 +41,7 @@ export class GetHighscoreService {
 
       if (userAchievements.length || givenAchievements.length) {
         const points = userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0;
-        const kickback = givenAchievements.reduce((sum, a) => sum + this.getKickback(a?.achievementPoints ?? 0), 0);
+        const kickback = givenAchievements.reduce((sum, a) => sum + getKickback(a?.achievementPoints ?? 0), 0);
 
         const totalPoints = kickback + points;
         const pointsPerAchievement = totalPoints / (userAchievements.length || 1);

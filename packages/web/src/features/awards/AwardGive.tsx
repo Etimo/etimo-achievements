@@ -1,4 +1,4 @@
-import { AchievementDto, AwardDto, sort, UserDto } from '@etimo-achievements/common';
+import { AchievementDto, AwardDto, formatNumber, sort, UserDto } from '@etimo-achievements/common';
 import React, { useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
@@ -47,6 +47,7 @@ const AwardGive: React.FC = () => {
         value: f.id,
         subtitle: f.description,
         group: 'Favorites',
+        rightSection: <Points points={f.achievementPoints} />,
       })),
       ...(achievements ?? [])
         .filter((a) => !favorites.find((f) => f.id === a.id))
@@ -55,6 +56,7 @@ const AwardGive: React.FC = () => {
           value: a.id,
           subtitle: a.description,
           group: 'All achievements',
+          rightSection: <Points points={a.achievementPoints} />,
         })),
     ];
   }, [favorites, achievements]);
@@ -94,6 +96,10 @@ const AwardGive: React.FC = () => {
       </Form>
     </div>
   );
+};
+
+const Points = ({ points }: { points: number }) => {
+  return <div className="text-xs text-gray-500 font-thin whitespace-nowrap">{`${formatNumber(points)} pts`}</div>;
 };
 
 export default AwardGive;

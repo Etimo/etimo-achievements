@@ -4,6 +4,7 @@ export * from './date-helper';
 export * from './dtos';
 export * from './env-helper';
 export * from './errors';
+export * from './kickback-calculator';
 export * from './number-helper';
 export * from './object-helper';
 export * from './paginate';

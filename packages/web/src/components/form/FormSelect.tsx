@@ -24,23 +24,29 @@ type Props = {
   nothingFound?: string;
 };
 
-interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+export interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
   image: string;
   label: string;
   subtitle: string;
   type: Props['type'];
+  rightSection?: React.ReactNode | string;
 }
 
 const SelectItemComponent = forwardRef<HTMLDivElement, ItemProps>(
-  ({ image, label, subtitle, type, ...rest }: ItemProps, ref) => (
-    <div {...rest} ref={ref} className="flex flex-column items-center p-2 hover:bg-slate-100 cursor-pointer w-full">
+  ({ image, label, subtitle, type, onClick, rightSection, ...rest }: ItemProps, ref) => (
+    <div
+      {...rest}
+      ref={ref}
+      className="flex flex-column items-center p-2 hover:bg-slate-100 cursor-pointer w-full pointer-events-none"
+    >
       {(type === 'multiline-image' || type === 'singleline-image') && <Avatar src={image} size={40} />}
-      <div className="py-0 px-2 w-full">
+      <div className="py-0 px-2 w-full pointer-events-auto" onClick={onClick}>
         <div className="font-medium">{label}</div>
         {(type === 'multiline-image' || type === 'multiline') && subtitle && (
           <div className="text-xs text-gray-500 font-thin">{subtitle}</div>
         )}
       </div>
+      {rightSection}
     </div>
   )
 );
