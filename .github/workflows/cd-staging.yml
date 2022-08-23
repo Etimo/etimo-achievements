@@ -29,7 +29,7 @@ env:
   GOOGLE_REDIRECT_URI: https://achievements-test.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements-test.staging.etimo-test.live
   NODE_ENV: staging
-  UNLEASH_URL: achievements-unleash-test.staging.etimo-test.live
+  UNLEASH_URL: achievements-test-unleash.staging.etimo-test.live
   SLACK_CHANNEL_HIGH: C03BQBQ29PH
   SLACK_CHANNEL_MEDIUM: C03BQBQ29PH
   SLACK_CHANNEL_LOW: C03BQBQ29PH

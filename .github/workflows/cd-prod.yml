@@ -20,7 +20,7 @@ env:
   GOOGLE_REDIRECT_URI: https://achievements-live.staging.etimo-test.live/login/callback
   INGRESS_URL: achievements-live.staging.etimo-test.live
   NODE_ENV: production
-  UNLEASH_URL: achievements-unleash-live.staging.etimo-test.live
+  UNLEASH_URL: achievements-live-unleash.staging.etimo-test.live
   LOG_HEADERS: true
   LOG_CONTEXT: true
   LOG_REQUESTS: false
