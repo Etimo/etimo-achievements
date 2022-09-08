@@ -20,7 +20,9 @@ export const loginCallback = async (code: string) => {
   if (response.success) {
     const token = await response.data();
     localStorage.setItem(AuthStorageKeys.JWTExpiresAt, (Date.now() + token.expires_in * 1000).toString());
-    localStorage.setItem(AuthStorageKeys.RTExpiresAt, (Date.now() + token.rt_expires_in * 1000).toString());
+    if (token.rt_expires_in) {
+      localStorage.setItem(AuthStorageKeys.RTExpiresAt, (Date.now() + token.rt_expires_in * 1000).toString());
+    }
     return token;
   } else {
     localStorage.removeItem(AuthStorageKeys.JWTExpiresAt);
@@ -33,7 +35,9 @@ export const refreshToken = async () => {
   if (refreshRes.success) {
     const token = await refreshRes.data();
     localStorage.setItem(AuthStorageKeys.JWTExpiresAt, (Date.now() + token.expires_in * 1000).toString());
-    localStorage.setItem(AuthStorageKeys.RTExpiresAt, (Date.now() + token.rt_expires_in * 1000).toString());
+    if (token.rt_expires_in) {
+      localStorage.setItem(AuthStorageKeys.RTExpiresAt, (Date.now() + token.rt_expires_in * 1000).toString());
+    }
     return token;
   } else {
     toast.error('Could not refresh token: ' + (await refreshRes.errorMessage));

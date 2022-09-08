@@ -3,6 +3,7 @@ import {
   AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
+  ClientRepository,
   RefreshTokenRepository,
   UserRepository,
 } from '@etimo-achievements/data';
@@ -15,6 +16,7 @@ type Repositories = {
   award: AwardRepository;
   refreshToken: RefreshTokenRepository;
   achievementFavorite: AchievementFavoriteRepository;
+  client: ClientRepository;
 };
 
 export type IContext = {

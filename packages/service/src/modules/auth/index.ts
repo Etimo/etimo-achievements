@@ -1,3 +1,4 @@
+export * from './client-credential-service';
 export * from './login-service';
 export * from './logout-service';
 export * from './refresh-login-service';

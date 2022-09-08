@@ -1,6 +1,12 @@
 import { AccessTokenDto, TokenValidationDto, UnauthorizedError, UserInfoDto } from '@etimo-achievements/common';
 import { CookieName, OAuthServiceFactory } from '@etimo-achievements/security';
-import { LoginResponse, LoginService, LogoutService, RefreshLoginService } from '@etimo-achievements/service';
+import {
+  ClientCredentialService,
+  LoginResponse,
+  LoginService,
+  LogoutService,
+  RefreshLoginService,
+} from '@etimo-achievements/service';
 import { getEnvVariable } from '@etimo-achievements/utils';
 import { Request, Response, Router } from 'express';
 import { endpoint, getContext, okResponse, protectedEndpoint, redirectResponse } from '../../utils';
@@ -57,6 +63,27 @@ export class AuthController {
      *       - Auth
      */
     router.get('/auth/refresh', endpoint(this.refresh));
+
+    /**
+     * @openapi
+     * /auth/token:
+     *   post:
+     *     summary: Get a token
+     *     operationId: authToken
+     *     security: []
+     *     requestBody:
+     *       required: true
+     *       content: *tokenRequestContent
+     *     responses:
+     *       200:
+     *         description: Authentication success.
+     *         content: *accessTokenContent
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Auth
+     */
+    router.post('/auth/token', endpoint(this.token));
 
     /**
      * @openapi
@@ -180,6 +207,19 @@ export class AuthController {
     return redirectResponse(res, url);
   };
 
+  private token = async (req: Request, res: Response) => {
+    /* eslint-disable */
+    const { grant_type, client_id, client_secret } = req.body;
+
+    if (grant_type !== 'client_credentials') throw new UnauthorizedError('invalid_grant');
+
+    const service = new ClientCredentialService(getContext());
+    const loginResponse = await service.login(client_id, client_secret);
+    const dto = AccessTokenMapper.toAccessTokenDto(loginResponse);
+
+    return okResponse(res, dto);
+  };
+
   private refresh = async (_req: Request, res: Response) => {
     const { refreshTokenId, refreshTokenKey } = getContext();
     if (refreshTokenId && refreshTokenKey) {
@@ -283,6 +323,8 @@ export class AuthController {
     };
 
     setCookie(CookieName.Jwt, loginResponse.expiresAt, dto.access_token);
-    setCookie(CookieName.RefreshToken, loginResponse.refreshTokenExpiresAt, dto.refresh_token);
+    if (loginResponse.refreshTokenExpiresAt) {
+      setCookie(CookieName.RefreshToken, loginResponse.refreshTokenExpiresAt, dto.refresh_token);
+    }
   }
 }

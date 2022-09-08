@@ -1,7 +1,7 @@
 import { OAuthServiceFactory } from '@etimo-achievements/security';
 import { CreateUserService, SyncSlackUsersService, UpdateUserService } from '..';
 import { IContext } from '../..';
-import { CreateTokenService } from './create-token-service';
+import { CreateUserTokenService } from './create-user-token-service';
 import { LoginResponse } from './types/login-response';
 
 export class LoginService {
@@ -49,7 +49,7 @@ export class LoginService {
       scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore', 'a:feature'];
     }
 
-    const createTokenService = new CreateTokenService(this.context);
-    return createTokenService.create(user, scopes);
+    const createUserTokenService = new CreateUserTokenService(this.context);
+    return createUserTokenService.create(user, scopes);
   }
 }
