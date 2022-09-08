@@ -7,7 +7,6 @@ export class GetAwardService {
 
   public async getMany(options: PaginationOptions): Promise<PaginatedData<IAward>> {
     const { repositories } = this.context;
-    console.log(options);
     const awards = await repositories.award.find(options);
     const count = await repositories.award.count(options);
     return paginate(awards, count, options);
