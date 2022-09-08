@@ -3,13 +3,13 @@ import { OrderByOption, PaginationOptions } from '@etimo-achievements/types';
 export function getPaginationOptions(req: any, max: number = 50): PaginationOptions {
   const [skip, take] = getSkipAndTake(req, max);
   const orderBy = getOrderBy(req);
-  const filters = getFilters(req);
+  const where = getFilters(req);
 
   return {
     skip,
     take,
     orderBy,
-    filters,
+    where,
   };
 }
 
