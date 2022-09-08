@@ -4,9 +4,13 @@ import { getEnvVariable } from '@etimo-achievements/utils';
 import jwt from 'jsonwebtoken';
 import { decrypt, encrypt } from '..';
 
+type JwtServiceOptions = {
+  expirationSeconds: number;
+};
+
 export class JwtService {
-  public static create(user: IUser, scopes: string[]): JWT {
-    const expirationSeconds = +getEnvVariable('JWT_EXPIRATION_SECONDS');
+  public static create(user: IUser, scopes: string[], options?: JwtServiceOptions): JWT {
+    const expirationSeconds = options?.expirationSeconds ?? +getEnvVariable('JWT_EXPIRATION_SECONDS');
     const token: JWT = {
       jti: uuid(),
       sub: user.id,
