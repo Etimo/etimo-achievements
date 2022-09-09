@@ -32,7 +32,10 @@ export class AwardRepository extends BaseRepository<AwardModel> {
   }
 
   public async find(options: FindOptions<AwardModel>): Promise<IAward[]> {
-    return super.$find(options);
+    return super.$find({
+      ...options,
+      orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['created_at', 'desc']],
+    });
   }
 
   public async findById(id: string): Promise<IAward> {

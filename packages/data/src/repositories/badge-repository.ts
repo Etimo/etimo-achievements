@@ -1,65 +1,54 @@
-import { camelToSnakeCase } from '@etimo-achievements/common';
-import { IBadge, INewBadge, IPartialBadge, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
+import { IBadge } from '@etimo-achievements/types';
+import Knex from 'knex';
 import { Database } from '..';
 import { BadgeModel } from '../models/badge-model';
-import { catchErrors } from '../utils';
+import {
+  BaseRepository,
+  CountOptions,
+  CreateData,
+  DeleteOptions,
+  FindByIdOptions,
+  FindOptions,
+  UpdateOptions,
+} from './base-repository';
 
-export class BadgeRepository {
-  constructor(private context: IRequestContext) {}
+export class BadgeRepository extends BaseRepository<BadgeModel> {
+  constructor(transaction?: Knex.Transaction) {
+    super(new BadgeModel(), Database.knex, transaction);
+  }
 
-  async count(): Promise<number> {
-    return catchErrors(async () => {
-      const result = await Database.knex.raw('select count(*) from badges');
-      return parseInt(result.rows[0]['count'], 10);
+  public async count(options: CountOptions<BadgeModel>): Promise<number> {
+    return super.$count(options);
+  }
+
+  public async find(options: FindOptions<BadgeModel>): Promise<IBadge[]> {
+    return super.$find({
+      ...options,
+      orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['name', 'asc']],
     });
   }
 
-  getAll(): Promise<IBadge[]> {
-    return catchErrors(async () => {
-      return BadgeModel.query();
-    });
+  public async findById(id: string): Promise<IBadge> {
+    return super.$findById(id);
   }
 
-  getMany(options: PaginationOptions): Promise<IBadge[]> {
-    return catchErrors(async () => {
-      const query = BadgeModel.query().limit(options.take).offset(options.skip);
-      if (!options.orderBy.length) {
-        query.orderBy('name', 'asc');
-      }
-      for (const [key, order] of options.orderBy) {
-        query.orderBy(camelToSnakeCase(key), order);
-      }
-      return query;
-    });
+  public async getAll(): Promise<IBadge[]> {
+    return super.$getAll();
   }
 
-  getManyByIds(ids: string[]): Promise<IBadge[]> {
-    return catchErrors(async () => {
-      return BadgeModel.query().whereIn('id', ids);
-    });
+  public async create(data: CreateData<BadgeModel>): Promise<IBadge> {
+    return super.$create(data);
   }
 
-  findById(id: string): Promise<IBadge | undefined> {
-    return catchErrors(async () => {
-      return BadgeModel.query().findById(id);
-    });
+  public async delete(options: DeleteOptions<BadgeModel>): Promise<number> {
+    return super.$delete(options);
   }
 
-  create(badge: INewBadge): Promise<IBadge> {
-    return catchErrors(async () => {
-      return BadgeModel.query().insert(badge);
-    });
+  public async findByIds(ids: string[], options: FindByIdOptions<BadgeModel>): Promise<IBadge[]> {
+    return super.$findByIds(ids, options);
   }
 
-  update(badge: IPartialBadge): Promise<IBadge> {
-    return catchErrors(async () => {
-      return BadgeModel.query().patchAndFetchById(badge.id, badge);
-    });
-  }
-
-  delete(id: string): Promise<number> {
-    return catchErrors(async () => {
-      return BadgeModel.query().deleteById(id);
-    });
+  public async update(data: Partial<BadgeModel>, options?: UpdateOptions<BadgeModel>): Promise<number> {
+    return super.$update(data, options);
   }
 }

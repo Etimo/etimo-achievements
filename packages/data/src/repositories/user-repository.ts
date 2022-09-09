@@ -41,7 +41,7 @@ export class UserRepository extends BaseRepository<UserModel> {
   }
 
   public async find(options: FindOptions<UserModel>): Promise<IUser[]> {
-    return super.$find(options);
+    return super.$find({ ...options, orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['name', 'asc']] });
   }
 
   public async findById(id: string): Promise<IUser> {
