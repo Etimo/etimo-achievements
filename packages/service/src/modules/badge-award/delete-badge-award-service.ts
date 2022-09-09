@@ -6,6 +6,6 @@ export class DeleteBadgeAwardService {
   public async delete(awardId: string) {
     const { repositories } = this.context;
 
-    await repositories.badgeAward.delete(awardId);
+    await repositories.badgeAward.delete({ where: { id: awardId } });
   }
 }

@@ -56,9 +56,9 @@ export class Context implements IContext {
     refreshToken: new RefreshTokenRepository(),
     user: new UserRepository(),
     achievementFavorite: new AchievementFavoriteRepository(),
-    client: new ClientRepository(),
-    badge: new BadgeRepository(this),
-    badgeAward: new BadgeAwardRepository(this),
+    client: new ClientRepository(this),
+    badge: new BadgeRepository(),
+    badgeAward: new BadgeAwardRepository(),
   };
 
   public async transactionRepositories(): Promise<IContext['repositories'] & { commit: () => void }> {

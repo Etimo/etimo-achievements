@@ -6,5 +6,5 @@ export interface IBadgeAward {
   createdAt: Date;
 }
 
-export type INewBadgeAward = Omit<IBadgeAward, 'id' | 'createdAt'>;
+export type INewBadgeAward = Omit<IBadgeAward, 'id' | 'createdAt' | 'userId'> & { userIds: string[] };
 export type IPartialBadgeAward = Pick<IBadgeAward, 'id'> & Partial<IBadgeAward>;

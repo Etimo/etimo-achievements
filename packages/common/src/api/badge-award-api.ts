@@ -15,8 +15,8 @@ export const getBadgeAwards = (skip: number = 0, take: number = 50, sort?: strin
   return authorizedApi.get<BadgeAwardDto[]>(url);
 };
 
-export const createBadgeAward = (award: BadgeAwardDto) => {
-  return api.post<{ awardId: string }>('/badge-awards', award);
+export const createBadgeAwards = (userIds: string[], badgeId: string) => {
+  return api.post<{ awardId: string }>('/badge-awards', { userIds, badgeId });
 };
 
 export const deleteBadgeAward = (id: string) => {

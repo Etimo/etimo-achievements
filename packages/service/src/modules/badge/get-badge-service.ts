@@ -10,14 +10,14 @@ export class GetBadgeService {
   }
 
   public async getMany(options: PaginationOptions): Promise<PaginatedData<IBadge>> {
-    const badges = await this.repos.badge.getMany(options);
-    const count = await this.repos.badge.count();
+    const badges = await this.repos.badge.find(options);
+    const count = await this.repos.badge.count(options);
 
     return paginate(badges, count, options);
   }
 
   public async getManyByIds(ids: string[]): Promise<IBadge[]> {
-    const badges = await this.repos.badge.getManyByIds(ids);
+    const badges = await this.repos.badge.findByIds(ids, {});
     return badges;
   }
 

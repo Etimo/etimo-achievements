@@ -1,7 +1,7 @@
 import { DeleteBadgeAwardService, GetBadgeAwardService, GiveBadgeService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import {
-  createdResponse,
+  createdManyResponse,
   getContext,
   getPaginationOptions,
   okResponse,
@@ -25,7 +25,7 @@ export class BadgeAwardController {
      *       - jwtCookie: []
      *     requestBody:
      *       required: true
-     *       content: *badgeAwardContent
+     *       content: *createBadgeAwardContent
      *     responses:
      *       201:
      *         description: The request was successful.
@@ -141,8 +141,8 @@ export class BadgeAwardController {
 
     const service = new GiveBadgeService(getContext());
     const input = BadgeAwardMapper.toNewAward({ ...payload, awardedByUserId: userId });
-    const { id } = await service.give(input);
+    const badgeAwards = await service.give(input);
 
-    return createdResponse(res, '/badge-awards', { id });
+    return createdManyResponse(res, '/badge-awards', { ids: badgeAwards.map((b) => b.id) });
   }
 }

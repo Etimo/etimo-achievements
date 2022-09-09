@@ -5,10 +5,23 @@ import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
 import { TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
+import { NameAvatarUserCell } from '../../components/table';
+import PaginatedTable, {
+  Column,
+  PaginatedTableDataEntry,
+  PaginationRequestInput,
+} from '../../components/table/PaginatedTable';
 import { BadgeAwardComposite } from './badge-award-types';
 import { getManyBadgeAwards } from './badge-award-utils';
 import BadgeAwardDeleteModal from './BadgeAwardDeleteModal';
+
+type BadgeAwardData = {
+  id: PaginatedTableDataEntry<string>;
+  name: PaginatedTableDataEntry<string>;
+  awardedTo: PaginatedTableDataEntry<React.ReactNode>;
+  date: PaginatedTableDataEntry<string>;
+  delete: PaginatedTableDataEntry<React.ReactNode>;
+};
 
 const BadgeAwardsList: React.FC = () => {
   const query = useQuery();
@@ -32,19 +45,30 @@ const BadgeAwardsList: React.FC = () => {
     setLoading(false);
   };
 
-  const mapToData = (composites: BadgeAwardComposite[]): any[] => {
+  const mapToData = (composites: BadgeAwardComposite[]): BadgeAwardData[] => {
     return composites.map((c) => ({
-      id: c.badgeAward.id,
-      name: c.badge.name,
-      awardedTo: c.awardedTo.name,
-      date: new Date(c.badgeAward.createdAt ?? 0).toLocaleString('sv-SE'),
-      delete: (
-        <TrashButton
-          id={c.badgeAward.id}
-          link={addQueryParam(window.location, 'delete', c.badgeAward.id)}
-          loading={deleting}
-        />
-      ),
+      id: {
+        value: c.badgeAward.id,
+      },
+      name: {
+        value: c.badge.name,
+        tooltip: c.badge.description,
+      },
+      awardedTo: {
+        value: <NameAvatarUserCell user={c.awardedTo} />,
+      },
+      date: {
+        value: new Date(c.badgeAward.createdAt ?? 0).toLocaleString('sv-SE'),
+      },
+      delete: {
+        value: (
+          <TrashButton
+            id={c.badgeAward.id}
+            link={addQueryParam(window.location, 'delete', c.badgeAward.id)}
+            loading={deleting}
+          />
+        ),
+      },
     }));
   };
 

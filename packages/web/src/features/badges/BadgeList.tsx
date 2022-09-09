@@ -6,10 +6,23 @@ import { addQueryParam } from '../../common/utils/query-helper';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
-import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
+import PaginatedTable, {
+  Column,
+  PaginatedTableData,
+  PaginatedTableDataEntry,
+  PaginationRequestInput,
+} from '../../components/table/PaginatedTable';
 import { getManyBadges } from './badge-utils';
 import BadgeDeleteModal from './BadgeDeleteModal';
 import BadgeEditModal from './BadgeEditModal';
+
+interface BadgeData extends PaginatedTableData {
+  id: PaginatedTableDataEntry<string>;
+  name: PaginatedTableDataEntry<string>;
+  description: PaginatedTableDataEntry<string>;
+  edit: PaginatedTableDataEntry<React.ReactNode>;
+  delete: PaginatedTableDataEntry<React.ReactNode>;
+}
 
 const BadgeList: React.FC = () => {
   const query = useQuery();
@@ -28,19 +41,29 @@ const BadgeList: React.FC = () => {
     const response = await getManyBadges(input);
     if (response) {
       const { data, pagination } = response;
-      setData(mapToData(data));
+      setData(data);
       setPageCount(pagination?.totalPages ?? 0);
     }
     setLoading(false);
   };
 
-  const mapToData = (badges: BadgeDto[]): any[] => {
+  const mapToData = (badges: BadgeDto[]): BadgeData[] => {
     return badges.map((b) => ({
-      id: b.id,
-      name: b.name,
-      description: b.description,
-      edit: <EditButton id={b.id} link={addQueryParam(window.location, 'edit', b.id)} />,
-      delete: <TrashButton id={b.id} link={addQueryParam(window.location, 'delete', b.id)} loading={deleting} />,
+      id: {
+        value: b.id,
+      },
+      name: {
+        value: b.name,
+      },
+      description: {
+        value: b.description,
+      },
+      edit: {
+        value: <EditButton id={b.id} link={addQueryParam(window.location, 'edit', b.id)} />,
+      },
+      delete: {
+        value: <TrashButton id={b.id} link={addQueryParam(window.location, 'delete', b.id)} loading={deleting} />,
+      },
     }));
   };
 
@@ -76,16 +99,22 @@ const BadgeList: React.FC = () => {
     []
   );
 
+  const mappedData = React.useMemo(() => {
+    return mapToData(data);
+  }, [data]);
+  console.log(mappedData);
+
   return (
     <div className="w-3/4 mx-auto">
       <Header>All Badges</Header>
       <PaginatedTable
         columns={columns}
-        data={data}
+        data={mappedData}
         pageCount={pageCount}
         loading={loading}
         monitor={monitor}
         fetchData={fetchData}
+        noDataText="No badges"
       />
       {getEditId() && (
         <RequirePermission update="badges">

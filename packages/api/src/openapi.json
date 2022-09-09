@@ -88,6 +88,27 @@
           }
         }
       },
+      "NewBadgeAward": {
+        "title": "NewBadgeAward",
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "badgeId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "userIds",
+          "badgeId"
+        ]
+      },
       "TokenInfo": {
         "title": "TokenInfo",
         "type": "object",
@@ -1427,7 +1448,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/BadgeAward"
+                "$ref": "#/components/schemas/NewBadgeAward"
               }
             }
           }
@@ -1503,7 +1524,10 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -1702,7 +1726,10 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {

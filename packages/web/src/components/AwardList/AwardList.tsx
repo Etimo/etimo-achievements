@@ -203,7 +203,7 @@ const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true
             onChange={onSelectFilterChange('achievementId')}
             options={mappedAchievements}
             value={selectFilters.achievementId ?? null}
-            text="Achievement"
+            placeholder="Achievement"
           />
         )}
         {enableAwardedToFilter && (
@@ -212,7 +212,7 @@ const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true
             onChange={onSelectFilterChange('userId')}
             options={mappedUsers}
             value={selectFilters.userId ?? null}
-            text="Awarded to"
+            placeholder="Awarded to"
           />
         )}
         {enableAwardedByFilter && (
@@ -221,7 +221,7 @@ const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true
             onChange={onSelectFilterChange('awardedByUserId')}
             options={mappedUsers}
             value={selectFilters.awardedByUserId ?? null}
-            text="Awarded by"
+            placeholder="Awarded by"
           />
         )}
         <ClearFilters tooltipLabel="Clear filters" onClick={resetFilters} disabled={noFilters} />

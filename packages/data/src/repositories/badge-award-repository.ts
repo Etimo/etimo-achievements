@@ -1,68 +1,54 @@
-import { camelToSnakeCase } from '@etimo-achievements/common';
-import { IBadgeAward, INewBadgeAward, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
+import { IBadgeAward } from '@etimo-achievements/types';
+import Knex from 'knex';
 import { Database } from '..';
 import { BadgeAwardModel } from '../models/badge-award-model';
-import { catchErrors } from '../utils';
+import {
+  BaseRepository,
+  CountOptions,
+  CreateData,
+  DeleteOptions,
+  FindByIdOptions,
+  FindOptions,
+  UpdateOptions,
+} from './base-repository';
 
-export class BadgeAwardRepository {
-  constructor(private context: IRequestContext) {}
+export class BadgeAwardRepository extends BaseRepository<BadgeAwardModel> {
+  constructor(transaction?: Knex.Transaction) {
+    super(new BadgeAwardModel(), Database.knex, transaction);
+  }
 
-  async count(): Promise<number> {
-    return catchErrors(async () => {
-      const result = await Database.knex.raw('select count(*) from "badge_awards"');
-      return parseInt(result.rows[0]['count'], 10);
+  public async count(options: CountOptions<BadgeAwardModel>): Promise<number> {
+    return super.$count(options);
+  }
+
+  public async find(options: FindOptions<BadgeAwardModel>): Promise<IBadgeAward[]> {
+    return super.$find({
+      ...options,
+      orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['created_at', 'desc']],
     });
   }
 
-  getAll(): Promise<IBadgeAward[]> {
-    return catchErrors(async () => {
-      return BadgeAwardModel.query().select();
-    });
+  public async findById(id: string): Promise<IBadgeAward> {
+    return super.$findById(id);
   }
 
-  getMany(options: PaginationOptions): Promise<IBadgeAward[]> {
-    return catchErrors(async () => {
-      const query = BadgeAwardModel.query().limit(options.take).offset(options.skip);
-      if (!options.orderBy.length) {
-        query.orderBy('created_at', 'desc');
-      }
-      for (const [key, order] of options.orderBy) {
-        query.orderBy(camelToSnakeCase(key), order);
-      }
-      return query;
-    });
+  public async getAll(): Promise<IBadgeAward[]> {
+    return super.$getAll();
   }
 
-  findById(awardId: string): Promise<IBadgeAward> {
-    return catchErrors(async () => {
-      return BadgeAwardModel.query().findById(awardId);
-    });
+  public async create(data: CreateData<BadgeAwardModel>): Promise<IBadgeAward> {
+    return super.$create(data);
   }
 
-  findHasOne(userId: string, badgeId: string): Promise<IBadgeAward | undefined> {
-    return catchErrors(async () => {
-      return BadgeAwardModel.query().findOne({ user_id: userId, badge_id: badgeId });
-    });
+  public async delete(options: DeleteOptions<BadgeAwardModel>): Promise<number> {
+    return super.$delete(options);
   }
 
-  findLatest(userId: string, badgeId: string): Promise<IBadgeAward | undefined> {
-    return catchErrors(async () => {
-      return BadgeAwardModel.query().orderBy('created_at', 'desc').findOne({
-        user_id: userId,
-        badge_id: badgeId,
-      });
-    });
+  public async findByIds(ids: string[], options: FindByIdOptions<BadgeAwardModel>): Promise<IBadgeAward[]> {
+    return super.$findByIds(ids, options);
   }
 
-  create(award: INewBadgeAward): Promise<IBadgeAward> {
-    return catchErrors(async () => {
-      return BadgeAwardModel.query().insert(award);
-    });
-  }
-
-  delete(id: string): Promise<number> {
-    return catchErrors(async () => {
-      return BadgeAwardModel.query().deleteById(id);
-    });
+  public async update(data: Partial<BadgeAwardModel>, options?: UpdateOptions<BadgeAwardModel>): Promise<number> {
+    return super.$update(data, options);
   }
 }

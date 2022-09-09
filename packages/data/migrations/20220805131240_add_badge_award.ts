@@ -9,6 +9,7 @@ export async function up(knex: Knex) {
       table.uuid('badge_id').references('id').inTable('badges');
       table.uuid('user_id').references('id').inTable('users');
       table.uuid('awarded_by_user_id').references('id').inTable('users');
+      table.unique(['user_id', 'badge_id']);
       table.timestamps(false, true);
     })
     .raw(createOnUpdateTrigger('badge_awards'));

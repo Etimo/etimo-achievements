@@ -1,4 +1,4 @@
-import { BadgeAwardDto } from '@etimo-achievements/common';
+import { BadgeAwardDto, NewBadgeAwardDto } from '@etimo-achievements/common';
 import { IBadgeAward, INewBadgeAward } from '@etimo-achievements/types';
 
 export class BadgeAwardMapper {
@@ -22,11 +22,11 @@ export class BadgeAwardMapper {
     };
   }
 
-  public static toNewAward(awardDto: BadgeAwardDto): INewBadgeAward {
+  public static toNewAward(awardDto: NewBadgeAwardDto): INewBadgeAward {
     return {
       badgeId: awardDto.badgeId,
+      userIds: awardDto.userIds,
       awardedByUserId: awardDto.awardedByUserId,
-      userId: awardDto.userId,
     };
   }
 

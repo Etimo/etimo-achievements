@@ -31,3 +31,29 @@ export interface BadgeAwardDto {
   badgeId: string;
   createdAt?: Date;
 }
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     NewBadgeAward:
+ *       title: NewBadgeAward
+ *       type: object
+ *       properties:
+ *         userIds:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: uuid
+ *         badgeId:
+ *           type: string
+ *           format: uuid
+ *       required:
+ *         - userIds
+ *         - badgeId
+ */
+export interface NewBadgeAwardDto {
+  userIds: string[];
+  badgeId: string;
+  awardedByUserId: string;
+}

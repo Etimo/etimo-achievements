@@ -1,6 +1,5 @@
 import {
-  BadgeAwardDto,
-  createBadgeAward,
+  createBadgeAwards,
   getBadge,
   getBadgeAward,
   getBadgeAwards,
@@ -13,11 +12,8 @@ import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { BadgeAwardComposite } from './badge-award-types';
 
-export const giveBadge = async (userId: string, badgeId: string) => {
-  return createBadgeAward({
-    userId,
-    badgeId,
-  } as BadgeAwardDto).wait();
+export const giveBadge = async (userIds: string[], badgeId: string) => {
+  return createBadgeAwards(userIds, badgeId).wait();
 };
 
 export const getSingleBadgeAward = async (id: string) => {

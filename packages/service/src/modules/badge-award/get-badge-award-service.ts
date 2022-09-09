@@ -8,8 +8,8 @@ export class GetBadgeAwardService {
   public async getMany(options: PaginationOptions): Promise<PaginatedData<IBadgeAward>> {
     const { repositories } = this.context;
 
-    const awards = await repositories.badgeAward.getMany(options);
-    const count = await repositories.badgeAward.count();
+    const awards = await repositories.badgeAward.find(options);
+    const count = await repositories.badgeAward.count(options);
     return paginate(awards, count, options);
   }
 

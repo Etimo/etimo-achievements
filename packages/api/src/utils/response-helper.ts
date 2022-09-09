@@ -6,6 +6,10 @@ export function createdResponse(res: Response, path: string, resource: { id: str
   res.status(201).location(`/${path}/${resource.id}`).send({ id: resource.id });
 }
 
+export function createdManyResponse(res: Response, path: string, resource: { ids: string[] }) {
+  res.status(201).send({ ids: resource.ids });
+}
+
 export function paginatedResponse<T>(
   res: Response,
   path: string,
