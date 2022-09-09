@@ -1,9 +1,14 @@
-import { IClient, INewClient, IPartialClient, IRequestContext } from '@etimo-achievements/types';
+import { IClient, INewClient, IPartialClient } from '@etimo-achievements/types';
+import Knex from 'knex';
+import { Database } from '..';
 import { ClientModel } from '../models/client-model';
 import { catchErrors } from '../utils';
+import { BaseRepository } from './base-repository';
 
-export class ClientRepository {
-  constructor(private context: IRequestContext) {}
+export class ClientRepository extends BaseRepository<ClientModel> {
+  constructor(transaction?: Knex.Transaction) {
+    super(new ClientModel(), Database.knex, transaction);
+  }
 
   findById(id: string): Promise<IClient | undefined> {
     return catchErrors(async () => {
