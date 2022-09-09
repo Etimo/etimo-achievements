@@ -20,7 +20,7 @@ import {
 } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { validateOrderBy } from '../../utils/validation-helper';
-import { AchievementFavoriteMapper } from '../achievement-favorite/achievement-favorite-mapper';
+import { AchievementFavoriteMapper } from './achievement-favorite-mapper';
 import { AchievementMapper } from './achievement-mapper';
 
 export class AchievementController {
