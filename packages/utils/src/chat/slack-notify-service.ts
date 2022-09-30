@@ -40,6 +40,7 @@ export class SlackNotifyService implements INotifyService {
     return this.client.chat.postMessage({
       channel: this.getChannel(options?.prio ?? 'low'),
       blocks,
+      text: message,
     });
   }
 

@@ -3,6 +3,8 @@ import {
   AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
+  BadgeAwardRepository,
+  BadgeRepository,
   ClientRepository,
   RefreshTokenRepository,
   UserRepository,
@@ -17,9 +19,11 @@ type Repositories = {
   refreshToken: RefreshTokenRepository;
   achievementFavorite: AchievementFavoriteRepository;
   client: ClientRepository;
+  badge: BadgeRepository;
+  badgeAward: BadgeAwardRepository;
 };
 
 export type IContext = {
   repositories: Repositories;
-  transactionRepositories: () => Promise<Repositories & { commit: () => void }>;
+  transactionRepositories: () => Promise<Repositories & { commit: () => void; rollback: () => void }>;
 } & IRequestContext;

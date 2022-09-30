@@ -30,6 +30,10 @@ export const errorMiddleware = () => {
         res.statusCode = 409;
         return res.send({ error: 'Conflict' });
 
+      case 'NotImplementedError':
+        res.statusCode = 501;
+        return res.send({ error: 'Not Implemented' });
+
       default:
         res.statusCode = 500;
         console.error(`Unmapped error '${error.name}' occurred: ${error.message}`);

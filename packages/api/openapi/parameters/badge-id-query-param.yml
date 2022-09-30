@@ -1,0 +1,7 @@
+x-template: &badgeIdQueryParam
+  name: badgeId
+  in: query
+  description: Only return data with this badgeId
+  schema:
+    type: string
+    format: uuid

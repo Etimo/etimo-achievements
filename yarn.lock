@@ -2191,8 +2191,8 @@ __metadata:
     "@fortawesome/free-regular-svg-icons": ^6.1.2
     "@fortawesome/free-solid-svg-icons": ^6.1.1
     "@fortawesome/react-fontawesome": ^0.1.18
-    "@mantine/core": ^5.0.2
-    "@mantine/hooks": ^5.0.2
+    "@mantine/core": ^5.2.7
+    "@mantine/hooks": ^5.2.7
     "@reduxjs/toolkit": ^1.8.0
     "@types/react": ^17.0.40
     "@types/react-dom": ^17.0.13
@@ -2696,35 +2696,35 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mantine/core@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "@mantine/core@npm:5.0.2"
+"@mantine/core@npm:^5.2.7":
+  version: 5.2.7
+  resolution: "@mantine/core@npm:5.2.7"
   dependencies:
     "@floating-ui/react-dom-interactions": 0.6.6
-    "@mantine/styles": 5.0.2
-    "@mantine/utils": 5.0.2
+    "@mantine/styles": 5.2.7
+    "@mantine/utils": 5.2.7
     "@radix-ui/react-scroll-area": 1.0.0
     react-textarea-autosize: 8.3.4
   peerDependencies:
-    "@mantine/hooks": 5.0.2
+    "@mantine/hooks": 5.2.7
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 3677995cb6b31481b29ee56096ba9366d68062fb9e636e271685a2e0ec7df852231edbe111aded6b02e7ddf2c6abc20f6c6aead42a30d130d8687540406dcedd
+  checksum: 6aa4dbddaa9b52b587a1c53ca0ca42e938a2c7d5bc296028c6bd8c4d6d9e532d61e823d51b698b4e22a8706966167ea01d9e0671c406dadf690b98426574e977
   languageName: node
   linkType: hard
 
-"@mantine/hooks@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "@mantine/hooks@npm:5.0.2"
+"@mantine/hooks@npm:^5.2.7":
+  version: 5.2.7
+  resolution: "@mantine/hooks@npm:5.2.7"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: 792b2ce59bc5a3bfb14e3f12762eaeb1e9b7edf080d03e2515c68ddd6b54fb6923e9c6461e5bd1030c043801f241f09be15bae5d6236b58a4206203a4d0166c6
+  checksum: 6de7e545d222cad9c27b9322c7ffdbf84d527090aceefa96a52aeba42a762b179fd64129ca21725a607701b885faec6386137a494593955c11138ed832deda09
   languageName: node
   linkType: hard
 
-"@mantine/styles@npm:5.0.2":
-  version: 5.0.2
-  resolution: "@mantine/styles@npm:5.0.2"
+"@mantine/styles@npm:5.2.7":
+  version: 5.2.7
+  resolution: "@mantine/styles@npm:5.2.7"
   dependencies:
     clsx: 1.1.1
     csstype: 3.0.9
@@ -2732,16 +2732,16 @@ __metadata:
     "@emotion/react": ">=11.9.0"
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: a602c1453007d52c2d779e3ff107b26f6072158c3d9ffda4be42276bdccfff4b7695cb48f41ead0aacd42af97d40d61b61b022c530200c60f8cf3db711721bee
+  checksum: 72afdda8130b78692843a48a5858013d690d13b734d6b85c989e34a9d2b9b9dca56d78577b2654afa379be762a3eb21723ef977dee306a4f5682d08b62c6b9c7
   languageName: node
   linkType: hard
 
-"@mantine/utils@npm:5.0.2":
-  version: 5.0.2
-  resolution: "@mantine/utils@npm:5.0.2"
+"@mantine/utils@npm:5.2.7":
+  version: 5.2.7
+  resolution: "@mantine/utils@npm:5.2.7"
   peerDependencies:
     react: ">=16.8.0"
-  checksum: fe618eb37c8f900ea2ed7ba25a95c01d55a9cc6d3e82ee46d36446258e52a8828098a5d8bd0c53ca269bb876cffd4c8162110715da7e912f552a99b1f2f5ba22
+  checksum: f86d2141490803d9e51ce7276fc1a8bc976a2642c560f212ac71626fc3bef79671e6eeb4c02dce6e246e68b8d952ea2be2d629d0ed66c6b165266131958c5a72
   languageName: node
   linkType: hard
 

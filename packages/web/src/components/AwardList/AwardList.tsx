@@ -1,8 +1,5 @@
 import { AchievementDto, formatNumber, UserDto, uuid } from '@etimo-achievements/common';
-import { faFilterCircleXmark } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState } from 'react';
-import { withTooltip } from '../../common/higher-order-components/with-tooltip';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
@@ -10,6 +7,7 @@ import { getAllAchievements } from '../../features/achievements/achievement-util
 import { getAllUsers } from '../../features/users/user-utils';
 import useKeyValueStore from '../../hooks/use-key-value-store';
 import { TrashButton } from '../buttons';
+import { ClearFilters } from '../ClearFilters';
 import { FormSelect } from '../form';
 import { Column, NameAvatarUserCell } from '../table';
 import PaginatedTable, {
@@ -203,7 +201,7 @@ const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true
             onChange={onSelectFilterChange('achievementId')}
             options={mappedAchievements}
             value={selectFilters.achievementId ?? null}
-            text="Achievement"
+            placeholder="Achievement"
           />
         )}
         {enableAwardedToFilter && (
@@ -212,7 +210,7 @@ const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true
             onChange={onSelectFilterChange('userId')}
             options={mappedUsers}
             value={selectFilters.userId ?? null}
-            text="Awarded to"
+            placeholder="Awarded to"
           />
         )}
         {enableAwardedByFilter && (
@@ -221,7 +219,7 @@ const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true
             onChange={onSelectFilterChange('awardedByUserId')}
             options={mappedUsers}
             value={selectFilters.awardedByUserId ?? null}
-            text="Awarded by"
+            placeholder="Awarded by"
           />
         )}
         <ClearFilters tooltipLabel="Clear filters" onClick={resetFilters} disabled={noFilters} />
@@ -229,18 +227,5 @@ const AwardList = ({ filters, noDataText, filterOptions, awardedToVisible = true
     </>
   );
 };
-
-const ClearFilters = withTooltip<{ onClick: () => void; disabled: boolean }>(
-  ({ onClick, disabled }) => {
-    return (
-      <FontAwesomeIcon
-        icon={faFilterCircleXmark}
-        className={disabled ? 'hover:cursor-not-allowed' : 'hover:cursor-pointer'}
-        onClick={onClick}
-      />
-    );
-  },
-  { className: 'flex items-center' }
-);
 
 export default AwardList;

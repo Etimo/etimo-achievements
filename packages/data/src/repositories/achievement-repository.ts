@@ -22,7 +22,7 @@ export class AchievementRepository extends BaseRepository<AchievementModel> {
   }
 
   public async find(options: FindOptions<AchievementModel>): Promise<IAchievement[]> {
-    return super.$find(options);
+    return super.$find({ ...options, orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['name', 'asc']] });
   }
 
   public async findById(id: string): Promise<IAchievement> {

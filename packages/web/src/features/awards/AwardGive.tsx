@@ -61,11 +61,11 @@ const AwardGive: React.FC = () => {
 
   return (
     <div className="w-1/3 mx-auto">
-      <Header>Give Award</Header>
+      <Header>Give Achievement</Header>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormSelectRow
           label="Achievement"
-          text="Select an achievement"
+          placeholder="Select an achievement"
           options={options}
           value={achievementId}
           onChange={(value) => setAchievementId(value)}
@@ -83,7 +83,7 @@ const AwardGive: React.FC = () => {
         </FormSelectRow>
         <FormSelectRow
           label="User"
-          text="Select a user"
+          placeholder="Select a user"
           options={sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name, image: a.image }))}
           value={userId}
           onChange={(value) => setUserId(value)}

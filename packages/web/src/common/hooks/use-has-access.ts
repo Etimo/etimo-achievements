@@ -2,7 +2,15 @@ import { useAppSelector } from '../../app/store';
 import { authSelector } from '../../features/auth/auth-slice';
 
 export type Action = 'create' | 'read' | 'update' | 'remove' | 'admin';
-export type Resource = 'achievements' | 'awards' | 'highscore' | 'users' | 'profile';
+export type Resource =
+  | 'achievements'
+  | 'awards'
+  | 'highscore'
+  | 'users'
+  | 'profile'
+  | 'badges'
+  | 'badge-awards'
+  | 'trophy';
 
 function useHasAccess() {
   const auth = useAppSelector(authSelector);

@@ -1,9 +1,9 @@
 import { faGoogle, faSlack } from '@fortawesome/free-brands-svg-icons';
 import {
-  faAward,
   faHandSparkles,
   faList,
   faRankingStar,
+  faShield,
   faSignOut,
   faSquarePlus,
   faStar,
@@ -44,34 +44,72 @@ const SideMenu: React.FC = () => {
             </Menu>
           </RequirePermission>
           <Menu iconShape="circle">
-            <RequirePermission read="achievements">
-              <SubMenu title="Achievements" icon={<FontAwesomeIcon icon={faStar} />}>
+            <SubMenu title="Achievements" icon={<FontAwesomeIcon icon={faStar} />}>
+              <RequirePermission create="achievements">
+                <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
+                  Create achievement
+                  <Link to={Routes.AchievementCreate} />
+                </MenuItem>
+              </RequirePermission>
+              <RequirePermission create="awards">
+                <MenuItem icon={<FontAwesomeIcon icon={faHandSparkles} />}>
+                  Give achievement
+                  <Link to={Routes.AwardGive} />
+                </MenuItem>
+              </RequirePermission>
+              <RequirePermission read="achievements">
                 <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
-                  List achievements
+                  List all achievements
                   <Link to={Routes.AchievementList} />
                 </MenuItem>
-                <RequirePermission create="achievements">
-                  <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
-                    Create achievement
-                    <Link to={Routes.AchievementCreate} />
-                  </MenuItem>
-                </RequirePermission>
-              </SubMenu>
-            </RequirePermission>
-            <RequirePermission read="awards">
-              <SubMenu title="Awards" icon={<FontAwesomeIcon icon={faAward} />}>
+              </RequirePermission>
+              <RequirePermission read="awards">
                 <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
-                  List awards
+                  List given achivements
                   <Link to={Routes.AwardList} />
                 </MenuItem>
-                <RequirePermission create="awards">
-                  <MenuItem icon={<FontAwesomeIcon icon={faHandSparkles} />}>
-                    Give award
-                    <Link to={Routes.AwardGive} />
-                  </MenuItem>
-                </RequirePermission>
-              </SubMenu>
-            </RequirePermission>
+              </RequirePermission>
+            </SubMenu>
+            <SubMenu title="Badges" icon={<FontAwesomeIcon icon={faShield} />}>
+              <RequirePermission create="badges">
+                <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
+                  Create badge
+                  <Link to={Routes.BadgeCreate} />
+                </MenuItem>
+              </RequirePermission>
+              <RequirePermission create="badge-awards">
+                <MenuItem icon={<FontAwesomeIcon icon={faHandSparkles} />}>
+                  Give badge
+                  <Link to={Routes.BadgeGive} />
+                </MenuItem>
+              </RequirePermission>
+              <RequirePermission read="badges">
+                <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
+                  List all badges
+                  <Link to={Routes.BadgeList} />
+                </MenuItem>
+              </RequirePermission>
+              <RequirePermission read="badge-awards">
+                <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
+                  List given badges
+                  <Link to={Routes.BadgeAwardsList} />
+                </MenuItem>
+              </RequirePermission>
+            </SubMenu>
+            {/* <SubMenu title="Trophies" icon={<FontAwesomeIcon icon={faTrophy} />}>
+              <RequirePermission create="awards">
+                <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
+                  Create trophy
+                  <Link to={''} />
+                </MenuItem>
+              </RequirePermission>
+              <RequirePermission read="awards">
+                <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
+                  List all Trophies
+                  <Link to={''} />
+                </MenuItem>
+              </RequirePermission>
+            </SubMenu> */}
             <RequirePermission read="users">
               <SubMenu title="Users" icon={<FontAwesomeIcon icon={faUsers} />}>
                 <MenuItem icon={<FontAwesomeIcon icon={faList} />}>

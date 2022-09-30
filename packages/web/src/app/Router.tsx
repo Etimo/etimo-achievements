@@ -9,6 +9,10 @@ import LoginCallback from '../features/auth/LoginCallback';
 import Logout from '../features/auth/Logout';
 import AwardGive from '../features/awards/AwardGive';
 import AwardList from '../features/awards/AwardList';
+import BadgeAwardGive from '../features/badge-awards/BadgeAwardGive';
+import BadgeAwardsList from '../features/badge-awards/BadgeAwardsList';
+import BadgeCreate from '../features/badges/BadgeCreate';
+import BadgeList from '../features/badges/BadgeList';
 import Highscores from '../features/highscore/Highscore';
 import MyProfile from '../features/user-profile/MyProfile';
 import UserProfile from '../features/user-profile/UserProfile';
@@ -32,6 +36,10 @@ export enum Routes {
   UserCreate = '/users/create',
   UserSlackSync = '/users/slack-sync',
   Highscores = '/highscores',
+  BadgeGive = '/badges/give',
+  BadgeCreate = '/badges/create',
+  BadgeList = '/badges/list',
+  BadgeAwardsList = '/badges/list-awards',
 }
 
 const Router = (): JSX.Element => {
@@ -53,6 +61,10 @@ const Router = (): JSX.Element => {
         <Route path={Routes.UserCreate} element={<UserCreate />} />
         <Route path={Routes.UserSlackSync} element={<UserSlackSync />} />
         <Route path={Routes.Highscores} element={<Highscores />} />
+        <Route path={Routes.BadgeAwardsList} element={<BadgeAwardsList />} />
+        <Route path={Routes.BadgeList} element={<BadgeList />} />
+        <Route path={Routes.BadgeCreate} element={<BadgeCreate />} />
+        <Route path={Routes.BadgeGive} element={<BadgeAwardGive />} />
         {/* Should be put last */}
         <Route path="*" element={<NotFound />} />
       </Route>

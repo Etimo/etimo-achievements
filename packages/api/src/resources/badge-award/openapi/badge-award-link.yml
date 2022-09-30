@@ -1,0 +1,5 @@
+x-template: &badgeAwardLink
+  GetAwardById:
+    operationId: getBadgeAward
+    parameters:
+      userId: '$response.body#/id'

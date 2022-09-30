@@ -2,6 +2,8 @@ export * from './access-token';
 export * from './achievement';
 export * from './achievement-favorite';
 export * from './award';
+export * from './badge';
+export * from './badge-award';
 export * from './client';
 export * from './context';
 export * from './env-variable';

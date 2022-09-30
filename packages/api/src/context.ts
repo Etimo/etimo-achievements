@@ -4,6 +4,8 @@ import {
   AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
+  BadgeAwardRepository,
+  BadgeRepository,
   ClientRepository,
   Database,
   getRepositories,
@@ -22,6 +24,11 @@ type ContextOptions = {
   notifier?: INotifyService;
   feature?: IFeatureService;
 };
+
+type TransactionRepositories = {
+  commit: () => void;
+  rollback: () => void;
+} & IContext['repositories'];
 
 export class Context implements IContext {
   public logger: ILogger;
@@ -54,14 +61,17 @@ export class Context implements IContext {
     refreshToken: new RefreshTokenRepository(),
     user: new UserRepository(),
     achievementFavorite: new AchievementFavoriteRepository(),
-    client: new ClientRepository(),
+    client: new ClientRepository(this),
+    badge: new BadgeRepository(),
+    badgeAward: new BadgeAwardRepository(),
   };
 
-  public async transactionRepositories(): Promise<IContext['repositories'] & { commit: () => void }> {
+  public async transactionRepositories(): Promise<TransactionRepositories> {
     const trx = await Database.transaction();
     return {
       ...getRepositories(trx),
       commit: trx.commit,
+      rollback: trx.rollback,
     };
   }
 

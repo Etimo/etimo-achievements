@@ -40,7 +40,7 @@ const Highscores: React.FC = () => {
 
   const mapToData = (composites: HighscoreComposite[]): any[] => {
     // Sorted list (desc) of unique scores
-    const totalRanks = [...new Set(composites.map((c) => c.points))].sort((a, b) => (a < b ? 1 : -1));
+    const totalRanks = [...new Set(composites.map((c) => c.totalPoints))].sort((a, b) => (a < b ? 1 : -1));
 
     return composites.map((h, i) => ({
       rank: {

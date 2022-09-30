@@ -1,0 +1,5 @@
+x-template: &badgeLink
+  GetAchievementById:
+    operationId: getBadge
+    parameters:
+      achievementId: '$response.body#/id'

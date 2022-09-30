@@ -232,11 +232,13 @@ const PaginatedTable: React.FC<Props> = ({
           title="Go to last page"
         />
       </div>
-      <div className="float-right m-2">
-        <span className="text-slate-800">
-          {getPage()} of {pageCount}
-        </span>
-      </div>
+      {pageCount !== 0 && (
+        <div className="float-right m-2">
+          <span className="text-slate-800">
+            {getPage()} of {pageCount}
+          </span>
+        </div>
+      )}
     </div>
   );
 };
