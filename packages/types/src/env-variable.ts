@@ -25,7 +25,6 @@ export type EnvVariable =
   | 'SLACK_CHANNEL_MEDIUM'
   | 'SLACK_TEAM_ID'
   | 'SLACK_TOKEN'
-  | 'ENABLE_SLACK_MESSAGES'
   | 'UNLEASH_TOKEN'
   | 'UNLEASH_URL'
   | 'NOTIFY_SLACK';
