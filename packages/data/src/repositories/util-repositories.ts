@@ -1,5 +1,6 @@
 // import { IContext } from '@etimo-achievements/service';
 import Knex from 'knex';
+import { BadgeAwardRepository, BadgeRepository } from '.';
 import { AccessTokenRepository } from './access-token-repository';
 import { AchievementFavoriteRepository } from './achievement-favorite-repository';
 import { AchievementRepository } from './achievement-repository';
@@ -14,4 +15,6 @@ export const getRepositories = (trx: Knex.Transaction): any => ({
   award: new AwardRepository(trx),
   refreshToken: new RefreshTokenRepository(trx),
   user: new UserRepository(trx),
+  badge: new BadgeRepository(trx),
+  badgeAward: new BadgeAwardRepository(trx),
 });

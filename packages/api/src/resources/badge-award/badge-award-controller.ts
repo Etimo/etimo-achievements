@@ -52,6 +52,8 @@ export class BadgeAwardController {
      *       - *skipParam
      *       - *takeParam
      *       - *orderByParam
+     *       - *userIdQueryParam
+     *       - *badgeIdQueryParam
      *     responses:
      *       200:
      *         description: The request was successful.

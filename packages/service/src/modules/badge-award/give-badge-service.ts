@@ -1,12 +1,13 @@
-import { BadRequestError, uniq } from '@etimo-achievements/common';
+import { BadRequestError, InternalServerError, uniq } from '@etimo-achievements/common';
 import { IBadgeAward, INewBadgeAward } from '@etimo-achievements/types';
+import { getEnvVariable } from '@etimo-achievements/utils';
 import { IContext } from '../../context';
 
 export class GiveBadgeService {
   constructor(private context: IContext) {}
 
   public async give(badgeAward: INewBadgeAward): Promise<IBadgeAward[]> {
-    const { repositories, notifier } = this.context;
+    const { repositories, notifier, transactionRepositories } = this.context;
 
     const awardedUsersPromise = repositories.user.findByIds(uniq(badgeAward.userIds), {});
     const awardedByPromise = repositories.user.findById(badgeAward.awardedByUserId);
@@ -24,6 +25,7 @@ export class GiveBadgeService {
       })
     );
 
+    // List of userIds
     const alreadyHasBadgeList = hasAwards.reduce((result: string[], a: IBadgeAward[]) => {
       if (a.length !== 0) return [...result, ...a.map((x) => x.userId)];
       return result;
@@ -33,26 +35,41 @@ export class GiveBadgeService {
       throw new BadRequestError(
         `User(s): ${alreadyHasBadgeList
           .map((u) => awardedTo.find((x) => x.id === u)?.name)
-          .join(', ')} already possess that badge`
+          .slice(0, 5)
+          .join(', ')
+          // replace last "," with "and"
+          .replace(/, ([^,]*)$/, ' and $1')} already possess that badge`
       );
 
     const message = `${awardedTo
       .map((u) => (u.slackHandle ? `<@${u.slackHandle}>` : u.name))
+      .slice(0, 5)
       .join(', ')
       // replace last "," with "and"
       .replace(/, ([^,]*)$/, ' and $1')} earned the medal :first_place_medal: *${badge.name}*`;
 
     const subtitle = `${badge.name}: ${badge.description}`;
 
-    try {
-      await notifier.notify(message, { subtitle, prio: 'medium' });
-    } catch (err) {}
+    if (getEnvVariable('NOTIFY_SLACK', 'true') === 'true') {
+      try {
+        await notifier.notify(message, { subtitle, prio: 'medium' });
+      } catch (err) {}
+    }
 
-    // TODO: transaction?
-    return await Promise.all(
+    const { commit, badgeAward: badgeAwardTransactionRepository, rollback } = await transactionRepositories();
+
+    return Promise.all(
       awardedTo.map((x) =>
-        repositories.badgeAward.create({ userId: x.id, awardedByUserId: awardedBy.id, badgeId: badge.id })
+        badgeAwardTransactionRepository.create({ userId: x.id, awardedByUserId: awardedBy.id, badgeId: badge.id })
       )
-    );
+    )
+      .then((res) => {
+        commit();
+        return res;
+      })
+      .catch((err) => {
+        rollback();
+        throw new InternalServerError('Failed to create badges');
+      });
   }
 }

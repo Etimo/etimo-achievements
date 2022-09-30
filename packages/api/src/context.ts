@@ -25,6 +25,11 @@ type ContextOptions = {
   feature?: IFeatureService;
 };
 
+type TransactionRepositories = {
+  commit: () => void;
+  rollback: () => void;
+} & IContext['repositories'];
+
 export class Context implements IContext {
   public logger: ILogger;
   public notifier: INotifyService;
@@ -61,11 +66,12 @@ export class Context implements IContext {
     badgeAward: new BadgeAwardRepository(),
   };
 
-  public async transactionRepositories(): Promise<IContext['repositories'] & { commit: () => void }> {
+  public async transactionRepositories(): Promise<TransactionRepositories> {
     const trx = await Database.transaction();
     return {
       ...getRepositories(trx),
       commit: trx.commit,
+      rollback: trx.rollback,
     };
   }
 

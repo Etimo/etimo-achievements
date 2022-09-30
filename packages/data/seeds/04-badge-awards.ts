@@ -18,5 +18,11 @@ export async function seed(knex: Knex): Promise<void> {
       user_id: 'ce76945f-b41e-4b3b-b2a9-6774c2201556',
       awarded_by_user_id: 'b158d926-9ef6-42a5-9059-f810a6d1c980',
     },
+    {
+      id: '6aa50a6f-0dfc-4f29-a80e-6e7781bc2485',
+      badge_id: '99d9505d-0c58-4af8-b069-08732d423e23',
+      user_id: 'b158d926-9ef6-42a5-9059-f810a6d1c980',
+      awarded_by_user_id: 'b158d926-9ef6-42a5-9059-f810a6d1c980',
+    },
   ]);
 }

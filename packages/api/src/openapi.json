@@ -1534,6 +1534,24 @@
                 "type": "string"
               }
             }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Only return data with the value of provided userId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "badgeId",
+            "in": "query",
+            "description": "Only return data with this badgeId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
           }
         ],
         "responses": {

@@ -38,8 +38,8 @@ export const getSingleBadgeAward = async (id: string) => {
 };
 
 export const getManyBadgeAwards = async (input: PaginationRequestInput) => {
-  const { page, size, order, sort } = input;
-  const response = await getBadgeAwards((page - 1) * size, size, sort, order);
+  const { page, size, order, sort, filters } = input;
+  const response = await getBadgeAwards((page - 1) * size, size, sort, order, filters);
   if (response.success) {
     const badgeAwards = await response.data();
     const badgeIds = uniq(badgeAwards.map((b) => b.badgeId));
@@ -76,5 +76,6 @@ export const getManyBadgeAwards = async (input: PaginationRequestInput) => {
     };
   } else {
     toast.error('Could not get badges: ' + (await response.errorMessage));
+    return Promise.reject(response.error);
   }
 };

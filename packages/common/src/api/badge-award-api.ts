@@ -9,9 +9,20 @@ export const getBadgeAward = (id: string) => {
   return authorizedApi.get<BadgeAwardDto>(`/badge-awards/${id}`);
 };
 
-export const getBadgeAwards = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
+export const getBadgeAwards = (
+  skip: number = 0,
+  take: number = 50,
+  sort?: string,
+  order?: string,
+  filters?: Record<string, any>
+) => {
   let url = `/badge-awards?skip=${skip}&take=${take}`;
   if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
+  if (filters)
+    url += Object.entries(filters)
+      .map(([key, value]) => `&${key}=${value}`)
+      .join('');
+
   return authorizedApi.get<BadgeAwardDto[]>(url);
 };
 

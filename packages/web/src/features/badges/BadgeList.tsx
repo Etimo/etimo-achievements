@@ -77,6 +77,7 @@ const BadgeList: React.FC = () => {
       {
         title: 'Name',
         accessor: 'name',
+        sortKey: 'name',
       },
       {
         title: 'Description',

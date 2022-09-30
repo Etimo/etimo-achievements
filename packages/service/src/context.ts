@@ -25,5 +25,5 @@ type Repositories = {
 
 export type IContext = {
   repositories: Repositories;
-  transactionRepositories: () => Promise<Repositories & { commit: () => void }>;
+  transactionRepositories: () => Promise<Repositories & { commit: () => void; rollback: () => void }>;
 } & IRequestContext;

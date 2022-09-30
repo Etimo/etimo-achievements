@@ -7,7 +7,6 @@ import {
   faSignOut,
   faSquarePlus,
   faStar,
-  faTrophy,
   faUser,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
@@ -97,7 +96,7 @@ const SideMenu: React.FC = () => {
                 </MenuItem>
               </RequirePermission>
             </SubMenu>
-            <SubMenu title="Trophies" icon={<FontAwesomeIcon icon={faTrophy} />}>
+            {/* <SubMenu title="Trophies" icon={<FontAwesomeIcon icon={faTrophy} />}>
               <RequirePermission create="awards">
                 <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
                   Create trophy
@@ -110,7 +109,7 @@ const SideMenu: React.FC = () => {
                   <Link to={''} />
                 </MenuItem>
               </RequirePermission>
-            </SubMenu>
+            </SubMenu> */}
             <RequirePermission read="users">
               <SubMenu title="Users" icon={<FontAwesomeIcon icon={faUsers} />}>
                 <MenuItem icon={<FontAwesomeIcon icon={faList} />}>

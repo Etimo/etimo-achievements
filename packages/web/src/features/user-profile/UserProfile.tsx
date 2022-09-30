@@ -13,6 +13,7 @@ import Header from '../../components/Header';
 import RequirePermission from '../../components/RequirePermission';
 import { userIdSelector } from '../auth/auth-slice';
 import { getSingleUser } from '../users/user-utils';
+import UserBadgeAwardsGrid from './UserBadgeAwardsGrid';
 import UserProfileEditModal from './UserProfileEditModal';
 
 const UserProfile = () => {
@@ -68,12 +69,10 @@ const UserProfile = () => {
             awardedToVisible={false}
           />
         </div>
-        {/* <div className="flex justify-start">
+        <div className="flex items-start flex-col last:w-full pb-6">
           <Header>Badges</Header>
+          <UserBadgeAwardsGrid userId={user.id} />
         </div>
-        <div className="flex justify-start">
-          <Header>Trophies</Header>
-        </div> */}
         {getEditState() && (
           <RequirePermission update="profile">
             <UserProfileEditModal onClose={() => removeQueryParam('edit')} onSubmit={() => setMonitor(uuid())} />
