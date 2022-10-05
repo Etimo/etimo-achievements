@@ -43,7 +43,6 @@ export class GiveBadgeService {
 
     const message = `${awardedTo
       .map((u) => (u.slackHandle ? `<@${u.slackHandle}>` : u.name))
-      .slice(0, 5)
       .join(', ')
       // replace last "," with "and"
       .replace(/, ([^,]*)$/, ' and $1')} earned the medal :first_place_medal: *${badge.name}*`;
