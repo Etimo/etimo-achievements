@@ -287,8 +287,8 @@
           "globalCooldowns": {
             "type": "boolean",
             "description": "Is the cooldown for this achievement applied globally? I.e. the award cannot be given to anyone when the cooldown is still active",
-            "example": true,
-            "default": true
+            "example": false,
+            "default": false
           }
         },
         "required": [
