@@ -5,4 +5,4 @@ x-template: &idListObject
       items:
         type: string
         format: uuid
-        description: ID of the desired resource.
+        description: ID of the desired resources.

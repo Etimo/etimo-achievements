@@ -7,6 +7,7 @@ import { toastResponse } from '../../common/utils/toast-response';
 import { FavoriteButtonWithTooltip as FavoriteButton } from '../../components/buttons/FavoriteButton';
 import { CardRow } from '../../components/cards';
 import { Form, FormSelectRow, FormSubmitButton } from '../../components/form';
+import { FormMultiSelectRow } from '../../components/form/FormSelect';
 import Header from '../../components/Header';
 import useFavoriteAchievement from '../../hooks/use-favorite-achievement';
 import { userIdSelector } from '../auth/auth-slice';
@@ -16,7 +17,7 @@ import { getAllAchievementsSortedByMostUsed, giveAward } from './award-utils';
 const AwardGive: React.FC = () => {
   const { handleSubmit } = useForm<AwardDto>();
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState<string>();
+  const [userIds, setUserIds] = useState<string[]>([]);
   const [users, setUsers] = useState<UserDto[]>();
   const [achievements, setAchievements] = useState<AchievementDto[]>();
   const [achievementId, setAchievementId] = useState<string>();
@@ -29,17 +30,17 @@ const AwardGive: React.FC = () => {
   }, []);
 
   const resetForm = () => {
-    setUserId('');
+    setUserIds([]);
     setAchievementId('');
   };
 
   const onSubmit: SubmitHandler<AwardDto> = async () => {
     setLoading(true);
-    if (!userId || !achievementId) {
+    if (userIds?.length == 0 || !achievementId) {
       setLoading(false);
       return toast.error('Please select an achievement and a user');
     }
-    const response = await giveAward(userId, achievementId);
+    const response = await giveAward(userIds, achievementId, authenticatedUserId!);
     setLoading(false);
     toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
   };
@@ -80,6 +81,11 @@ const AwardGive: React.FC = () => {
     return formatUsers(_users);
   }, [users, achievementId, achievements, authenticatedUserId]);
 
+  // Filter yourself from selected users state if we switch to an achievement which isn't self awardable
+  useEffect(() => {
+    if (isSelfAwardable) setUserIds(userIds?.filter((x) => x !== authenticatedUserId));
+  }, [isSelfAwardable, authenticatedUserId]);
+
   return (
     <div className="w-1/3 mx-auto">
       <Header>Give Achievement</Header>
@@ -102,12 +108,12 @@ const AwardGive: React.FC = () => {
             className="mx-2"
           />
         </FormSelectRow>
-        <FormSelectRow
-          label="User"
-          placeholder="Select a user"
+        <FormMultiSelectRow
+          label="User(s)"
+          placeholder="Select user(s)"
           options={userOptions}
-          value={userId}
-          onChange={(value) => setUserId(value)}
+          value={userIds}
+          onChange={setUserIds}
           type="singleline-image"
           nothingFound="No users"
         />

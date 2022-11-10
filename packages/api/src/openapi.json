@@ -88,6 +88,31 @@
           }
         }
       },
+      "NewAward": {
+        "title": "NewAward",
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "achievementId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "awardedByUserId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "userIds",
+          "achievementId"
+        ]
+      },
       "NewBadgeAward": {
         "title": "NewBadgeAward",
         "type": "object",
@@ -660,7 +685,7 @@
                 "items": {
                   "type": "string",
                   "format": "uuid",
-                  "description": "ID of the desired resource."
+                  "description": "ID of the desired resources."
                 }
               }
             }
@@ -1308,7 +1333,7 @@
         ]
       },
       "post": {
-        "summary": "Give a user an award",
+        "summary": "Give awards to users",
         "operationId": "createAward",
         "security": [
           {
@@ -1320,7 +1345,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Award"
+                "$ref": "#/components/schemas/NewAward"
               }
             }
           }
@@ -1331,13 +1356,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "description": "ID of the created resource."
-                    }
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "ID of the desired resources."
                   }
                 }
               }
@@ -1392,7 +1415,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Award"
+                  "$ref": "#/components/schemas/NewAward"
                 }
               }
             }
@@ -1933,7 +1956,7 @@
                 "items": {
                   "type": "string",
                   "format": "uuid",
-                  "description": "ID of the desired resource."
+                  "description": "ID of the desired resources."
                 }
               }
             }
@@ -2370,7 +2393,7 @@
                 "items": {
                   "type": "string",
                   "format": "uuid",
-                  "description": "ID of the desired resource."
+                  "description": "ID of the desired resources."
                 }
               }
             }

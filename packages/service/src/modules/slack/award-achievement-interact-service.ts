@@ -34,17 +34,14 @@ export class AwardSlackAchievementsInteractService {
       throw new Error('To user not found');
     }
 
-    const awards = toUsers.map(
-      (toUser) =>
-        <INewAward>{
-          achievementId: achievement.id,
-          awardedByUserId: fromUser.id,
-          userId: toUser.id,
-        }
-    );
+    const award = <INewAward>{
+      achievementId: achievement.id,
+      awardedByUserId: fromUser.id,
+      userIds: toUsers.map((x) => x.id),
+    };
 
     const service = new GiveAwardService(this.context);
-    await Promise.allSettled(awards.map((award) => service.give(award)));
+    await service.give(award);
 
     await this.postAwardMessage(channel, fromUserSlackHandle, toUserSlackHandles, achievement);
   }
