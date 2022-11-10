@@ -80,7 +80,7 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, onClose, onSubmi
         />
         <FormCheckbox
           label="Self awardable"
-          sublabel="You cannot give this achievement to yourself"
+          sublabel="If unchecked: You cannot give this achievement to yourself"
           defaultValue={achievement.selfAwardable}
           register={register('selfAwardable')}
           error={errors.selfAwardable}

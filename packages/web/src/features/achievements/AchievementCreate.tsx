@@ -61,7 +61,7 @@ const AchievementCreate: React.FC = () => {
         />
         <FormCheckbox
           label="Self awardable"
-          sublabel="You cannot give this achievement to yourself"
+          sublabel="If unchecked: You cannot give this achievement to yourself"
           defaultValue={true}
           register={register('selfAwardable')}
           error={errors.selfAwardable}
