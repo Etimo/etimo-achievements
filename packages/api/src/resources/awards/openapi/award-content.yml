@@ -1,4 +1,4 @@
 x-template: &awardContent
   application/json:
     schema:
-      $ref: '#/components/schemas/Award'
+      $ref: '#/components/schemas/NewAward'

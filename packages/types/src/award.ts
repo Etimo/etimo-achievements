@@ -6,5 +6,5 @@ export interface IAward {
   createdAt: Date;
 }
 
-export type INewAward = Omit<IAward, 'id' | 'createdAt'>;
+export type INewAward = Omit<IAward, 'id' | 'createdAt' | 'userId'> & { userIds: string[] };
 export type IPartialAward = Pick<IAward, 'id'> & Partial<IAward>;

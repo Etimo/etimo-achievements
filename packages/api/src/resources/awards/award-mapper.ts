@@ -1,4 +1,4 @@
-import { AwardDto } from '@etimo-achievements/common';
+import { AwardDto, NewAwardDto } from '@etimo-achievements/common';
 import { IAward, INewAward } from '@etimo-achievements/types';
 
 export class AwardMapper {
@@ -22,11 +22,11 @@ export class AwardMapper {
     };
   }
 
-  public static toNewAward(awardDto: AwardDto): INewAward {
+  public static toNewAward(awardDto: NewAwardDto): INewAward {
     return {
       achievementId: awardDto.achievementId,
       awardedByUserId: awardDto.awardedByUserId,
-      userId: awardDto.userId,
+      userIds: awardDto.userIds,
     };
   }
 

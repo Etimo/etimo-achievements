@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import { AwardDto } from '..';
+import { AwardDto, NewAwardDto } from '..';
 import Api from './api';
 import AuthorizedApi from './authorized-api';
 
@@ -27,7 +27,7 @@ export const getAwards = (
   return authorizedApi.get<AwardDto[]>(url);
 };
 
-export const createAward = (award: AwardDto) => {
+export const createAward = (award: NewAwardDto) => {
   return api.post<{ awardId: string }>('/awards', award);
 };
 
