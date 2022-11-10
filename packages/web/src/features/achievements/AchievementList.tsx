@@ -23,8 +23,9 @@ interface AchievementData extends PaginatedTableData {
   description: PaginatedTableDataEntry<string>;
   points: PaginatedTableDataEntry<string>;
   cooldown: PaginatedTableDataEntry<string>;
-  repeatable: PaginatedTableDataEntry<string>;
+  globalCooldowns: PaginatedTableDataEntry<string>;
   favorite: PaginatedTableDataEntry<React.ReactNode>;
+  selfAwardable: PaginatedTableDataEntry<string>;
   edit: PaginatedTableDataEntry<React.ReactNode>;
   delete: PaginatedTableDataEntry<React.ReactNode>;
 }
@@ -70,8 +71,8 @@ const AchievementList: React.FC = () => {
       cooldown: {
         value: `${formatNumber(a.cooldownMinutes)} min`,
       },
-      repeatable: {
-        value: 'Unsupported',
+      globalCooldowns: {
+        value: a.globalCooldowns ? 'Yes' : 'No',
       },
       favorite: {
         value: (
@@ -130,8 +131,10 @@ const AchievementList: React.FC = () => {
         className: 'w-32',
       },
       {
-        title: 'Repeatable',
-        accessor: 'repeatable',
+        title: 'Global cooldown',
+        accessor: 'globalCooldowns',
+        tooltip:
+          'Giving this achievement to a user puts it on a global cooldown: no other user can receive this achievement while the cooldown is active',
         className: 'w-32',
       },
       {

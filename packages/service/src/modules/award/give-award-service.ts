@@ -12,9 +12,14 @@ export class GiveAwardService {
     const { repositories, notifier, logger, transactionRepositories } = this.context;
 
     const lastAwardPromises = award.userIds.map((uid) => repositories.award.findLatest(uid, award.achievementId));
+    const lastAwardAnyUserPromise = repositories.award.findLatestAnyUser(award.achievementId);
     const achievementPromise = repositories.achievement.findById(award.achievementId);
 
-    const [lastAwards, achievement] = await Promise.all([Promise.all(lastAwardPromises), achievementPromise]);
+    const [lastAwards, lastAwardAnyUser, achievement] = await Promise.all([
+      Promise.all(lastAwardPromises),
+      lastAwardAnyUserPromise,
+      achievementPromise,
+    ]);
 
     if (!achievement) {
       throw new BadRequestError('Achievement does not exist');
@@ -27,6 +32,16 @@ export class GiveAwardService {
 
     if (awardedTo.length === 0 || !awardedBy) {
       throw new BadRequestError('Awarded user or awarded by user does not exist');
+    }
+
+    // Check global cooldown
+    if (
+      achievement.globalCooldowns &&
+      lastAwardAnyUser &&
+      achievement.cooldownMinutes > 0 &&
+      minutesSince(lastAwardAnyUser.createdAt) < achievement.cooldownMinutes
+    ) {
+      throw new BadRequestError('Achievement is on global cooldown, someone has recently received this achievement.');
     }
 
     for (const lastAward of lastAwards) {

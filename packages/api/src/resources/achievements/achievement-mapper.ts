@@ -10,6 +10,7 @@ export class AchievementMapper {
       achievementPoints: achievement.achievementPoints,
       cooldownMinutes: achievement.cooldownMinutes,
       selfAwardable: achievement.selfAwardable,
+      globalCooldowns: achievement.globalCooldowns,
     };
   }
 
@@ -21,6 +22,7 @@ export class AchievementMapper {
       achievementPoints: achievementDto.achievementPoints,
       cooldownMinutes: achievementDto.cooldownMinutes,
       selfAwardable: achievementDto.selfAwardable,
+      globalCooldowns: achievementDto.globalCooldowns,
     };
   }
 

@@ -45,6 +45,7 @@ const AchievementCreate: React.FC = () => {
         />
         <FormTextInput
           label="Cooldown minutes"
+          sublabel="Giving a user this achievement puts it on a cooldown"
           register={register('cooldownMinutes', {
             required: true,
             valueAsNumber: true,
@@ -52,7 +53,15 @@ const AchievementCreate: React.FC = () => {
           error={errors.cooldownMinutes}
         />
         <FormCheckbox
+          label="Global cooldown"
+          sublabel="The cooldown is applied globally: no other user can receive this achievement while the cooldown is active"
+          defaultValue={false}
+          register={register('globalCooldowns')}
+          error={errors.globalCooldowns}
+        />
+        <FormCheckbox
           label="Self awardable"
+          sublabel="You cannot give this achievement to yourself"
           defaultValue={true}
           register={register('selfAwardable')}
           error={errors.selfAwardable}
