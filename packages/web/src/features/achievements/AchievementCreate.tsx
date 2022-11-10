@@ -2,7 +2,7 @@ import { AchievementDto, createAchievement } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
-import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
+import { Form, FormCheckbox, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
 
 const AchievementCreate: React.FC = () => {
@@ -50,6 +50,12 @@ const AchievementCreate: React.FC = () => {
             valueAsNumber: true,
           })}
           error={errors.cooldownMinutes}
+        />
+        <FormCheckbox
+          label="Self awardable"
+          defaultValue={true}
+          register={register('selfAwardable')}
+          error={errors.selfAwardable}
         />
         <FormSubmitButton label="Create" loading={loading} />
       </Form>

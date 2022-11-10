@@ -81,6 +81,9 @@ const AchievementList: React.FC = () => {
           />
         ),
       },
+      selfAwardable: {
+        value: a.selfAwardable ? 'Yes' : 'No',
+      },
       edit: {
         value: <EditButton id={a.id} link={addQueryParam(window.location, 'edit', a.id)} />,
       },
@@ -130,6 +133,12 @@ const AchievementList: React.FC = () => {
         title: 'Repeatable',
         accessor: 'repeatable',
         className: 'w-32',
+      },
+      {
+        title: 'Self awardable',
+        accessor: 'selfAwardable',
+        className: 'w-32',
+        tooltip: 'Is it possible to give the achievement to yourself?',
       },
       {
         title: 'Edit',

@@ -27,6 +27,11 @@
  *           description: Minutes until the this achievement becomes available again after awarding it
  *           example: 15
  *           default: 0
+ *         selfAwardable:
+ *           type: boolean
+ *           description: Is it possible to give the achievement to yourself?
+ *           example: true
+ *           default: true
  *       required:
  *         - name
  *         - description
@@ -38,4 +43,5 @@ export interface AchievementDto {
   description: string;
   achievementPoints: number;
   cooldownMinutes: number;
+  selfAwardable: boolean;
 }

@@ -2,7 +2,7 @@ import { AchievementDto, updateAchievement } from '@etimo-achievements/common';
 import React, { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
-import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
+import { Form, FormCheckbox, FormSubmitButton, FormTextInput } from '../../components/form';
 import Modal from '../../components/Modal';
 import { getSingleAchievement } from './achievement-utils';
 
@@ -69,6 +69,12 @@ const AchievementEditModal: React.FC<Props> = ({ achievementId, onClose, onSubmi
             valueAsNumber: true,
           })}
           error={errors.cooldownMinutes}
+        />
+        <FormCheckbox
+          label="Self awardable"
+          defaultValue={achievement.selfAwardable}
+          register={register('selfAwardable')}
+          error={errors.selfAwardable}
         />
         <FormSubmitButton label="Update" loading={loading} />
       </Form>
