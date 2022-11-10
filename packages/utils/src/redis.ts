@@ -4,7 +4,7 @@ import IORedis, { RedisOptions } from 'ioredis';
 export type RedisClient = IORedis;
 export type RedisConnection = RedisOptions;
 
-export const getRedisClient = (url: string, logger: ILogger): IORedis => {
+export function getRedisClient(url: string, logger: ILogger): IORedis {
   const redis = getRedisConnection(url);
 
   redis.on('connect', () => {
@@ -24,7 +24,7 @@ export const getRedisClient = (url: string, logger: ILogger): IORedis => {
   });
 
   return redis;
-};
+}
 
 export function stopRedis(url: string): boolean {
   const connection = redisConnections.get(url);
