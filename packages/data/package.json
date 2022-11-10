@@ -11,7 +11,7 @@
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "npm run bin tsc -- --project tsconfig.build.json",
+    "compile": "tsc -b -v .",
     "compile-test": "npm run bin tsc -- --build",
     "knex:dev": "npm run bin knex -- --knexfile src/config/knexfile.ts --env development",
     "knex:local": "npm run bin knex -- --knexfile src/config/knexfile.ts --env local",
