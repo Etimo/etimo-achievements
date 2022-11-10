@@ -1,6 +1,6 @@
 import { DeleteAwardService, GetAwardService, GiveAwardService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
-import { createdResponse, getContext, okResponse, paginatedResponse, protectedEndpoint } from '../../utils';
+import { createdManyResponse, getContext, okResponse, paginatedResponse, protectedEndpoint } from '../../utils';
 import { getPaginationOptions } from '../../utils/pagination-helper';
 import { validateOrderBy } from '../../utils/validation-helper';
 import { AwardMapper } from './award-mapper';
@@ -60,7 +60,7 @@ export class AwardController {
      * @openapi
      * /awards:
      *   post:
-     *     summary: Give a user an award
+     *     summary: Give awards to users
      *     operationId: createAward
      *     security:
      *       - jwtCookie: []
@@ -70,7 +70,7 @@ export class AwardController {
      *     responses:
      *       201:
      *         description: The request was successful.
-     *         content: *idObject
+     *         content: *idListObject
      *         links: *awardLink
      *       400: *badRequestResponse
      *       401: *unauthorizedResponse
@@ -129,9 +129,9 @@ export class AwardController {
 
     const service = new GiveAwardService(getContext());
     const input = AwardMapper.toNewAward({ ...payload, awardedByUserId: userId });
-    const award = await service.give(input);
+    const awards = await service.give(input);
 
-    return createdResponse(res, '/awards', award);
+    return createdManyResponse(res, '/awards', { ids: awards.map((a) => a.id) });
   };
 
   private deleteAward = async (req: Request, res: Response) => {

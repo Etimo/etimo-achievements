@@ -77,8 +77,8 @@ export const getAllAchievementsSortedByMostUsed = async () => {
   }
 };
 
-export const giveAward = (userId: string, achievementId: string) => {
-  return createAward({ userId, achievementId } as AwardDto).wait();
+export const giveAward = (userIds: string[], achievementId: string, awardedByUserId: string) => {
+  return createAward({ userIds, achievementId, awardedByUserId }).wait();
 };
 
 export const getManyAwards = async (input: PaginationRequestInput) => {
