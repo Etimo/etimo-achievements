@@ -48,7 +48,7 @@ env:
   API_ROOT: /api/
   DEBUG: false
   WEB_PORT: 3001
-  REDIS_URL: redis://redis:6379/0
+  REDIS_URL: redis://redis-service:6379/0
 
 jobs:
   deploy:
