@@ -7,5 +7,6 @@ export * from './errors';
 export * from './number-helper';
 export * from './object-helper';
 export * from './paginate';
+export * from './sleep';
 export * from './string-helper';
 export * from './uuid';
