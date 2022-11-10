@@ -257,7 +257,6 @@ export class AchievementController {
 
   private createAchievements = async (req: Request, res: Response) => {
     const payload = req.body;
-    console.log(payload);
 
     const service = new CreateAchievementService(getContext());
     const input = AchievementMapper.toAchievementDto(payload);
