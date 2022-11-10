@@ -81,6 +81,11 @@ const AwardGive: React.FC = () => {
     return formatUsers(_users);
   }, [users, achievementId, achievements, authenticatedUserId]);
 
+  // Filter yourself from selected users state if we switch to an achievement which isn't self awardable
+  useEffect(() => {
+    if (isSelfAwardable) setUserIds(userIds?.filter((x) => x !== authenticatedUserId));
+  }, [isSelfAwardable, authenticatedUserId]);
+
   return (
     <div className="w-1/3 mx-auto">
       <Header>Give Achievement</Header>
