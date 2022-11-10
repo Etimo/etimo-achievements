@@ -5,7 +5,7 @@ export const definition = {
     version: '1.0.0',
     license: {
       name: 'Swagger spec',
-      url: '/swagger.json',
+      url: 'openapi.json',
     },
     contact: {
       name: 'Etimo AB',

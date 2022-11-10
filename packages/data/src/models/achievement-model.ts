@@ -21,6 +21,8 @@ export class AchievementModel extends BaseModel implements IAchievement {
         cooldownMinutes: { type: 'integer' },
         createdAt: { type: 'timestamp' },
         updatedAt: { type: 'timestamp' },
+        selfAwardable: { type: 'boolean' },
+        globalCooldowns: { type: 'boolean' },
       },
     };
   }
@@ -37,4 +39,6 @@ export class AchievementModel extends BaseModel implements IAchievement {
   cooldownMinutes!: number;
   createdAt!: Date;
   updatedAt!: Date;
+  selfAwardable!: boolean;
+  globalCooldowns!: boolean;
 }

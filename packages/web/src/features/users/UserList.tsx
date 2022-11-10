@@ -5,17 +5,31 @@ import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
-import PaginatedTable, { Column, PaginationRequestInput } from '../../components/table/PaginatedTable';
+import { NameAvatarUserCell } from '../../components/table';
+import PaginatedTable, {
+  Column,
+  PaginatedTableData,
+  PaginatedTableDataEntry,
+  PaginationRequestInput,
+} from '../../components/table/PaginatedTable';
 import { getManyUsers } from './user-utils';
 import UserDeleteModal from './UserDeleteModal';
 import UserEditModal from './UserEditModal';
+
+interface UserData extends PaginatedTableData {
+  name: PaginatedTableDataEntry<string>;
+  email: PaginatedTableDataEntry<string>;
+  slackHandle: PaginatedTableDataEntry<string>;
+  edit: PaginatedTableDataEntry<React.ReactNode>;
+  delete: PaginatedTableDataEntry<React.ReactNode>;
+}
 
 const UserList: React.FC = () => {
   const query = useQuery();
   const removeQueryParam = useRemoveQueryParam();
   const [loading, setLoading] = useState(false);
   const [deleting, setDeleting] = useState<string>();
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<UserData[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
 
@@ -35,11 +49,21 @@ const UserList: React.FC = () => {
 
   const mapToData = (users: UserDto[]): any[] => {
     return users.map((u) => ({
-      name: u.name,
-      email: u.email,
-      slackHandle: u.slackHandle,
-      edit: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} />,
-      delete: <TrashButton id={u.id} link={addQueryParam(window.location, 'delete', u.id)} loading={deleting} />,
+      name: {
+        value: <NameAvatarUserCell user={u} />,
+      },
+      email: {
+        value: u.email,
+      },
+      slackHandle: {
+        value: u.slackHandle!,
+      },
+      edit: {
+        value: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} />,
+      },
+      delete: {
+        value: <TrashButton id={u.id} link={addQueryParam(window.location, 'delete', u.id)} loading={deleting} />,
+      },
     }));
   };
 

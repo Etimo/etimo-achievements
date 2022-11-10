@@ -1,41 +1,84 @@
 import {
   AwardDto,
   createAward,
-  getAchievement,
-  getAward,
+  createFavorite,
+  deleteFavorite,
+  getAchievements,
   getAwards,
-  getUser,
+  getFavorites,
   listAchievements,
   listUsers,
   uniq,
 } from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
-import { AwardComposite } from './award-types';
+import { AwardComposite, FavoriteComposite } from './award-types';
 
-export const giveAward = (userId: string, achievementId: string) => {
-  return createAward({ userId, achievementId } as AwardDto).wait();
+export const getAchievementFavorites = async (): Promise<FavoriteComposite[]> => {
+  const response = await getFavorites();
+  if (response.success) {
+    const favorites = await response.data();
+    const achievementPromise = (await getAchievements()).data();
+    await Promise.allSettled([achievementPromise]);
+
+    const achievements = await achievementPromise;
+
+    return favorites.map((f) => achievements.find((a) => a.id === f.achievementId)!);
+  } else {
+    toast.error('Could not get favorite achievements: ' + (await response.errorMessage));
+    return [];
+  }
 };
 
-export const getSingleAward = async (awardId: string): Promise<AwardComposite | undefined> => {
-  const response = await getAward(awardId);
+export const addAchievementFavorite = (achievementId: string) => {
+  return createFavorite(achievementId).wait();
+};
+
+export const removeAchievementFavorite = (achievementId: string) => {
+  return deleteFavorite(achievementId).wait();
+};
+
+export const getAllAchievementsSortedByMostUsed = async () => {
+  const response = await getAchievements();
   if (response.success) {
-    const award = await response.data();
-    const achievementPromise = (await getAchievement(award.achievementId)).data();
-    const awardedToPromise = (await getUser(award.userId)).data();
-    const awardedByPromise = (await getUser(award.awardedByUserId)).data();
+    const achievements = await response.data();
+    const awardsPromise = (await getAwards()).data();
 
-    await Promise.allSettled([achievementPromise, awardedToPromise, awardedByPromise]);
-    const achievement = await achievementPromise;
-    const awardedTo = await awardedToPromise;
-    const awardedBy = await awardedByPromise;
+    await Promise.allSettled([awardsPromise]);
+    const awards = await awardsPromise;
 
-    if (achievement && awardedTo && awardedBy) {
-      return { award, achievement, awardedTo, awardedBy };
-    }
+    const achievementFrequency = awards.reduce((result: Record<string, number>, award: AwardDto) => {
+      if (result[award.achievementId]) {
+        return {
+          ...result,
+          [award.achievementId]: result[award.achievementId] + 1,
+        };
+      } else {
+        // init
+        return {
+          ...result,
+          [award.achievementId]: 1,
+        };
+      }
+    }, {} as Record<string, number>);
+
+    const topAchievementIds = Object.entries(achievementFrequency)
+      .sort((a, b) => (a[1] < b[1] ? 1 : -1))
+      .slice(0, 5)
+      .map((a) => a[0]);
+
+    const topAchievements = topAchievementIds.map((t) => achievements.find((a) => a.id === t)!);
+    const otherAchievements = achievements.filter((a) => !topAchievementIds.includes(a.id));
+
+    const totalOrder = [...topAchievements, ...otherAchievements];
+    return totalOrder;
   } else {
-    toast.error('Could not get award: ' + (await response.errorMessage));
+    toast.error('Could not get awards: ' + (await response.errorMessage));
   }
+};
+
+export const giveAward = (userIds: string[], achievementId: string, awardedByUserId: string) => {
+  return createAward({ userIds, achievementId, awardedByUserId }).wait();
 };
 
 export const getManyAwards = async (input: PaginationRequestInput) => {

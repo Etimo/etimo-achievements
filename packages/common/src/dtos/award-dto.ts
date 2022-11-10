@@ -31,3 +31,32 @@ export interface AwardDto {
   achievementId: string;
   createdAt?: Date;
 }
+
+/**
+ * @openapi
+ * components:
+ *   schemas:
+ *     NewAward:
+ *       title: NewAward
+ *       type: object
+ *       properties:
+ *         userIds:
+ *           type: array
+ *           items:
+ *             type: string
+ *             format: uuid
+ *         achievementId:
+ *           type: string
+ *           format: uuid
+ *         awardedByUserId:
+ *           type: string
+ *           format: uuid
+ *       required:
+ *         - userIds
+ *         - achievementId
+ */
+export interface NewAwardDto {
+  userIds: string[];
+  achievementId: string;
+  awardedByUserId: string;
+}

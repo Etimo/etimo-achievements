@@ -11,8 +11,9 @@
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "npm run bin tsc -- --project tsconfig.build.json",
+    "compile": "tsc -b -v .",
     "compile-test": "npm run bin tsc -- --build",
+    "devts": "npm run compile && ts-node src/dev.ts",
     "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts'",
     "test": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
   },
@@ -20,6 +21,7 @@
     "@etimo-achievements/common": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "@slack/web-api": "^6.7.1",
+    "ioredis": "^5.2.4",
     "unleash-client": "^3.13.3",
     "winston": "^3.7.2"
   },
@@ -28,6 +30,7 @@
     "@types/uuid": "^8.3.1",
     "jest": "^28.0.0",
     "ts-jest": "^28.0.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.4.3"
   },
   "jest": {

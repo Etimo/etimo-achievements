@@ -35,14 +35,6 @@ const UserCreate: React.FC = () => {
           register={register('email', { required: true, maxLength: 255 })}
           error={errors.email}
         />
-        <FormTextInput
-          label="Slack Handle"
-          register={register('slackHandle', {
-            required: true,
-            maxLength: 255,
-          })}
-          error={errors.slackHandle}
-        />
         <FormSubmitButton label="Create" loading={loading} />
       </Form>
     </div>

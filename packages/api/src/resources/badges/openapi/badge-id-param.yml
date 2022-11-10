@@ -1,5 +1,5 @@
-x-template: &userIdParam
-  name: userId
+x-template: &badgeIdParam
+  name: badgeId
   in: path
   required: true
   schema:

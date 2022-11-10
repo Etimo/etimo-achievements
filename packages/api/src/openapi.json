@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "license": {
       "name": "Swagger spec",
-      "url": "/swagger.json"
+      "url": "openapi.json"
     },
     "contact": {
       "name": "Etimo AB",
@@ -88,6 +88,52 @@
           }
         }
       },
+      "NewAward": {
+        "title": "NewAward",
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "achievementId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "awardedByUserId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "userIds",
+          "achievementId"
+        ]
+      },
+      "NewBadgeAward": {
+        "title": "NewBadgeAward",
+        "type": "object",
+        "properties": {
+          "userIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          "badgeId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "userIds",
+          "badgeId"
+        ]
+      },
       "TokenInfo": {
         "title": "TokenInfo",
         "type": "object",
@@ -143,6 +189,28 @@
             "type": "number",
             "description": "The unix timestamp when the token was issued.",
             "example": 1647951123
+          }
+        }
+      },
+      "TokenRequest": {
+        "title": "TokenRequest",
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "enum": [
+              "client_credentials"
+            ]
+          },
+          "client_id": {
+            "type": "string",
+            "description": "The client id",
+            "example": "eb64a4dc-02fa-44dd-aa55-026160dcdc6b"
+          },
+          "client_secret": {
+            "type": "string",
+            "description": "The client secret",
+            "example": "2e7f1d2b-3ac8-45da-b18f-d12bd52b5f48"
           }
         }
       },
@@ -234,12 +302,47 @@
             "description": "Minutes until the this achievement becomes available again after awarding it",
             "example": 15,
             "default": 0
+          },
+          "selfAwardable": {
+            "type": "boolean",
+            "description": "Is it possible to give the achievement to yourself?",
+            "example": true,
+            "default": true
+          },
+          "globalCooldowns": {
+            "type": "boolean",
+            "description": "Is the cooldown for this achievement applied globally? I.e. the award cannot be given to anyone when the cooldown is still active",
+            "example": false,
+            "default": false
           }
         },
         "required": [
           "name",
           "description",
           "achievementPoints"
+        ]
+      },
+      "AchievementFavorite": {
+        "title": "AchievementFavorite",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "achievementId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "achievementId"
         ]
       },
       "Award": {
@@ -273,6 +376,64 @@
           "achievementId"
         ]
       },
+      "BadgeAward": {
+        "title": "BadgeAward",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "awardedByUserId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "badgeId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "userId",
+          "badgeId"
+        ]
+      },
+      "Badge": {
+        "title": "Badge",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the badge",
+            "maxLength": 255,
+            "example": "Åre 2022"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of when the badge should be awarded",
+            "maxLength": 255,
+            "example": "Åk med Etimo till Åre"
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ]
+      },
       "Highscore": {
         "title": "Highscore",
         "type": "object",
@@ -301,10 +462,25 @@
             "description": "How many kickback achievement points have been awarded to the user",
             "example": 1200
           },
+          "pointsPerAchievement": {
+            "type": "integer",
+            "description": "Total score divided by amount of achievements",
+            "example": 528
+          },
           "totalPoints": {
             "type": "integer",
             "description": "Total points",
             "example": 13200
+          },
+          "givenAchievements": {
+            "type": "integer",
+            "description": "How many achievements the user have given other users",
+            "example": 5
+          },
+          "kickbackPerAchievement": {
+            "type": "integer",
+            "description": "Total kickback divided by amount of achievements",
+            "example": 48
           }
         }
       },
@@ -336,12 +512,17 @@
             "type": "string",
             "description": "The role of the user",
             "example": "moderator"
+          },
+          "image": {
+            "type": "string",
+            "description": "The url to the user's image",
+            "example": "https://lh3.googleusercontent.com/a/AItbvmmjI2iBhkmtsdRhooDvMuW25VgaZGBA5avYuM9h",
+            "readOnly": true
           }
         },
         "required": [
           "name",
-          "email",
-          "slackHandle"
+          "email"
         ]
       }
     }
@@ -401,7 +582,10 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -506,7 +690,7 @@
                 "items": {
                   "type": "string",
                   "format": "uuid",
-                  "description": "ID of the desired resource."
+                  "description": "ID of the desired resources."
                 }
               }
             }
@@ -534,6 +718,135 @@
           },
           "404": {
             "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
+      }
+    },
+    "/achievements/favorites": {
+      "get": {
+        "summary": "Get user's favorite achievements",
+        "operationId": "getFavoriteAchievement",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
+      },
+      "post": {
+        "summary": "Add an achievement to your favorites",
+        "operationId": "createFavoriteAchievement",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AchievementFavorite"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Achievements"
+        ]
+      }
+    },
+    "/achievements/favorites/{achievementId}": {
+      "delete": {
+        "summary": "Remove an achievement from favorites",
+        "operationId": "removeFavoriteAchievement",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "achievementId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
           }
         },
         "tags": [
@@ -748,6 +1061,44 @@
         ]
       }
     },
+    "/auth/token": {
+      "post": {
+        "summary": "Get a token",
+        "operationId": "authToken",
+        "security": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authentication success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccessToken"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
     "/auth/callback/{provider}": {
       "get": {
         "summary": "Callback URL for OAuth2 code flow",
@@ -925,12 +1276,42 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
                 "type": "string"
               }
+            }
+          },
+          {
+            "name": "achievementId",
+            "in": "query",
+            "description": "Only return data with this achievementId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "awardedByUserId",
+            "in": "query",
+            "description": "Only return awards with this awardedByUserId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Only return data with the value of provided userId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -957,7 +1338,7 @@
         ]
       },
       "post": {
-        "summary": "Give a user an award",
+        "summary": "Give awards to users",
         "operationId": "createAward",
         "security": [
           {
@@ -969,7 +1350,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Award"
+                "$ref": "#/components/schemas/NewAward"
               }
             }
           }
@@ -980,13 +1361,11 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "description": "ID of the created resource."
-                    }
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "ID of the desired resources."
                   }
                 }
               }
@@ -1041,7 +1420,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Award"
+                  "$ref": "#/components/schemas/NewAward"
                 }
               }
             }
@@ -1092,6 +1471,528 @@
         },
         "tags": [
           "Awards"
+        ]
+      }
+    },
+    "/badge-awards": {
+      "post": {
+        "summary": "Give a user a badge",
+        "operationId": "createBadgeAward",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewBadgeAward"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetAwardById": {
+                "operationId": "getBadgeAward",
+                "parameters": {
+                  "userId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The user/badge could not be found."
+          }
+        },
+        "tags": [
+          "Badge Awards"
+        ]
+      },
+      "get": {
+        "summary": "Get a list of badge awards",
+        "operationId": "getBadgeAwards",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "description": "Only return data with the value of provided userId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "badgeId",
+            "in": "query",
+            "description": "Only return data with this badgeId",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BadgeAward"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badge Awards"
+        ]
+      }
+    },
+    "/badge-awards/{badgeAwardId}": {
+      "get": {
+        "summary": "Get a single badge award",
+        "operationId": "getBadgeAward",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "badgeAwardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BadgeAward"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Badge Awards"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a badge award",
+        "operationId": "deleteBadgeAward",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "badgeAwardId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badge Awards"
+        ]
+      }
+    },
+    "/badges": {
+      "post": {
+        "summary": "Create a badge",
+        "operationId": "createBadge",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Badge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The badge was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetAchievementById": {
+                "operationId": "getBadge",
+                "parameters": {
+                  "achievementId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badges"
+        ]
+      },
+      "get": {
+        "summary": "Get a list of badges",
+        "operationId": "getBadges",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Badge"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badges"
+        ]
+      }
+    },
+    "/badges/{badgeId}": {
+      "get": {
+        "summary": "Get a single badge",
+        "operationId": "getBadge",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "badgeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Badge"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Badges"
+        ]
+      },
+      "put": {
+        "summary": "Update a badge",
+        "operationId": "updateBadge",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "badgeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Badge"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badges"
+        ]
+      },
+      "delete": {
+        "summary": "Delete a badge",
+        "operationId": "deleteBadge",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "badgeId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Badges"
+        ]
+      }
+    },
+    "/badges/list": {
+      "post": {
+        "summary": "Get many badges by list of ids",
+        "operationId": "listBadges",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "ID of the desired resources."
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Badge"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Badges"
         ]
       }
     },
@@ -1156,7 +2057,10 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -1338,12 +2242,12 @@
         "summary": "Sync slack users with the database",
         "security": [
           {
-            "ApiKeyParameter": []
+            "jwtCookie": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Users was synced."
+            "description": "Users were synced."
           },
           "400": {
             "description": "The request was invalid and could/would not be processed."
@@ -1389,7 +2293,10 @@
           {
             "name": "orderBy",
             "in": "query",
-            "description": "The number of items to skip before starting to collect the result set (e.g. 'createdAt,desc').",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
             "schema": {
               "type": "array",
               "items": {
@@ -1491,7 +2398,7 @@
                 "items": {
                   "type": "string",
                   "format": "uuid",
-                  "description": "ID of the desired resource."
+                  "description": "ID of the desired resources."
                 }
               }
             }
@@ -1522,7 +2429,7 @@
           }
         },
         "tags": [
-          "Achievements"
+          "Users"
         ]
       }
     },
@@ -1616,7 +2523,7 @@
         ]
       },
       "delete": {
-        "summary": "Delete an user",
+        "summary": "Delete a user",
         "operationId": "deleteUser",
         "security": [
           {

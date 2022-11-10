@@ -1,8 +1,14 @@
 import { UnauthorizedError, uuid } from '@etimo-achievements/common';
 import {
   AccessTokenRepository,
+  AchievementFavoriteRepository,
   AchievementRepository,
   AwardRepository,
+  BadgeAwardRepository,
+  BadgeRepository,
+  ClientRepository,
+  Database,
+  getRepositories,
   RefreshTokenRepository,
   UserRepository,
 } from '@etimo-achievements/data';
@@ -18,6 +24,11 @@ type ContextOptions = {
   notifier?: INotifyService;
   feature?: IFeatureService;
 };
+
+type TransactionRepositories = {
+  commit: () => void;
+  rollback: () => void;
+} & IContext['repositories'];
 
 export class Context implements IContext {
   public logger: ILogger;
@@ -44,12 +55,25 @@ export class Context implements IContext {
   }
 
   private _repositories: IContext['repositories'] = {
-    accessToken: new AccessTokenRepository(this),
-    achievement: new AchievementRepository(this),
-    award: new AwardRepository(this),
-    refreshToken: new RefreshTokenRepository(this),
-    user: new UserRepository(this),
+    accessToken: new AccessTokenRepository(),
+    achievement: new AchievementRepository(),
+    award: new AwardRepository(),
+    refreshToken: new RefreshTokenRepository(),
+    user: new UserRepository(),
+    achievementFavorite: new AchievementFavoriteRepository(),
+    client: new ClientRepository(),
+    badge: new BadgeRepository(),
+    badgeAward: new BadgeAwardRepository(),
   };
+
+  public async transactionRepositories(): Promise<TransactionRepositories> {
+    const trx = await Database.transaction();
+    return {
+      ...getRepositories(trx),
+      commit: trx.commit,
+      rollback: trx.rollback,
+    };
+  }
 
   public get loggingContext() {
     if (getEnvVariable('LOG_CONTEXT') !== 'true') {

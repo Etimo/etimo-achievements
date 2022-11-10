@@ -24,10 +24,14 @@
  *           type: string
  *           description: The role of the user
  *           example: 'moderator'
+ *         image:
+ *           type: string
+ *           description: The url to the user's image
+ *           example: 'https://lh3.googleusercontent.com/a/AItbvmmjI2iBhkmtsdRhooDvMuW25VgaZGBA5avYuM9h'
+ *           readOnly: true
  *       required:
  *         - name
  *         - email
- *         - slackHandle
  */
 export interface UserDto {
   id: string;
@@ -35,4 +39,5 @@ export interface UserDto {
   email: string;
   slackHandle?: string;
   role: string;
+  image: string;
 }

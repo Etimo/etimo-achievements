@@ -1,62 +1,72 @@
-import { camelToSnakeCase } from '@etimo-achievements/common';
-import { IAward, INewAward, IRequestContext, PaginationOptions } from '@etimo-achievements/types';
+import { IAward } from '@etimo-achievements/types';
+import Knex from 'knex';
 import { Database } from '..';
 import { AwardModel } from '../models/award-model';
 import { catchErrors } from '../utils';
+import {
+  BaseRepository,
+  CountOptions,
+  CreateData,
+  DeleteOptions,
+  FindByIdOptions,
+  FindOptions,
+  UpdateOptions,
+} from './base-repository';
 
-export class AwardRepository {
-  constructor(private context: IRequestContext) {}
-
-  async count(): Promise<number> {
-    return catchErrors(async () => {
-      const result = await Database.knex.raw('select count(*) from "awards"');
-      return parseInt(result.rows[0]['count'], 10);
-    });
+export class AwardRepository extends BaseRepository<AwardModel> {
+  constructor(transaction?: Knex.Transaction) {
+    super(new AwardModel(), Database.knex, transaction);
   }
 
-  getAll(): Promise<IAward[]> {
+  public async findLatest(userId: string, achievementId: string): Promise<IAward | undefined> {
     return catchErrors(async () => {
-      return AwardModel.query().select();
-    });
-  }
-
-  getMany(options: PaginationOptions): Promise<IAward[]> {
-    return catchErrors(async () => {
-      const query = AwardModel.query().limit(options.take).offset(options.skip);
-      if (!options.orderBy.length) {
-        query.orderBy('created_at', 'desc');
-      }
-      for (const [key, order] of options.orderBy) {
-        query.orderBy(camelToSnakeCase(key), order);
-      }
-      return query;
-    });
-  }
-
-  findById(awardId: string): Promise<IAward> {
-    return catchErrors(async () => {
-      return AwardModel.query().findById(awardId);
-    });
-  }
-
-  findLatest(userId: string, achievementId: string): Promise<IAward | undefined> {
-    return catchErrors(async () => {
-      return AwardModel.query().orderBy('created_at', 'desc').findOne({
+      return this.model.query().orderBy('created_at', 'desc').findOne({
         user_id: userId,
         achievement_id: achievementId,
       });
     });
   }
 
-  create(award: INewAward): Promise<IAward> {
+  public async findLatestAnyUser(achievementId: string): Promise<IAward | undefined> {
     return catchErrors(async () => {
-      return AwardModel.query().insert(award);
+      return this.model.query().orderBy('created_at', 'desc').findOne({
+        achievement_id: achievementId,
+      });
     });
   }
 
-  delete(id: string): Promise<number> {
-    return catchErrors(async () => {
-      return AwardModel.query().deleteById(id);
+  public async count(options: CountOptions<AwardModel>): Promise<number> {
+    return super.$count(options);
+  }
+
+  public async find(options: FindOptions<AwardModel>): Promise<IAward[]> {
+    return super.$find({
+      ...options,
+      orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['created_at', 'desc']],
     });
+  }
+
+  public async findById(id: string): Promise<IAward> {
+    return super.$findById(id);
+  }
+
+  public async getAll(): Promise<IAward[]> {
+    return super.$getAll();
+  }
+
+  public async create(data: CreateData<AwardModel>): Promise<IAward> {
+    return super.$create(data);
+  }
+
+  public async delete(options: DeleteOptions<AwardModel>): Promise<number> {
+    return super.$delete(options);
+  }
+
+  public async findByIds(ids: string[], options: FindByIdOptions<AwardModel>): Promise<IAward[]> {
+    return super.$findByIds(ids, options);
+  }
+
+  public async update(data: Partial<AwardModel>, options?: UpdateOptions<AwardModel>): Promise<number> {
+    return super.$update(data, options);
   }
 }

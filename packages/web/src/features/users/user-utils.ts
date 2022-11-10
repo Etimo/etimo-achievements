@@ -1,4 +1,4 @@
-import { getProfile, getUser, getUsers } from '@etimo-achievements/common';
+import { getUser, getUsers } from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
 
@@ -29,15 +29,5 @@ export const getSingleUser = async (id: string) => {
     return data;
   } else {
     toast.error('Could not fetch user: ' + (await response.errorMessage));
-  }
-};
-
-export const getMyUser = async () => {
-  const response = await getProfile();
-  if (response.success) {
-    const data = await response.data();
-    return data;
-  } else {
-    toast.error('Could not fetch profile: ' + (await response.errorMessage));
   }
 };

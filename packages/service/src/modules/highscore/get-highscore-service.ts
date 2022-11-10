@@ -11,6 +11,10 @@ const MAXIMUM_KICKBACK_POINTS = 50;
 export class GetHighscoreService {
   constructor(private context: IContext) {}
 
+  public getKickback(pts: number) {
+    return Math.floor(Math.min(KICKBACK * pts, MAXIMUM_KICKBACK_POINTS));
+  }
+
   public async get(options: PaginationOptions): Promise<PaginatedData<IHighscore>> {
     const { repositories } = this.context;
     const { skip, take } = options;
@@ -18,14 +22,15 @@ export class GetHighscoreService {
     const awards = await repositories.award.getAll();
 
     const userIds = uniq([...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)]);
-    const users = await repositories.user.getManyByIds(userIds);
+    const users = await repositories.user.findByIds(userIds, {});
 
     const achievementIds = uniq(awards.map((a) => a.achievementId));
-    const achievements = await repositories.achievement.getManyByIds(achievementIds);
+    const achievements = await repositories.achievement.findByIds(achievementIds, {});
 
     const highscores: IHighscore[] = [];
     for (const user of users) {
       const userAwards = awards.filter((a) => a.userId === user.id);
+      const givenAwards = awards.filter((a) => a.awardedByUserId === user.id);
       const userAchievements = userAwards.map((a) =>
         achievements.find((achievement) => achievement.id === a.achievementId)
       );
@@ -42,16 +47,21 @@ export class GetHighscoreService {
 
       if (userAchievements.length || givenAchievements.length) {
         const points = userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0;
-        const kickback = givenAchievements.reduce(
-          (sum, a) => sum + Math.min((a?.achievementPoints ?? 0) * KICKBACK, MAXIMUM_KICKBACK_POINTS),
-          0
-        );
+        const kickback = givenAchievements.reduce((sum, a) => sum + this.getKickback(a?.achievementPoints ?? 0), 0);
+
+        const totalPoints = kickback + points;
+        const pointsPerAchievement = totalPoints / (userAchievements.length || 1);
+        const kickbackPerAchievement = kickback / (givenAwards.length || 1);
+
         const userHighscore: IHighscore = {
           userId: user.id,
           achievements: userAchievements.length,
           points,
           kickback,
-          totalPoints: kickback + points,
+          pointsPerAchievement,
+          totalPoints,
+          givenAchievements: givenAwards.length,
+          kickbackPerAchievement,
         };
         highscores.push(userHighscore);
       }

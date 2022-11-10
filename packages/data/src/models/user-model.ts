@@ -21,6 +21,7 @@ export class UserModel extends BaseModel implements IUser {
         createdAt: { type: 'timestamp' },
         updatedAt: { type: 'timestamp' },
         role: { type: 'string' },
+        image: { type: 'string', maxLength: 255 },
       },
     };
   }
@@ -37,4 +38,5 @@ export class UserModel extends BaseModel implements IUser {
   createdAt!: Date;
   updatedAt!: Date;
   role!: string;
+  image!: string;
 }

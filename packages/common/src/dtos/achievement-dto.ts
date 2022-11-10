@@ -27,6 +27,16 @@
  *           description: Minutes until the this achievement becomes available again after awarding it
  *           example: 15
  *           default: 0
+ *         selfAwardable:
+ *           type: boolean
+ *           description: Is it possible to give the achievement to yourself?
+ *           example: true
+ *           default: true
+ *         globalCooldowns:
+ *           type: boolean
+ *           description: Is the cooldown for this achievement applied globally? I.e. the award cannot be given to anyone when the cooldown is still active
+ *           example: false
+ *           default: false
  *       required:
  *         - name
  *         - description
@@ -38,4 +48,6 @@ export interface AchievementDto {
   description: string;
   achievementPoints: number;
   cooldownMinutes: number;
+  selfAwardable: boolean;
+  globalCooldowns: boolean;
 }

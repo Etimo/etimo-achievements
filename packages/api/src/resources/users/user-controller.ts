@@ -1,4 +1,10 @@
-import { CreateUserService, DeleteUserService, GetUserService, UpdateUserService } from '@etimo-achievements/service';
+import {
+  CreateUserService,
+  DeleteUserService,
+  GetUserService,
+  SyncSlackUsersService,
+  UpdateUserService,
+} from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import {
   badRequestResponse,
@@ -57,7 +63,7 @@ export class UserController {
      *       401: *unauthorizedResponse
      *       404: *notFoundResponse
      *     tags:
-     *       - Achievements
+     *       - Users
      */
     router.post('/users/list', protectedEndpoint(this.listUsers, ['r:users']));
 
@@ -172,7 +178,7 @@ export class UserController {
      * @openapi
      * /users/{userId}:
      *   delete:
-     *     summary: Delete an user
+     *     summary: Delete a user
      *     operationId: deleteUser
      *     security:
      *       - jwtCookie: []
@@ -240,6 +246,10 @@ export class UserController {
     const service = new CreateUserService(getContext());
     const input = UserMapper.toUser(payload);
     const user = await service.create(input);
+    const slackService = new SyncSlackUsersService(getContext());
+    try {
+      await slackService.syncUser(user.email);
+    } catch (err) {} // Do not crash if fail, we can sync later
 
     return createdResponse(res, '/users', user);
   };
@@ -251,6 +261,10 @@ export class UserController {
     const service = new UpdateUserService(getContext());
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
+    const slackService = new SyncSlackUsersService(getContext());
+    try {
+      await slackService.syncUser(payload.email);
+    } catch (err) {} // Do not crash if fail, we can sync later
 
     return noContentResponse(res);
   };
@@ -262,6 +276,10 @@ export class UserController {
     const service = new UpdateUserService(getContext());
     const input = UserMapper.toUser({ ...payload, id: userId });
     await service.update(input);
+    const slackService = new SyncSlackUsersService(getContext());
+    try {
+      await slackService.syncUser(payload.email);
+    } catch (err) {} // Do not crash if fail, we can sync later
 
     return noContentResponse(res);
   };

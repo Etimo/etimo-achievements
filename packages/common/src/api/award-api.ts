@@ -1,4 +1,5 @@
-import { AwardDto } from '..';
+import { isEmpty } from 'lodash';
+import { AwardDto, NewAwardDto } from '..';
 import Api from './api';
 import AuthorizedApi from './authorized-api';
 
@@ -9,13 +10,24 @@ export const getAward = (id: string) => {
   return authorizedApi.get<AwardDto>(`/awards/${id}`);
 };
 
-export const getAwards = (skip: number = 0, take: number = 50, sort?: string, order?: string) => {
+export const getAwards = (
+  skip: number = 0,
+  take: number = 50,
+  sort?: string,
+  order?: string,
+  filters?: Record<string, any>
+) => {
   let url = `/awards?skip=${skip}&take=${take}`;
   if (sort) url += `&orderBy=${sort}~${order ?? 'asc'}`;
+  if (!isEmpty(filters)) {
+    url += Object.entries(filters!)
+      .map(([key, value]) => `&${key}=${value}`)
+      .join('');
+  }
   return authorizedApi.get<AwardDto[]>(url);
 };
 
-export const createAward = (award: AwardDto) => {
+export const createAward = (award: NewAwardDto) => {
   return api.post<{ awardId: string }>('/awards', award);
 };
 

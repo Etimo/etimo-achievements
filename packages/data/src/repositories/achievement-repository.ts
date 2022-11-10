@@ -1,71 +1,51 @@
-import { camelToSnakeCase } from '@etimo-achievements/common';
-import {
-  IAchievement,
-  INewAchievement,
-  IPartialAchievement,
-  IRequestContext,
-  PaginationOptions,
-} from '@etimo-achievements/types';
+import { IAchievement } from '@etimo-achievements/types';
+import Knex from 'knex';
 import { Database } from '..';
 import { AchievementModel } from '../models/achievement-model';
-import { catchErrors } from '../utils';
+import {
+  BaseRepository,
+  CountOptions,
+  CreateData,
+  DeleteOptions,
+  FindByIdOptions,
+  FindOptions,
+  UpdateOptions,
+} from './base-repository';
 
-export class AchievementRepository {
-  constructor(private context: IRequestContext) {}
-
-  async count(): Promise<number> {
-    return catchErrors(async () => {
-      const result = await Database.knex.raw('select count(*) from achievements');
-      return parseInt(result.rows[0]['count'], 10);
-    });
+export class AchievementRepository extends BaseRepository<AchievementModel> {
+  constructor(transaction?: Knex.Transaction) {
+    super(new AchievementModel(), Database.knex, transaction);
   }
 
-  getAll(): Promise<IAchievement[]> {
-    return catchErrors(async () => {
-      return AchievementModel.query();
-    });
+  public async count(options: CountOptions<AchievementModel>): Promise<number> {
+    return super.$count(options);
   }
 
-  getMany(options: PaginationOptions): Promise<IAchievement[]> {
-    return catchErrors(async () => {
-      const query = AchievementModel.query().limit(options.take).offset(options.skip);
-      if (!options.orderBy.length) {
-        query.orderBy('name', 'asc');
-      }
-      for (const [key, order] of options.orderBy) {
-        query.orderBy(camelToSnakeCase(key), order);
-      }
-      return query;
-    });
+  public async find(options: FindOptions<AchievementModel>): Promise<IAchievement[]> {
+    return super.$find({ ...options, orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['name', 'asc']] });
   }
 
-  getManyByIds(ids: string[]): Promise<IAchievement[]> {
-    return catchErrors(async () => {
-      return AchievementModel.query().whereIn('id', ids);
-    });
+  public async findById(id: string): Promise<IAchievement> {
+    return super.$findById(id);
   }
 
-  findById(id: string): Promise<IAchievement | undefined> {
-    return catchErrors(async () => {
-      return AchievementModel.query().findById(id);
-    });
+  public async getAll(): Promise<IAchievement[]> {
+    return super.$getAll();
   }
 
-  create(achievement: INewAchievement): Promise<IAchievement> {
-    return catchErrors(async () => {
-      return AchievementModel.query().insert(achievement);
-    });
+  public async create(data: CreateData<AchievementModel>): Promise<IAchievement> {
+    return super.$create(data);
   }
 
-  update(achievement: IPartialAchievement): Promise<IAchievement> {
-    return catchErrors(async () => {
-      return AchievementModel.query().patchAndFetchById(achievement.id, achievement);
-    });
+  public async delete(options: DeleteOptions<AchievementModel>): Promise<number> {
+    return super.$delete(options);
   }
 
-  delete(id: string): Promise<number> {
-    return catchErrors(async () => {
-      return AchievementModel.query().deleteById(id);
-    });
+  public async findByIds(ids: string[], options: FindByIdOptions<AchievementModel>): Promise<IAchievement[]> {
+    return super.$findByIds(ids, options);
+  }
+
+  public async update(data: Partial<AchievementModel>, options?: UpdateOptions<AchievementModel>): Promise<number> {
+    return super.$update(data, options);
   }
 }

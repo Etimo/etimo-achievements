@@ -11,10 +11,10 @@
     "build": "npm run clean && npm run compile",
     "clean": "node ../../scripts/remove-path.js --recursive dist tsconfig.build.tsbuildinfo",
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
-    "compile": "npm run bin tsc -- --project tsconfig.build.json",
+    "compile": "tsc -b -v .",
     "compile-test": "npm run bin tsc -- --build",
     "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",
-    "test": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
+    "test": "npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",

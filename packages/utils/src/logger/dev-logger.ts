@@ -3,7 +3,7 @@ import { ILogger, IRequestContext, LoggerOptions, LoggingColor } from '@etimo-ac
 import { ContextLogger } from './context-logger';
 
 export class DevLogger extends ContextLogger implements ILogger {
-  constructor(private context: IRequestContext) {
+  constructor(private context?: IRequestContext) {
     super();
   }
 
@@ -34,7 +34,7 @@ export class DevLogger extends ContextLogger implements ILogger {
     options?: LoggerOptions
   ) {
     const output = this.getMessage(message, { color: defaultColor, ...options });
-    const meta = JSON.stringify({ ...options?.extras, ...this.context.loggingContext, ...this.meta });
+    const meta = JSON.stringify({ ...options?.extras, ...(this.context?.loggingContext ?? {}), ...this.meta });
     if (meta !== '{}') {
       logFn(output, meta);
     } else {

@@ -61,6 +61,8 @@ spec:
               value: '${API_PORT}'
             - name: SLACK_TOKEN
               value: '${SLACK_TOKEN}'
+            - name: SLACK_TEAM_ID
+              value: '${SLACK_TEAM_ID}'
             - name: SLACK_CHANNEL_HIGH
               value: '${SLACK_CHANNEL_HIGH}'
             - name: SLACK_CHANNEL_MEDIUM

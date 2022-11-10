@@ -8,6 +8,8 @@ import {
   faChevronUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@mantine/core';
+import { isEqual } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderRow, TableRow } from '.';
@@ -18,12 +20,13 @@ import { queryParam, replaceQueryParam } from '../../common/utils/query-helper';
 import PaginationButton from './PaginationButton';
 
 export type Column = {
-  title: string;
+  title: string | React.ReactNode;
   accessor: string;
   sortKey?: string;
   className?: string;
   hidden?: boolean;
   hasAccess?: [Action, Resource];
+  tooltip?: string | React.ReactNode;
 };
 
 export type PaginationRequestInput = {
@@ -31,15 +34,28 @@ export type PaginationRequestInput = {
   page: number;
   sort?: string;
   order?: string;
+  filters?: Record<string, any>;
+};
+
+export type PaginatedTableDataEntry<T> = {
+  value: T;
+  /** Text to render when hover on cell */
+  tooltip?: string;
+};
+
+export type PaginatedTableData = {
+  [key: string]: PaginatedTableDataEntry<any>;
 };
 
 type Props = {
   columns: Column[];
-  data: any[];
+  data: PaginatedTableData[];
   loading: boolean;
   pageCount: number;
   fetchData: any;
   monitor?: any;
+  filters?: Record<string, any>;
+  noDataText?: string;
 };
 
 const PaginatedTable: React.FC<Props> = ({
@@ -50,6 +66,8 @@ const PaginatedTable: React.FC<Props> = ({
   fetchData,
   monitor,
   children,
+  filters,
+  noDataText,
   ...rest
 }) => {
   const navigate = useNavigate();
@@ -57,7 +75,11 @@ const PaginatedTable: React.FC<Props> = ({
   const hasAccess = useHasAccess();
   const location = useLocation();
   const removeQueryParam = useRemoveQueryParam();
-  const [pagination, setPagination] = useState([1, 10, '']);
+  const [pagination, setPagination] = useState<[number, number, string, string?, string?, Record<string, any>?]>([
+    1,
+    10,
+    '',
+  ]);
   const [canNavigateBack, setCanNavigateBack] = useState(false);
   const [canNavigateForward, setCanNavigateForward] = useState(true);
 
@@ -69,16 +91,23 @@ const PaginatedTable: React.FC<Props> = ({
   const setOrder = (order: string) => navigate(replaceQueryParam(window.location, 'order', order));
 
   useEffect(() => {
-    const [oldPage, oldSize, oldSort, oldOrder, oldMonitor] = pagination;
+    const [oldPage, oldSize, oldSort, oldOrder, oldMonitor, oldFilters] = pagination;
     const page = getPage();
     const size = getSize();
     const sort = getSort();
     const order = getOrder();
-    if (page !== oldPage || size !== oldSize || sort !== oldSort || order !== oldOrder || monitor !== oldMonitor) {
-      fetchData({ page, size, sort, order });
-      setPagination([page, size, sort, order, monitor]);
+    if (
+      page !== oldPage ||
+      size !== oldSize ||
+      sort !== oldSort ||
+      order !== oldOrder ||
+      monitor !== oldMonitor ||
+      !isEqual(filters, oldFilters)
+    ) {
+      fetchData({ page, size, sort, order, filters });
+      setPagination([page, size, sort, order, monitor, filters]);
     }
-  }, [location, monitor]);
+  }, [location, monitor, filters]);
 
   useEffect(() => {
     const page = getPage();
@@ -94,7 +123,7 @@ const PaginatedTable: React.FC<Props> = ({
   };
 
   return (
-    <div>
+    <div className="w-full">
       <Table {...rest}>
         <TableHead>
           <TableHeaderRow>
@@ -120,15 +149,19 @@ const PaginatedTable: React.FC<Props> = ({
                     }}
                     key={uuid()}
                   >
-                    <span>{column.title}</span>
-                    <span>
-                      {getSort() === column.sortKey &&
-                        (getOrder() === 'asc' ? (
-                          <FontAwesomeIcon icon={faChevronUp} className="ml-2 text-slate-100" />
-                        ) : (
-                          <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
-                        ))}
-                    </span>
+                    <Tooltip label={column.tooltip} disabled={!column.tooltip}>
+                      <span>
+                        <span>{column.title}</span>
+                        <span>
+                          {getSort() === column.sortKey &&
+                            (getOrder() === 'asc' ? (
+                              <FontAwesomeIcon icon={faChevronUp} className="ml-2 text-slate-100" />
+                            ) : (
+                              <FontAwesomeIcon icon={faChevronDown} className="ml-2 text-slate-100" />
+                            ))}
+                        </span>
+                      </span>
+                    </Tooltip>
                   </TableHeader>
                 )
             )}
@@ -160,8 +193,8 @@ const PaginatedTable: React.FC<Props> = ({
                       .filter((c) => !c.hidden && userHasAccess(c))
                       .map((column) => {
                         return (
-                          <TableCell key={uuid()} className={column.className}>
-                            {row[column.accessor]}
+                          <TableCell key={uuid()} className={column.className} tooltip={row[column.accessor].tooltip}>
+                            {row[column.accessor].value}
                           </TableCell>
                         );
                       })}
@@ -170,6 +203,9 @@ const PaginatedTable: React.FC<Props> = ({
               })}
         </TableBody>
       </Table>
+      {!loading && data.length === 0 && (
+        <div className="w-full text-center p-3 bg-slate-300">{noDataText ?? 'No data'}</div>
+      )}
       <div className="m-2 float-left">
         <PaginationButton
           icon={faAnglesLeft}
@@ -196,11 +232,13 @@ const PaginatedTable: React.FC<Props> = ({
           title="Go to last page"
         />
       </div>
-      <div className="float-right m-2">
-        <span className="text-slate-800">
-          {getPage()} of {pageCount}
-        </span>
-      </div>
+      {pageCount !== 0 && (
+        <div className="float-right m-2">
+          <span className="text-slate-800">
+            {getPage()} of {pageCount}
+          </span>
+        </div>
+      )}
     </div>
   );
 };

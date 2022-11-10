@@ -2,7 +2,7 @@ import { AchievementDto, createAchievement } from '@etimo-achievements/common';
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { toastResponse } from '../../common/utils/toast-response';
-import { Form, FormSubmitButton, FormTextInput } from '../../components/form';
+import { Form, FormCheckbox, FormSubmitButton, FormTextInput } from '../../components/form';
 import Header from '../../components/Header';
 
 const AchievementCreate: React.FC = () => {
@@ -45,11 +45,26 @@ const AchievementCreate: React.FC = () => {
         />
         <FormTextInput
           label="Cooldown minutes"
+          sublabel="Giving a user this achievement puts it on a cooldown"
           register={register('cooldownMinutes', {
             required: true,
             valueAsNumber: true,
           })}
           error={errors.cooldownMinutes}
+        />
+        <FormCheckbox
+          label="Global cooldown"
+          sublabel="The cooldown is applied globally: no other user can receive this achievement while the cooldown is active"
+          defaultValue={false}
+          register={register('globalCooldowns')}
+          error={errors.globalCooldowns}
+        />
+        <FormCheckbox
+          label="Self awardable"
+          sublabel="You cannot give this achievement to yourself"
+          defaultValue={true}
+          register={register('selfAwardable')}
+          error={errors.selfAwardable}
         />
         <FormSubmitButton label="Create" loading={loading} />
       </Form>

@@ -9,6 +9,7 @@ export class UserMapper {
       email: user.email,
       slackHandle: user.slackHandle,
       role: user.role,
+      image: user.image,
     };
   }
 
@@ -19,6 +20,7 @@ export class UserMapper {
       email: userDto.email,
       slackHandle: userDto.slackHandle,
       role: userDto.role,
+      image: userDto.image,
     };
   }
 

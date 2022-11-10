@@ -1,37 +1,34 @@
-import { IAccessToken, INewAccessToken, IPartialAccessToken, IRequestContext } from '@etimo-achievements/types';
+import { IAccessToken } from '@etimo-achievements/types';
+import Knex from 'knex';
+import { Database } from '..';
 import { AccessTokenModel } from '../models/access-token-model';
 import { catchErrors } from '../utils';
+import { BaseRepository, CreateData, DeleteOptions, UpdateOptions } from './base-repository';
 
-export class AccessTokenRepository {
-  constructor(private context: IRequestContext) {}
+export class AccessTokenRepository extends BaseRepository<AccessTokenModel> {
+  constructor(transaction?: Knex.Transaction) {
+    super(new AccessTokenModel(), Database.knex, transaction);
+  }
 
-  findById(id: string): Promise<IAccessToken | undefined> {
+  public async deleteInvalid(): Promise<number> {
     return catchErrors(async () => {
-      return AccessTokenModel.query().findById(id);
+      return this.model.query(this.trx).where('expires_at', '<', new Date()).orWhere('disabled', true).delete();
     });
   }
 
-  create(accessToken: INewAccessToken): Promise<IAccessToken> {
-    return catchErrors(async () => {
-      return AccessTokenModel.query().insert(accessToken);
-    });
+  public async findById(id: string): Promise<IAccessToken> {
+    return super.$findById(id);
   }
 
-  update(accessToken: IPartialAccessToken): Promise<IAccessToken> {
-    return catchErrors(async () => {
-      return AccessTokenModel.query().patchAndFetchById(accessToken.id, accessToken);
-    });
+  public async create(data: CreateData<AccessTokenModel>): Promise<IAccessToken> {
+    return super.$create(data);
   }
 
-  delete(id: string): Promise<number> {
-    return catchErrors(async () => {
-      return AccessTokenModel.query().deleteById(id);
-    });
+  public async delete(options: DeleteOptions<AccessTokenModel>): Promise<number> {
+    return super.$delete(options);
   }
 
-  deleteInvalid(): Promise<number> {
-    return catchErrors(async () => {
-      return AccessTokenModel.query().where('expires_at', '<', new Date()).orWhere('disabled', true).delete();
-    });
+  public async update(data: Partial<AccessTokenModel>, options?: UpdateOptions<AccessTokenModel>): Promise<number> {
+    return super.$update(data, options);
   }
 }

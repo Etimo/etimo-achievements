@@ -1,4 +1,5 @@
 import { PaginationOptions } from '@etimo-achievements/types';
+import { isEmpty } from 'lodash';
 import { PaginatedData } from '.';
 
 export function paginate<T>(data: T[], count: number, options: PaginationOptions): PaginatedData<T> {
@@ -27,8 +28,14 @@ export function paginate<T>(data: T[], count: number, options: PaginationOptions
 }
 
 function generateLink(options: PaginationOptions) {
-  const { skip, take, orderBy } = options;
+  const { skip, take, orderBy, where } = options;
   let link = `?skip=${skip}&take=${take}`;
+
+  if (!isEmpty(where)) {
+    link += Object.entries(where!)
+      .map(([key, value]) => `&${key}=${value}`)
+      .join('');
+  }
 
   // Add order by params
   for (const order of orderBy) {

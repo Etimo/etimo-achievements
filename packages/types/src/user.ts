@@ -4,6 +4,7 @@ export interface IUser {
   email: string;
   slackHandle?: string;
   role: string;
+  image: string;
 }
 
 export type Role = 'user' | 'moderator' | 'admin';

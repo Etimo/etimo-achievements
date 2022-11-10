@@ -1,0 +1,4 @@
+x-template: &createBadgeAwardContent
+  application/json:
+    schema:
+      $ref: '#/components/schemas/NewBadgeAward'

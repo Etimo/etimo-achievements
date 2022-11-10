@@ -1,8 +1,8 @@
 import { OAuthServiceFactory } from '@etimo-achievements/security';
 import { Role } from '@etimo-achievements/types';
-import { CreateUserService } from '..';
+import { CreateUserService, SyncSlackUsersService, UpdateUserService } from '..';
 import { IContext } from '../..';
-import { CreateTokenService } from './create-token-service';
+import { CreateUserTokenService } from './create-user-token-service';
 import { roleToScope } from './roles';
 import { LoginResponse } from './types/login-response';
 
@@ -18,8 +18,13 @@ export class LoginService {
     const oauthService = OAuthServiceFactory.create(this.provider);
     const userInfo = await oauthService.getUserInfo(code);
 
+    const image = userInfo.picture.split('=')[0]; // remove the sizing options at the end of the url
+
     // Check if user exists in our store
     let user = await repositories.user.findByEmail(userInfo.email);
+    // Get slack handle
+    const slackHandle =
+      user?.slackHandle ?? (await new SyncSlackUsersService(this.context).getUserSlackHandle(userInfo.email));
 
     // If user doesn't exist, create it
     if (!user) {
@@ -29,12 +34,19 @@ export class LoginService {
         name: userInfo.name,
         email: userInfo.email,
         role: 'user',
+        slackHandle,
+        image,
       });
+    } else {
+      // Update user's profile image
+      logger.debug(`Updating ${user.email}'s profile picture.`);
+      if (!user.slackHandle) user.slackHandle = slackHandle; // If user.slackHandle is null, updating below will fail
+      await new UpdateUserService(this.context).update({ ...user, image });
     }
 
     const scopes = roleToScope(user.role as Role);
 
-    const createTokenService = new CreateTokenService(this.context);
-    return createTokenService.create(user, scopes);
+    const createUserTokenService = new CreateUserTokenService(this.context);
+    return createUserTokenService.create(user, scopes);
   }
 }
