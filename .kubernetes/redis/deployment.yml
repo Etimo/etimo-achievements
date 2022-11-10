@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-deployment
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+        - name: achievements-redis
+          image: redis:6.2
+          resources:
+            requests:
+              cpu: '25m'
+              memory: '32Mi'
+            limits:
+              cpu: '100m'
+              memory: '64Mi'
+          volumeMounts:
+            - mountPath: /redis-master-data
+              name: data
+            - mountPath: /redis-master
+              name: config
+          ports:
+            - containerPort: 6379
+              protocol: TCP
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: redis-config
+            items:
+              - key: redis-config
+                path: redis.conf

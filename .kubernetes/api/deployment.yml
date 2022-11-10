@@ -59,6 +59,8 @@ spec:
               value: '${NODE_ENV}'
             - name: PORT
               value: '${API_PORT}'
+            - name: REDIS_URL
+              value: '${REDIS_URL}'
             - name: SLACK_TOKEN
               value: '${SLACK_TOKEN}'
             - name: SLACK_TEAM_ID
