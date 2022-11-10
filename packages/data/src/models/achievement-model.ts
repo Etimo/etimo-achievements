@@ -22,6 +22,7 @@ export class AchievementModel extends BaseModel implements IAchievement {
         createdAt: { type: 'timestamp' },
         updatedAt: { type: 'timestamp' },
         selfAwardable: { type: 'boolean' },
+        globalCooldowns: { type: 'boolean' },
       },
     };
   }
@@ -39,4 +40,5 @@ export class AchievementModel extends BaseModel implements IAchievement {
   createdAt!: Date;
   updatedAt!: Date;
   selfAwardable!: boolean;
+  globalCooldowns!: boolean;
 }

@@ -27,6 +27,14 @@ export class AwardRepository extends BaseRepository<AwardModel> {
     });
   }
 
+  public async findLatestAnyUser(achievementId: string): Promise<IAward | undefined> {
+    return catchErrors(async () => {
+      return this.model.query().orderBy('created_at', 'desc').findOne({
+        achievement_id: achievementId,
+      });
+    });
+  }
+
   public async count(options: CountOptions<AwardModel>): Promise<number> {
     return super.$count(options);
   }

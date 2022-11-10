@@ -4,14 +4,15 @@ import CardRow from '../cards/CardRow';
 
 type Props = {
   label: string;
+  sublabel?: string;
   defaultValue?: any;
   register: UseFormRegisterReturn;
   error: FieldError | undefined;
 };
 
-const FormTextInput: React.FC<Props> = ({ defaultValue, label, register, error }) => {
+const FormTextInput: React.FC<Props> = ({ defaultValue, label, sublabel, register, error }) => {
   return (
-    <CardRow label={label}>
+    <CardRow label={label} sublabel={sublabel}>
       <input
         {...register}
         defaultValue={defaultValue}
