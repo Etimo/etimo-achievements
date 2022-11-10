@@ -61,7 +61,7 @@ export class Context implements IContext {
     refreshToken: new RefreshTokenRepository(),
     user: new UserRepository(),
     achievementFavorite: new AchievementFavoriteRepository(),
-    client: new ClientRepository(this),
+    client: new ClientRepository(),
     badge: new BadgeRepository(),
     badgeAward: new BadgeAwardRepository(),
   };

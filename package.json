@@ -8,7 +8,7 @@
   "scripts": {
     "bin": "node ../../scripts/run-module-bin.js",
     "bootstrap": "npm run update && husky install && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
-    "build": "npm run script build",
+    "build": "tsc -b -v packages/api packages/web",
     "clean": "npm run script clean",
     "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
     "compile": "npm run script compile",
