@@ -1,5 +1,5 @@
 export type LoggerOptions = {
-  extras?: any[];
+  extras?: any;
   color?: LoggingColor;
   timestamp?: boolean;
 };

@@ -1,5 +1,11 @@
 version: '3.7'
 
+networks:
+  achievements:
+  postgres:
+  unleash:
+  redis:
+
 volumes:
   db-data:
     name: achievements-db
@@ -11,15 +17,23 @@ services:
     env_file: ../../packages/api/.env
     environment:
       - DB_MAIN_PRIVATE_HOST=postgres
+      - REDIS_URL=redis://redis:6379/0
     ports:
       - 3000:3000
     user: 1000:1000
+    networks:
+      - achievements
+      - postgres
+      - unleash
+      - redis
 
   web:
     container_name: achievements-web
     env_file: ../../packages/web/.env
     ports:
       - 3001:3001
+    networks:
+      - achievements
 
   postgres:
     image: postgres:latest
@@ -31,6 +45,8 @@ services:
       - 5432:5432
     labels:
       - 'com.etimo-achievements.postgres'
+    networks:
+      - postgres
 
   pgadmin:
     image: dpage/pgadmin4:latest
@@ -39,6 +55,8 @@ services:
     ports:
       - 8011:80
     depends_on:
+      - postgres
+    networks:
       - postgres
 
   unleash:
@@ -58,3 +76,14 @@ services:
       - 4242:4242
     depends_on:
       - postgres
+    networks:
+      - unleash
+      - postgres
+
+  redis:
+    image: redis:6.2
+    container_name: achievements-redis
+    ports:
+      - 6379:6379
+    networks:
+      - redis
