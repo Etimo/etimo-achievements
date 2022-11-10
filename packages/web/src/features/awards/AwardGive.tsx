@@ -1,12 +1,15 @@
 import { AchievementDto, AwardDto, sort, UserDto } from '@etimo-achievements/common';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
+import { useAppSelector } from '../../app/store';
 import { toastResponse } from '../../common/utils/toast-response';
 import { FavoriteButtonWithTooltip as FavoriteButton } from '../../components/buttons/FavoriteButton';
+import { CardRow } from '../../components/cards';
 import { Form, FormSelectRow, FormSubmitButton } from '../../components/form';
 import Header from '../../components/Header';
 import useFavoriteAchievement from '../../hooks/use-favorite-achievement';
+import { userIdSelector } from '../auth/auth-slice';
 import { getAllUsers } from '../users/user-utils';
 import { getAllAchievementsSortedByMostUsed, giveAward } from './award-utils';
 
@@ -18,6 +21,7 @@ const AwardGive: React.FC = () => {
   const [achievements, setAchievements] = useState<AchievementDto[]>();
   const [achievementId, setAchievementId] = useState<string>();
   const { favorites, toggleFavorite } = useFavoriteAchievement(achievements ?? []);
+  const authenticatedUserId = useAppSelector(userIdSelector);
 
   useEffect(() => {
     getAllAchievementsSortedByMostUsed().then(setAchievements);
@@ -40,6 +44,8 @@ const AwardGive: React.FC = () => {
     toastResponse(response, 'Award given successfully', 'Award could not be given', () => resetForm());
   };
 
+  const isSelfAwardable = achievements?.find((a) => a.id === achievementId)?.selfAwardable == false;
+
   const options = useMemo(() => {
     return [
       ...(favorites ?? []).map((f) => ({
@@ -58,6 +64,21 @@ const AwardGive: React.FC = () => {
         })),
     ];
   }, [favorites, achievements]);
+
+  const formatUsers = useCallback((users: UserDto[]) => {
+    return sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name, image: a.image }));
+  }, []);
+
+  const userOptions = useMemo(() => {
+    const _users = users ?? [];
+
+    if (isSelfAwardable) {
+      // Remove yourself from list
+      return formatUsers(_users.filter((x) => x.id !== authenticatedUserId));
+    }
+
+    return formatUsers(_users);
+  }, [users, achievementId, achievements, authenticatedUserId]);
 
   return (
     <div className="w-1/3 mx-auto">
@@ -84,12 +105,17 @@ const AwardGive: React.FC = () => {
         <FormSelectRow
           label="User"
           placeholder="Select a user"
-          options={sort(users ?? [], 'name').map((a) => ({ value: a.id, label: a.name, image: a.image }))}
+          options={userOptions}
           value={userId}
           onChange={(value) => setUserId(value)}
           type="singleline-image"
           nothingFound="No users"
         />
+        {isSelfAwardable && (
+          <CardRow>
+            <span className="text-slate-500">This achievement cannot be awarded to yourself.</span>
+          </CardRow>
+        )}
         <FormSubmitButton label="Give" loading={loading} />
       </Form>
     </div>

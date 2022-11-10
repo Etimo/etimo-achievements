@@ -4,6 +4,7 @@ export interface IAchievement {
   description: string;
   achievementPoints: number;
   cooldownMinutes: number;
+  selfAwardable: boolean;
 }
 
 export type INewAchievement = Omit<IAchievement, 'id'>;

@@ -37,6 +37,10 @@ export class GiveAwardService {
       throw new BadRequestError('Awarded user or awarded by user does not exist');
     }
 
+    if (!achievement.selfAwardable && awardedTo.id === awardedBy.id) {
+      throw new BadRequestError('This achievement cannot be given to yourself.');
+    }
+
     const highscoreService = new GetHighscoreService(this.context);
     const kickback = highscoreService.getKickback(achievement.achievementPoints);
 
