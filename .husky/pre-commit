@@ -13,17 +13,17 @@ title() {
   echo "$hash_str"
 }
 
-title "Package references"
-npm run generate-references
+#title "Package references"
+#npm run generate-references
 
-title "Jest config"
-npm run generate-jest
+#title "Jest config"
+#npm run generate-jest
 
-title "OpenAPI"
-npm run generate-openapi
+#title "OpenAPI"
+#npm run generate-openapi
 
-title "Tests"
-npm run test
+#title "Tests"
+#npm run test
 
-title "Linting"
-npx lint-staged
+#title "Linting"
+#npx lint-staged
