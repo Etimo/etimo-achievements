@@ -145,6 +145,14 @@ jobs:
           target: production
           tag: latest
 
+      - name: Build & push worker image
+        uses: ./.github/actions/docker-build-push
+        with:
+          dockerfile: worker
+          image-name: niclaslindstedt/etimo-achievements-worker
+          target: production
+          tag: latest
+
       - name: Verify database migrations
         uses: ./.github/actions/verify-migrations
         with:
@@ -158,7 +166,7 @@ jobs:
           kubeconfig: ${{ env.KUBECONFIG }}
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ignore-path: .kubernetes/.init
-          wait: api-deployment,web-deployment
+          wait: api-deployment,web-deployment,worker-deployment
 
       - name: Verify application version
         uses: ./.github/actions/verify-version
@@ -179,6 +187,14 @@ jobs:
           from-image-name: niclaslindstedt/etimo-achievements-web
           from-tag: ${{ steps.info.outputs.current-commit }}
           to-image-name: niclaslindstedt/etimo-achievements-web
+          to-tag: staging
+
+      - name: Promote worker image
+        uses: ./.github/actions/docker-promote
+        with:
+          from-image-name: niclaslindstedt/etimo-achievements-worker
+          from-tag: ${{ steps.info.outputs.current-commit }}
+          to-image-name: niclaslindstedt/etimo-achievements-worker
           to-tag: staging
 
       - name: Promote migrate image

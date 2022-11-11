@@ -1,11 +1,18 @@
 import { sleep } from '@etimo-achievements/common';
-
-console.log('worker');
+import fs from 'fs';
 
 async function main() {
+  verifyStarted();
+
   while (true) {
-    await sleep(1000);
+    console.log('Sleeping...');
+    await sleep(5000);
   }
+}
+
+async function verifyStarted() {
+  fs.writeFileSync('/tmp/healthy', '1');
+  console.log('Worker initialized');
 }
 
 main();

@@ -6,3 +6,6 @@ services:
 
   web:
     image: ghcr.io/etimo/etimo-achievements/web:latest
+
+  worker:
+    image: ghcr.io/etimo/etimo-achievements/worker:latest

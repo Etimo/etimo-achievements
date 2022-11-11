@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-deployment
+  labels:
+    app: worker
+    app.kubernetes.io/name: achievements-worker
+    app.kubernetes.io/instance: achievements-worker-${DATE}-${TAG}
+    app.kubernetes.io/version: '${TAG}'
+    app.kubernetes.io/component: worker
+    app.kubernetes.io/part-of: achievements
+  annotations:
+    kubernetes.io/change-cause: 'release ${RELEASE}'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - name: achievements-worker
+          image: niclaslindstedt/etimo-achievements-worker:${COMMIT_SHA}
+          resources:
+            requests:
+              cpu: '50m'
+              memory: '64Mi'
+            limits:
+              cpu: '200m'
+              memory: '128Mi'
+          envFrom:
+            - secretRef:
+                name: provisioned-secrets
+            - configMapRef:
+                name: provisioned-config
+          env:
+            - name: NODE_ENV
+              value: '${NODE_ENV}'
+            - name: REDIS_URL
+              value: '${REDIS_URL}'
+            - name: SLACK_TOKEN
+              value: '${SLACK_TOKEN}'
+            - name: SLACK_TEAM_ID
+              value: '${SLACK_TEAM_ID}'
+            - name: SLACK_CHANNEL_HIGH
+              value: '${SLACK_CHANNEL_HIGH}'
+            - name: SLACK_CHANNEL_MEDIUM
+              value: '${SLACK_CHANNEL_MEDIUM}'
+            - name: SLACK_CHANNEL_LOW
+              value: '${SLACK_CHANNEL_LOW}'
+            - name: UNLEASH_URL
+              value: '${UNLEASH_URL}'
+          livenessProbe:
+            exec:
+              command:
+                - cat
+                - /tmp/healthy
+            initialDelaySeconds: 5
+            periodSeconds: 5
