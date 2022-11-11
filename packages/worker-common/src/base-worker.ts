@@ -1,6 +1,6 @@
-import { IContext } from '@etimo-achievements/service';
 import { getDefaultRedisClient } from '@etimo-achievements/utils';
 import { Job, JobsOptions, Queue, QueueOptions, Worker, WorkerOptions } from 'bullmq';
+import { IWorkerContext } from './context';
 
 export type IWorker<TType, TData> = {
   name: string;
@@ -57,7 +57,7 @@ export abstract class BaseWorker<TData> {
     return this;
   }
 
-  public getWorker(context?: IContext): IWorker<this, TData> {
+  public getWorker(context?: IWorkerContext): IWorker<this, TData> {
     const queueOptions: QueueOptions = { connection: getDefaultRedisClient(), ...this.options.queueOptions };
     const queue = new Queue(this.options.name, queueOptions);
 
@@ -68,7 +68,7 @@ export abstract class BaseWorker<TData> {
       push: (data: TData) => {
         console.log(`Enqueuing job to worker ${this.options.name}`);
 
-        queue.add(this.options.name, { data: data });
+        queue.add(this.options.name, { context, data: data });
       },
     };
   }

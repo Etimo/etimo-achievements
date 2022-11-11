@@ -2,6 +2,6 @@
   "watch": ["packages/**"],
   "ext": "ts,json,yml",
   "ignore": ["packages/web", "**/dist/**", "**/build/**", "**/*.spec.ts", "**/openapi.json", "**.tsconfig.*"],
-  "exec": "node ./scripts/build-apps.js",
+  "exec": "npm run build",
   "verbose": true
 }

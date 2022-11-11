@@ -12,21 +12,10 @@ export function getDefaultRedisClient(logger: RedisLogger = console.log): IORedi
 export function getRedisClient(url: string, logger: RedisLogger): IORedis {
   const redis = getRedisConnection(url);
 
-  redis.on('connect', () => {
-    logger('Connected to Redis');
-  });
-
-  redis.on('error', (error) => {
-    logger('Redis error', error);
-  });
-
-  redis.on('reconnecting', (ms: number) => {
-    logger(`Reconnecting to Redis in ${ms} ms`);
-  });
-
-  redis.on('close', () => {
-    logger('Disconnected from Redis');
-  });
+  redis.on('connect', () => logger('Connected to Redis'));
+  redis.on('error', (error) => logger('Redis error', error));
+  redis.on('reconnecting', (ms: number) => logger(`Reconnecting to Redis in ${ms} ms`));
+  redis.on('close', () => logger('Disconnected from Redis'));
 
   return redis;
 }
