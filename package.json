@@ -8,7 +8,7 @@
   "scripts": {
     "bin": "node ../../scripts/run-module-bin.js",
     "bootstrap": "npm run update && husky install && npm run env && npm run build && npm run docker-rebuild && npm run db-reset-force",
-    "build": "tsc -b -v packages/api packages/web",
+    "build": "tsc -b -v packages/api packages/web packages/worker",
     "clean": "npm run script clean",
     "clear": "npm run script clear && node ./scripts/remove-path.js --recursive node_modules",
     "compile": "npm run script compile",
@@ -49,9 +49,10 @@
     "start": "npm run dc up -- -d --build && npm run dc logs -- --tail 100 -f",
     "start-api": "cd packages/api && npm run dev",
     "start-fresh": "yarn install && npm run build && npm run generate && npm run docker-rebuild && npm run db-reset-force && npm run start",
-    "start-host": "npm run dc stop api web nodemon redis && concurrently \"npm run start-api\" \"npm run start-web\" \"nodemon\"",
+    "start-host": "npm run dc stop api web nodemon redis && concurrently \"npm run start-api\" \"npm run start-worker\" \"npm run start-web\" \"nodemon\"",
     "start-prod": "npm run dc-prod up -- -d --remove-orphans",
     "start-web": "cd packages/web && npm run dev",
+    "start-worker": "cd packages/worker && npm run dev",
     "support": "npm run db && npm run unleash && npm run nodemon && npm run redis",
     "test": "npm run script test",
     "test-integration": "npm run script test-integration",
@@ -80,6 +81,7 @@
     "spacetime": "^6.16.3",
     "syncpack": "^6.2.0",
     "ts-jest": "^28.0.2",
+    "ts-node": "^10.9.1",
     "typescript": "^4.5.5"
   },
   "lint-staged": {

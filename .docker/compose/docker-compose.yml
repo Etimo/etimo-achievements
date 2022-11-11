@@ -35,6 +35,19 @@ services:
     networks:
       - achievements
 
+  worker:
+    container_name: achievements-worker
+    env_file: ../../packages/worker/.env
+    environment:
+      - DB_MAIN_PRIVATE_HOST=postgres
+      - REDIS_URL=redis://redis:6379/0
+    user: 1000:1000
+    networks:
+      - achievements
+      - postgres
+      - unleash
+      - redis
+
   postgres:
     image: postgres:latest
     container_name: achievements-pg

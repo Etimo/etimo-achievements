@@ -14,7 +14,8 @@
       "@etimo-achievements/service/*": ["service/src/*"],
       "@etimo-achievements/types/*": ["types/src/*"],
       "@etimo-achievements/utils/*": ["utils/src/*"],
-      "@etimo-achievements/web/*": ["web/src/*"]
+      "@etimo-achievements/web/*": ["web/src/*"],
+      "@etimo-achievements/worker/*": ["worker/src/*"]
     }
   },
   "extends": "@tsconfig/node14/tsconfig.json"

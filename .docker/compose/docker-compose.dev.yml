@@ -22,6 +22,16 @@ services:
       - ../../packages:/app/packages
     user: 1000:1000
 
+  worker:
+    build:
+      dockerfile: .docker/dockerfiles/worker
+      context: ../..
+      target: develop
+    labels:
+      - 'com.etimo-achievements.monitored'
+    volumes:
+      - ../../packages:/app/packages
+
   nodemon:
     build:
       dockerfile: .docker/dockerfiles/nodemon

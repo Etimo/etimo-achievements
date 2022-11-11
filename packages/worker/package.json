@@ -1,9 +1,9 @@
 {
-  "name": "@etimo-achievements/types",
+  "name": "@etimo-achievements/worker",
   "version": "1.0.0",
-  "description": "Common types used in Etimo Achievements",
+  "description": "Etimo Achievements Worker",
   "author": "Etimo AB",
-  "license": "ISC",
+  "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
@@ -13,13 +13,31 @@
     "clear": "npm run clean && node ../../scripts/remove-path.js --recursive node_modules",
     "compile": "tsc -b -v .",
     "compile-test": "npm run bin tsc -- --build",
-    "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts' --detectOpenHandles",
-    "test": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
+    "dev": "nodemon",
+    "start": "npm run bin ts-node -- src/index.ts",
+    "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts'",
+    "test": "npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
+  },
+  "dependencies": {
+    "@etimo-achievements/common": "^1.0.0",
+    "@etimo-achievements/security": "^1.0.0",
+    "@etimo-achievements/service": "^1.0.0",
+    "@etimo-achievements/types": "^1.0.0",
+    "@etimo-achievements/utils": "^1.0.0",
+    "dotenv": "^10.0.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@types/dotenv": "^8.2.0",
     "@types/jest": "^27.0.2",
+    "@types/node": "^16.10.2",
+    "babel-jest": "^27.3.1",
     "jest": "^28.0.0",
+    "nodemon": "^2.0.13",
     "ts-jest": "^28.0.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.4.3"
   },
   "jest": {

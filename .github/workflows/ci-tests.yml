@@ -21,8 +21,8 @@ defaults:
     shell: bash
 
 jobs:
-  build:
-    name: 'Build images'
+  build-base:
+    name: 'Build base image'
     runs-on: ubuntu-latest
 
     steps:
@@ -48,25 +48,35 @@ jobs:
           target: base
           tag: latest
 
-      - name: Build api image
-        uses: ./.github/actions/docker-build-push
-        with:
-          dockerfile: api
-          image-name: etimo-achievements/api-ci
-          push: false
+jobs:
+  build-images:
+    name: 'Build app images'
+    runs-on: ubuntu-latest
+    needs: build-base
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [ api, web, worker, migrate ]
 
-      - name: Build web image
-        uses: ./.github/actions/docker-build-push
-        with:
-          dockerfile: web
-          image-name: etimo-achievements/web-ci
-          push: false
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - name: Build migrate image
+      - name: Login to GitHub registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io/etimo
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GH_PACKAGES_TOKEN }}
+
+      - name: Setup cache
+        uses: ./.github/actions/setup-cache
+
+      - name: Build ${{ matrix.app }} image
         uses: ./.github/actions/docker-build-push
         with:
-          dockerfile: migrate
-          image-name: etimo-achievements/migrate-ci
+          dockerfile: ${{ matrix.app }}
+          image-name: etimo-achievements/${{ matrix.app }}-ci
           push: false
 
   test:
