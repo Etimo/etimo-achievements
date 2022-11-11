@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import { getWorkers } from '@etimo-achievements/worker-common';
 import fs from 'fs';
 

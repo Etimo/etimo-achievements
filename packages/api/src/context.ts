@@ -1,18 +1,6 @@
 import { UnauthorizedError, uuid } from '@etimo-achievements/common';
-import {
-  AccessTokenRepository,
-  AchievementFavoriteRepository,
-  AchievementRepository,
-  AwardRepository,
-  BadgeAwardRepository,
-  BadgeRepository,
-  ClientRepository,
-  Database,
-  getRepositories,
-  RefreshTokenRepository,
-  UserRepository,
-} from '@etimo-achievements/data';
-import { IContext } from '@etimo-achievements/service';
+import { getRepositories, getTransactionRepositories, Repositories } from '@etimo-achievements/data';
+import { IContext, TransactionRepositories } from '@etimo-achievements/service';
 import { IFeatureService, ILogger, INotifyService, JWT } from '@etimo-achievements/types';
 import { DevLogger, FeatureServiceFactory, getEnvVariable, NotifyServiceFactory } from '@etimo-achievements/utils';
 import { getWorkers, Workers } from '@etimo-achievements/worker-common';
@@ -25,11 +13,6 @@ type ContextOptions = {
   notifier?: INotifyService;
   feature?: IFeatureService;
 };
-
-type TransactionRepositories = {
-  commit: () => void;
-  rollback: () => void;
-} & IContext['repositories'];
 
 export type IApiContext = IContext & {
   workers: Workers;
@@ -61,25 +44,12 @@ export class Context implements IApiContext {
     count++;
   }
 
-  private _repositories: IContext['repositories'] = {
-    accessToken: new AccessTokenRepository(),
-    achievement: new AchievementRepository(),
-    award: new AwardRepository(),
-    refreshToken: new RefreshTokenRepository(),
-    user: new UserRepository(),
-    achievementFavorite: new AchievementFavoriteRepository(),
-    client: new ClientRepository(),
-    badge: new BadgeRepository(),
-    badgeAward: new BadgeAwardRepository(),
-  };
+  public get repositories(): Repositories {
+    return getRepositories();
+  }
 
   public async transactionRepositories(): Promise<TransactionRepositories> {
-    const trx = await Database.transaction();
-    return {
-      ...getRepositories(trx),
-      commit: trx.commit,
-      rollback: trx.rollback,
-    };
+    return getTransactionRepositories();
   }
 
   public get loggingContext() {
@@ -133,10 +103,6 @@ export class Context implements IApiContext {
 
   public setLogger(logger: ILogger) {
     this.logger = logger;
-  }
-
-  public get repositories() {
-    return this._repositories;
   }
 
   public get userId() {

@@ -167,6 +167,7 @@ jobs:
           namespace: ${{ env.KUBERNETES_NAMESPACE }}
           ignore-path: .kubernetes/.init
           wait: api-deployment,web-deployment,worker-deployment
+          debug: true
 
       - name: Verify application version
         uses: ./.github/actions/verify-version

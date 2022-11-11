@@ -1,10 +1,8 @@
 import { IFeatureService, ILogger, INotifyService, JWT } from '.';
 
-export type IRequestContext = {
-  jwt?: JWT;
-  logger: ILogger;
-  notifier: INotifyService;
+export type IRequestContext = IServiceContext & {
   feature: IFeatureService;
+  jwt?: JWT;
   loggingContext: any;
   refreshTokenId?: string;
   refreshTokenKey?: string;
@@ -16,4 +14,9 @@ export type IRequestContext = {
   shortRequestId: string;
   timestamp: string;
   userId: string;
+};
+
+export type IServiceContext = {
+  logger: ILogger;
+  notifier: INotifyService;
 };

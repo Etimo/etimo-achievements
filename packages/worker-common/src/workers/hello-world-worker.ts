@@ -5,11 +5,16 @@ export type HelloWorldWorkerData = {
 };
 
 export class HelloWorldWorker extends BaseWorker<HelloWorldWorkerData> {
-  constructor() {
+  constructor({}) {
     super({ name: 'hello-world' });
   }
 
   protected override async processor(payload: WorkerPayload<HelloWorldWorkerData>): Promise<any> {
+    const { context } = payload;
+
+    const users = await context.repositories.user.getAll();
+
     console.log(`Hello ${payload.data.name}!`);
+    console.log(`Users: ${users.length}}!`);
   }
 }

@@ -7,4 +7,3 @@ export * from './badge-repository';
 export * from './client-repository';
 export * from './refresh-token-repository';
 export * from './user-repository';
-export * from './util-repositories';

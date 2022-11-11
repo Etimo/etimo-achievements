@@ -1,4 +1,4 @@
-import { INotifyService, IRequestContext, NotifyPriority, NotifyServiceOptions } from '@etimo-achievements/types';
+import { INotifyService, IServiceContext, NotifyPriority, NotifyServiceOptions } from '@etimo-achievements/types';
 import { Block, KnownBlock, WebClient } from '@slack/web-api';
 import { getEnvVariable } from '..';
 
@@ -8,7 +8,7 @@ export class SlackNotifyService implements INotifyService {
   private readonly channelMedium: string;
   private readonly channelLow: string;
 
-  constructor(_context: IRequestContext) {
+  constructor(_context: IServiceContext) {
     this.client = new WebClient(getEnvVariable('SLACK_TOKEN'));
     this.channelHigh = getEnvVariable('SLACK_CHANNEL_HIGH');
     this.channelMedium = getEnvVariable('SLACK_CHANNEL_MEDIUM');
