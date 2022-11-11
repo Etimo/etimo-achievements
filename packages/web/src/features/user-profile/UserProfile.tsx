@@ -1,4 +1,5 @@
 import { UserDto, uuid } from '@etimo-achievements/common';
+import { ROLES } from '@etimo-achievements/types';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useAppSelector } from '../../app/store';
@@ -7,6 +8,7 @@ import { addQueryParam, queryParam } from '../../common/utils/query-helper';
 import NotFound from '../../components/404/NotFound';
 import Avatar from '../../components/Avatar';
 import AwardListComponent from '../../components/AwardList/AwardList';
+import RoleBadge from '../../components/Badge';
 import { EditButton } from '../../components/buttons';
 import { Card } from '../../components/cards';
 import Header from '../../components/Header';
@@ -55,8 +57,11 @@ const UserProfile = () => {
           <div className="flex items-center">
             <Avatar src={user?.image} size={100} />
             <div className="flex flex-col mx-5">
-              <Header className="pb-0">{user?.name}</Header>
+              <Header className="pb-0 flex flex-row">{user?.name}</Header>
               <div className="text-center">{user?.email}</div>
+              <div className="flex flex-row">
+                {user.role !== ROLES.user.key && <RoleBadge text={ROLES[user.role].name} role={user.role} />}
+              </div>
             </div>
           </div>
         </div>

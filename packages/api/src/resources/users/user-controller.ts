@@ -1,6 +1,7 @@
 import {
   CreateUserService,
   DeleteUserService,
+  GetRoleService,
   GetUserService,
   SyncSlackUsersService,
   UpdateUserService,
@@ -66,6 +67,24 @@ export class UserController {
      *       - Users
      */
     router.post('/users/list', protectedEndpoint(this.listUsers, ['r:users']));
+
+    /**
+     * @openapi
+     * /users/roles:
+     *   get:
+     *     summary: Get all roles
+     *     operationId: getRoles
+     *     security:
+     *       - jwtCookie: []
+     *     responses:
+     *       200:
+     *         description: The request was successful.
+     *         content: *rolesContent
+     *     tags:
+     *       - Users
+     */
+    // This has to be above GET /users/:userId, otherwise "roles" will be interpreted as an url param
+    router.get('/users/roles', protectedEndpoint(this.getRoles, ['r:users']));
 
     /**
      * @openapi
@@ -291,5 +310,12 @@ export class UserController {
     await service.delete(userId);
 
     return okResponse(res);
+  };
+
+  private getRoles = async (req: Request, res: Response) => {
+    const service = new GetRoleService(getContext());
+    const roles = await service.getAll();
+
+    return okResponse(res, roles);
   };
 }

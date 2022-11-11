@@ -1,7 +1,7 @@
 import { Role } from '@etimo-achievements/types';
 
 type Action = ('c' | 'r' | 'u' | 'd')[];
-type Resource = 'achievements' | 'awards' | 'users' | 'profile' | 'highscore' | 'feature';
+type Resource = 'achievements' | 'awards' | 'users' | 'profile' | 'highscore' | 'feature' | 'badges' | 'badge-awards';
 type RolePermissions = Partial<Record<Resource, Action>>;
 type Scopes = string[];
 
@@ -18,6 +18,8 @@ const basePermissions: RolePermissions = {
   profile: ['r', 'u'],
   highscore: ['r'],
   feature: ['r'],
+  badges: ['r'],
+  'badge-awards': ['c', 'r', 'u'],
 };
 
 export const userRole: Scopes = createRole(basePermissions);
@@ -25,6 +27,7 @@ export const userRole: Scopes = createRole(basePermissions);
 export const moderatorRole: Scopes = createRole({
   ...basePermissions,
   achievements: ['c', 'r', 'u'],
+  badges: ['c', 'r', 'u'],
 });
 
 export const adminRole: Scopes = createRole({
@@ -34,6 +37,8 @@ export const adminRole: Scopes = createRole({
   profile: ['c', 'r', 'u', 'd'],
   highscore: ['c', 'r', 'u', 'd'],
   feature: ['c', 'r', 'u', 'd'],
+  badges: ['c', 'r', 'u', 'd'],
+  'badge-awards': ['c', 'r', 'u', 'd'],
 });
 
 export const roleToScope = (key: Role) => {

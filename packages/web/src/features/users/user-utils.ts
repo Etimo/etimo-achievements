@@ -1,4 +1,4 @@
-import { getUser, getUsers } from '@etimo-achievements/common';
+import { getAllRoles, getUser, getUsers } from '@etimo-achievements/common';
 import toast from 'react-hot-toast';
 import { PaginationRequestInput } from '../../components/table/PaginatedTable';
 
@@ -29,5 +29,15 @@ export const getSingleUser = async (id: string) => {
     return data;
   } else {
     toast.error('Could not fetch user: ' + (await response.errorMessage));
+  }
+};
+
+export const getRoles = async () => {
+  const response = await getAllRoles();
+  if (response.success) {
+    const data = await response.data();
+    return data;
+  } else {
+    toast.error('Could not fetch roles: ' + (await response.errorMessage));
   }
 };

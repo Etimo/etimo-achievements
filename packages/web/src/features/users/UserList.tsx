@@ -1,8 +1,10 @@
-import { UserDto, uuid } from '@etimo-achievements/common';
-import React, { useState } from 'react';
+import { RoleDto, UserDto, uuid } from '@etimo-achievements/common';
+import { ROLES } from '@etimo-achievements/types';
+import React, { useEffect, useState } from 'react';
 import useQuery from '../../common/hooks/use-query';
 import useRemoveQueryParam from '../../common/hooks/use-remove-query-param';
 import { addQueryParam } from '../../common/utils/query-helper';
+import RoleBadge from '../../components/Badge';
 import { EditButton, TrashButton } from '../../components/buttons';
 import Header from '../../components/Header';
 import { NameAvatarUserCell } from '../../components/table';
@@ -12,7 +14,7 @@ import PaginatedTable, {
   PaginatedTableDataEntry,
   PaginationRequestInput,
 } from '../../components/table/PaginatedTable';
-import { getManyUsers } from './user-utils';
+import { getManyUsers, getRoles } from './user-utils';
 import UserDeleteModal from './UserDeleteModal';
 import UserEditModal from './UserEditModal';
 
@@ -20,6 +22,7 @@ interface UserData extends PaginatedTableData {
   name: PaginatedTableDataEntry<string>;
   email: PaginatedTableDataEntry<string>;
   slackHandle: PaginatedTableDataEntry<string>;
+  role: PaginatedTableDataEntry<string>;
   edit: PaginatedTableDataEntry<React.ReactNode>;
   delete: PaginatedTableDataEntry<React.ReactNode>;
 }
@@ -32,9 +35,14 @@ const UserList: React.FC = () => {
   const [data, setData] = React.useState<UserData[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [monitor, setMonitor] = useState(uuid());
+  const [roles, setRoles] = useState<RoleDto[]>();
 
   const getEditId = () => query.get('edit') ?? '';
   const getDeleteId = () => query.get('delete') ?? '';
+
+  useEffect(() => {
+    getRoles().then(setRoles);
+  }, []);
 
   const fetchData = async (input: PaginationRequestInput) => {
     setLoading(true);
@@ -57,6 +65,9 @@ const UserList: React.FC = () => {
       },
       slackHandle: {
         value: u.slackHandle!,
+      },
+      role: {
+        value: <RoleBadge text={ROLES[u.role].name} role={u.role} />,
       },
       edit: {
         value: <EditButton id={u.id} link={addQueryParam(window.location, 'edit', u.id)} />,
@@ -85,6 +96,11 @@ const UserList: React.FC = () => {
         accessor: 'slackHandle',
         sortKey: 'slackHandle',
         className: 'w-40',
+      },
+      {
+        title: 'Role',
+        accessor: 'role',
+        className: 'w-8',
       },
       {
         title: 'Edit',
@@ -118,6 +134,7 @@ const UserList: React.FC = () => {
           userId={getEditId()}
           onClose={() => removeQueryParam('edit')}
           onSubmit={() => setMonitor(uuid())}
+          roles={roles ?? []}
         />
       )}
       {getDeleteId() && (

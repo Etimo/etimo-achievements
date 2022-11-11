@@ -5,6 +5,11 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.alterTable('users', (table) => {
     table.string('role').defaultTo('user');
   });
+
+  await knex('users')
+    .where({ email: 'axel.elmarsson@etimo.se' })
+    .orWhere({ email: 'niclas.lindstedt@etimo.se' })
+    .update({ role: 'admin' });
 }
 
 export async function down(knex: Knex): Promise<void> {

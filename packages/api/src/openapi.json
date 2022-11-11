@@ -134,6 +134,23 @@
           "badgeId"
         ]
       },
+      "Role": {
+        "title": "Role",
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "example": "user"
+          },
+          "name": {
+            "type": "string",
+            "example": "User"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
       "TokenInfo": {
         "title": "TokenInfo",
         "type": "object",
@@ -2426,6 +2443,35 @@
           },
           "404": {
             "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/users/roles": {
+      "get": {
+        "summary": "Get all roles",
+        "operationId": "getRoles",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
           }
         },
         "tags": [
