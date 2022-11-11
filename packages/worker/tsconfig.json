@@ -1,0 +1,27 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "resolveJsonModule": true
+  },
+  "references": [
+    {
+      "path": "../common"
+    },
+    {
+      "path": "../security"
+    },
+    {
+      "path": "../service"
+    },
+    {
+      "path": "../types"
+    },
+    {
+      "path": "../utils"
+    }
+  ],
+  "include": ["./src"]
+}

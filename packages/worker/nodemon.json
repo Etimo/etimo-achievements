@@ -1,0 +1,6 @@
+{
+  "watch": ["dist/*"],
+  "ext": "ts,map,js,json",
+  "delay": 1000,
+  "exec": "node dist/index.js"
+}
