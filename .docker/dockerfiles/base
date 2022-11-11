@@ -30,6 +30,7 @@ COPY --chown=1000:1000 packages/types/package.json packages/types/package.json
 COPY --chown=1000:1000 packages/utils/package.json packages/utils/package.json
 COPY --chown=1000:1000 packages/web/package.json packages/web/package.json
 COPY --chown=1000:1000 packages/worker/package.json packages/worker/package.json
+COPY --chown=1000:1000 packages/worker-common/package.json packages/worker-common/package.json
 
 # Install node_modules
 RUN yarn install --immutable

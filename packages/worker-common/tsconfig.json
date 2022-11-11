@@ -8,7 +8,19 @@
   },
   "references": [
     {
-      "path": "../worker-common"
+      "path": "../common"
+    },
+    {
+      "path": "../security"
+    },
+    {
+      "path": "../service"
+    },
+    {
+      "path": "../types"
+    },
+    {
+      "path": "../utils"
     }
   ],
   "include": ["./src"]

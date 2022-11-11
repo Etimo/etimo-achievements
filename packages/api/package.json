@@ -25,6 +25,7 @@
     "@etimo-achievements/service": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "@etimo-achievements/utils": "^1.0.0",
+    "@etimo-achievements/worker-common": "^1.0.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -78,7 +79,8 @@
       "^@etimo\\-achievements/types/(.*)$": "<rootDir>/types/src/$1",
       "^@etimo\\-achievements/utils/(.*)$": "<rootDir>/utils/src/$1",
       "^@etimo\\-achievements/web/(.*)$": "<rootDir>/web/src/$1",
-      "^@etimo\\-achievements/worker/(.*)$": "<rootDir>/worker/src/$1"
+      "^@etimo\\-achievements/worker/(.*)$": "<rootDir>/worker/src/$1",
+      "^@etimo\\-achievements/worker\\-common/(.*)$": "<rootDir>/worker-common/src/$1"
     },
     "modulePathIgnorePatterns": [
       "d.ts$"

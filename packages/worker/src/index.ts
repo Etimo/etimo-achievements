@@ -1,15 +1,10 @@
-import { sleep } from '@etimo-achievements/common';
+import { getWorkers } from '@etimo-achievements/worker-common';
 import fs from 'fs';
-import { getWorkers } from './worker-setup';
 
 async function setup() {
   const workers = getWorkers();
 
   workers.helloWorld.init();
-
-  await sleep(5000);
-
-  workers.helloWorld.push({ name: 'bla' });
 }
 
 async function main() {

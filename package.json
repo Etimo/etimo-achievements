@@ -49,7 +49,7 @@
     "start": "npm run dc up -- -d --build && npm run dc logs -- --tail 100 -f",
     "start-api": "cd packages/api && npm run dev",
     "start-fresh": "yarn install && npm run build && npm run generate && npm run docker-rebuild && npm run db-reset-force && npm run start",
-    "start-host": "npm run dc stop api web nodemon redis && concurrently \"npm run start-api\" \"npm run start-worker\" \"npm run start-web\" \"nodemon\"",
+    "start-host": "npm run dc stop api web nodemon && concurrently \"npm run start-api\" \"npm run start-worker\" \"npm run start-web\" \"nodemon\"",
     "start-prod": "npm run dc-prod up -- -d --remove-orphans",
     "start-web": "cd packages/web && npm run dev",
     "start-worker": "cd packages/worker && npm run dev",

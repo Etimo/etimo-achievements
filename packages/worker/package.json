@@ -19,12 +19,7 @@
     "test": "npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
-    "@etimo-achievements/common": "^1.0.0",
-    "@etimo-achievements/security": "^1.0.0",
-    "@etimo-achievements/service": "^1.0.0",
-    "@etimo-achievements/types": "^1.0.0",
-    "@etimo-achievements/utils": "^1.0.0",
-    "bullmq": "^3.2.0",
+    "@etimo-achievements/worker-common": "^1.0.0",
     "dotenv": "^10.0.0"
   },
   "devDependencies": {
@@ -60,7 +55,8 @@
       "^@etimo\\-achievements/types/(.*)$": "<rootDir>/types/src/$1",
       "^@etimo\\-achievements/utils/(.*)$": "<rootDir>/utils/src/$1",
       "^@etimo\\-achievements/web/(.*)$": "<rootDir>/web/src/$1",
-      "^@etimo\\-achievements/worker/(.*)$": "<rootDir>/worker/src/$1"
+      "^@etimo\\-achievements/worker/(.*)$": "<rootDir>/worker/src/$1",
+      "^@etimo\\-achievements/worker\\-common/(.*)$": "<rootDir>/worker-common/src/$1"
     },
     "modulePathIgnorePatterns": [
       "d.ts$"

@@ -41,7 +41,8 @@
       "^@etimo\\-achievements/types/(.*)$": "<rootDir>/types/src/$1",
       "^@etimo\\-achievements/utils/(.*)$": "<rootDir>/utils/src/$1",
       "^@etimo\\-achievements/web/(.*)$": "<rootDir>/web/src/$1",
-      "^@etimo\\-achievements/worker/(.*)$": "<rootDir>/worker/src/$1"
+      "^@etimo\\-achievements/worker/(.*)$": "<rootDir>/worker/src/$1",
+      "^@etimo\\-achievements/worker\\-common/(.*)$": "<rootDir>/worker-common/src/$1"
     },
     "modulePathIgnorePatterns": [
       "d.ts$"

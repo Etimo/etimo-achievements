@@ -21,6 +21,9 @@
     },
     {
       "path": "../utils"
+    },
+    {
+      "path": "../worker-common"
     }
   ],
   "include": ["./src", "./src/**/version.json", "./src/openapi.json"]

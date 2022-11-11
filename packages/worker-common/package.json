@@ -1,7 +1,7 @@
 {
-  "name": "@etimo-achievements/security",
+  "name": "@etimo-achievements/worker-common",
   "version": "1.0.0",
-  "description": "Security-related functions",
+  "description": "Etimo Achievements Worker Common Library",
   "author": "Etimo AB",
   "license": "MIT",
   "main": "dist/index.js",
@@ -14,30 +14,26 @@
     "compile": "tsc -b -v .",
     "compile-test": "npm run bin tsc -- --build",
     "test-integration": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.spec.ts'",
-    "test": "exit 0; npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
+    "test": "npm run bin jest -- --testMatch '**/src/**/*.test.ts'"
   },
   "dependencies": {
     "@etimo-achievements/common": "^1.0.0",
+    "@etimo-achievements/security": "^1.0.0",
+    "@etimo-achievements/service": "^1.0.0",
     "@etimo-achievements/types": "^1.0.0",
     "@etimo-achievements/utils": "^1.0.0",
-    "bcrypt": "^5.0.1",
-    "crypto-js": "^4.1.1",
-    "google-auth-library": "^7.14.0",
-    "jsonwebtoken": "^8.5.1",
-    "node-fetch": "^2.6.5",
-    "secure-random-password": "^0.2.3"
+    "bullmq": "^3.2.0"
   },
   "devDependencies": {
-    "@types/bcrypt": "^5.0.0",
-    "@types/crypto-js": "^4.1.1",
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
     "@types/jest": "^27.0.2",
-    "@types/jsonwebtoken": "^8.5.8",
     "@types/node": "^16.10.2",
-    "@types/node-fetch": "^2.5.12",
-    "@types/secure-random-password": "^0.2.1",
+    "babel-jest": "^27.3.1",
     "jest": "^28.0.0",
     "ts-jest": "^28.0.0",
-    "ts-node": "^10.2.1",
+    "ts-node": "^10.9.1",
     "typescript": "^4.4.3"
   },
   "jest": {
