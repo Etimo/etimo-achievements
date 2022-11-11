@@ -1,26 +1,31 @@
-import { ILogger } from '@etimo-achievements/types';
 import IORedis, { RedisOptions } from 'ioredis';
 
 export type RedisClient = IORedis;
 export type RedisConnection = RedisOptions;
 
-export function getRedisClient(url: string, logger: ILogger): IORedis {
+type RedisLogger = typeof console.log;
+
+export function getDefaultRedisClient(logger: RedisLogger = console.log): IORedis {
+  return getRedisClient(process.env.REDIS_URL ?? 'redis://localhost:6379/0', logger);
+}
+
+export function getRedisClient(url: string, logger: RedisLogger): IORedis {
   const redis = getRedisConnection(url);
 
   redis.on('connect', () => {
-    logger.info('Connected to Redis');
+    logger('Connected to Redis');
   });
 
   redis.on('error', (error) => {
-    logger.info('Redis error', { extras: { error } });
+    logger('Redis error', error);
   });
 
   redis.on('reconnecting', (ms: number) => {
-    logger.info(`Reconnecting to Redis in ${ms} ms`);
+    logger(`Reconnecting to Redis in ${ms} ms`);
   });
 
   redis.on('close', () => {
-    logger.info('Disconnected from Redis');
+    logger('Disconnected from Redis');
   });
 
   return redis;

@@ -1,16 +1,25 @@
 import { sleep } from '@etimo-achievements/common';
 import fs from 'fs';
+import { getWorkers } from './worker-setup';
 
-async function main() {
-  verifyStarted();
+async function setup() {
+  const workers = getWorkers();
 
-  while (true) {
-    console.log('Sleeping...');
-    await sleep(5000);
-  }
+  workers.helloWorld.init();
+
+  await sleep(5000);
+
+  workers.helloWorld.push({ name: 'bla' });
 }
 
-async function verifyStarted() {
+async function main() {
+  setup();
+
+  // Don't touch this
+  markAsHealthy();
+}
+
+async function markAsHealthy() {
   fs.writeFileSync('/tmp/healthy', '1');
   console.log('Worker initialized');
 }
