@@ -15,6 +15,7 @@ import {
 import { IContext } from '@etimo-achievements/service';
 import { IFeatureService, ILogger, INotifyService, JWT } from '@etimo-achievements/types';
 import { DevLogger, FeatureServiceFactory, getEnvVariable, NotifyServiceFactory } from '@etimo-achievements/utils';
+import { getWorkers, Workers } from '@etimo-achievements/worker-common';
 import { Request, Response } from 'express';
 
 let count: number = 0;
@@ -30,10 +31,15 @@ type TransactionRepositories = {
   rollback: () => void;
 } & IContext['repositories'];
 
-export class Context implements IContext {
+export type IApiContext = IContext & {
+  workers: Workers;
+};
+
+export class Context implements IApiContext {
   public logger: ILogger;
   public notifier: INotifyService;
   public feature: IFeatureService;
+  public workers: Workers;
   public remoteAddress: string;
   public requestId: string;
   public requestDate: Date;
@@ -51,6 +57,7 @@ export class Context implements IContext {
     this.requestId = req.get('X-Request-Id') ?? uuid();
     this.requestDate = new Date();
     this.timestamp = new Date().toTimeString().split(' ')[0];
+    this.workers = getWorkers();
     count++;
   }
 

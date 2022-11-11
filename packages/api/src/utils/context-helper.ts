@@ -1,6 +1,6 @@
-import { IContext } from '@etimo-achievements/service';
 import httpContext from 'express-http-context';
+import { IApiContext } from '../context';
 
-export function getContext(): IContext {
-  return httpContext.get('context') as IContext;
+export function getContext(): IApiContext {
+  return httpContext.get('context') as IApiContext;
 }
