@@ -1,7 +1,9 @@
 import { OAuthServiceFactory } from '@etimo-achievements/security';
+import { Role } from '@etimo-achievements/types';
 import { CreateUserService, SyncSlackUsersService, UpdateUserService } from '..';
 import { IContext } from '../..';
 import { CreateUserTokenService } from './create-user-token-service';
+import { roleToScope } from './roles';
 import { LoginResponse } from './types/login-response';
 
 export class LoginService {
@@ -31,6 +33,7 @@ export class LoginService {
       user = await createUserService.create({
         name: userInfo.name,
         email: userInfo.email,
+        role: 'user',
         slackHandle,
         image,
       });
@@ -41,32 +44,7 @@ export class LoginService {
       await new UpdateUserService(this.context).update({ ...user, image });
     }
 
-    let scopes = [
-      'cru:achievements',
-      'cru:awards',
-      'r:users',
-      'ru:profile',
-      'r:highscore',
-      'r:feature',
-      'r:badges',
-      'cru:badge-awards',
-    ];
-
-    // Administrator rights for certain users
-    const isAdmin = userInfo.email === 'niclas.lindstedt@etimo.se' || userInfo.email === 'axel.elmarsson@etimo.se';
-    if (isAdmin) {
-      scopes = [
-        'admin',
-        'a:achievements',
-        'a:awards',
-        'a:users',
-        'a:profile',
-        'a:highscore',
-        'a:feature',
-        'a:badges',
-        'a:badge-awards',
-      ];
-    }
+    const scopes = roleToScope(user.role as Role);
 
     const createUserTokenService = new CreateUserTokenService(this.context);
     return createUserTokenService.create(user, scopes);

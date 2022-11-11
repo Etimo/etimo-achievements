@@ -1,4 +1,4 @@
-import { uniq, UserDto } from '..';
+import { RoleDto, uniq, UserDto } from '..';
 import Api from './api';
 import AuthorizedApi from './authorized-api';
 
@@ -7,6 +7,10 @@ const authorizedApi = new AuthorizedApi();
 
 export const getUser = (id: string) => {
   return authorizedApi.get<UserDto>(`/users/${id}`);
+};
+
+export const getAllRoles = () => {
+  return authorizedApi.get<RoleDto[]>('/users/roles');
 };
 
 export const getProfile = () => {

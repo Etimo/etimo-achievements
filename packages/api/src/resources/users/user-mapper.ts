@@ -1,5 +1,5 @@
 import { UserDto } from '@etimo-achievements/common';
-import { IUser } from '@etimo-achievements/types';
+import { IUser, Role } from '@etimo-achievements/types';
 
 export class UserMapper {
   public static toUserDto(user: IUser): UserDto {
@@ -8,6 +8,7 @@ export class UserMapper {
       name: user.name,
       email: user.email,
       slackHandle: user.slackHandle,
+      role: user.role as Role,
       image: user.image,
     };
   }
@@ -18,6 +19,7 @@ export class UserMapper {
       name: userDto.name,
       email: userDto.email,
       slackHandle: userDto.slackHandle,
+      role: userDto.role,
       image: userDto.image,
     };
   }

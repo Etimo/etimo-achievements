@@ -1,3 +1,5 @@
+import { Role } from '@etimo-achievements/types';
+
 /**
  * @openapi
  * components:
@@ -20,6 +22,10 @@
  *           type: string
  *           description: The @slack handle of the user
  *           example: '@niclas'
+ *         role:
+ *           type: string
+ *           description: The role of the user
+ *           example: 'user'
  *         image:
  *           type: string
  *           description: The url to the user's image
@@ -34,5 +40,6 @@ export interface UserDto {
   name: string;
   email: string;
   slackHandle?: string;
+  role: Role;
   image: string;
 }
