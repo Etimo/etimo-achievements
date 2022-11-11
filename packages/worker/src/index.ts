@@ -11,6 +11,7 @@ async function setup() {
   const workers = getWorkers();
 
   workers.helloWorld.init();
+  workers.clearExpiredTokens.init();
 }
 
 async function main() {
