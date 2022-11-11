@@ -1,4 +1,3 @@
-import { IContext } from '@etimo-achievements/service';
 import { getDefaultRedisClient } from '@etimo-achievements/utils';
 import { Job, JobsOptions, Queue, QueueOptions, Worker, WorkerOptions } from 'bullmq';
 import { IWorkerContext } from './context';
@@ -11,7 +10,6 @@ export type IWorker<TType, TData> = {
 };
 
 export type WorkerPayload<T> = {
-  context: IWorkerContext;
   data: T;
 };
 

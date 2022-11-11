@@ -1,10 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import { Database } from '@etimo-achievements/data';
 import { getWorkers } from '@etimo-achievements/worker-common';
 import fs from 'fs';
 
 async function setup() {
+  Database.connect();
+
   const workers = getWorkers();
 
   workers.helloWorld.init();

@@ -9,7 +9,10 @@ export function setupEnvironment(environment?: string) {
     envFile += `.${environment}`;
     console.log(`Using env file ${envFile}`);
   }
-  dotenv.config({ path: `${__dirname}/../../${envFile}` });
+
+  const envFilePath = `${__dirname}/../../${envFile}`;
+  console.log(`Envfile path: ${envFilePath}`);
+  dotenv.config({ path: `${envFilePath}` });
 
   console.log(`NODE_ENV: ${getEnvVariable('NODE_ENV')}`);
 
