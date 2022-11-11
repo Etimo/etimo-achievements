@@ -31,7 +31,7 @@ export class SyncSlackUsersService {
   private async updateSlackHandle(name: string, email: string, slackHandle: string) {
     const { repositories, logger } = this.context;
 
-    const foundUser = await repositories.user.findByEmail(email);
+    const foundUser = await repositories.user.findBy({ email });
     if (!foundUser) {
       logger.error(`User ${name} not found in database. No action.`);
       throw new BadRequestError('User not found');

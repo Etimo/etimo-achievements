@@ -2,25 +2,22 @@ import { IAchievementFavorite } from '@etimo-achievements/types';
 import Knex from 'knex';
 import { Database } from '..';
 import { AchievementFavoriteModel } from '../models/achivement-favorites-model';
+import { CreateData } from '../types';
 import { catchErrors } from '../utils';
-import { BaseRepository, CreateData, DeleteOptions } from './base-repository';
+import { BaseRepository } from './base-repository';
 
 export class AchievementFavoriteRepository extends BaseRepository<AchievementFavoriteModel> {
   constructor(transaction?: Knex.Transaction) {
     super(new AchievementFavoriteModel(), Database.knex, transaction);
   }
 
-  public async findManyByUserId(id: string): Promise<IAchievementFavorite[]> {
-    return catchErrors(async () => {
+  public findManyByUserId(id: string): Promise<IAchievementFavorite[]> {
+    return catchErrors(() => {
       return this.model.query().where({ user_id: id });
     });
   }
 
-  public async create(data: CreateData<AchievementFavoriteModel>): Promise<IAchievementFavorite> {
+  public create(data: CreateData<AchievementFavoriteModel>): Promise<IAchievementFavorite> {
     return super.$create(data);
-  }
-
-  public async delete(options: DeleteOptions<AchievementFavoriteModel>): Promise<number> {
-    return super.$delete(options);
   }
 }

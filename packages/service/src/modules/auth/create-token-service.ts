@@ -31,11 +31,6 @@ export class CreateTokenService {
 
     const accessToken = await this.repos.accessToken.create(newToken);
 
-    const deleted = await this.repos.accessToken.deleteInvalid();
-    if (deleted) {
-      logger.debug(`Deleted ${deleted} invalid access tokens`);
-    }
-
     logger.debug(`Stored access token for user ${newToken.userId}`);
 
     return accessToken;
