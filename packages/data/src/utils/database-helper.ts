@@ -1,6 +1,6 @@
 import { camelToSnakeCase, convertObjectKeysCamelToSnakeCase } from '@etimo-achievements/common';
 import Objection, { Model, OrderByDirection } from 'objection';
-import { RepositoryOptions } from '../repositories/base-repository';
+import { RepositoryOptions } from '../types';
 
 export function queryBuilder<M extends Model>(query: Objection.QueryBuilderType<M>, options: RepositoryOptions<M>) {
   const { orderBy, skip, take, where } = options;

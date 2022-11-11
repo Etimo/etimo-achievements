@@ -22,7 +22,7 @@ export class AwardSlackAchievementsInteractService {
     const toUserSlackHandles = values['user-input']['multi_users_select-action'].selected_users;
 
     const achievement = await repositories.achievement.findById(achievementId);
-    const fromUser = await repositories.user.findBySlackHandle(fromUserSlackHandle);
+    const fromUser = await repositories.user.findBy({ slackHandle: fromUserSlackHandle });
     const toUsers = await repositories.user.findBySlackHandles(toUserSlackHandles);
 
     // TODO: Improve error handling.

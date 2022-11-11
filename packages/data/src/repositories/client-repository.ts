@@ -1,8 +1,8 @@
-import { IClient, INewClient, IPartialClient } from '@etimo-achievements/types';
+import { IClient } from '@etimo-achievements/types';
 import Knex from 'knex';
 import { Database } from '..';
 import { ClientModel } from '../models/client-model';
-import { catchErrors } from '../utils';
+import { CreateData } from '../types';
 import { BaseRepository } from './base-repository';
 
 export class ClientRepository extends BaseRepository<ClientModel> {
@@ -10,33 +10,11 @@ export class ClientRepository extends BaseRepository<ClientModel> {
     super(new ClientModel(), Database.knex, transaction);
   }
 
-  findById(id: string): Promise<IClient | undefined> {
-    return catchErrors(async () => {
-      return ClientModel.query().findById(id);
-    });
+  public findById(id: string): Promise<IClient | undefined> {
+    return super.$findById(id);
   }
 
-  create(client: INewClient): Promise<IClient> {
-    return catchErrors(async () => {
-      return ClientModel.query().insert(client);
-    });
-  }
-
-  update(client: IPartialClient): Promise<IClient> {
-    return catchErrors(async () => {
-      return ClientModel.query().patchAndFetchById(client.id, client);
-    });
-  }
-
-  delete(id: string): Promise<number> {
-    return catchErrors(async () => {
-      return ClientModel.query().deleteById(id);
-    });
-  }
-
-  deleteInvalid(): Promise<number> {
-    return catchErrors(async () => {
-      return ClientModel.query().where('expires_at', '<', new Date()).orWhere('disabled', true).delete();
-    });
+  public create(client: CreateData<ClientModel>): Promise<IClient> {
+    return super.$create(client);
   }
 }

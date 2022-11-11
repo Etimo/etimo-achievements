@@ -21,7 +21,7 @@ export class LoginService {
     const image = userInfo.picture.split('=')[0]; // remove the sizing options at the end of the url
 
     // Check if user exists in our store
-    let user = await repositories.user.findByEmail(userInfo.email);
+    let user = await repositories.user.findBy({ email: userInfo.email });
     // Get slack handle
     const slackHandle =
       user?.slackHandle ?? (await new SyncSlackUsersService(this.context).getUserSlackHandle(userInfo.email));

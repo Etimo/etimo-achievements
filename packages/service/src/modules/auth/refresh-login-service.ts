@@ -27,11 +27,6 @@ export class RefreshLoginService {
       repositories.accessToken.delete({ where: { id: data.accessTokenId } }),
     ]);
 
-    const deleted = await repositories.refreshToken.deleteInvalid();
-    if (deleted) {
-      logger.debug(`Deleted ${deleted} invalid refresh tokens`);
-    }
-
     const createUserTokenService = new CreateUserTokenService(this.context);
     return createUserTokenService.create(user, data.scopes);
   }
