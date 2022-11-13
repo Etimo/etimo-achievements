@@ -1,7 +1,16 @@
 import { Role } from '@etimo-achievements/types';
 
 type Action = ('c' | 'r' | 'u' | 'd')[];
-type Resource = 'achievements' | 'awards' | 'users' | 'profile' | 'highscore' | 'feature' | 'badges' | 'badge-awards';
+type Resource =
+  | 'achievements'
+  | 'awards'
+  | 'badge-awards'
+  | 'badges'
+  | 'clients'
+  | 'feature'
+  | 'highscore'
+  | 'profile'
+  | 'users';
 type RolePermissions = Partial<Record<Resource, Action>>;
 type Scopes = string[];
 
@@ -38,6 +47,7 @@ export const adminRole: Scopes = createRole({
   highscore: ['c', 'r', 'u', 'd'],
   feature: ['c', 'r', 'u', 'd'],
   badges: ['c', 'r', 'u', 'd'],
+  clients: ['c', 'r', 'u', 'd'],
   'badge-awards': ['c', 'r', 'u', 'd'],
 });
 

@@ -1,5 +1,6 @@
 import { faGoogle, faSlack } from '@fortawesome/free-brands-svg-icons';
 import {
+  faGear,
   faHandSparkles,
   faList,
   faRankingStar,
@@ -134,6 +135,12 @@ const SideMenu: React.FC = () => {
               <MenuItem icon={<FontAwesomeIcon icon={faRankingStar} />}>
                 Highscores
                 <Link to={Routes.Highscores} />
+              </MenuItem>
+            </RequirePermission>
+            <RequirePermission create="clients">
+              <MenuItem icon={<FontAwesomeIcon icon={faGear} />}>
+                Settings
+                <Link to={Routes.UserSettings} />
               </MenuItem>
             </RequirePermission>
           </Menu>

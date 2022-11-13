@@ -2,7 +2,9 @@ FROM node:16-alpine AS base
 WORKDIR /app
 
 # Install dependencies
-RUN apk add --update \
+RUN npm add --global \
+    nodemon \
+    && apk add --update \
     bash \
     gettext
 
@@ -40,4 +42,4 @@ COPY --chown=1000:1000 packages packages
 COPY --chown=1000:1000 scripts scripts
 
 # Build packages
-RUN npm run compile
+RUN npm run build

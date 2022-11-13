@@ -16,6 +16,7 @@ import BadgeList from '../features/badges/BadgeList';
 import Highscores from '../features/highscore/Highscore';
 import MyProfile from '../features/user-profile/MyProfile';
 import UserProfile from '../features/user-profile/UserProfile';
+import UserSettings from '../features/user-profile/UserSettings';
 import UserCreate from '../features/users/UserCreate';
 import UserList from '../features/users/UserList';
 import UserSlackSync from '../features/users/UserSlackSync';
@@ -35,6 +36,7 @@ export enum Routes {
   UserList = '/users/list',
   UserCreate = '/users/create',
   UserSlackSync = '/users/slack-sync',
+  UserSettings = '/settings',
   Highscores = '/highscores',
   BadgeGive = '/badges/give',
   BadgeCreate = '/badges/create',
@@ -60,6 +62,7 @@ const Router = (): JSX.Element => {
         <Route path={Routes.UserList} element={<UserList />} />
         <Route path={Routes.UserCreate} element={<UserCreate />} />
         <Route path={Routes.UserSlackSync} element={<UserSlackSync />} />
+        <Route path={Routes.UserSettings} element={<UserSettings />} />
         <Route path={Routes.Highscores} element={<Highscores />} />
         <Route path={Routes.BadgeAwardsList} element={<BadgeAwardsList />} />
         <Route path={Routes.BadgeList} element={<BadgeList />} />

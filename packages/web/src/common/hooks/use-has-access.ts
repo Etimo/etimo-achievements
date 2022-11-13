@@ -10,7 +10,8 @@ export type Resource =
   | 'profile'
   | 'badges'
   | 'badge-awards'
-  | 'trophy';
+  | 'trophy'
+  | 'clients';
 
 function useHasAccess() {
   const auth = useAppSelector(authSelector);

@@ -21,12 +21,12 @@ export class ClientCredentialService {
     const user = await repositories.user.findById(client.userId);
     if (!user) throw new UnauthorizedError('invalid_client');
 
-    let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile', 'r:highscore', 'r:feature'];
+    let scopes = ['cru:achievements', 'cru:awards', 'r:users', 'ru:profile', 'r:highscore', 'r:feature', 'cr:clients'];
 
     // Administrator rights for certain users
     const isAdmin = user.email === 'niclas.lindstedt@etimo.se';
     if (isAdmin) {
-      scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore', 'a:feature'];
+      scopes = ['admin', 'a:achievements', 'a:awards', 'a:users', 'a:profile', 'a:highscore', 'a:feature', 'a:clients'];
     }
 
     const createClientTokenService = new CreateClientTokenService(this.context);

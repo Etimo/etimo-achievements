@@ -1,10 +1,11 @@
 export * from './achievement-api';
-export * from './achievement-favorite';
+export * from './achievement-favorite-api';
 export { ApiResponse } from './api';
 export * from './auth-api';
 export * from './award-api';
 export * from './badge-api';
 export * from './badge-award-api';
+export * from './client-api';
 export * from './feature-api';
 export * from './highscore-api';
 export * from './slack-api';

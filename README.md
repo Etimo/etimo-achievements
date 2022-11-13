@@ -18,6 +18,7 @@ These are the technologies used in this project:
 
 | Technology                                            | Description                                                 |
 | ----------------------------------------------------- | ----------------------------------------------------------- |
+| [BullMQ](https://docs.bullmq.io/)                     | BullMQ is used for handling asynchronous jobs.              |
 | [Docker](https://www.docker.com/)                     | Containers are used in local development and in production. |
 | [ESLint](https://eslint.org/)                         | Code linting.                                               |
 | [Express](https://expressjs.com/)                     | Express is used for the API.                                |
