@@ -9,6 +9,7 @@ export * from './paginated-data';
 export * from './pagination-info';
 export * from './response-dto';
 export * from './role-dto';
+export * from './season-dto';
 export * from './token-info-dto';
 export * from './token-validation-dto';
 export * from './user-dto';
