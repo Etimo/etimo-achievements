@@ -17,6 +17,7 @@ import {
   AuthController,
   AwardController,
   BadgeController,
+  SeasonController,
   SlackController,
   UserController,
   VersionController,
@@ -134,6 +135,7 @@ export default class AchievementsServer {
     this.express.use(this.root, new VersionController().routes);
     this.express.use(this.root, new BadgeController().routes);
     this.express.use(this.root, new BadgeAwardController().routes);
+    this.express.use(this.root, new SeasonController().routes);
   }
 
   private setupErrorHandler() {

@@ -5,6 +5,7 @@ import { AchievementFavoriteRepository } from './repositories/achievement-favori
 import { AchievementRepository } from './repositories/achievement-repository';
 import { AwardRepository } from './repositories/award-repository';
 import { RefreshTokenRepository } from './repositories/refresh-token-repository';
+import { SeasonRepository } from './repositories/season-repository';
 import { UserRepository } from './repositories/user-repository';
 
 export type Repositories = ReturnType<typeof getRepositories>;
@@ -21,6 +22,7 @@ export const getRepositories = (trx?: Knex.Transaction) => ({
   client: new ClientRepository(trx),
   refreshToken: new RefreshTokenRepository(trx),
   user: new UserRepository(trx),
+  seasons: new SeasonRepository(trx),
 });
 
 export const getTransactionRepositories = async (): Promise<TransactionRepositories> => {

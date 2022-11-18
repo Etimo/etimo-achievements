@@ -1,6 +1,0 @@
-x-template: &activeSeasonParam
-  name: active
-  in: query
-  description: If the seasons should be active or not
-  schema:
-    type: boolean

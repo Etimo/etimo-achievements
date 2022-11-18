@@ -2211,14 +2211,35 @@
                 "type": "string"
               }
             }
-          },
-          {
-            "name": "active",
-            "in": "query",
-            "description": "If the season is active or not",
-            "schema": {
-              "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Season"
+                  }
+                }
+              }
             }
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      }
+    },
+    "/seasons/active": {
+      "get": {
+        "summary": "Get a list of active seasons",
+        "operationId": "getActiveSeasons",
+        "security": [
+          {
+            "jwtCookie": []
           }
         ],
         "responses": {
