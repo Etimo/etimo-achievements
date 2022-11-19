@@ -11,7 +11,7 @@ export class SeasonModel extends BaseModel implements ISeason {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['name', 'starts_at'],
+      required: ['name', 'startsAt'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },

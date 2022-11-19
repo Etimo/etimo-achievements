@@ -2231,6 +2231,61 @@
         "tags": [
           "Seasons"
         ]
+      },
+      "post": {
+        "summary": "Create a season",
+        "operationId": "createSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Season"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The season was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetSeasonById": {
+                "operationId": "getSeason",
+                "parameters": {
+                  "seasonId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
       }
     },
     "/seasons/active": {
