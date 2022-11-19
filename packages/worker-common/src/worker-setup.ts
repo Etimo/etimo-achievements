@@ -7,12 +7,14 @@ const context = new WorkerContext();
 const workers = {
   helloWorld: new Worker.HelloWorldWorker(context),
   clearExpiredTokens: new Worker.ClearExpiredTokensWorker(context),
+  createMonthlySeason: new Worker.CreateMonthlySeasonWorker(context),
 };
 
 export type Workers = ReturnType<typeof getWorkers>;
 export const getWorkers = () => ({
   helloWorld: workers.helloWorld.getWorker(context),
   clearExpiredTokens: workers.clearExpiredTokens.getWorker(context),
+  createMonthlySeason: workers.createMonthlySeason.getWorker(context),
 });
 
 export const getWorkerQueues = (): Queue[] => {
