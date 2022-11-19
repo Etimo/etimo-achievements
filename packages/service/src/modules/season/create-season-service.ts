@@ -9,8 +9,6 @@ export class CreateSeasonService {
   }
 
   public async create(data: INewSeason): Promise<ISeason> {
-    const { repositories } = this.context;
-    console.log(data);
-    return await repositories.seasons.create(data);
+    return await this.repos.seasons.create(data);
   }
 }

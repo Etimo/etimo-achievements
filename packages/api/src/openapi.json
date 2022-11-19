@@ -2317,6 +2317,52 @@
         ]
       }
     },
+    "/seasons/{seasonId}": {
+      "put": {
+        "summary": "Update a season",
+        "operationId": "updateSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Season"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      }
+    },
     "/slack/list-achievements": {
       "post": {
         "summary": "Display achievement list modal in Slack",

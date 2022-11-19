@@ -1,9 +1,10 @@
-import { CreateSeasonService, GetSeasonService } from '@etimo-achievements/service';
+import { CreateSeasonService, GetSeasonService, UpdateSeasonService } from '@etimo-achievements/service';
 import { Request, Response, Router } from 'express';
 import {
   createdResponse,
   getContext,
   getPaginationOptions,
+  noContentResponse,
   okResponse,
   paginatedResponse,
   protectedEndpoint,
@@ -76,6 +77,28 @@ export class SeasonController {
      */
     router.post('/seasons', protectedEndpoint(this.createSeason, ['c:seasons']));
 
+    /**
+     * @openapi
+     * /seasons/{seasonId}:
+     *   put:
+     *     summary: Update a season
+     *     operationId: updateSeason
+     *     security:
+     *       - jwtCookie: []
+     *     parameters:
+     *       - *seasonIdParam
+     *     requestBody:
+     *       required: true
+     *       content: *seasonContent
+     *     responses:
+     *       204: *noContentResponse
+     *       400: *badRequestResponse
+     *       401: *unauthorizedResponse
+     *     tags:
+     *       - Seasons
+     */
+    router.put('/seasons/:seasonId', protectedEndpoint(this.updateSeason, ['c:seasons']));
+
     return router;
   }
 
@@ -102,5 +125,14 @@ export class SeasonController {
     const service = new CreateSeasonService(getContext());
     const season = await service.create(input);
     return createdResponse(res, '/seasons', { id: season.id });
+  };
+
+  public updateSeason = async (req: Request, res: Response) => {
+    const body = req.body;
+    const id = req.params.seasonId;
+    const input = SeasonMapper.toSeason({ ...body, id });
+    const service = new UpdateSeasonService(getContext());
+    await service.update(input);
+    return noContentResponse(res);
   };
 }
