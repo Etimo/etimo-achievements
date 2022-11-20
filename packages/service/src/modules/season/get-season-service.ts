@@ -16,7 +16,6 @@ export class GetSeasonService {
   }
 
   public async getActive(): Promise<ISeason[]> {
-    const timestamp = new Date().toISOString();
-    return await this.repos.seasons.findActive(timestamp);
+    return await this.repos.seasons.findActive();
   }
 }

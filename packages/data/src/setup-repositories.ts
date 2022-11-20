@@ -1,5 +1,12 @@
 import Knex from 'knex';
-import { BadgeAwardRepository, BadgeRepository, ClientRepository, Database } from '.';
+import {
+  BadgeAwardRepository,
+  BadgeRepository,
+  ClientRepository,
+  DailyScoreRepository,
+  Database,
+  SeasonScoreRepository,
+} from '.';
 import { AccessTokenRepository } from './repositories/access-token-repository';
 import { AchievementFavoriteRepository } from './repositories/achievement-favorite-repository';
 import { AchievementRepository } from './repositories/achievement-repository';
@@ -23,6 +30,8 @@ export const getRepositories = (trx?: Knex.Transaction) => ({
   refreshToken: new RefreshTokenRepository(trx),
   user: new UserRepository(trx),
   seasons: new SeasonRepository(trx),
+  dailyScore: new DailyScoreRepository(trx),
+  seasonScore: new SeasonScoreRepository(trx),
 });
 
 export const getTransactionRepositories = async (): Promise<TransactionRepositories> => {

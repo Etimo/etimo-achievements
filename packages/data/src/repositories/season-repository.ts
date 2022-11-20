@@ -21,10 +21,14 @@ export class SeasonRepository extends BaseRepository<SeasonModel> {
     return super.$getBy(filter, options);
   }
 
+  public findActive(): Promise<ISeason[]> {
+    return this.findActiveAtTimestamp(new Date().toISOString());
+  }
+
   // isoTimestamp can be generated with new Date().toISOString()
-  public findActive(isoTimeStamp: string): Promise<ISeason[]> {
+  public findActiveAtTimestamp(isoTimeStamp: string): Promise<ISeason[]> {
     return catchErrors(() => {
-      return this.model.query().where('starts_at', '<', isoTimeStamp).andWhere('ends_at', '>', isoTimeStamp);
+      return this.model.query().where('starts_at', '<=', isoTimeStamp).andWhere('ends_at', '>=', isoTimeStamp);
     });
   }
 

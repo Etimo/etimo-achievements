@@ -5,5 +5,7 @@ export * from './award-repository';
 export * from './badge-award-repository';
 export * from './badge-repository';
 export * from './client-repository';
+export * from './daily-score-repository';
 export * from './refresh-token-repository';
+export * from './season-score-repository';
 export * from './user-repository';
