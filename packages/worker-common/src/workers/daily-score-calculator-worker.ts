@@ -41,23 +41,33 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
     }
   }
 
+  private getKickback(pts: number) {
+    // TODO: Get these values from season settings
+    return Math.floor(Math.min(50, 0.1 * pts));
+  }
+
   // time of date is ignored, only date is used
   private async calculateDailyScore(user: IUser, season: ISeason, date: Date = new Date()) {
     const { repositories } = this.context;
 
-    const _awards = await repositories.award.findAwardedBetween(
+    const exists = (await repositories.dailyScore.findByUserAndDay(user.id, season.id, date)).length !== 0;
+    if (exists) {
+      return;
+    }
+
+    const todaysAwards = await repositories.award.findAwardedBetween(
       new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1).toISOString(), // day before at 00.00 (24 hours ago)
       new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString(), // this day at 00.00
       user.id
     );
 
     const achievements = await repositories.achievement.findByIds(
-      _awards.map((x) => x.achievementId),
+      todaysAwards.map((x) => x.achievementId),
       {}
     );
 
     // array of awards with the score of each achievement added to the award
-    const awards = _awards.reduce((result: (IAward & { points: number })[], award: IAward) => {
+    const awards = todaysAwards.reduce((result: (IAward & { points: number })[], award: IAward) => {
       return [
         ...result,
         {
@@ -92,7 +102,7 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
         };
         // awards we have given (no self awards)
       } else {
-        const kickback = Math.floor(Math.min(50, 0.1 * award.points));
+        const kickback = this.getKickback(award.points);
         const awardKickbackScore = result.awardKickbackScore + kickback;
         const awardsGiven = result.awardsGiven + 1;
 

@@ -2074,7 +2074,7 @@
         ]
       }
     },
-    "/highscores": {
+    "/highscores/{seasonId}": {
       "get": {
         "summary": "Get a list of awards",
         "operationId": "getHighscores",
@@ -2115,6 +2115,15 @@
               "items": {
                 "type": "string"
               }
+            }
+          },
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],

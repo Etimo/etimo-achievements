@@ -18,6 +18,10 @@ export class DailyScoreRepository extends BaseRepository<DailyScoreModel> {
     return this.model.query().where('user_id', userId).andWhere('season_id', seasonId);
   }
 
+  public async findByUserAndDay(userId: string, seasonId: string, date: Date): Promise<IDailyScore[]> {
+    return await this.model.query().where('user_id', userId).andWhere('season_id', seasonId).andWhere('date', date);
+  }
+
   public getBy(filter: Partial<DailyScoreModel>, options?: FindOptions<DailyScoreModel>): Promise<IDailyScore[]> {
     return super.$getBy(filter, options);
   }

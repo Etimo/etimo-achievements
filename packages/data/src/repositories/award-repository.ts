@@ -30,9 +30,13 @@ export class AwardRepository extends BaseRepository<AwardModel> {
 
   public findAwardedBetween(start: string, end: string, userId?: string): Promise<IAward[]> {
     return catchErrors(() => {
-      const query = this.model.query().where('created_at', '>=', start).andWhere('created_at', '<=', end);
+      const query = this.model.query().where(function () {
+        this.where('created_at', '>=', start).andWhere('created_at', '<=', end);
+      });
       if (userId) {
-        query.andWhere('user_id', userId).orWhere('awarded_by_user_id', userId);
+        query.andWhere(function () {
+          this.where('user_id', userId).orWhere('awarded_by_user_id', userId);
+        });
       }
 
       return query;
