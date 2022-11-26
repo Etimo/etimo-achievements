@@ -22,13 +22,13 @@ export class SeasonRepository extends BaseRepository<SeasonModel> {
   }
 
   public findActive(): Promise<ISeason[]> {
-    return this.findActiveAtTimestamp(new Date().toISOString());
+    return this.findActiveAtTimestamp(new Date());
   }
 
-  // isoTimestamp can be generated with new Date().toISOString()
-  public findActiveAtTimestamp(isoTimeStamp: string): Promise<ISeason[]> {
+  public findActiveAtTimestamp(date: Date): Promise<ISeason[]> {
+    const isoDateStr = date.toISOString();
     return catchErrors(() => {
-      return this.model.query().where('starts_at', '<=', isoTimeStamp).andWhere('ends_at', '>=', isoTimeStamp);
+      return this.model.query().where('starts_at', '<=', isoDateStr).andWhere('ends_at', '>=', isoDateStr);
     });
   }
 

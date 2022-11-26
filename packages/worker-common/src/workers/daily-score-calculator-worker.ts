@@ -6,16 +6,17 @@ export type DailyScoreCalculatorWorkerData = {
   name: string;
 };
 
+// This worker is called at midnight every day. It calculates the scores for the previous day.
 export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorWorkerData> {
   constructor(private context: IWorkerContext) {
     super({
       name: 'daily-score-calculator',
       jobsOptions: {
-        // repeat: {
-        //   // At 00:00 every day
-        //   //        s m H d M weekday
-        //   // pattern: '0 0 0 * * *',
-        // },
+        repeat: {
+          // At 00:01 every day
+          //        s m H d M weekday
+          pattern: '0 1 0 * * *',
+        },
       },
     });
   }
@@ -40,14 +41,13 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
     }
   }
 
-  private async calculateDailyScore(user: IUser, season: ISeason) {
+  // time of date is ignored, only date is used
+  private async calculateDailyScore(user: IUser, season: ISeason, date: Date = new Date()) {
     const { repositories } = this.context;
 
-    const timestamp = new Date();
-
     const _awards = await repositories.award.findAwardedBetween(
-      new Date(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate() - 1).toISOString(), // 24 hours ago at 00.00
-      new Date(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate()).toISOString(), // this day at 00.00
+      new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1).toISOString(), // day before at 00.00 (24 hours ago)
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString(), // this day at 00.00
       user.id
     );
 
@@ -106,10 +106,11 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
       }
     }, score);
 
+    // TODO: try catch? add failed daily score creation to a queue, run them again?
     await repositories.dailyScore.create({
       userId: user.id,
       seasonId: season.id,
-      date: timestamp,
+      date: date,
       ...dailyScore,
     });
   }
@@ -118,11 +119,9 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
     const { repositories } = this.context;
 
     const seasonScore = await repositories.seasonScore.getOrCreate(user.id, seasonId);
-    console.log(seasonScore);
 
     const dailyScores = await repositories.dailyScore.findByUserAndSeason(user.id, seasonId);
     const nextSeasonScore: IScore = dailyScores.reduce((result: IScore, dailyScore: IDailyScore) => {
-      console.log(dailyScore);
       const awardKickbackScore = (result.awardKickbackScore ?? 0) + dailyScore.awardKickbackScore;
       const awardsGiven = (result.awardsGiven ?? 0) + dailyScore.awardsGiven;
       const awardScore = (result.awardScore ?? 0) + dailyScore.awardScore;
@@ -138,8 +137,6 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
         scorePerReceivedAward: awardScore / (awardsReceived || 1),
       };
     }, seasonScore);
-
-    console.log(nextSeasonScore);
 
     await repositories.seasonScore.updateByUserAndSeason(user.id, seasonId, nextSeasonScore);
   }
