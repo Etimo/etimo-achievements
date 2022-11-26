@@ -2217,6 +2217,8 @@ __metadata:
     css-loader: ^6.7.1
     dotenv-webpack: ^7.1.0
     html-webpack-plugin: ^5.5.0
+    moment: ^2.29.4
+    moment-timezone: ^0.5.39
     postcss: ^8.4.12
     postcss-loader: ^6.2.1
     react: ^17.0.2
@@ -2225,6 +2227,7 @@ __metadata:
     react-hot-loader: ^4.13.0
     react-hot-toast: ^2.2.0
     react-modal: ^3.14.4
+    react-moment: ^1.1.2
     react-pro-sidebar: ^0.7.1
     react-redux: ^7.2.6
     react-router: ^6.2.2
@@ -10830,6 +10833,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment-timezone@npm:^0.5.39":
+  version: 0.5.39
+  resolution: "moment-timezone@npm:0.5.39"
+  dependencies:
+    moment: ">= 2.9.0"
+  checksum: 9f972d3a29b2726d4fd1464df27738b756441fe57575f087cda91b7716a5a31d2cfd274255e3edfb15eb60af3ccf33fd339527b456092cac1a2a4124e4369c8b
+  languageName: node
+  linkType: hard
+
+"moment@npm:>= 2.9.0, moment@npm:^2.29.4":
+  version: 2.29.4
+  resolution: "moment@npm:2.29.4"
+  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
+  languageName: node
+  linkType: hard
+
 "moment@npm:^2.14.1, moment@npm:^2.29.1":
   version: 2.29.1
   resolution: "moment@npm:2.29.1"
@@ -12393,6 +12412,17 @@ __metadata:
     react: ^0.14.0 || ^15.0.0 || ^16 || ^17
     react-dom: ^0.14.0 || ^15.0.0 || ^16 || ^17
   checksum: 71457de902d45de390932fb68380c4a72fcd51e64faaf8b96138c3cb402d2e445002220560614ef6035eb349ff933bcbbe35c4cb85fb66c1129e65ad40336b8b
+  languageName: node
+  linkType: hard
+
+"react-moment@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "react-moment@npm:1.1.2"
+  peerDependencies:
+    moment: ^2.29.0
+    prop-types: ^15.7.0
+    react: ^16.0 || ^17.0.0 || ^18.0.0
+  checksum: 89ad1a668b98015950682ce0c55de29e96915e0c001167089a78377da1fce9ea3484f6203f48e59c677df5474bdf6bd4cf0d75867f1ccb6135b3103d4a12c1d8
   languageName: node
   linkType: hard
 

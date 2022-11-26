@@ -7,5 +7,6 @@ export * from './badge-api';
 export * from './badge-award-api';
 export * from './feature-api';
 export * from './highscore-api';
+export * from './season-api';
 export * from './slack-api';
 export * from './user-api';

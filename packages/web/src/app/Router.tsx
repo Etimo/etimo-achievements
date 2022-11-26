@@ -14,6 +14,7 @@ import BadgeAwardsList from '../features/badge-awards/BadgeAwardsList';
 import BadgeCreate from '../features/badges/BadgeCreate';
 import BadgeList from '../features/badges/BadgeList';
 import Highscores from '../features/highscore/Highscore';
+import { SeasonCreate, SeasonList } from '../features/seasons';
 import MyProfile from '../features/user-profile/MyProfile';
 import UserProfile from '../features/user-profile/UserProfile';
 import UserCreate from '../features/users/UserCreate';
@@ -40,6 +41,8 @@ export enum Routes {
   BadgeCreate = '/badges/create',
   BadgeList = '/badges/list',
   BadgeAwardsList = '/badges/list-awards',
+  SeasonCreate = '/seasons/create',
+  SeasonList = '/seasons/list',
 }
 
 const Router = (): JSX.Element => {
@@ -65,6 +68,8 @@ const Router = (): JSX.Element => {
         <Route path={Routes.BadgeList} element={<BadgeList />} />
         <Route path={Routes.BadgeCreate} element={<BadgeCreate />} />
         <Route path={Routes.BadgeGive} element={<BadgeAwardGive />} />
+        <Route path={Routes.SeasonCreate} element={<SeasonCreate />} />
+        <Route path={Routes.SeasonList} element={<SeasonList />} />
         {/* Should be put last */}
         <Route path="*" element={<NotFound />} />
       </Route>

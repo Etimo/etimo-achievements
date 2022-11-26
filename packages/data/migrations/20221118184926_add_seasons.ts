@@ -8,7 +8,7 @@ export async function up(knex: Knex): Promise<void> {
       table.uuid('id').primary();
       table.string('name', 255).notNullable();
       table.dateTime('starts_at').notNullable();
-      table.dateTime('ends_at');
+      table.dateTime('ends_at').notNullable();
       table.timestamps(false, true);
     })
     .raw(createOnUpdateTrigger('seasons'));

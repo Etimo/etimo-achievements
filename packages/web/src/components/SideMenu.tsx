@@ -7,6 +7,7 @@ import {
   faSignOut,
   faSquarePlus,
   faStar,
+  faTimeline,
   faUser,
   faUsers,
 } from '@fortawesome/free-solid-svg-icons';
@@ -126,6 +127,22 @@ const SideMenu: React.FC = () => {
                   <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
                     Create user
                     <Link to={Routes.UserCreate} />
+                  </MenuItem>
+                </RequirePermission>
+              </SubMenu>
+            </RequirePermission>
+            <RequirePermission read="seasons">
+              <SubMenu title="Seasons" icon={<FontAwesomeIcon icon={faTimeline} />}>
+                <RequirePermission create="seasons">
+                  <MenuItem icon={<FontAwesomeIcon icon={faSquarePlus} />}>
+                    Create season
+                    <Link to={Routes.SeasonCreate} />
+                  </MenuItem>
+                </RequirePermission>
+                <RequirePermission read="seasons">
+                  <MenuItem icon={<FontAwesomeIcon icon={faList} />}>
+                    List seasons
+                    <Link to={Routes.SeasonList} />
                   </MenuItem>
                 </RequirePermission>
               </SubMenu>
