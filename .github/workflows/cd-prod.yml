@@ -70,7 +70,7 @@ jobs:
         run: |
           remote_commit=$(curl --fail -s $URL | jq -r '.commit')
           echo "Found remote commit $remote_commit"
-          echo "::set-output name=remote-commit::$remote_commit"
+          echo "remote-commit=$remote_commit" >> $GITHUB_OUTPUT
 
       - name: Checkout code
         uses: actions/checkout@v2
@@ -80,7 +80,7 @@ jobs:
       - name: Get information
         id: info
         run: |
-          echo "::set-output name=current-commit::$(git rev-parse HEAD)"
+          echo "current-commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1

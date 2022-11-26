@@ -33,9 +33,9 @@ runs:
       id: info
       shell: bash
       run: |
-        echo "::set-output name=build-number::${GITHUB_RUN_NUMBER}"
-        echo "::set-output name=branch-name::${GITHUB_REF##*/}"
-        echo "::set-output name=current-commit::$(git rev-parse HEAD)"
+        echo "build-number=${GITHUB_RUN_NUMBER}" >> $GITHUB_OUTPUT
+        echo "branch-name=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+        echo "current-commit=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
     - name: Build image
       uses: docker/build-push-action@v2

@@ -29,8 +29,8 @@ if [ "$tag_commit" != "$latest_version_commit" ]; then
   git push origin $next_version || exit 1
   echo "Successfully pushed $next_version tag (-> $tag_commit)"
 
-  echo "::set-output name=tagged::true"
-  echo "::set-output name=tag::$next_version"
+  echo "tagged=true" >> "$GITHUB_OUTPUT"
+  echo "tag=$next_version" >> "$GITHUB_OUTPUT"
 fi
 
 exit 0
