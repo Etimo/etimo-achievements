@@ -74,7 +74,7 @@ runs:
         fi
 
         output="$(awk '{printf "%s\\n", $0}' __deployment.yaml)"
-        echo "::set-output name=deployment-yaml::$output"
+        echo "deployment-yaml=$output" >> $GITHUB_OUTPUT
 
     - name: Deploy to Kubernetes
       shell: bash
