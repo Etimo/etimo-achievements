@@ -1,152 +1,59 @@
-import { formatNumber } from '@etimo-achievements/common';
-import React, { useState } from 'react';
+import { SeasonDto } from '@etimo-achievements/common';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { FormSelect } from '../../components/form';
 import Header from '../../components/Header';
-import { NameAvatarUserCell } from '../../components/table';
-import PaginatedTable, {
-  Column,
-  PaginatedTableData,
-  PaginatedTableDataEntry,
-  PaginationRequestInput,
-} from '../../components/table/PaginatedTable';
-import { HighscoreComposite } from './highscore-types';
-import { getHighscores } from './highscore-utils';
-
-interface HighscoreData extends PaginatedTableData {
-  rank: PaginatedTableDataEntry<string>;
-  name: PaginatedTableDataEntry<string>;
-  achievements: PaginatedTableDataEntry<string>;
-  givenAchievements: PaginatedTableDataEntry<string>;
-  points: PaginatedTableDataEntry<string>;
-  kickback: PaginatedTableDataEntry<string>;
-  totalPoints: PaginatedTableDataEntry<string>;
-  pointsPerAchievement: PaginatedTableDataEntry<string>;
-}
+import { getManySeasons } from '../seasons/season-utils';
+import { HighscoreTable } from './HighscoreTable';
 
 const Highscores: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const [data, setData] = React.useState<HighscoreData[]>([]);
-  const [pageCount, setPageCount] = useState(0);
+  const [seasons, setSeasons] = useState<SeasonDto[]>([]);
+  const [search, setSearch] = useSearchParams();
 
-  const fetchData = async (input: PaginationRequestInput) => {
-    setLoading(true);
-    const response = await getHighscores(input);
-    if (response) {
-      const { data, pagination } = response;
-      setData(mapToData(data));
-      setPageCount(pagination.totalPages ?? 0);
+  const getSeasonId = () => search.get('seasonId') ?? '';
+  const setSeasonId = (value: string) => {
+    if (!value) {
+      search.delete('seasonId');
+      setSearch(search);
+    } else {
+      setSearch({ seasonId: value });
     }
-    setLoading(false);
   };
 
-  const mapToData = (composites: HighscoreComposite[]): any[] => {
-    // Sorted list (desc) of unique scores
-    const totalRanks = [...new Set(composites.map((c) => c.totalPoints))].sort((a, b) => (a < b ? 1 : -1));
-
-    return composites.map((h, i) => ({
-      rank: {
-        value: totalRanks.indexOf(h.points) + 1, // index of the user's score in the list is the rank of the user
-      },
-      name: {
-        value: <NameAvatarUserCell user={h.user} />,
-      },
-      achievements: {
-        value: formatNumber(h.achievements),
-      },
-      givenAchievements: {
-        value: formatNumber(h.givenAchievements),
-      },
-      points: {
-        value: `${formatNumber(h.points)} pts`,
-      },
-      kickback: {
-        value: `${formatNumber(h.kickback)} pts`,
-      },
-      totalPoints: {
-        value: `${formatNumber(h.totalPoints)} pts`,
-      },
-      pointsPerAchievement: {
-        // Two decimals
-        value: `${formatNumber(parseFloat(h.pointsPerAchievement.toFixed(2)))} pts`,
-      },
-      kickbackPerAchievement: {
-        value: `${formatNumber(parseFloat(h.kickbackPerAchievement.toFixed(2)))} pts`,
-      },
-    }));
+  const getSeasons = async () => {
+    // TODO: Infinite scrolling, this won't work in about 4 years
+    const response = await getManySeasons({ page: 1, size: 50 });
+    if (response) {
+      setSeasons(response.data);
+      if (response.data.length !== 0) {
+        setSeasonId(response.data[0].id);
+      }
+    }
   };
 
-  const columns = React.useMemo(
-    (): Column[] => [
-      {
-        title: 'Rank',
-        accessor: 'rank',
-        sortKey: 'points', // rank is based on score
-      },
-      {
-        title: 'Name',
-        accessor: 'name',
-      },
-      {
-        title: 'Achievements',
-        accessor: 'achievements',
-        sortKey: 'achievements',
-        className: 'w-40',
-        tooltip: 'How many achievements this user has been awarded',
-      },
-      {
-        title: 'Given achievements',
-        accessor: 'givenAchievements',
-        sortKey: 'givenAchievements',
-        className: 'w-40',
-        tooltip: 'How many achievements a user has given other users',
-      },
-      {
-        title: 'Achievement points',
-        accessor: 'points',
-        sortKey: 'points',
-        className: 'w-40',
-        tooltip: 'Points awarded from achievements',
-      },
-      {
-        title: 'Kickback points',
-        accessor: 'kickback',
-        sortKey: 'kickback',
-        className: 'w-40',
-        tooltip: (
-          <span>
-            <div>Points received for giving achievements.</div>
-            <div>10% of achievement score, capped at 50 points</div>
-          </span>
-        ),
-      },
-      {
-        title: 'Total points',
-        accessor: 'totalPoints',
-        sortKey: 'totalPoints',
-        className: 'w-40',
-        tooltip: 'Achievement points + kickback points',
-      },
-      {
-        title: 'Points per achievement',
-        accessor: 'pointsPerAchievement',
-        sortKey: 'pointsPerAchievement',
-        className: 'w-40',
-        tooltip: 'Total points / #achievements',
-      },
-      {
-        title: 'Kickback per given achievement',
-        accessor: 'kickbackPerAchievement',
-        sortKey: 'kickbackPerAchievement',
-        className: 'w-40',
-        tooltip: 'Total kickback / #given achievements',
-      },
-    ],
-    []
-  );
+  useEffect(() => {
+    getSeasons();
+  }, []);
+
+  const mappedSeasons = useMemo(() => {
+    return seasons.map((s) => ({ label: s.name, value: s.id }));
+  }, [seasons]);
 
   return (
     <div className="w-2/3 mx-auto">
       <Header>Highscores</Header>
-      <PaginatedTable columns={columns} data={data} pageCount={pageCount} loading={loading} fetchData={fetchData} />
+      <div className="flex flex-row mb-2">
+        <FormSelect
+          allowDeselect={false}
+          onChange={setSeasonId}
+          options={mappedSeasons}
+          value={getSeasonId()}
+          nothingFound="No seasons found"
+          placeholder="Select season"
+          type="single-line"
+        />
+      </div>
+      {!!getSeasonId() && <HighscoreTable seasonId={getSeasonId()} />}
     </div>
   );
 };

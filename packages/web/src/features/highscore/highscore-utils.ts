@@ -4,10 +4,11 @@ import { PaginationRequestInput } from '../../components/table/PaginatedTable';
 import { HighscoreComposite } from './highscore-types';
 
 export const getHighscores = async (
+  seasonId: string,
   input: PaginationRequestInput
 ): Promise<PaginatedData<HighscoreComposite> | undefined> => {
   const { size, page, sort, order } = input;
-  const response = await getManyHighscores((page - 1) * size, size, sort, order);
+  const response = await getManyHighscores(seasonId, (page - 1) * size, size, sort, order);
   if (response.success) {
     const highscores = await response.data();
 
@@ -27,6 +28,7 @@ export const getHighscores = async (
           pointsPerAchievement: highscore.pointsPerAchievement,
           givenAchievements: highscore.givenAchievements,
           kickbackPerAchievement: highscore.kickbackPerAchievement,
+          rank: highscore.rank,
         });
       }
     }

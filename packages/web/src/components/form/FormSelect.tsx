@@ -27,6 +27,7 @@ type SelectProps = {
   value: string | undefined;
   /** Custom filter function */
   filter?: (value: string, item: SelectItem) => boolean;
+  allowDeselect?: boolean;
 } & BaseProps;
 
 type MultiSelectProps = {
@@ -105,11 +106,12 @@ const FormSelect: React.FC<SelectProps> = ({
   type = 'single-line',
   filter,
   nothingFound,
+  allowDeselect = true,
 }) => {
   return (
     <Select
       searchable
-      allowDeselect
+      allowDeselect={allowDeselect}
       data={options.map((o) => ({ ...o, type }))}
       nothingFound={nothingFound ?? 'No items'}
       value={value}
