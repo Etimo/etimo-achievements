@@ -33,7 +33,16 @@ export class SeasonRepository extends BaseRepository<SeasonModel> {
   }
 
   public find(options: FindOptions<SeasonModel>): Promise<ISeason[]> {
-    return super.$get({ ...options, orderBy: options.orderBy?.length !== 0 ? options.orderBy : [['ends_at', 'desc']] });
+    return super.$get({
+      ...options,
+      orderBy:
+        options?.orderBy && options.orderBy.length !== 0
+          ? options.orderBy
+          : [
+              ['startsAt', 'desc'],
+              ['endsAt', 'desc'],
+            ],
+    });
   }
 
   public findById(id: string): Promise<ISeason> {
