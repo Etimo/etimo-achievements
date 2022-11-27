@@ -39,6 +39,10 @@
  *           type: integer
  *           description: Total kickback divided by amount of achievements
  *           example: 48
+ *         rank:
+ *           type: integer
+ *           description: Rank of user
+ *           example: 1
  */
 export interface HighscoreDto {
   userId: string;
@@ -49,4 +53,5 @@ export interface HighscoreDto {
   totalPoints: number;
   givenAchievements: number;
   kickbackPerAchievement: number;
+  rank: number;
 }

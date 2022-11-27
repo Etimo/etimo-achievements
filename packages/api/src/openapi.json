@@ -498,6 +498,11 @@
             "type": "integer",
             "description": "Total kickback divided by amount of achievements",
             "example": 48
+          },
+          "rank": {
+            "type": "integer",
+            "description": "Rank of user",
+            "example": 1
           }
         }
       },

@@ -23,9 +23,22 @@ export class GetHighscoreService {
       season_id: seasonId,
     } as any); // TODO
 
-    const highscores: IHighscore[] = [];
-    for (const score of seasonScores) {
-      highscores.push({
+    const sortedSeasons = sort(seasonScores, 'totalScore', 'desc');
+
+    const highscores: (IHighscore & { rank: number })[] = [];
+
+    sortedSeasons.forEach((score, i) => {
+      const getRank = () => {
+        if (i === 0) {
+          return 1;
+        } else if (highscores[i - 1].totalPoints > score.totalScore) {
+          return highscores[i - 1].rank + 1;
+        } else if (highscores[i - 1].totalPoints === score.totalScore) {
+          return highscores[i - 1].rank;
+        }
+      };
+
+      const highscore: IHighscore & { rank: number } = {
         achievements: score.awardsReceived,
         givenAchievements: score.awardsGiven,
         kickback: score.awardKickbackScore,
@@ -34,8 +47,11 @@ export class GetHighscoreService {
         pointsPerAchievement: score.scorePerReceivedAward,
         totalPoints: score.totalScore,
         userId: score.userId,
-      });
-    }
+        rank: getRank()!,
+      };
+
+      highscores.push(highscore);
+    });
 
     let orderBy = 'totalPoints';
     let order: 'asc' | 'desc' = 'desc';
