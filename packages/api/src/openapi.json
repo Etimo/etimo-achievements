@@ -498,8 +498,45 @@
             "type": "integer",
             "description": "Total kickback divided by amount of achievements",
             "example": 48
+          },
+          "rank": {
+            "type": "integer",
+            "description": "Rank of user",
+            "example": 1
           }
         }
+      },
+      "Season": {
+        "title": "Season",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "minLength": 3,
+            "example": "November 2022"
+          },
+          "startsAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the season starts",
+            "example": "2017-01-01T00:00:00Z"
+          },
+          "endsAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the season ends",
+            "example": "2017-02-01T00:00:00Z"
+          }
+        },
+        "required": [
+          "name",
+          "startsAt"
+        ]
       },
       "User": {
         "title": "User",
@@ -2042,7 +2079,7 @@
         ]
       }
     },
-    "/highscores": {
+    "/highscores/{seasonId}": {
       "get": {
         "summary": "Get a list of awards",
         "operationId": "getHighscores",
@@ -2083,6 +2120,15 @@
               "items": {
                 "type": "string"
               }
+            }
+          },
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -2134,6 +2180,200 @@
         },
         "tags": [
           "Probes"
+        ]
+      }
+    },
+    "/seasons": {
+      "get": {
+        "summary": "Get a list of seasons",
+        "operationId": "getSeasons",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Season"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      },
+      "post": {
+        "summary": "Create a season",
+        "operationId": "createSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Season"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The season was created.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            },
+            "links": {
+              "GetSeasonById": {
+                "operationId": "getSeason",
+                "parameters": {
+                  "seasonId": "$response.body#/id"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      }
+    },
+    "/seasons/active": {
+      "get": {
+        "summary": "Get a list of active seasons",
+        "operationId": "getActiveSeasons",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Season"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Seasons"
+        ]
+      }
+    },
+    "/seasons/{seasonId}": {
+      "put": {
+        "summary": "Update a season",
+        "operationId": "updateSeason",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "seasonId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Season"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "The request was successful"
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Seasons"
         ]
       }
     },

@@ -10,8 +10,7 @@ async function setup() {
 
   const workers = getWorkers();
 
-  workers.helloWorld.init();
-  workers.clearExpiredTokens.init();
+  Object.values(workers).forEach((w) => w.init());
 }
 
 async function main() {

@@ -1,4 +1,4 @@
-import { paginate, PaginatedData, sort, uniq } from '@etimo-achievements/common';
+import { paginate, PaginatedData, sort } from '@etimo-achievements/common';
 import { IHighscore, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
@@ -15,57 +15,43 @@ export class GetHighscoreService {
     return Math.floor(Math.min(KICKBACK * pts, MAXIMUM_KICKBACK_POINTS));
   }
 
-  public async get(options: PaginationOptions): Promise<PaginatedData<IHighscore>> {
+  public async get(seasonId: string, options: PaginationOptions): Promise<PaginatedData<IHighscore>> {
     const { repositories } = this.context;
     const { skip, take } = options;
 
-    const awards = await repositories.award.getAll();
+    const seasonScores = await repositories.seasonScore.getBy({
+      season_id: seasonId,
+    } as any); // TODO
 
-    const userIds = uniq([...awards.map((a) => a.userId), ...awards.map((a) => a.awardedByUserId)]);
-    const users = await repositories.user.findByIds(userIds, {});
+    const sortedSeasons = sort(seasonScores, 'totalScore', 'desc');
 
-    const achievementIds = uniq(awards.map((a) => a.achievementId));
-    const achievements = await repositories.achievement.findByIds(achievementIds, {});
+    const highscores: (IHighscore & { rank: number })[] = [];
 
-    const highscores: IHighscore[] = [];
-    for (const user of users) {
-      const userAwards = awards.filter((a) => a.userId === user.id);
-      const givenAwards = awards.filter((a) => a.awardedByUserId === user.id);
-      const userAchievements = userAwards.map((a) =>
-        achievements.find((achievement) => achievement.id === a.achievementId)
-      );
-      // Get awards the user has given
-      const awardsGiven = awards.filter(
-        (a) =>
-          a.awardedByUserId === user.id &&
-          // Exclude self given awards
-          a.userId !== user.id
-      );
-      const givenAchievements = awardsGiven.map((a) =>
-        achievements.find((achievement) => achievement.id === a.achievementId)
-      );
+    sortedSeasons.forEach((score, i) => {
+      const getRank = () => {
+        if (i === 0) {
+          return 1;
+        } else if (highscores[i - 1].totalPoints > score.totalScore) {
+          return highscores[i - 1].rank + 1;
+        } else if (highscores[i - 1].totalPoints === score.totalScore) {
+          return highscores[i - 1].rank;
+        }
+      };
 
-      if (userAchievements.length || givenAchievements.length) {
-        const points = userAchievements?.reduce((a, b) => a + (b?.achievementPoints ?? 0), 0) ?? 0;
-        const kickback = givenAchievements.reduce((sum, a) => sum + this.getKickback(a?.achievementPoints ?? 0), 0);
+      const highscore: IHighscore & { rank: number } = {
+        achievements: score.awardsReceived,
+        givenAchievements: score.awardsGiven,
+        kickback: score.awardKickbackScore,
+        kickbackPerAchievement: score.scorePerGivenAward,
+        points: score.awardScore,
+        pointsPerAchievement: score.scorePerReceivedAward,
+        totalPoints: score.totalScore,
+        userId: score.userId,
+        rank: getRank()!,
+      };
 
-        const totalPoints = kickback + points;
-        const pointsPerAchievement = totalPoints / (userAchievements.length || 1);
-        const kickbackPerAchievement = kickback / (givenAwards.length || 1);
-
-        const userHighscore: IHighscore = {
-          userId: user.id,
-          achievements: userAchievements.length,
-          points,
-          kickback,
-          pointsPerAchievement,
-          totalPoints,
-          givenAchievements: givenAwards.length,
-          kickbackPerAchievement,
-        };
-        highscores.push(userHighscore);
-      }
-    }
+      highscores.push(highscore);
+    });
 
     let orderBy = 'totalPoints';
     let order: 'asc' | 'desc' = 'desc';

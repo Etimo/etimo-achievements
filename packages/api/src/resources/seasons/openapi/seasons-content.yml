@@ -1,0 +1,6 @@
+x-template: &seasonsContent
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/Season'
