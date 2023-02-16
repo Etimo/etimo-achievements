@@ -67,12 +67,14 @@ export class GiveAwardService {
     const numKickbackUsers = isSelfAward ? awardedTo.length - 1 : awardedTo.length;
     const totalKickback = numKickbackUsers * awardKickback;
 
+    const verb = awardedTo.length > 1 ? 'were' : 'was';
+
     // https://api.slack.com/reference/surfaces/formatting#mentioning-users
     let slackMessage = `${awardedTo
       .map((u) => (u.slackHandle ? `<@${u.slackHandle}>` : u.name))
       .join(', ')
       // Replace last ", " with "and"
-      .replace(/, ([^,]*)$/, ' and $1')} was awarded :medal: *${achievement.name}* (${formatNumber(
+      .replace(/, ([^,]*)$/, ' and $1')} ${verb} awarded :medal: *${achievement.name}* (${formatNumber(
       achievement.achievementPoints
     )} pts) by ${awardedBy.name}`;
 
