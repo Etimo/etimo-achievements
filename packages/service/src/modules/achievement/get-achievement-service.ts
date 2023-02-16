@@ -12,18 +12,20 @@ export class GetAchievementService {
   public async getMany(options: PaginationOptions): Promise<PaginatedData<IAchievement>> {
     const achievements = await this.repos.achievement.find(options);
     const count = await this.repos.achievement.count({});
+    const existingAchievements = achievements.filter((a) => !a.deletedAt);
 
-    return paginate(achievements, count, options);
+    return paginate(existingAchievements, count, options);
   }
 
   public async getManyByIds(ids: string[]): Promise<IAchievement[]> {
     const achievements = await this.repos.achievement.findByIds(ids, {});
-    return achievements;
+    const existingAchievements = achievements.filter((a) => !a.deletedAt);
+    return existingAchievements;
   }
 
   public async get(id: string): Promise<IAchievement> {
     const achievement = await this.repos.achievement.findById(id);
-    if (!achievement) {
+    if (!achievement || achievement.deletedAt) {
       throw new NotFoundError('Achievement not found');
     }
 

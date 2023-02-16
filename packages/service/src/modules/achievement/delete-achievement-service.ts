@@ -6,6 +6,9 @@ export class DeleteAchievementService {
   public async delete(achievementId: string) {
     const { repositories } = this.context;
 
-    await repositories.achievement.delete({ where: { id: achievementId } });
+    const existingAchievement = await repositories.achievement.findById(achievementId);
+    if (existingAchievement && !existingAchievement.deletedAt) {
+      await repositories.achievement.updateById(achievementId, { deletedAt: new Date() });
+    }
   }
 }

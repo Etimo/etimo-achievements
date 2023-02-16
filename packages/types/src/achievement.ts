@@ -6,6 +6,7 @@ export interface IAchievement {
   cooldownMinutes: number;
   selfAwardable: boolean;
   globalCooldowns: boolean;
+  deletedAt?: Date | null;
 }
 
 export type INewAchievement = Omit<IAchievement, 'id'>;
