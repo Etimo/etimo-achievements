@@ -86,9 +86,10 @@ export class GiveAwardService {
 
     const description = achievement.name + ': ' + achievement.description;
 
+    let ts: string | undefined;
     if (getEnvVariable('NOTIFY_SLACK', 'true') === 'true') {
       try {
-        notifier.notify(slackMessage, { subtitle: description, prio: 'medium' });
+        ts = await notifier.notify(slackMessage, { subtitle: description, prio: 'medium' });
       } catch (err) {}
     } else {
       logger.debug(slackMessage);
@@ -103,6 +104,7 @@ export class GiveAwardService {
             achievementId: award.achievementId,
             awardedByUserId: award.awardedByUserId,
             userId: a.id,
+            messageId: ts,
           })
         )
       );

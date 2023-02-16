@@ -6,5 +6,6 @@ export type NotifyServiceOptions = {
 };
 
 export interface INotifyService {
-  notify(message: any, options?: NotifyServiceOptions): Promise<any>;
+  notify(message: any, options?: NotifyServiceOptions): Promise<string | undefined>;
+  delete(timestamp: string): Promise<void>;
 }
