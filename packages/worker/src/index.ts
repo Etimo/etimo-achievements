@@ -5,10 +5,10 @@ import { Database } from '@etimo-achievements/data';
 import { getWorkers } from '@etimo-achievements/worker-common';
 import fs from 'fs';
 
+const workers = getWorkers();
+
 async function setup() {
   Database.connect();
-
-  const workers = getWorkers();
 
   Object.values(workers).forEach((w) => w.init());
 }

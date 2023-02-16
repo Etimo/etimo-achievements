@@ -18,13 +18,8 @@ export class SeasonScoreRepository extends BaseRepository<SeasonScoreModel> {
     return super.$getBy(filter, options);
   }
 
-  public async getOrCreate(userId: string, seasonId: string) {
-    const seasonScore = await this.model.query().where('user_id', userId).andWhere('season_id', seasonId).first();
-    if (!seasonScore) {
-      return await this.create({ userId, seasonId }); // data default to 0
-    }
-
-    return seasonScore;
+  public async getByUserAndSeason(userId: string, seasonId: string) {
+    return this.model.query().where('user_id', userId).andWhere('season_id', seasonId).first();
   }
 
   public updateByUserAndSeason(userId: string, seasonId: string, partialModel: Partial<SeasonScoreModel>) {

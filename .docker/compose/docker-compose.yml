@@ -65,6 +65,21 @@ services:
     image: dpage/pgadmin4:latest
     container_name: achievements-pgadmin
     env_file: ../../.env.defaults
+    entrypoint: >
+      /bin/sh -c "
+      cp -fv /pgadmin4/pgpass /var/lib/pgadmin/;
+      chmod -v 600 /var/lib/pgadmin/pgpass;
+      chown -v pgadmin:root /var/lib/pgadmin/pgpass;
+      /entrypoint.sh;
+      "
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+      - PGADMIN_DEFAULT_PASSWORD=test123
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    volumes:
+      - ../resources/pgadmin/pgpass:/pgadmin4/pgpass
+      - ../resources/pgadmin/servers.json:/pgadmin4/servers.json
     ports:
       - 8011:80
     depends_on:

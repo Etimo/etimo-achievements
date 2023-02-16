@@ -1,31 +1,25 @@
-import { IAward, IDailyScore, IScore, ISeason, IUser } from '@etimo-achievements/types';
+import { isDevelopment, uuid } from '@etimo-achievements/common';
+import { IScore, ISeason, ISeasonScore, IUser } from '@etimo-achievements/types';
 import { BaseWorker, WorkerPayload } from '../base-worker';
 import { IWorkerContext } from '../context';
 
-export type DailyScoreCalculatorWorkerData = {
-  name: string;
-};
-
 // This worker is called at midnight every day. It calculates the scores for the previous day.
-export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorWorkerData> {
+export class DailyScoreCalculatorWorker extends BaseWorker<unknown> {
   constructor(private context: IWorkerContext) {
     super({
       name: 'daily-score-calculator',
       jobsOptions: {
         repeat: {
-          // At 00:01 every day
-          //        s m H d M weekday
-          pattern: '0 1 0 * * *',
+          pattern: isDevelopment() ? '*/5 * * * * *' : '0 */30 * * * *',
         },
       },
     });
   }
 
-  protected override async processor(payload: WorkerPayload<DailyScoreCalculatorWorkerData>): Promise<any> {
+  protected override async processor(payload: WorkerPayload<unknown>): Promise<any> {
     const { repositories } = this.context;
 
     const seasons = await repositories.seasons.findActive();
-
     for (const season of seasons) {
       await this.processSeason(season);
     }
@@ -47,17 +41,20 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
   }
 
   // time of date is ignored, only date is used
-  private async calculateDailyScore(user: IUser, season: ISeason, date: Date = new Date()) {
-    const { repositories } = this.context;
+  private async calculateDailyScore(user: IUser, season: ISeason) {
+    const { repositories, logger } = this.context;
 
-    const exists = (await repositories.dailyScore.findByUserAndDay(user.id, season.id, date)).length !== 0;
-    if (exists) {
-      return;
-    }
+    const date = new Date();
+
+    logger.debug(
+      `Calculating daily score for user ${user.id} on season '${season.name}' and day ${
+        date.toISOString().split('T')[0]
+      }`
+    );
 
     const todaysAwards = await repositories.award.findAwardedBetween(
-      new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1).toISOString(), // day before at 00.00 (24 hours ago)
-      new Date(date.getFullYear(), date.getMonth(), date.getDate()).toISOString(), // this day at 00.00
+      new Date(date.getFullYear(), date.getMonth(), date.getDate()), // start of day
+      new Date(), // now
       user.id
     );
 
@@ -67,15 +64,10 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
     );
 
     // array of awards with the score of each achievement added to the award
-    const awards = todaysAwards.reduce((result: (IAward & { points: number })[], award: IAward) => {
-      return [
-        ...result,
-        {
-          ...award,
-          points: achievements.find((x) => x.id === award.achievementId)!.achievementPoints!,
-        },
-      ];
-    }, []);
+    const awards = todaysAwards.map((a) => ({
+      ...a,
+      points: achievements.find((x) => x.id === a.achievementId)!.achievementPoints!,
+    }));
 
     const score: IScore = {
       awardKickbackScore: 0,
@@ -87,67 +79,74 @@ export class DailyScoreCalculatorWorker extends BaseWorker<DailyScoreCalculatorW
       totalScore: 0,
     };
 
-    const dailyScore: IScore = awards.reduce((result: IScore, award: IAward & { points: number }) => {
+    for (const award of awards) {
       // awards we have received
       if (award.userId === user.id) {
-        const awardScore = result.awardScore + award.points;
-        const awardsReceived = result.awardsReceived + 1;
-
-        return {
-          ...score,
-          awardScore,
-          awardsReceived,
-          totalScore: result.totalScore + award.points,
-          scorePerReceivedAward: awardScore / (awardsReceived || 1),
-        };
-        // awards we have given (no self awards)
-      } else {
-        const kickback = this.getKickback(award.points);
-        const awardKickbackScore = result.awardKickbackScore + kickback;
-        const awardsGiven = result.awardsGiven + 1;
-
-        return {
-          ...score,
-          awardKickbackScore,
-          awardsGiven,
-          totalScore: result.totalScore + kickback,
-          scorePerGivenAward: awardKickbackScore / (awardsGiven || 1),
-        };
+        score.awardScore += award.points;
+        score.awardsReceived += 1;
+        score.totalScore += award.points;
       }
-    }, score);
+      // awards we have given (no self awards)
+      else {
+        const kickback = this.getKickback(award.points);
+        score.awardKickbackScore += kickback;
+        score.awardsGiven += 1;
+        score.totalScore += kickback;
+      }
+    }
 
-    // TODO: try catch? add failed daily score creation to a queue, run them again?
-    await repositories.dailyScore.create({
-      userId: user.id,
-      seasonId: season.id,
-      date: date,
-      ...dailyScore,
-    });
+    // Create or update daily score
+    const existingDailyScore = await repositories.dailyScore.findByUserAndDay(user.id, season.id, date);
+    if (!existingDailyScore) {
+      await repositories.dailyScore.create({
+        userId: user.id,
+        seasonId: season.id,
+        date: date,
+        ...score,
+      });
+    } else {
+      await repositories.dailyScore.updateById(existingDailyScore.id, {
+        ...existingDailyScore,
+        ...score,
+      });
+    }
   }
 
   private async calculateSeasonScore(user: IUser, seasonId: string) {
     const { repositories } = this.context;
 
-    const seasonScore = await repositories.seasonScore.getOrCreate(user.id, seasonId);
-
     const dailyScores = await repositories.dailyScore.findByUserAndSeason(user.id, seasonId);
-    const nextSeasonScore: IScore = dailyScores.reduce((result: IScore, dailyScore: IDailyScore) => {
-      const awardKickbackScore = (result.awardKickbackScore ?? 0) + dailyScore.awardKickbackScore;
-      const awardsGiven = (result.awardsGiven ?? 0) + dailyScore.awardsGiven;
-      const awardScore = (result.awardScore ?? 0) + dailyScore.awardScore;
-      const awardsReceived = (result.awardsReceived ?? 0) + dailyScore.awardsReceived;
 
-      return {
-        awardKickbackScore,
-        awardScore,
-        awardsGiven,
-        awardsReceived,
-        totalScore: (result.totalScore ?? 0) + dailyScore.totalScore,
-        scorePerGivenAward: awardKickbackScore / (awardsGiven || 1),
-        scorePerReceivedAward: awardScore / (awardsReceived || 1),
-      };
-    }, seasonScore);
+    // Calculate season scores from daily scores
+    const seasonScore: ISeasonScore = {
+      id: uuid(),
+      userId: user.id,
+      seasonId: seasonId,
+      awardKickbackScore: 0,
+      awardScore: 0,
+      awardsGiven: 0,
+      awardsReceived: 0,
+      scorePerGivenAward: 0,
+      scorePerReceivedAward: 0,
+      totalScore: 0,
+    };
 
-    await repositories.seasonScore.updateByUserAndSeason(user.id, seasonId, nextSeasonScore);
+    for (const dailyScore of dailyScores) {
+      seasonScore.awardKickbackScore += dailyScore.awardKickbackScore;
+      seasonScore.awardScore += dailyScore.awardScore;
+      seasonScore.awardsGiven += dailyScore.awardsGiven;
+      seasonScore.awardsReceived += dailyScore.awardsReceived;
+      seasonScore.totalScore += dailyScore.totalScore;
+    }
+
+    seasonScore.scorePerGivenAward = seasonScore.awardKickbackScore / (seasonScore.awardsGiven || 1);
+    seasonScore.scorePerReceivedAward = seasonScore.awardScore / (seasonScore.awardsReceived || 1);
+
+    const existingSeasonScore = await repositories.seasonScore.getByUserAndSeason(user.id, seasonId);
+    if (!existingSeasonScore) {
+      await repositories.seasonScore.create(seasonScore);
+    } else {
+      await repositories.seasonScore.updateByUserAndSeason(user.id, seasonId, seasonScore);
+    }
   }
 }
