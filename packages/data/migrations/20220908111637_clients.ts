@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable('clients', (table: Knex.TableBuilder) => {
     table.uuid('id').primary();
     table.string('client_secret', 255).notNullable();
-    table.uuid('userId').references('id').inTable('users');
+    table.uuid('user_id').references('id').inTable('users');
   });
 }
 

@@ -10,12 +10,15 @@ export class ClientModel extends BaseModel {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['id', 'client_secret', 'userId'],
+      required: ['name', 'description', 'clientSecret', 'userId', 'scope'],
 
       properties: {
         id: { type: 'string', format: 'uuid' },
-        client_secret: { type: 'string' },
+        clientSecret: { type: 'string' },
         userId: { type: 'string', format: 'uuid' },
+        scope: { type: 'string' },
+        name: { type: 'string' },
+        description: { type: 'string' },
       },
     };
   }
@@ -28,4 +31,7 @@ export class ClientModel extends BaseModel {
   id!: string;
   clientSecret!: string;
   userId!: string;
+  scope!: string;
+  name!: string;
+  description!: string;
 }
