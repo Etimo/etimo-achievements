@@ -13,6 +13,7 @@ export class FeatureController {
      *     operationId: getFeature
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *featureNameParam
      *     responses:

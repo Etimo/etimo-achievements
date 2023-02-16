@@ -53,6 +53,7 @@ export class BadgeController {
      *     operationId: getBadges
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -75,6 +76,7 @@ export class BadgeController {
      *     operationId: getBadge
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *badgeIdParam
      *     responses:
@@ -97,6 +99,7 @@ export class BadgeController {
      *     operationId: updateBadge
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *badgeIdParam
      *     requestBody:
@@ -142,6 +145,7 @@ export class BadgeController {
      *     operationId: deleteBadge
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *badgeIdParam
      *     responses:

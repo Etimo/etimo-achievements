@@ -32,6 +32,7 @@ export class UserController {
      *     operationId: getUsers
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -94,6 +95,7 @@ export class UserController {
      *     operationId: getUser
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *userIdParam
      *     responses:
@@ -159,6 +161,7 @@ export class UserController {
      *     operationId: updateUser
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *userIdParam
      *     requestBody:
@@ -201,6 +204,7 @@ export class UserController {
      *     operationId: deleteUser
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *userIdParam
      *     responses:

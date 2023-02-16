@@ -47,6 +47,11 @@ export const definition = {
         in: 'query',
         name: 'apiKey',
       },
+      authenticationHeader: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+      },
     },
   },
 };

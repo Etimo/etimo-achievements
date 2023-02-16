@@ -24,6 +24,7 @@ export class SeasonController {
      *     operationId: getSeasons
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -85,6 +86,7 @@ export class SeasonController {
      *     operationId: updateSeason
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *seasonIdParam
      *     requestBody:

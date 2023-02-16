@@ -17,6 +17,7 @@ export class AwardController {
      *     operationId: getAwards
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -42,6 +43,7 @@ export class AwardController {
      *     operationId: getAward
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *awardIdParam
      *     responses:
@@ -89,6 +91,7 @@ export class AwardController {
      *     operationId: deleteAward
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *awardIdParam
      *     responses:
