@@ -15,7 +15,7 @@ export class SlackNotifyService implements INotifyService {
     this.channelLow = getEnvVariable('SLACK_CHANNEL_LOW');
   }
 
-  public notify(message: any, options?: NotifyServiceOptions) {
+  public async notify(message: any, options?: NotifyServiceOptions): Promise<string | undefined> {
     const blocks = [
       {
         type: 'section',
@@ -37,10 +37,19 @@ export class SlackNotifyService implements INotifyService {
         ],
       });
 
-    return this.client.chat.postMessage({
+    const response = await this.client.chat.postMessage({
       channel: this.getChannel(options?.prio ?? 'low'),
       blocks,
       text: message,
+    });
+
+    return response.ts;
+  }
+
+  public async delete(timestamp: string): Promise<void> {
+    await this.client.chat.delete({
+      channel: this.channelMedium,
+      ts: timestamp,
     });
   }
 

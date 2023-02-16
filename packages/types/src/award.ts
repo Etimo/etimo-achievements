@@ -3,6 +3,7 @@ export interface IAward {
   achievementId: string;
   awardedByUserId: string;
   userId: string;
+  messageId?: string | null;
   createdAt: Date;
 }
 
