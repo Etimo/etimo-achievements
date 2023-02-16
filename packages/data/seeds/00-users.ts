@@ -2,6 +2,8 @@ import * as Knex from 'knex';
 
 export async function seed(knex: Knex): Promise<void> {
   // Deletes ALL existing entries
+  await knex('awards').del();
+  await knex('badge_awards').del();
   await knex('users').del();
 
   // Inserts seed entries
@@ -14,11 +16,18 @@ export async function seed(knex: Knex): Promise<void> {
       role: 'admin',
     },
     {
-      id: 'b158d926-9ef6-42a5-9059-f810a6d1c980',
-      name: 'user',
-      email: 'user@etimo.se',
-      slack_handle: '@user',
-      role: 'user',
+      id: 'a11ea55b-9a6c-4f50-a390-b787f3dc2ad5',
+      name: 'Niclas Lindstedt',
+      email: 'niclas.lindstedt@etimo.se',
+      slack_handle: 'URS4S1WH5',
+      role: 'admin',
+    },
+    {
+      id: '537574f5-605d-491e-bd23-108e373aa8ca',
+      name: 'Axel Elmarsson',
+      email: 'axel.elmarsson@etimo.se',
+      slack_handle: 'U03QM7ZM81X',
+      role: 'admin',
     },
   ]);
 }
