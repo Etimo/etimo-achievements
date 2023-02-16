@@ -35,6 +35,7 @@ export class AchievementController {
      *     operationId: getAchievements
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -80,6 +81,7 @@ export class AchievementController {
      *     operationId: getFavoriteAchievement
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -121,6 +123,7 @@ export class AchievementController {
      *     operationId: removeFavoriteAchievement
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *achievementIdParam
      *     responses:
@@ -140,6 +143,7 @@ export class AchievementController {
      *     operationId: getAchievement
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *achievementIdParam
      *     responses:
@@ -185,6 +189,7 @@ export class AchievementController {
      *     operationId: updateAchievement
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *achievementIdParam
      *     requestBody:
@@ -207,6 +212,7 @@ export class AchievementController {
      *     operationId: deleteAchievement
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *achievementIdParam
      *     responses:

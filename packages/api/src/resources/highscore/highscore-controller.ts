@@ -17,6 +17,7 @@ export class HighscoreController {
      *     operationId: getHighscores
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
