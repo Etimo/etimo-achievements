@@ -5,17 +5,23 @@ export type RedisConnection = RedisOptions;
 
 type RedisLogger = typeof console.log;
 
+let redisSingleton: IORedis | undefined;
+
 export function getDefaultRedisClient(logger: RedisLogger = console.log): IORedis {
   return getRedisClient(process.env.REDIS_URL ?? 'redis://localhost:6379/0', logger);
 }
 
 export function getRedisClient(url: string, logger: RedisLogger): IORedis {
+  if (redisSingleton) return redisSingleton;
+
   const redis = getRedisConnection(url);
 
   redis.on('connect', () => logger('Connected to Redis'));
   redis.on('error', (error) => logger('Redis error', error));
   redis.on('reconnecting', (ms: number) => logger(`Reconnecting to Redis in ${ms} ms`));
   redis.on('close', () => logger('Disconnected from Redis'));
+
+  redisSingleton = redis;
 
   return redis;
 }

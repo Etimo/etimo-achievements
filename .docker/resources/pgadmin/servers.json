@@ -1,0 +1,14 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "achievements",
+      "Group": "Servers",
+      "Port": 5432,
+      "Username": "root",
+      "Host": "postgres",
+      "SSLMode": "prefer",
+      "MaintenanceDB": "achievements",
+      "PassFile": "/var/lib/pgadmin/pgpass"
+    }
+  }
+}

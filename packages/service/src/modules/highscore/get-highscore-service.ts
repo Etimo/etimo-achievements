@@ -1,5 +1,5 @@
 import { paginate, PaginatedData, sort } from '@etimo-achievements/common';
-import { IHighscore, PaginationOptions } from '@etimo-achievements/types';
+import { IHighscore, ISeasonScore, PaginationOptions } from '@etimo-achievements/types';
 import { IContext } from '../../context';
 
 /**
@@ -27,17 +27,18 @@ export class GetHighscoreService {
 
     const highscores: (IHighscore & { rank: number })[] = [];
 
-    sortedSeasons.forEach((score, i) => {
-      const getRank = () => {
-        if (i === 0) {
-          return 1;
-        } else if (highscores[i - 1].totalPoints > score.totalScore) {
-          return highscores[i - 1].rank + 1;
-        } else if (highscores[i - 1].totalPoints === score.totalScore) {
-          return highscores[i - 1].rank;
-        }
-      };
+    const getRank = (score: ISeasonScore, i: number) => {
+      if (i === 0) {
+        return 1;
+      } else if (highscores[i - 1].totalPoints > score.totalScore) {
+        return highscores[i - 1].rank + 1;
+      } else if (highscores[i - 1].totalPoints === score.totalScore) {
+        return highscores[i - 1].rank;
+      }
+      return 0;
+    };
 
+    sortedSeasons.forEach((score: ISeasonScore, i: number) => {
       const highscore: IHighscore & { rank: number } = {
         achievements: score.awardsReceived,
         givenAchievements: score.awardsGiven,
@@ -47,7 +48,7 @@ export class GetHighscoreService {
         pointsPerAchievement: score.scorePerReceivedAward,
         totalPoints: score.totalScore,
         userId: score.userId,
-        rank: getRank()!,
+        rank: getRank(score, i),
       };
 
       highscores.push(highscore);

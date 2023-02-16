@@ -15,5 +15,17 @@ export async function seed(knex: Knex): Promise<void> {
       user_id: '537574f5-605d-491e-bd23-108e373aa8ca',
       awarded_by_user_id: 'a11ea55b-9a6c-4f50-a390-b787f3dc2ad5',
     },
+    {
+      id: 'b37c6aed-73d7-46f2-b090-d021fc234e3d',
+      achievement_id: 'ea363ba1-e037-4c3c-a8ed-d393e2539e2f',
+      user_id: '537574f5-605d-491e-bd23-108e373aa8ca',
+      awarded_by_user_id: '537574f5-605d-491e-bd23-108e373aa8ca',
+    },
+    {
+      id: '646e9214-ab94-40e3-90ed-56ed02c7c4b3',
+      achievement_id: 'ea363ba1-e037-4c3c-a8ed-d393e2539e2f',
+      user_id: '537574f5-605d-491e-bd23-108e373aa8ca',
+      awarded_by_user_id: 'a11ea55b-9a6c-4f50-a390-b787f3dc2ad5',
+    },
   ]);
 }

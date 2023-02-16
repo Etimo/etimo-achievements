@@ -13,7 +13,7 @@ export class HighscoreController {
      * @openapi
      * /highscores/{seasonId}:
      *   get:
-     *     summary: Get a list of awards
+     *     summary: Get a list of highscores
      *     operationId: getHighscores
      *     security:
      *       - jwtCookie: []
