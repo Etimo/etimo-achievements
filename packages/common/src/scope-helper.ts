@@ -22,9 +22,6 @@ function scopeMatches(requestedScope: string, scope: string): boolean {
   const reqScopeParts = requestedScope.split(':');
   const scopeParts = scope.split(':');
 
-  console.log('reqScopeParts ', reqScopeParts);
-  console.log('scopeParts ', scopeParts);
-
   const reqScopeName = reqScopeParts[1] ?? reqScopeParts[0];
   const scopeName = scopeParts[1] ?? scopeParts[0];
 
