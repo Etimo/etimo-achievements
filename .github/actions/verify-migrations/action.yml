@@ -16,7 +16,7 @@ inputs:
     default: 5
   attempts:
     description: How many attempts to try before giving up
-    default: 60
+    default: 180
   debug:
     description: Output debug information
     default: false
