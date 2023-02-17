@@ -6,6 +6,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('scope', 256).notNullable();
     table.string('name', 256).notNullable();
     table.string('description', 256).notNullable();
+    table.renameColumn('userId', 'user_id');
     table.unique(['name', 'user_id']);
   });
 }
