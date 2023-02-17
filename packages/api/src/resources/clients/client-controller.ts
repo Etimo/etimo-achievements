@@ -37,6 +37,7 @@ export class ClientController {
      *     operationId: rotateClientId
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *clientIdParam
      *     responses:
@@ -58,6 +59,7 @@ export class ClientController {
      *     operationId: getClients
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *skipParam
      *       - *takeParam
@@ -80,6 +82,7 @@ export class ClientController {
      *     operationId: deleteClient
      *     security:
      *       - jwtCookie: []
+     *       - authenticationHeader: []
      *     parameters:
      *       - *clientIdParam
      *     responses:

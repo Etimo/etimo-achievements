@@ -2186,6 +2186,9 @@
         "security": [
           {
             "jwtCookie": []
+          },
+          {
+            "authenticationHeader": []
           }
         ],
         "parameters": [
@@ -2253,6 +2256,9 @@
         "security": [
           {
             "jwtCookie": []
+          },
+          {
+            "authenticationHeader": []
           }
         ],
         "parameters": [
@@ -2292,6 +2298,9 @@
         "security": [
           {
             "jwtCookie": []
+          },
+          {
+            "authenticationHeader": []
           }
         ],
         "parameters": [

@@ -6,6 +6,7 @@ import { decrypt, encrypt } from '..';
 
 type JwtServiceOptions = {
   expirationSeconds: number;
+  clientId?: string;
 };
 
 export class JwtService {
@@ -13,7 +14,8 @@ export class JwtService {
     const expirationSeconds = options?.expirationSeconds ?? +getEnvVariable('JWT_EXPIRATION_SECONDS');
     const token: JWT = {
       jti: uuid(),
-      sub: user.id,
+      sub: options?.clientId ? options.clientId : user.id,
+      act: user.id,
       name: user.name,
       email: user.email,
       iss: 'etimo-achievements',

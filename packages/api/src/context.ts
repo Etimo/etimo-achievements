@@ -59,7 +59,8 @@ export class Context implements IApiContext {
 
     const context: any = {
       requestId: this.requestId,
-      userId: this.jwt?.sub,
+      userId: this.jwt?.act,
+      isClient: this.jwt?.act !== this.jwt?.sub,
       email: this.jwt?.email,
       scopes: this.scopes,
       request: {
