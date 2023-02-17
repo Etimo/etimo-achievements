@@ -24,6 +24,7 @@ export class AccessTokenMapper {
       token_type: 'bearer',
       jti: jwt.jti,
       sub: jwt.sub,
+      act: jwt.act,
       iss: jwt.iss,
       aud: jwt.aud,
       exp: jwt.exp,

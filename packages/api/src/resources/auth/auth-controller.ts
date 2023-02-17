@@ -280,7 +280,7 @@ export class AuthController {
     }
 
     const dto = {
-      id: jwt.sub,
+      id: jwt.act,
       email: jwt.email,
       name: jwt.name,
     } as Partial<UserInfoDto>;

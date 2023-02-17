@@ -14,11 +14,6 @@ export class ClientRepository extends BaseRepository<ClientModel> {
     return super.$findById(id);
   }
 
-  public async isOwner(userId: string, clientId: string): Promise<boolean> {
-    const client = await this.findByUserId(userId, clientId);
-    return client?.userId === userId;
-  }
-
   public find(options: FindOptions<ClientModel>): Promise<IClient[]> {
     return super.$get({
       ...options,

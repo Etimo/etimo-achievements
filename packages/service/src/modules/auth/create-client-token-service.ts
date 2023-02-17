@@ -11,14 +11,14 @@ export class CreateClientTokenService {
     this.repos = context.repositories;
   }
 
-  public async create(user: IUser, scopes: string[]): Promise<LoginResponse> {
+  public async create(clientId: string, user: IUser, scopes: string[]): Promise<LoginResponse> {
     // Create a token for the user
-    const token = JwtService.create(user, scopes, { expirationSeconds: 86400 * 365 });
+    const token = JwtService.create(user, scopes, { expirationSeconds: 86400 * 365, clientId });
 
     // Store token in database
     const createTokenService = new CreateTokenService(this.context);
     const createdToken = await createTokenService.createAccessToken(token);
-    const signedToken = JwtService.lock(token);
+    const signedToken = JwtService.sign(token);
     const expiresIn = Math.round((createdToken.expiresAt.getTime() - new Date().getTime()) / 1000);
 
     return {

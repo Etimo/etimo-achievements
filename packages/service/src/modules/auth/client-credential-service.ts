@@ -32,7 +32,7 @@ export class ClientCredentialService {
     if (!user) throw new UnauthorizedError('invalid_client');
 
     const createClientTokenService = new CreateClientTokenService(this.context);
-    return createClientTokenService.create(user, client.scope.split(' '));
+    return createClientTokenService.create(client.id, user, client.scope.split(' '));
   }
 
   public async create(data: INewClient) {
@@ -84,7 +84,8 @@ export class ClientCredentialService {
   public async remove(clientId: string) {
     const { userId, repositories } = this.context;
 
-    const isOwner = await repositories.client.isOwner(userId, clientId);
+    const clients = await repositories.client.find({ where: { userId, id: clientId } });
+    const isOwner = clients[0].userId === userId;
 
     if (!isOwner) throw new ForbiddenError('User not owner of client');
 
