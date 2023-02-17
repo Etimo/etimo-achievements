@@ -23,7 +23,7 @@ export class CreateTokenService {
 
     const newToken: INewAccessToken = {
       id: token.jti,
-      userId: token.sub,
+      userId: token.act,
       disabled: false,
       expiresAt: new Date(token.exp * 1000),
       scopes: token.scope.split(' '),

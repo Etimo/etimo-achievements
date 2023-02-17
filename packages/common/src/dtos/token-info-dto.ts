@@ -58,6 +58,7 @@ export type TokenInfoDto = {
   token_type: string;
   jti: string;
   sub: string;
+  act: string;
   iss: string;
   aud: string;
   exp: number;

@@ -13,6 +13,16 @@ export class ClientsMapper {
     };
   }
 
+  public static toSafeClientDto(client: IClient): Omit<ClientDto, 'clientSecret'> {
+    return {
+      id: client.id,
+      description: client.description,
+      name: client.name,
+      scope: client.scope,
+      userId: client.userId,
+    };
+  }
+
   public static toClient(dto: ClientDto): IClient {
     return {
       id: dto.id,

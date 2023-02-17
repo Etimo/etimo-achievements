@@ -1,6 +1,13 @@
-import { ForbiddenError, NotFoundError, scopesMatch, UnauthorizedError } from '@etimo-achievements/common';
+import {
+  ForbiddenError,
+  NotFoundError,
+  paginate,
+  PaginatedData,
+  scopesMatch,
+  UnauthorizedError,
+} from '@etimo-achievements/common';
 import { hashPassword, randomPassword, verifyPassword } from '@etimo-achievements/security';
-import { INewClient, Role } from '@etimo-achievements/types';
+import { IClient, INewClient, PaginationOptions, Role } from '@etimo-achievements/types';
 import { LoginResponse } from '.';
 import { IContext } from '../..';
 import { CreateClientTokenService } from './create-client-token-service';
@@ -25,7 +32,7 @@ export class ClientCredentialService {
     if (!user) throw new UnauthorizedError('invalid_client');
 
     const createClientTokenService = new CreateClientTokenService(this.context);
-    return createClientTokenService.create(user, client.scope.split(' '));
+    return createClientTokenService.create(client.id, user, client.scope.split(' '));
   }
 
   public async create(data: INewClient) {
@@ -41,8 +48,7 @@ export class ClientCredentialService {
 
     if (!validScopes) throw new ForbiddenError('User lacks the required scopes');
 
-    const clientSecret = randomPassword(32);
-    const hash = await hashPassword(clientSecret);
+    const { clientSecret, hash } = await this.generateSecret();
 
     const result = await repositories.client.create({ ...data, clientSecret: hash, userId });
 
@@ -50,5 +56,46 @@ export class ClientCredentialService {
       ...result,
       clientSecret,
     };
+  }
+
+  public async getMany(options: PaginationOptions): Promise<PaginatedData<IClient>> {
+    const { repositories, userId } = this.context;
+
+    const clients = await repositories.client.find({ ...options, where: { userId } });
+    const count = await repositories.client.count({});
+
+    return paginate(clients, count, options);
+  }
+
+  public async rotate(clientId: string) {
+    const { userId, repositories } = this.context;
+
+    const client = await repositories.client.findByUserId(userId, clientId);
+
+    if (!client) throw new NotFoundError('Client not found');
+
+    const { clientSecret, hash } = await this.generateSecret();
+
+    await repositories.client.updateById(clientId, { clientSecret: hash });
+
+    return { ...client, clientSecret };
+  }
+
+  public async remove(clientId: string) {
+    const { userId, repositories } = this.context;
+
+    const clients = await repositories.client.find({ where: { userId, id: clientId } });
+    const isOwner = clients[0].userId === userId;
+
+    if (!isOwner) throw new ForbiddenError('User not owner of client');
+
+    await repositories.client.deleteById(clientId);
+  }
+
+  private async generateSecret() {
+    const clientSecret = randomPassword(32);
+    const hash = await hashPassword(clientSecret);
+
+    return { hash, clientSecret };
   }
 }

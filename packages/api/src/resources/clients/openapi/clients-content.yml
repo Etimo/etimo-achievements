@@ -1,0 +1,6 @@
+x-template: &clientsContent
+  application/json:
+    schema:
+      type: array
+      items:
+        $ref: '#/components/schemas/Client'

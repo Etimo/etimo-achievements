@@ -13,10 +13,12 @@ export const authMiddleware = () => {
 
 function setJwt(req: Request) {
   const ctx = getContext();
-  const token = req.signedCookies[CookieName.Jwt];
 
   try {
-    const jwt = JwtService.unlock(token);
+    const token = req.signedCookies[CookieName.Jwt];
+    const authToken = req.headers.authorization?.split(' ')[1]!;
+
+    const jwt = token ? JwtService.unlock(token) : JwtService.verify(authToken);
     ctx.jwt = jwt;
     ctx.scopes = jwt.scope?.split(' ') ?? [];
   } catch {}
