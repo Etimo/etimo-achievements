@@ -2167,21 +2167,147 @@
         },
         "responses": {
           "201": {
+            "description": "The request was successful."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Clients"
+        ]
+      },
+      "get": {
+        "summary": "Get a list of clients",
+        "operationId": "getClients",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "The number of items to skip before starting to collect the result set.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "take",
+            "in": "query",
+            "description": "The numbers of items to return.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50
+            }
+          },
+          {
+            "name": "orderBy",
+            "in": "query",
+            "description": "The order of the result set.",
+            "example": [
+              "id~desc"
+            ],
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
             "description": "The request was successful.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "string",
-                      "format": "uuid",
-                      "description": "ID of the created resource."
-                    }
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Client"
                   }
                 }
               }
             }
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Clients"
+        ]
+      }
+    },
+    "/clients/rotate/{clientId}": {
+      "post": {
+        "summary": "Reset the client secret for a client",
+        "operationId": "rotateClientId",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful."
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          },
+          "404": {
+            "description": "The requested resource could not be found."
+          }
+        },
+        "tags": [
+          "Clients"
+        ]
+      }
+    },
+    "/clients/{clientId}": {
+      "delete": {
+        "summary": "Delete a client",
+        "operationId": "deleteClient",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request was successful"
           },
           "400": {
             "description": "The request was invalid and could/would not be processed."
