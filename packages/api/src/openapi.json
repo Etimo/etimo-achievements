@@ -456,6 +456,49 @@
           "description"
         ]
       },
+      "Client": {
+        "title": "Client",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of the client",
+            "maxLength": 255,
+            "example": "magic_mirror"
+          },
+          "description": {
+            "type": "string",
+            "description": "A description of the client",
+            "maxLength": 255,
+            "example": "Klienten för min magiska spegel i kontoret"
+          },
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "readOnly": true
+          },
+          "scope": {
+            "type": "string",
+            "example": "r:awards crud:badges"
+          },
+          "clientSecret": {
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "required": [
+          "name",
+          "description",
+          "userId",
+          "scope",
+          "clientSecret"
+        ]
+      },
       "Highscore": {
         "title": "Highscore",
         "type": "object",
@@ -2100,6 +2143,55 @@
         },
         "tags": [
           "Badges"
+        ]
+      }
+    },
+    "/clients": {
+      "post": {
+        "summary": "Create a client",
+        "operationId": "createClients",
+        "security": [
+          {
+            "jwtCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Client"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The request was successful.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid",
+                      "description": "ID of the created resource."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request was invalid and could/would not be processed."
+          },
+          "401": {
+            "description": "The request was unauthorized."
+          }
+        },
+        "tags": [
+          "Clients"
         ]
       }
     },

@@ -4,6 +4,7 @@ export * from './achievement-favorite-dto';
 export * from './award-dto';
 export * from './badge-award-dto';
 export * from './badge-dto';
+export * from './client-dto';
 export * from './highscore-dto';
 export * from './paginated-data';
 export * from './pagination-info';

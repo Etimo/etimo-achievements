@@ -4,6 +4,7 @@ type Action = ('c' | 'r' | 'u' | 'd')[];
 type Resource =
   | 'achievements'
   | 'awards'
+  | 'clients'
   | 'users'
   | 'profile'
   | 'highscore'
@@ -28,6 +29,7 @@ const crud: Action = ['c', 'r', 'u', 'd'];
 const basePermissions: RolePermissions = {
   achievements: r,
   awards: cru,
+  clients: crud,
   users: r,
   profile: ru,
   highscore: r,
@@ -49,6 +51,7 @@ export const moderatorRole: Scopes = createRole({
 export const adminRole: Scopes = createRole({
   achievements: crud,
   awards: crud,
+  clients: crud,
   users: crud,
   profile: crud,
   highscore: crud,
